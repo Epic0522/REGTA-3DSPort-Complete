@@ -17,6 +17,8 @@ REGTA brings three classic Grand Theft Auto games to New Nintendo 3DS:
 - **Grand Theft Auto: Liberty City Stories**, based on
   [reStories/reLCS](https://github.com/knackers4/res) (`stories`)
 
+https://youtu.be/fBzzLx0BX5M
+
 Each game has its own source tree. They share the 3DS renderer, audio backend
 and platform libraries, so fixes to those components benefit all three ports.
 
