@@ -1,0 +1,185 @@
+BasicInfo:
+  Title: $(APP_TITLE)
+  ProductCode: $(APP_PRODUCT_CODE)
+  Logo: Nintendo
+
+TitleInfo:
+  Category: Application
+  UniqueId: $(APP_UNIQUE_ID)
+
+Option:
+  UseOnSD: true
+  FreeProductCode: false
+  MediaFootPadding: false
+  EnableCrypt: false
+  EnableCompress: true
+
+AccessControlInfo:
+  CoreVersion: 2
+  DescVersion: 2
+  ReleaseKernelMajor: "02"
+  # MVDSTD H.264 decoding requires kernel-release-version >= 2.44.  The old
+  # 2.33 declaration can leave libctru in MVD's busy cleanup path at boot.
+  ReleaseKernelMinor: "44"
+  UseExtSaveData: false
+
+  FileSystemAccess:
+    - CategoryFileSystemTool
+    - DirectSdmc
+
+  MemoryType: Application
+  SystemMode: 64MB
+  IdealProcessor: 0
+  AffinityMask: 1
+  # makerom adds the application priority base (32), yielding runtime 48.
+  Priority: 16
+  MaxCpu: 0x9E
+  HandleTableSize: 0x200
+  DisableDebug: false
+  EnableForceDebug: false
+  CanWriteSharedPage: true
+  CanUsePrivilegedPriority: false
+  CanUseNonAlphabetAndNumber: true
+  PermitMainFunctionArgument: true
+  CanShareDeviceMemory: true
+  RunnableOnSleep: false
+  SpecialMemoryArrange: true
+
+  SystemModeExt: 124MB
+  CpuSpeed: 804MHz
+  EnableL2Cache: true
+  CanAccessCore2: true
+
+  IORegisterMapping:
+    - 1ff00000-1ff7ffff
+  MemoryMapping:
+    - 1f000000-1f5fffff:r
+
+  # Match the proven reVC application capabilities.  makerom consumes the
+  # numeric values; the labels only keep this list readable and unique.
+  SystemCallAccess:
+    SVC01: 1
+    SVC02: 2
+    SVC03: 3
+    SVC06: 6
+    SVC08: 8
+    SVC09: 9
+    SVC0A: 10
+    SVC0B: 11
+    SVC0C: 12
+    SVC0F: 15
+    SVC11: 17
+    SVC13: 19
+    SVC14: 20
+    SVC15: 21
+    SVC16: 22
+    SVC17: 23
+    SVC18: 24
+    SVC19: 25
+    SVC1A: 26
+    SVC1B: 27
+    SVC1C: 28
+    SVC1D: 29
+    SVC1E: 30
+    SVC1F: 31
+    SVC20: 32
+    SVC21: 33
+    SVC22: 34
+    SVC23: 35
+    SVC24: 36
+    SVC25: 37
+    SVC27: 39
+    SVC28: 40
+    SVC29: 41
+    SVC2A: 42
+    SVC2B: 43
+    SVC2C: 44
+    SVC2D: 45
+    SVC2E: 46
+    SVC2F: 47
+    SVC30: 48
+    SVC31: 49
+    SVC32: 50
+    SVC35: 53
+    SVC36: 54
+    SVC37: 55
+    SVC38: 56
+    SVC39: 57
+    SVC3A: 58
+    SVC3B: 59
+    SVC3C: 60
+    SVC3D: 61
+    SVC70: 112
+    SVC7B: 123
+
+  ServiceAccessControl:
+    - APT:U
+    - ac:u
+    - am:net
+    - boss:U
+    - cam:u
+    - cecd:u
+    - cfg:nor
+    - cfg:u
+    - csnd:SND
+    - dsp::DSP
+    - frd:u
+    - fs:USER
+    - gsp::Gpu
+    - hid:USER
+    - http:C
+    - ir:rst
+    - ir:u
+    - ir:USER
+    - mic:u
+    - mvd:STD
+    - ndm:u
+    - news:u
+    - nwm::UDS
+    - ptm:u
+    - pxi:dev
+    - soc:U
+    - ssl:C
+    - y2r:u
+
+SystemControlInfo:
+  SaveDataSize: 0KB
+  RemasterVersion: 2
+  StackSize: 0x40000
+
+  Dependency:
+    module01: 0x0004013000002402
+    module02: 0x0004013000003802
+    module03: 0x0004013000001502
+    module04: 0x0004013000003402
+    module05: 0x0004013000001602
+    module06: 0x0004013000002602
+    module07: 0x0004013000001702
+    module08: 0x0004013000001802
+    module09: 0x0004013000002702
+    module10: 0x0004013000002802
+    module11: 0x0004013000001a02
+    module12: 0x0004013000003202
+    module13: 0x0004013000001b02
+    module14: 0x0004013000001c02
+    module15: 0x0004013000001d02
+    module16: 0x0004013000002902
+    module17: 0x0004013000001e02
+    module18: 0x0004013000003302
+    module19: 0x0004013000001f02
+    module20: 0x0004013000002002
+    module21: 0x0004013000002b02
+    module22: 0x0004013000003502
+    module23: 0x0004013000004002
+    module24: 0x0004013000002c02
+    module25: 0x0004013000002d02
+    module26: 0x0004013000002102
+    module27: 0x0004013000003102
+    module28: 0x0004013000002202
+    # New3DS MVD system module used by the startup H.264 movies.
+    module29: 0x0004013020004102
+    module29: 0x0004013020004202
+    module30: 0x0004013000003702
+    module31: 0x0004013000002e02
+    module32: 0x0004013000002302
+    module33: 0x0004013000002f02

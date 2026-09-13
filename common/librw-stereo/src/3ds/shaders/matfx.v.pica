@@ -1,0 +1,28 @@
+	;; Inputs
+.alias in_pos     v0
+.alias in_normal  v1
+.alias in_color   v2
+.alias in_tex0    v3
+
+	;; Outputs
+.out v_pos      position
+.out v_color	color
+.out v_tex0	texcoord0
+.out v_tex1	texcoord1
+
+.entry matfx_main
+.proc matfx_main
+	call	xform_vertex	; (r8 = world-space vertex)
+	mov	v_pos, r0
+	call	xform_normal	; (r9 = world-space normal)
+	call	DynamicLights
+	mov	v_color, r0
+	
+	mov	r9.w, ones
+	dp4	r0.x, u_texMatrix[0], r9
+	dp4	r0.y, u_texMatrix[1], r9
+	mov	v_tex0, in_tex0
+	mov	v_tex1, r0
+
+	end
+.end

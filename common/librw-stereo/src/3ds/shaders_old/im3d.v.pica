@@ -1,0 +1,34 @@
+	;; Typical constants
+	;; not needed right? wrong, segfaults libctru
+	
+.constf const  (0.0, 1.0, 2.0, 1.0/255.0)
+.alias  zeros  const.xxxx
+.alias  ones   const.yyyy
+.alias  fixclr const.wwww
+
+	;; uniforms
+.ivec u_stereo
+.alias screenSide u_stereo.x
+
+.fvec u_proj[8]
+.fvec u_view[4]
+.fvec u_world[4]
+
+	;; inputs
+.alias in_pos     v0
+.alias in_color   v1
+.alias in_tex0    v2
+
+	;; outputs
+.out v_pos position
+.out v_color color
+.out v_tex0 texcoord0
+
+.entry im3d_main
+.proc im3d_main
+	call	xform_vertex
+	mov	v_pos, r0
+	mov	v_color, in_color
+	mov	v_tex0, in_tex0
+	end
+.end

@@ -1,0 +1,1682 @@
+./src/modelinfo/ModelIndices.h:3:#define MODELINDICES \
+./src/modelinfo/ModelIndices.h:161:#define X(name, var) extern int16 var;
+./src/modelinfo/ModelIndices.cpp:6:#define X(name, var) int16 var = -1;
+./src/modelinfo/ModelIndices.cpp:13:#define X(name, var) var = -1;
+./src/modelinfo/ModelIndices.cpp:21:#define X(name, var) \
+./src/modelinfo/VehicleModelInfo.cpp:541:#define SETFLAGS(f) RwFrameForAllObjects(frame, SetAtomicFlagCB, (void*)(f))
+./src/modelinfo/VehicleModelInfo.cpp:570:#define COMPRULE_RULE(comprule) (((comprule) >> 12) & 0xF)
+./src/modelinfo/VehicleModelInfo.cpp:571:#define COMPRULE_COMPS(comprule) ((comprule) & 0xFFF)
+./src/modelinfo/VehicleModelInfo.cpp:572:#define COMPRULE_COMPN(comps, n) (((comps) >> 4*(n)) & 0xF)
+./src/modelinfo/VehicleModelInfo.cpp:573:#define COMPRULE2_RULE(comprule) (((comprule) >> (12+16)) & 0xF)
+./src/modelinfo/VehicleModelInfo.cpp:574:#define COMPRULE2_COMPS(comprule) ((comprule >> 16) & 0xFFF)
+./src/modelinfo/VehicleModelInfo.cpp:575:#define COMPRULE2_COMPN(comps, n) (((comps >> 16) >> 4*(n)) & 0xF)
+./src/modelinfo/BaseModelInfo.h:5:#define MAX_MODEL_NAME (24)
+./src/modelinfo/PedModelInfo.cpp:196:#define NUMPEDINFONODES 8
+./src/rw/VisibilityPlugins.cpp:138:#define RENDERCALLBACK PreInstanceRenderCB
+./src/rw/VisibilityPlugins.cpp:148:#define RENDERCALLBACK DefaultRenderCB_pushid
+./src/rw/VisibilityPlugins.cpp:232:#define VEHICLE_LODDIST_MULTIPLIER (TheCamera.GenerationDistMultiplier)
+./src/rw/VisibilityPlugins.cpp:863:#define ATOMICEXT(o) (RWPLUGINOFFSET(AtomicExt, o, ms_atomicPluginOffset))
+./src/rw/VisibilityPlugins.cpp:864:#define FRAMEEXT(o) (RWPLUGINOFFSET(FrameExt, o, ms_framePluginOffset))
+./src/rw/VisibilityPlugins.cpp:865:#define CLUMPEXT(o) (RWPLUGINOFFSET(ClumpExt, o, ms_clumpPluginOffset))
+./src/rw/MemoryHeap.cpp:12://#define MEMORYHEAP_ASSERT(cond) { if (!(cond)) { printf("ASSERT File:%s Line:%d\n", __FILE__, __LINE__); exit(1); } }
+./src/rw/MemoryHeap.cpp:13://#define MEMORYHEAP_ASSERT_MESSAGE(cond, message) { if (!(cond)) { printf("ASSERT File:%s Line:%d:\n\t%s\n", __FILE__, __LINE__, message); exit(1); } }
+./src/rw/MemoryHeap.cpp:15:#define MEMORYHEAP_ASSERT(cond) assert(cond)
+./src/rw/MemoryHeap.cpp:16:#define MEMORYHEAP_ASSERT_MESSAGE(cond, message) assert(cond)
+./src/rw/RwHelper.h:60:#define SetAlphaTest(a) (0)
+./src/rw/RwHelper.h:61:#define RestoreAlphaTest() (0)
+./src/rw/TexturePools.cpp:4:#define WITHD3D
+./src/rw/RwPS2AlphaTest.cpp:3:#define WITHD3D
+./src/rw/TexRead.cpp:4:#define FORCE_PC_SCALING
+./src/rw/TexRead.cpp:32:#define READNATIVE(stream, tex, size) rwNativeTextureHackRead(stream, tex, size)
+./src/rw/TexRead.cpp:34:#define READNATIVE(stream, tex, size) RWSRCGLOBAL(stdFunc[rwSTANDARDNATIVETEXTUREREAD](stream, tex, size))
+./src/rw/TexRead.cpp:167:#define CAPSVERSION 0
+./src/rw/TexRead.cpp:336:#define STREAMTELL(str)	str->tell()
+./src/rw/TexRead.cpp:338:#define STREAMTELL(str) filesys->rwftell((str)->Type.file.fpFile)
+./src/rw/RwHelper.cpp:1:#define WITHD3D
+./src/rw/RwMatFX.cpp:3:#define WITHD3D
+./src/rw/MemoryHeap.h:9:#define PUSH_MEMID(id) gMainHeap.PushMemId(id)
+./src/rw/MemoryHeap.h:10:#define POP_MEMID() gMainHeap.PopMemId()
+./src/rw/MemoryHeap.h:11:#define REGISTER_MEMPTR(ptr) gMainHeap.RegisterMemPointer(ptr)
+./src/rw/MemoryHeap.h:13:#define PUSH_MEMID(id)
+./src/rw/MemoryHeap.h:14:#define POP_MEMID()
+./src/rw/MemoryHeap.h:15:#define REGISTER_MEMPTR(ptr)
+./src/rw/NodeName.cpp:12:#define NODENAMEEXT(o) (RWPLUGINOFFSET(char, o, gPluginOffset))
+./src/animation/AnimManager.cpp:550:#define awc(a) ARRAY_SIZE(a), a
+./src/animation/AnimManager.cpp:801:	#define ROUNDSIZE(x) if((x) & 3) (x) += 4 - ((x)&3)
+./src/animation/CutsceneMgr.h:4:#define CUTSCENENAMESIZE 8
+./src/animation/RpAnimBlend.h:15:#define RPANIMBLENDCLUMPDATA(o) (RWPLUGINOFFSET(CAnimBlendClumpData*, o, ClumpOffset))
+./src/skel/events.h:2:#define EVENTS_H
+./src/skel/skeleton.h:2:#define SKELETON_H
+./src/skel/skeleton.h:7:#define rsRESOURCESDEFAULTARENASIZE (1 << 20)
+./src/skel/skeleton.h:10:#define RsSprintf rwsprintf
+./src/skel/skeleton.h:19:#define RSASSERT(_condition) /* No-op */
+./src/skel/skeleton.h:22:#define RSASSERTISTYPE(_f, _t) \
+./src/skel/glfw/glfw.cpp:53:#define MAX_SUBSYSTEMS		(16)
+./src/skel/glfw/glfw.cpp:56:#define GLFW_EXPOSE_NATIVE_WIN32
+./src/skel/glfw/glfw.cpp:84:#define PSGLOBAL(var) (((psGlobalType *)(RsGlobal.ps))->var)
+./src/skel/glfw/glfw.cpp:309:#define CMDSTR	LPWSTR
+./src/skel/glfw/glfw.cpp:311:#define CMDSTR	LPSTR
+./src/skel/glfw/glfw.cpp:872:#define SDL_GAMEPAD_DB_PATH "gamecontrollerdb.txt"
+./src/skel/crossplatform.h:30:#define fcaseopen fopen
+./src/skel/crossplatform.h:52:#define fcaseopen _fcaseopen
+./src/skel/crossplatform.h:68:#define PSGLOBAL(var) (((psGlobalType *)(RsGlobal.ps))->var)
+./src/skel/crossplatform.h:97:    #define MAX_PATH PATH_MAX
+./src/skel/crossplatform.h:99:    #define MAX_PATH 260
+./src/skel/crossplatform.h:105:#define DeleteFile unlink
+./src/skel/crossplatform.h:120:#define GetLocalTime GetLocalTime_CP
+./src/skel/crossplatform.h:121:#define OutputDebugString(s) re3_debug("[DBG-2]: %s\n",s)
+./src/skel/crossplatform.h:134:#define INVALID_HANDLE_VALUE NULL
+./src/skel/crossplatform.h:135:#define FindClose(h) closedir((DIR*)h)
+./src/skel/crossplatform.h:136:#define LOCALE_USER_DEFAULT 0
+./src/skel/crossplatform.h:137:#define DATE_SHORTDATE 0
+./src/skel/platform.h:2:#define PLATFORM_H
+./src/skel/win/win.cpp:3:#define _WIN32_WINDOWS 0x0500
+./src/skel/win/win.cpp:4:#define WINVER 0x0500
+./src/skel/win/win.cpp:23:#define MAPVK_VK_TO_CHAR (2) // this is missing from codewarrior win32 headers - but it gets used ... how?
+./src/skel/win/win.cpp:30:#define WM_GRAPHNOTIFY	WM_USER+13
+./src/skel/win/win.cpp:41:#define WITHD3D
+./src/skel/win/win.cpp:42:#define WITHDINPUT
+./src/skel/win/win.cpp:54:#define MAX_SUBSYSTEMS		(16)
+./src/skel/win/win.cpp:76:#define PSGLOBAL(var) (((psGlobalType *)(RsGlobal.ps))->var)
+./src/skel/win/win.cpp:79:#define MAKEPOINTS(l)		(*((POINTS /*FAR*/ *)&(l)))
+./src/skel/win/win.cpp:81:#define SAFE_RELEASE(x) { if (x) x->Release(); x = NULL; }
+./src/skel/win/win.cpp:82:#define JIF(x) if (FAILED(hr=(x))) \
+./src/skel/win/win.cpp:602:#define CMDSTR	LPWSTR
+./src/skel/win/win.cpp:604:#define CMDSTR	LPSTR
+./src/skel/win/win.cpp:2632:#define DEVICE_AXIS_MIN -2000
+./src/skel/win/win.cpp:2633:#define DEVICE_AXIS_MAX 2000
+./src/skel/win/win.h:5:#define _PLATFORM_WIN_H
+./src/skel/win/win.h:8:#define RSREGSETBREAKALLOC(_name) /* No op */
+./src/skel/win/win.h:29:#define PSGLOBAL(var) (((psGlobalType *)(RsGlobal.ps))->var)
+./src/skel/win/resource.h:5:#define IDD_DIALOG1                     104
+./src/skel/win/resource.h:6:#define IDC_DEVICESEL                   1000
+./src/skel/win/resource.h:7:#define IDC_VIDMODE                     1001
+./src/skel/win/resource.h:8:#define IDEXIT                          1002
+./src/skel/win/resource.h:9:#define IDC_SELECTDEVICE                1005
+./src/skel/win/resource.h:11:#define IDI_MAIN_ICON                   1042
+./src/skel/win/resource.h:16:#define _APS_NEXT_RESOURCE_VALUE        104
+./src/skel/win/resource.h:17:#define _APS_NEXT_COMMAND_VALUE         40001
+./src/skel/win/resource.h:18:#define _APS_NEXT_CONTROL_VALUE         1000
+./src/skel/win/resource.h:19:#define _APS_NEXT_SYMED_VALUE           101
+./src/save/GenericGameStorage.h:6:#define SLOT_COUNT (8)
+./src/save/MemoryCard.h:45:#define GUFF_FILE_SIZE 147096
+./src/save/MemoryCard.h:46:#define SAVE_FILE_SIZE 201729
+./src/save/PCSave.cpp:1:#define WITHWINDOWS
+./src/save/GenericGameStorage.cpp:1:#define WITHWINDOWS
+./src/save/GenericGameStorage.cpp:41:#define BLOCK_COUNT 20
+./src/save/GenericGameStorage.cpp:42:#define SIZE_OF_SIMPLEVARS 0xBC
+./src/save/GenericGameStorage.cpp:68:#define ReadDataFromBufferPointer(buf, to) memcpy(&to, buf, sizeof(to)); buf += align4bytes(sizeof(to));
+./src/save/GenericGameStorage.cpp:69:#define WriteDataToBufferPointer(buf, from) memcpy(buf, &from, sizeof(from)); buf += align4bytes(sizeof(from));
+./src/save/GenericGameStorage.cpp:71:#define LoadSaveDataBlock()\
+./src/save/GenericGameStorage.cpp:81:#define ReadDataFromBlock(msg,load_func)\
+./src/save/GenericGameStorage.cpp:90:#define WriteSaveDataBlock(save_func)\
+./src/save/MemoryCard.cpp:1:#define WITHWINDOWS
+./src/save/MemoryCard.cpp:53:#define ReadDataFromBufferPointer(buf, to) memcpy(&to, buf, sizeof(to)); buf += align4bytes(sizeof(to));
+./src/save/MemoryCard.cpp:54:#define WriteDataToBufferPointer(buf, from) memcpy(buf, &from, sizeof(from)); buf += align4bytes(sizeof(from));
+./src/save/MemoryCard.cpp:256:	#define _CMP(m) strncmp(month, m, sizeof(m)-1)
+./src/save/MemoryCard.cpp:358:	#define LoadSaveDataBlock()\
+./src/save/MemoryCard.cpp:427:	#define ReadDataFromBlock(load_func)\
+./src/save/MemoryCard.cpp:1770:	#define WriteSaveDataBlock(save_func)\
+./src/save/MemoryCard.cpp:1905:	#define ROUNDHACK(a) ( ((a) & 15) + ( ( ( ((a) >> 4) << 2 ) + ((a) >> 4) ) << 1 ) )
+./src/text/Messages.h:25:#define NUMBRIEFMESSAGES 8
+./src/text/Messages.h:26:#define NUMBIGMESSAGES 6
+./src/text/Messages.h:27:#define NUMPREVIOUSBRIEFS 5
+./src/text/Pager.h:14:#define NUMPAGERMESSAGES 8
+./src/objects/ParticleObject.h:7:#define MAX_PARTICLEOBJECTS 100
+./src/objects/ParticleObject.h:8:#define MAX_AUDIOHYDRANTS   8
+./src/weapons/Weapon.cpp:2307:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/weapons/Weapon.cpp:2308:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/weapons/Weapon.h:5:#define DRIVEBYAUTOAIMING_MAXDIST (2.5f)
+./src/weapons/Weapon.h:6:#define DOOMAUTOAIMING_MAXDIST    (9000.0f)
+./src/weapons/BulletInfo.cpp:31:#define BULLET_LIFETIME (1000)
+./src/weapons/BulletInfo.cpp:32:#define NUM_PED_BLOOD_PARTICLES (8)
+./src/weapons/BulletInfo.cpp:33:#define BLOOD_PARTICLE_OFFSET (CVector(0.0f, 0.0f, 0.0f))
+./src/weapons/BulletInfo.cpp:34:#define NUM_VEHICLE_SPARKS (16)
+./src/weapons/BulletInfo.cpp:35:#define NUM_OTHER_SPARKS (8)
+./src/weapons/BulletInfo.cpp:36:#define BULLET_HIT_FORCE (7.5f)
+./src/weapons/BulletInfo.cpp:37:#define MAP_BORDER (1960.0f)
+./src/fakerw/rwplcore.h:14:#define __RWUNUSED__
+./src/fakerw/rwplcore.h:17:#define FALSE 0
+./src/fakerw/rwplcore.h:21:#define TRUE !FALSE
+./src/fakerw/rwplcore.h:25:#define RWSTRING(x) x
+./src/fakerw/rwplcore.h:52:#define RWRGBALONG(r,g,b,a)                                             \
+./src/fakerw/rwplcore.h:56:#define MAKECHUNKID(vendorID, chunkID) (((vendorID & 0xFFFFFF) << 8) | (chunkID & 0xFF))
+./src/fakerw/rwplcore.h:118:#define rwsprintf   sprintf
+./src/fakerw/rwplcore.h:119:#define rwvsprintf  vsprintf
+./src/fakerw/rwplcore.h:120:#define rwstrcpy    strcpy
+./src/fakerw/rwplcore.h:121:#define rwstrncpy   strncpy
+./src/fakerw/rwplcore.h:122:#define rwstrcat    strcat
+./src/fakerw/rwplcore.h:123:#define rwstrncat   strncat
+./src/fakerw/rwplcore.h:124:#define rwstrrchr   strrchr
+./src/fakerw/rwplcore.h:125:#define rwstrchr    strchr
+./src/fakerw/rwplcore.h:126:#define rwstrstr    strstr
+./src/fakerw/rwplcore.h:127:#define rwstrcmp    strcmp
+./src/fakerw/rwplcore.h:128:#define rwstricmp   stricmp
+./src/fakerw/rwplcore.h:129:#define rwstrlen    strlen
+./src/fakerw/rwplcore.h:130:#define rwstrupr    strupr
+./src/fakerw/rwplcore.h:131:#define rwstrlwr    strlwr
+./src/fakerw/rwplcore.h:132:#define rwstrtok    strtok
+./src/fakerw/rwplcore.h:133:#define rwsscanf    sscanf
+./src/fakerw/rwplcore.h:208:#define RWPLUGINOFFSET(_type, _base, _offset)                   \
+./src/fakerw/rpworld.h:3:#define rpATOMIC rw::Atomic::ID
+./src/fakerw/rpworld.h:4:#define rpCLUMP rw::Clump::ID
+./src/fakerw/fake.cpp:1:#define _CRT_SECURE_NO_WARNINGS
+./src/fakerw/fake.cpp:2:#define WITH_D3D // not WITHD3D, so it's librw define
+./src/fakerw/rphanim.h:10:#define rpHANIMSTDKEYFRAMETYPEID 0x1
+./src/fakerw/rphanim.h:40:#define rpHANIMPOPPARENTMATRIX      rw::HAnimHierarchy::POP
+./src/fakerw/rphanim.h:41:#define rpHANIMPUSHPARENTMATRIX     rw::HAnimHierarchy::PUSH
+./src/fakerw/rphanim.h:64:#define rpHANIMHIERARCHYGETINTERPFRAME( hierarchy, nodeIndex )    \
+./src/fakerw/rwcore.h:3:#define RWCORE_H	// needed by CVector
+./src/entities/Physical.cpp:1848:#define NUMSTEPS(x) ceil(Sqrt(distSq) * (1.0f/(x)))
+./src/entities/Physical.h:11:#define GRAVITY (0.008f)
+./src/core/Frontend_PS2.h:164:#define ISLAND_LOADING_IS(p)
+./src/core/Frontend_PS2.h:165:#define ISLAND_LOADING_ISNT(p)
+./src/core/FileMgr.cpp:1:#define _CRT_SECURE_NO_WARNINGS
+./src/core/FileMgr.cpp:27:#define NUMFILES 20
+./src/core/FileMgr.cpp:35:#define _getcwd getcwd
+./src/core/FileMgr.cpp:49:#define mychdir chdir
+./src/core/PlayerInfo.cpp:309:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); buf += sizeof(data);
+./src/core/PlayerInfo.cpp:329:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); buf += sizeof(data);
+./src/core/ZoneCull.cpp:34:#define NUMUNCOMPRESSED (6000)
+./src/core/ZoneCull.cpp:35:#define NUMTEMPINDICES (140000)
+./src/core/ZoneCull.cpp:928:#define MEM(x, y, z) pMem[((x)*ElementsY + (y))*ElementsZ + (z)]
+./src/core/ZoneCull.cpp:929:#define FLAG_FREE 1
+./src/core/ZoneCull.cpp:930:#define FLAG_PROCESSED 2
+./src/core/CdStream.cpp:2:#define WITHWINDOWS
+./src/core/Zones.cpp:25:#define SWAPF(a, b) { float t; t = a; a = b; b = t; }
+./src/core/Camera.h:18:#define DEFAULT_NEAR (0.9f)
+./src/core/Camera.h:30:#define FREE_CAR_ZOOM_VALUE_1 (-1.0f)
+./src/core/Camera.h:31:#define FREE_CAR_ZOOM_VALUE_2 (2.0f)
+./src/core/Camera.h:32:#define FREE_CAR_ZOOM_VALUE_3 (6.0f)
+./src/core/Camera.h:34:#define FREE_BOAT_ZOOM_VALUE_1 (-2.41f)
+./src/core/Camera.h:35:#define FREE_BOAT_ZOOM_VALUE_2 (6.49f)
+./src/core/Camera.h:36:#define FREE_BOAT_ZOOM_VALUE_3 (15.0f)
+./src/core/Camera.h:39:#define DEFAULT_CAR_ZOOM_VALUE_1 (0.05f)
+./src/core/Camera.h:40:#define DEFAULT_CAR_ZOOM_VALUE_2 (1.9f)
+./src/core/Camera.h:41:#define DEFAULT_CAR_ZOOM_VALUE_3 (3.9f)
+./src/core/timebars.h:9:#define tbInit()
+./src/core/timebars.h:10:#define tbStartTimer(a, b)
+./src/core/timebars.h:11:#define tbEndTimer(a)
+./src/core/timebars.h:12:#define tbDisplay()
+./src/core/MenuScreensCustom.cpp:37:	#define VIDEOMODE_SELECTOR MENUACTION_CFO_SELECT, "FEM_SCF", { new CCFOSelect((int8*)&FrontEndMenuManager.m_nPrefsWindowed, "VideoMode", "Windowed", screenModes, 2, true, ScreenModeAfterChange, true) },
+./src/core/MenuScreensCustom.cpp:39:	#define VIDEOMODE_SELECTOR
+./src/core/MenuScreensCustom.cpp:43:	#define MULTISAMPLING_SELECTOR MENUACTION_CFO_DYNAMIC, "FED_AAS", { new CCFODynamic((int8*)&FrontEndMenuManager.m_nPrefsMSAALevel, "Graphics", "MultiSampling", MultiSamplingDraw, MultiSamplingButtonPress) },
+./src/core/MenuScreensCustom.cpp:45:	#define MULTISAMPLING_SELECTOR
+./src/core/MenuScreensCustom.cpp:49:	#define CUTSCENE_BORDERS_TOGGLE MENUACTION_CFO_SELECT, "FEM_CSB", { new CCFOSelect((int8 *)&CMenuManager::m_PrefsCutsceneBorders, "Display", "CutsceneBorders", off_on, 2, false) },
+./src/core/MenuScreensCustom.cpp:51:	#define CUTSCENE_BORDERS_TOGGLE
+./src/core/MenuScreensCustom.cpp:55:	#define FREE_CAM_TOGGLE MENUACTION_CFO_SELECT, "FEC_FRC", { new CCFOSelect((int8*)&TheCamera.bFreeCam, "Display", "FreeCam", off_on, 2, false) },
+./src/core/MenuScreensCustom.cpp:57:	#define FREE_CAM_TOGGLE
+./src/core/MenuScreensCustom.cpp:61:	#define DUALPASS_SELECTOR MENUACTION_CFO_SELECT, "FEM_2PR", { new CCFOSelect((int8*)&gPS2alphaTest, "Graphics", "PS2AlphaTest", off_on, 2, false) },
+./src/core/MenuScreensCustom.cpp:63:	#define DUALPASS_SELECTOR 
+./src/core/MenuScreensCustom.cpp:67:	#define ISLAND_LOADING_SELECTOR MENUACTION_CFO_SELECT, "FEM_ISL", { new CCFOSelect((int8*)&CMenuManager::m_PrefsIslandLoading, "Graphics", "IslandLoading", islandLoadingOpts, ARRAY_SIZE(islandLoadingOpts), true, IslandLoadingAfterChange) },
+./src/core/MenuScreensCustom.cpp:69:	#define ISLAND_LOADING_SELECTOR 
+./src/core/MenuScreensCustom.cpp:73:	#define POSTFX_SELECTORS \
+./src/core/MenuScreensCustom.cpp:77:	#define POSTFX_SELECTORS
+./src/core/MenuScreensCustom.cpp:81:	#define INVERT_PAD_SELECTOR MENUACTION_CFO_SELECT, "FEC_IVP", { new CCFOSelect((int8*)&CPad::bInvertLook4Pad, "Controller", "InvertPad", off_on, 2, false) },
+./src/core/MenuScreensCustom.cpp:83:	#define INVERT_PAD_SELECTOR
+./src/core/MenuScreensCustom.cpp:87:	#define SELECT_CONTROLLER_TYPE  MENUACTION_CFO_SELECT, "FEC_TYP", { new CCFOSelect((int8*)&CMenuManager::m_PrefsControllerType, "Controller", "Type", controllerTypes, ARRAY_SIZE(controllerTypes), false, ControllerTypeAfterChange) },
+./src/core/MenuScreensCustom.cpp:89:	#define SELECT_CONTROLLER_TYPE
+./src/core/re3.cpp:2:#define WITHWINDOWS
+./src/core/config.h:4://#define VANILLA_DEFINES
+./src/core/config.h:146:#define GTA_PC
+./src/core/config.h:147://#define GTA_PS2
+./src/core/config.h:148://#define GTA_XBOX
+./src/core/config.h:151:#define GTA_PS2_STUFF
+./src/core/config.h:155://#define FINAL
+./src/core/config.h:159://#define MASTER
+./src/core/config.h:167:#define FINAL
+./src/core/config.h:171:#define GTA3_PS2_140	300
+./src/core/config.h:172:#define GTA3_PS2_160	301
+./src/core/config.h:173:#define GTA3_PC_10	310
+./src/core/config.h:174:#define GTA3_PC_11	311
+./src/core/config.h:175:#define GTA3_PC_STEAM	312
+./src/core/config.h:178:#define GTA_VERSION	GTA3_PC_11
+./src/core/config.h:181:#define NASTY_GAME	// nasty game for all languages
+./src/core/config.h:182:#define NO_CDCHECK
+./src/core/config.h:185:#define DRAW_GAME_VERSION_TEXT
+./src/core/config.h:188:	#define USE_OUR_VERSIONING // If you disable this then game will fetch version from peds.col, as R* did while in development
+./src/core/config.h:190://#define DRAW_MENU_VERSION_TEXT
+./src/core/config.h:193:// #define USE_CUSTOM_ALLOCATOR		// use CMemoryHeap for allocation. use with care, not finished yet
+./src/core/config.h:194://#define COMPRESSED_COL_VECTORS	// use compressed vectors for collision vertices
+./src/core/config.h:195://#define ANIM_COMPRESSION	// only keep most recently used anims uncompressed
+./src/core/config.h:216:#define COMPRESSED_COL_VECTORS	// currently need compressed vectors in this code
+./src/core/config.h:224:	#define VALIDATE_SAVE_SIZE
+./src/core/config.h:226:	#define NO_MOVIES	// disable intro videos
+./src/core/config.h:227:	#define DEBUGMENU
+./src/core/config.h:239:#define FIX_BUGS		// fixes bugs that we've came across during reversing. You can undefine this only on release builds.
+./src/core/config.h:240:#define MORE_LANGUAGES		// Add more translations to the game
+./src/core/config.h:241:#define COMPATIBLE_SAVES // this allows changing structs while keeping saves compatible
+./src/core/config.h:242:#define LOAD_INI_SETTINGS // as the name suggests. fundamental for CUSTOM_FRONTEND_OPTIONS
+./src/core/config.h:245:#define FIX_BUGS_64 // Must have fixes to be able to run 64 bit build
+./src/core/config.h:248:#define ASCII_STRCMP // use faster ascii str comparisons
+./src/core/config.h:256:#define MISSION_SWITCHER // from debug menu
+./src/core/config.h:260://#define EXTRA_MODEL_FLAGS	// from mobile to optimize rendering
+./src/core/config.h:263:#define ASPECT_RATIO_SCALE	// Not just makes everything scale with aspect ratio, also adds support for all aspect ratios
+./src/core/config.h:264:#define PROPER_SCALING		// use original DEFAULT_SCREEN_WIDTH/DEFAULT_SCREEN_HEIGHT from PS2 instead of PC(R* changed HEIGHT here to make radar look better, but broke other hud elements aspect ratio).
+./src/core/config.h:265:#define DEFAULT_NATIVE_RESOLUTION	// Set default video mode to your native resolution (fixes Windows 10 launch)
+./src/core/config.h:266:#define USE_TXD_CDIMAGE		// generate and load textures from txd.img
+./src/core/config.h:267:#define PS2_ALPHA_TEST		// emulate ps2 alpha test 
+./src/core/config.h:268:#define IMPROVED_VIDEOMODE	// save and load videomode parameters instead of a magic number
+./src/core/config.h:269:#define DISABLE_LOADING_SCREEN // disable the loading screen which vastly improves the loading time
+./src/core/config.h:274:#define DISABLE_VSYNC_ON_TEXTURE_CONVERSION // make texture conversion work faster by disabling vsync
+./src/core/config.h:275:#define ANISOTROPIC_FILTERING	// set all textures to max anisotropic filtering
+./src/core/config.h:276://#define USE_TEXTURE_POOL
+./src/core/config.h:278:#define EXTENDED_COLOURFILTER		// more options for colour filter (replaces mblur)
+./src/core/config.h:279:#define EXTENDED_PIPELINES		// custom render pipelines (includes Neo)
+./src/core/config.h:280:#define SCREEN_DROPLETS			// neo water droplets
+./src/core/config.h:281:#define NEW_RENDERER		// leeds-like world rendering, needs librw
+./src/core/config.h:284:#define FIX_SPRITES	// fix sprites aspect ratio(moon, coronas, particle etc)
+./src/core/config.h:291://#define PC_PARTICLE
+./src/core/config.h:292://#define PS2_ALTERNATIVE_CARSPLASH // unused on PS2
+./src/core/config.h:296:#define XINPUT
+./src/core/config.h:299:#define DETECT_JOYSTICK_MENU // Then we'll expect user to enter Controller->Detect joysticks if his joystick isn't detected at the start.
+./src/core/config.h:301:#define DETECT_PAD_INPUT_SWITCH // Adds automatic switch of pad related stuff between controller and kb/m
+./src/core/config.h:302:#define KANGAROO_CHEAT
+./src/core/config.h:303:#define ALLCARSHELI_CHEAT
+./src/core/config.h:304:#define ALT_DODO_CHEAT
+./src/core/config.h:305:#define REGISTER_START_BUTTON
+./src/core/config.h:306:#define BIND_VEHICLE_FIREWEAPON // Adds ability to rebind fire key for 'in vehicle' controls
+./src/core/config.h:307:#define BUTTON_ICONS // use textures to show controller buttons
+./src/core/config.h:310://#define PS2_HUD
+./src/core/config.h:311:#define HUD_ENHANCEMENTS	// Adjusts some aspects to make the HUD look/behave a little bit better.
+./src/core/config.h:312:// #define BETA_SLIDING_TEXT
+./src/core/config.h:313:#define TRIANGULAR_BLIPS	// height indicating triangular radar blips, as in VC
+./src/core/config.h:314:#define FIX_RADAR			// use radar size from early version before R* broke it
+./src/core/config.h:315:// #define XBOX_SUBTITLES	// the infamous outlines
+./src/core/config.h:316:#define RADIO_OFF_TEXT
+./src/core/config.h:317:#define PC_MENU
+./src/core/config.h:346:#define USE_DEBUG_SCRIPT_LOADER	// Loads main.scm by default. Hold R for main_freeroam.scm and D for main_d.scm
+./src/core/config.h:347:#define USE_MEASUREMENTS_IN_METERS // makes game use meters instead of feet in script
+./src/core/config.h:348:#define USE_PRECISE_MEASUREMENT_CONVERTION // makes game convert feet to meeters more precisely
+./src/core/config.h:352://#define SIMPLIER_MISSIONS // apply simplifications from mobile
+./src/core/config.h:353:#define USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/core/config.h:354:#define SCRIPT_LOG_FILE_LEVEL 0 // 0 == no log, 1 == overwrite every frame, 2 == full log
+./src/core/config.h:361:#define USE_BASIC_SCRIPT_DEBUG_OUTPUT
+./src/core/config.h:370://#define DONT_FIX_REPLAY_BUGS // keeps various bugs in CReplay, some of which are fairly cool!
+./src/core/config.h:371://#define USE_BETA_REPLAY_MODE // adds another replay mode, a few seconds slomo (caution: buggy!)
+./src/core/config.h:374:#define EXPLODING_AIRTRAIN	// can blow up jumbo jet with rocket launcher
+./src/core/config.h:375://#define REMOVE_TREADABLE_PATHFIND
+./src/core/config.h:378://#define MONEY_MESSAGES
+./src/core/config.h:379:#define CAMERA_PICKUP
+./src/core/config.h:382:#define PED_SKIN		// support for skinned geometry on peds
+./src/core/config.h:383:#define ANIMATE_PED_COL_MODEL
+./src/core/config.h:384:// #define VC_PED_PORTS			// various ports from VC's CPed, mostly subtle
+./src/core/config.h:385:// #define NEW_WALK_AROUND_ALGORITHM	// to make walking around vehicles/objects less awkward
+./src/core/config.h:386:#define CANCELLABLE_CAR_ENTER
+./src/core/config.h:387://#define PEDS_REPORT_CRIMES_ON_PHONE
+./src/core/config.h:390://#define PS2_CAM_TRANSITION	// old way of transitioning between cam modes
+./src/core/config.h:391:#define IMPROVED_CAMERA		// Better Debug cam, and maybe more in the future
+./src/core/config.h:392:#define FREE_CAM		// Rotating cam
+./src/core/config.h:395:#define RADIO_SCROLL_TO_PREV_STATION
+./src/core/config.h:396:#define AUDIO_CACHE
+./src/core/config.h:397://#define PS2_AUDIO_PATHS // changes audio paths for cutscenes and radio to PS2 paths (needs vbdec on MSS builds)
+./src/core/config.h:398://#define AUDIO_OAL_USE_SNDFILE // use libsndfile to decode WAVs instead of our internal decoder
+./src/core/config.h:399:#define AUDIO_OAL_USE_MPG123 // use mpg123 to support mp3 files
+./src/core/config.h:402:#define AUDIO_OAL_USE_OPUS // enable support of opus files
+./src/core/config.h:403:#define OPUS_AUDIO_PATHS // changes audio paths to opus paths (doesn't work if AUDIO_OAL_USE_OPUS isn't enabled)
+./src/core/config.h:404:#define OPUS_SFX  // enable if your sfx.raw is encoded with opus (doesn't work if AUDIO_OAL_USE_OPUS isn't enabled)
+./src/core/config.h:415:	//#define ONE_THREAD_PER_CHANNEL // Don't use if you're not on SSD/Flash - also not utilized too much right now(see commented LoadAllRequestedModels in Streaming.cpp)
+./src/core/config.h:416:	#define FLUSHABLE_STREAMING // Make it possible to interrupt reading when processing file isn't needed anymore.
+./src/core/config.h:418:#define BIG_IMG // Not complete - allows to read larger img files
+./src/core/config.h:420://#define SQUEEZE_PERFORMANCE
+./src/core/config.h:424:	#define PC_PARTICLE
+./src/core/config.h:425:	#define VC_PED_PORTS // To not process collisions always. But should be tested if that's really beneficial
+./src/core/config.h:426:	#define VC_RAIN_NERF // Reduces number of rain particles
+./src/core/config.h:432:#define FINAL
+./src/core/config.h:435://#define USE_MY_DOCUMENTS
+./src/core/config.h:437:#define MASTER
+./src/core/config.h:454:#define THIS_IS_STUPID
+./src/core/config.h:467://#define USE_TEXTURE_POOL // not possible because R* used custom RW33
+./src/core/config.h:471:#define PC_PARTICLE
+./src/core/config.h:505:#define DONT_FIX_REPLAY_BUGS
+./src/core/Radar.cpp:2:#define WITHD3D
+./src/core/Radar.cpp:73:#define RADAR_MIN_X (-2000.0f)
+./src/core/Radar.cpp:74:#define RADAR_MIN_Y (-2000.0f)
+./src/core/Radar.cpp:75:#define RADAR_MAX_X (2000.0f)
+./src/core/Radar.cpp:76:#define RADAR_MAX_Y (2000.0f)
+./src/core/Radar.cpp:77:#define RADAR_SIZE_X (RADAR_MAX_X - RADAR_MIN_X)
+./src/core/Radar.cpp:78:#define RADAR_SIZE_Y (RADAR_MAX_Y - RADAR_MIN_Y)
+./src/core/Radar.cpp:80:#define RADAR_NUM_TILES (8)
+./src/core/Radar.cpp:81:#define RADAR_TILE_SIZE (RADAR_SIZE_X / RADAR_NUM_TILES)
+./src/core/Radar.cpp:84:#define RADAR_MIN_RANGE (120.0f)
+./src/core/Radar.cpp:85:#define RADAR_MAX_RANGE (350.0f)
+./src/core/Radar.cpp:86:#define RADAR_MIN_SPEED (0.3f)
+./src/core/Radar.cpp:87:#define RADAR_MAX_SPEED (0.9f)
+./src/core/FileLoader.cpp:369:#define InitClump(clump)
+./src/core/FileLoader.cpp:960:#define isLine3(l, a, b, c) ((l[0] == a) && (l[1] == b) && (l[2] == c))
+./src/core/FileLoader.cpp:961:#define isLine4(l, a, b, c, d) ((l[0] == a) && (l[1] == b) && (l[2] == c) && (l[3] == d))
+./src/core/CdStream.h:3:#define CDSTREAM_SECTOR_SIZE 2048
+./src/core/CdStream.h:5:#define _GET_INDEX(a) (a >> 24)
+./src/core/CdStream.h:6:#define _GET_OFFSET(a)  (a & 0xFFFFFF)
+./src/core/timebars.cpp:8:#define MAX_TIMERS (50)
+./src/core/timebars.cpp:9:#define MAX_MS_COLLECTED (40)
+./src/core/timebars.cpp:12:#define FRAMETIME
+./src/core/Streaming.cpp:220:#define MB (1024*1024)
+./src/core/Streaming.cpp:818:#define BIGBUILDINGFLAGS STREAMFLAGS_DONT_REMOVE|STREAMFLAGS_PRIORITY
+./src/core/Streaming.cpp:2187:#define STREAM_DIST 80.0f
+./src/core/Streaming.cpp:2688:#define MB (1024 * 1024)
+./src/core/main.h:20:#define gbShowTimebars false
+./src/core/Debug.cpp:11:#define DEBUG_X_POS (300)
+./src/core/Debug.cpp:12:#define DEBUG_Y_POS (41)
+./src/core/Debug.cpp:13:#define DEBUG_LINE_HEIGHT (22)
+./src/core/Frontend_PS2.cpp:28:#define CRect_SZ(x, y, w, h) CRect(x, y, x+w, y+h)
+./src/core/Frontend_PS2.cpp:39:#define SCRW SCREEN_WIDTH
+./src/core/Frontend_PS2.cpp:40:#define SCRH SCREEN_HEIGHT
+./src/core/Frontend_PS2.cpp:41://#define X SCREEN_STRETCH_X
+./src/core/Frontend_PS2.cpp:42://#define Y SCREEN_STRETCH_Y
+./src/core/Frontend_PS2.cpp:43:#define X SCREEN_SCALE_X
+./src/core/Frontend_PS2.cpp:44:#define Y SCREEN_SCALE_Y
+./src/core/Frontend_PS2.cpp:46:#define YF(x) Y(float(x)*(float(DEFAULT_SCREEN_HEIGHT)/float(SCREEN_HEIGHT_PAL)))
+./src/core/Frontend_PS2.cpp:47://#define X(x) ((x)/640.0f*SCRW)
+./src/core/Frontend_PS2.cpp:48://#define Y(y) ((y)/448.0f*SCRH)
+./src/core/Frontend_PS2.cpp:1122:		#define STAT_HEADER(str) do { MenuStats_1.AddTextLine(TheText.Get(str), nil); } while(0)
+./src/core/Frontend_PS2.cpp:1123:		#define STAT_PARAM(str) do { MenuStats_1.AddTextLine(nil, TheText.Get(str)); } while(0)
+./src/core/Frontend_PS2.cpp:1124:		#define STAT_LINE(str, left, isFloat, right) do { MenuStats_1.AddTextLine(TheText.Get(str), PrintStatLine(str, left, isFloat, right)); } while(0)
+./src/core/Timer.cpp:1:#define WITHWINDOWS
+./src/core/Timer.cpp:25:#define RsTimerType uint32
+./src/core/Timer.cpp:27:#define RsTimerType double
+./src/core/templates.h:32:#define POOLFLAG_ID     0x7f
+./src/core/templates.h:33:#define POOLFLAG_ISFREE 0x80
+./src/core/Radar.h:89:#define RADAR_LEFT (40.0f)
+./src/core/Radar.h:91:#define RADAR_BOTTOM (44.0f)
+./src/core/Radar.h:93:#define RADAR_BOTTOM (47.0f)
+./src/core/Radar.h:99:		#define RADAR_WIDTH (82.0f)
+./src/core/Radar.h:100:		#define RADAR_HEIGHT (82.0f)
+./src/core/Radar.h:102:#define RADAR_WIDTH ((CDraw::ms_bFixRadar)  ? (82.0f) : (94.0f))	
+./src/core/Radar.h:103:#define RADAR_HEIGHT ((CDraw::ms_bFixRadar) ? (82.0f) : (76.0f))
+./src/core/Radar.h:114:#define RADAR_WIDTH (94.0f)
+./src/core/Radar.h:115:#define RADAR_HEIGHT (76.0f)
+./src/core/ControllerConfig.cpp:1:#define WITHDINPUT
+./src/core/ControllerConfig.cpp:375:	#define IF_BTN_IN_RANGE(n) \
+./src/core/ControllerConfig.cpp:380:	#define IF_BTN_IN_RANGE(n) \
+./src/core/ControllerConfig.cpp:500:#define SETACTIONNAME(name) AsciiToUnicode(#name, buf); CMessages::WideStringCopy(m_aActionNames[name], buf, ACTIONNAME_LENGTH);
+./src/core/ControllerConfig.cpp:1681:#define CLEAR_ACTION_IF_NEEDED(action) \
+./src/core/ControllerConfig.cpp:1787:#define CHECK_ACTION(action) \
+./src/core/ControllerConfig.cpp:2431:#define VFB(b) b,
+./src/core/ControllerConfig.cpp:2433:#define VFB(b)
+./src/core/ControllerConfig.cpp:2436:#define CONTROLLER_BUTTONS(T, O, X, Q, L1, L2, L3, R1, R2, R3, SELECT)                                                                                         \
+./src/core/ControllerConfig.cpp:2623:#define PS2_TRIANGLE "\""
+./src/core/ControllerConfig.cpp:2624:#define PS2_CIRCLE "|"
+./src/core/ControllerConfig.cpp:2625:#define PS2_CROSS "/"
+./src/core/ControllerConfig.cpp:2626:#define PS2_SQUARE "^"
+./src/core/ControllerConfig.cpp:2628:#define PS2_TRIANGLE "TRIANGLE"
+./src/core/ControllerConfig.cpp:2629:#define PS2_CIRCLE "CIRCLE"
+./src/core/ControllerConfig.cpp:2630:#define PS2_CROSS "CROSS"
+./src/core/ControllerConfig.cpp:2631:#define PS2_SQUARE "SQUARE"
+./src/core/common.h:3:#define _CRT_SECURE_NO_WARNINGS
+./src/core/common.h:4:#define _USE_MATH_DEFINES
+./src/core/common.h:11:#define __STDC_LIMIT_MACROS // so we get UINT32_MAX etc
+./src/core/common.h:19:#define AUDIO_MSS
+./src/core/common.h:20:#define RWLIBS // codewarrior doesn't support project level defines - so not even this is enough, but still catches most ifdefs
+./src/core/common.h:29:#define WITHWINDOWS
+./src/core/common.h:38:		#define WITH_D3D // librw includes d3d9 itself via this right now
+./src/core/common.h:49:#define DIRECTINPUT_VERSION 0x0800
+./src/core/common.h:58:#define STREAMPOS(str) ((str)->tell())
+./src/core/common.h:59:#define STREAMFILE(str) (((rw::StreamFile*)(str))->file)
+./src/core/common.h:60:#define HIERNODEINFO(hier) ((hier)->nodeInfo)
+./src/core/common.h:61:#define HIERNODEID(hier, i) ((hier)->nodeInfo[i].id)
+./src/core/common.h:62:#define HANIMFRAME(anim, i) ((RwUInt8*)(anim)->keyframes + (i)*(anim)->interpInfo->animKeyFrameSize)
+./src/core/common.h:64:#define RWHALFPIXEL	// always d3d
+./src/core/common.h:65:#define STREAMPOS(str) ((str)->Type.memory.position)
+./src/core/common.h:66:#define STREAMFILE(str) ((str)->Type.file.fpFile)
+./src/core/common.h:67:#define HIERNODEINFO(hier) ((hier)->pNodeInfo)
+./src/core/common.h:68:#define HIERNODEID(hier, i) ((hier)->pNodeInfo[i].nodeID)
+./src/core/common.h:69:#define HANIMFRAME(anim, i) ((RwUInt8*)(anim)->pFrames + (i)*(anim)->interpInfo->keyFrameSize)
+./src/core/common.h:70:#define RpHAnimStdInterpFrame RpHAnimStdKeyFrame
+./src/core/common.h:74:#define HALFPX (0.5f)
+./src/core/common.h:76:#define HALFPX (0.0f)
+./src/core/common.h:79:#define rwVENDORID_ROCKSTAR 0x0253F2
+./src/core/common.h:81:#define Max(a,b) ((a) > (b) ? (a) : (b))
+./src/core/common.h:82:#define Min(a,b) ((a) < (b) ? (a) : (b))
+./src/core/common.h:85:#define Const const
+./src/core/common.h:114:#define nil NULL
+./src/core/common.h:125:#define TYPEALIGN(n) __attribute__ ((aligned (n)))
+./src/core/common.h:128:#define TYPEALIGN(n) __declspec(align(n))
+./src/core/common.h:130:#define TYPEALIGN(n)	// unknown compiler...ignore
+./src/core/common.h:134:#define ALIGNPTR(p) (void*)((((uintptr)(void*)p) + sizeof(void*)-1) & ~(sizeof(void*)-1))
+./src/core/common.h:137:#define MASK(p, s) (((1<<(s))-1) << (p))
+./src/core/common.h:153:		#define DEFAULT_SCREEN_WIDTH  (640)
+./src/core/common.h:154:		#define DEFAULT_SCREEN_HEIGHT (448)
+./src/core/common.h:156:		#define DEFAULT_SCREEN_WIDTH  (640)
+./src/core/common.h:157:		#define DEFAULT_SCREEN_HEIGHT (480)
+./src/core/common.h:160:		#define DEFAULT_SCREEN_WIDTH  (640)
+./src/core/common.h:161:		#define DEFAULT_SCREEN_HEIGHT (480)
+./src/core/common.h:163:		#define DEFAULT_SCREEN_WIDTH  (640)
+./src/core/common.h:164:		#define DEFAULT_SCREEN_HEIGHT (448)
+./src/core/common.h:167:#define DEFAULT_ASPECT_RATIO (4.0f/3.0f)
+./src/core/common.h:168:#define DEFAULT_VIEWWINDOW (0.7f)
+./src/core/common.h:174:		#define SCREEN_WIDTH  ((float)640)
+./src/core/common.h:175:		#define SCREEN_HEIGHT ((float)512)
+./src/core/common.h:177:		#define SCREEN_WIDTH  ((float)640)
+./src/core/common.h:178:		#define SCREEN_HEIGHT ((float)448)
+./src/core/common.h:181:#define SCREEN_WIDTH  ((float)RsGlobal.width)
+./src/core/common.h:182:#define SCREEN_HEIGHT ((float)RsGlobal.height)
+./src/core/common.h:185:#define SCREEN_HEIGHT_PAL ((float)512)
+./src/core/common.h:186:#define SCREEN_HEIGHT_NTSC ((float)448)
+./src/core/common.h:188:#define SCREEN_ASPECT_RATIO (CDraw::GetAspectRatio())
+./src/core/common.h:189:#define SCREEN_VIEWWINDOW (Tan(DEGTORAD(CDraw::GetScaledFOV() * 0.5f)))
+./src/core/common.h:192:#define SCREEN_STRETCH_X(a)   ((a) * (float) SCREEN_WIDTH / DEFAULT_SCREEN_WIDTH)
+./src/core/common.h:193:#define SCREEN_STRETCH_Y(a)   ((a) * (float) SCREEN_HEIGHT / DEFAULT_SCREEN_HEIGHT)
+./src/core/common.h:194:#define SCREEN_STRETCH_FROM_RIGHT(a)  (SCREEN_WIDTH - SCREEN_STRETCH_X(a))
+./src/core/common.h:195:#define SCREEN_STRETCH_FROM_BOTTOM(a) (SCREEN_HEIGHT - SCREEN_STRETCH_Y(a))
+./src/core/common.h:198:#define SCREEN_SCALE_X(a) SCREEN_SCALE_AR(SCREEN_STRETCH_X(a))
+./src/core/common.h:199:#define SCREEN_SCALE_Y(a) SCREEN_STRETCH_Y(a)
+./src/core/common.h:200:#define SCREEN_SCALE_FROM_RIGHT(a) (SCREEN_WIDTH - SCREEN_SCALE_X(a))
+./src/core/common.h:201:#define SCREEN_SCALE_FROM_BOTTOM(a) (SCREEN_HEIGHT - SCREEN_SCALE_Y(a))
+./src/core/common.h:204:#define SCREEN_SCALE_AR(a) ((a) * DEFAULT_ASPECT_RATIO / SCREEN_ASPECT_RATIO)
+./src/core/common.h:205:#define SCALE_AND_CENTER_X(x) ((SCREEN_WIDTH == DEFAULT_SCREEN_WIDTH) ? (x) : (SCREEN_WIDTH - SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH)) / 2 + SCREEN_SCALE_X((x)))
+./src/core/common.h:209:		#define SCREEN_SCALE_Y(a) CDraw::ScaleY(SCREEN_STRETCH_Y(a))	
+./src/core/common.h:213:#define SCREEN_SCALE_AR(a) (a)
+./src/core/common.h:214:#define SCALE_AND_CENTER_X(x) SCREEN_STRETCH_X(x)
+./src/core/common.h:287:#define clamp(v, low, high) ((v)<(low) ? (low) : (v)>(high) ? (high) : (v))
+./src/core/common.h:290:#define SQR(x) ((x) * (x))
+./src/core/common.h:293:#define M_E        2.71828182845904523536   // e
+./src/core/common.h:294:#define M_LOG2E    1.44269504088896340736   // log2(e)
+./src/core/common.h:295:#define M_LOG10E   0.434294481903251827651  // log10(e)
+./src/core/common.h:296:#define M_LN2      0.693147180559945309417  // ln(2)
+./src/core/common.h:297:#define M_LN10     2.30258509299404568402   // ln(10)
+./src/core/common.h:298:#define M_PI       3.14159265358979323846   // pi
+./src/core/common.h:299:#define M_PI_2     1.57079632679489661923   // pi/2
+./src/core/common.h:300:#define M_PI_4     0.785398163397448309616  // pi/4
+./src/core/common.h:301:#define M_1_PI     0.318309886183790671538  // 1/pi
+./src/core/common.h:302:#define M_2_PI     0.636619772367581343076  // 2/pi
+./src/core/common.h:303:#define M_2_SQRTPI 1.12837916709551257390   // 2/sqrt(pi)
+./src/core/common.h:304:#define M_SQRT2    1.41421356237309504880   // sqrt(2)
+./src/core/common.h:305:#define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
+./src/core/common.h:308:#define PI (float)M_PI
+./src/core/common.h:309:#define TWOPI (PI*2)
+./src/core/common.h:310:#define HALFPI (PI/2)
+./src/core/common.h:311:#define DEGTORAD(x) ((x) * PI / 180.0f)
+./src/core/common.h:312:#define RADTODEG(x) ((x) * 180.0f / PI)
+./src/core/common.h:315:#define MYRAND_MAX		65535
+./src/core/common.h:317:#define MYRAND_MAX		32767
+./src/core/common.h:328:#define DEBUGBREAK() __debugbreak();
+./src/core/common.h:332:#define DEV(f, ...)
+./src/core/common.h:334:#define DEV(f, ...)   re3_debug("[DEV]: " f, ## __VA_ARGS__)
+./src/core/common.h:343:#define debug(f, ...) re3_debug("[DBG]: " f, ## __VA_ARGS__)
+./src/core/common.h:344:#define Error(f, ...) re3_debug("[ERROR]: " f, ## __VA_ARGS__)
+./src/core/common.h:346:#define TRACE(f, ...) re3_trace(__FILE__, __LINE__, __FUNCTION__, f, ## __VA_ARGS__)
+./src/core/common.h:347:#define USERERROR(f, ...) re3_usererror(f, ## __VA_ARGS__)
+./src/core/common.h:349:#define TRACE(f, ...)
+./src/core/common.h:350:#define USERERROR(f, ...)
+./src/core/common.h:355:#define assert(_Expression) (void)( (!!(_Expression)) || (re3_assert(#_Expression, __FILE__, __LINE__, __FUNCTION__), 0) )
+./src/core/common.h:357:#define assert(_Expression) (_Expression)
+./src/core/common.h:359:#define ASSERT assert
+./src/core/common.h:362:#define static_assert(bool_constexpr, message)
+./src/core/common.h:365:#define _TODO(x)
+./src/core/common.h:366:#define _TODOCONST(x) (x)
+./src/core/common.h:372:#define VALIDATE_SIZE(struc, size) check_size<sizeof(struc), size> struc ## Check
+./src/core/common.h:374:#define VALIDATE_SIZE(struc, size)
+./src/core/common.h:376:#define VALIDATE_OFFSET(struc, member, offset) static_assert(offsetof(struc, member) == offset, "The offset of " #member " in " #struc " is not " #offset "...")
+./src/core/common.h:378:#define PERCENT(x, p)                    ((float(x) * (float(p) / 100.0f)))
+./src/core/common.h:379:#define ARRAY_SIZE(array)                (sizeof(array) / sizeof(array[0]))
+./src/core/common.h:380:#define BIT(num)                         (1<<(num))
+./src/core/common.h:382:#define ABS(a)  (((a) < 0) ? (-(a)) : (a))
+./src/core/common.h:383:#define norm(value, min, max) (((value) < (min)) ? 0 : (((value) > (max)) ? 1 : (((value) - (min)) / ((max) - (min)))))
+./src/core/common.h:384:#define lerp(norm, min, max) ( (norm) * ((max) - (min)) + (min) )
+./src/core/common.h:386:#define STRINGIFY(x)                    #x
+./src/core/common.h:387:#define STR(x)                          STRINGIFY(x)
+./src/core/common.h:388:#define CONCAT_(x,y) x##y
+./src/core/common.h:389:#define CONCAT(x,y) CONCAT_(x,y)
+./src/core/common.h:393:#define TWEAKPATH                                   ___tw___TWEAKPATH
+./src/core/common.h:394:#define SETTWEAKPATH(path)	                        static const char *___tw___TWEAKPATH = path;
+./src/core/common.h:395:#define TWEAKFUNC(v)                                static CTweakFunc   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), TWEAKPATH);
+./src/core/common.h:396:#define TWEAKFUNCN(v, name)                         static CTweakFunc   CONCAT(___tw___tweak, __COUNTER__)(&v, name, TWEAKPATH);
+./src/core/common.h:397:#define TWEAKBOOL(v)                                static CTweakBool   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), TWEAKPATH);
+./src/core/common.h:398:#define TWEAKBOOLN(v, name)                         static CTweakBool   CONCAT(___tw___tweak, __COUNTER__)(&v, name, TWEAKPATH);
+./src/core/common.h:399:#define TWEAKINT32(v, lower, upper, step)           static CTweakInt32  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:400:#define TWEAKINT32N(v, lower, upper, step, name)    static CTweakInt32  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:401:#define TWEAKUINT32(v, lower, upper, step)          static CTweakUInt32 CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:402:#define TWEAKUINT32N(v, lower, upper, step, name)   static CTweakUInt32 CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:403:#define TWEAKINT16(v, lower, upper, step)           static CTweakInt16  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:404:#define TWEAKINT16N(v, lower, upper, step, name)    static CTweakInt16  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:405:#define TWEAKUINT16(v, lower, upper, step)          static CTweakUInt16 CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:406:#define TWEAKUINT16N(v, lower, upper, step, name)   static CTweakUInt16 CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:407:#define TWEAKINT8(v, lower, upper, step)            static CTweakInt8   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:408:#define TWEAKINT8N(v, lower, upper, step, name)     static CTweakInt8   CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:409:#define TWEAKUINT8(v, lower, upper, step)           static CTweakUInt8  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:410:#define TWEAKUINT8N(v, lower, upper, step, name)    static CTweakUInt8  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:411:#define TWEAKFLOAT(v, lower, upper, step)           static CTweakFloat  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+./src/core/common.h:412:#define TWEAKFLOATN(v, lower, upper, step, name)    static CTweakFloat  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+./src/core/common.h:413:#define TWEAKSWITCH(v, lower, upper, str, f)        static CTweakSwitch CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, str, f, TWEAKPATH);
+./src/core/common.h:414:#define TWEAKSWITCHN(v, lower, upper, str, f, name) static CTweakSwitch CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, str, f, TWEAKPATH);
+./src/core/common.h:477:#define _TWEEKCLASS(name, type)                                                                    \
+./src/core/common.h:509:#define INITSAVEBUF _saveBufCount = 0;
+./src/core/common.h:510:#define VALIDATESAVEBUF(b) assert(_saveBufCount == b);
+./src/core/common.h:512:#define INITSAVEBUF
+./src/core/common.h:513:#define VALIDATESAVEBUF(b)
+./src/core/common.h:542:#define SAVE_HEADER_SIZE (4*sizeof(char)+sizeof(uint32))
+./src/core/common.h:544:#define WriteSaveHeader(buf,a,b,c,d,size) \
+./src/core/common.h:551:#define CheckSaveHeader(buf,a,b,c,d,size)\
+./src/core/Camera.cpp:59:#define PLAYER (CWorld::Players[CWorld::PlayerInFocus].m_pPed)
+./src/core/Camera.cpp:71:#define KEYJUSTDOWN(k) ControlsManager.GetIsKeyboardKeyJustDown((RsKeyCodes)k)
+./src/core/Camera.cpp:72:#define KEYDOWN(k) ControlsManager.GetIsKeyboardKeyDown((RsKeyCodes)k)
+./src/core/Camera.cpp:73:#define CTRLJUSTDOWN(key) \
+./src/core/Camera.cpp:76:#define CTRLDOWN(key) ((KEYDOWN(rsLCTRL) || KEYDOWN(rsRCTRL)) && KEYDOWN((RsKeyCodes)key))
+./src/core/World.cpp:27:#define OBJECT_REPOSITION_OFFSET_Z 2.0f
+./src/core/World.cpp:183:#define LOSARGS                                                                                                        \
+./src/core/World.cpp:477:#define LOSARGS                                                                                                        \
+./src/core/FrontEndControls.cpp:9:#define X SCREEN_SCALE_X
+./src/core/FrontEndControls.cpp:10:#define Y(x) SCREEN_SCALE_Y(float(x)*(float(DEFAULT_SCREEN_HEIGHT)/float(SCREEN_HEIGHT_PAL)))
+./src/core/Stats.cpp:301:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); buf += sizeof(data);
+./src/core/Stats.cpp:363:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); buf += sizeof(data);
+./src/core/Pools.cpp:28:#define CHECKMEM(msg) CMemCheck::AllocateMemCheckBlock(msg)
+./src/core/Pools.cpp:30:#define CHECKMEM(msg)
+./src/core/Pools.cpp:127:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/core/Pools.cpp:128:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/core/main.cpp:106:#define TOTALNUMCHUNKS 48.0f
+./src/core/main.cpp:108:#define TOTALNUMCHUNKS 73.0f
+./src/core/main.cpp:128:#define WANT_TO_LOAD TheMemoryCard.m_bWantToLoad
+./src/core/main.cpp:129:#define FOUND_GAME_TO_LOAD TheMemoryCard.b_FoundRecentSavedGameWantToLoad
+./src/core/main.cpp:131:#define WANT_TO_LOAD FrontEndMenuManager.m_bWantToLoad
+./src/core/main.cpp:132:#define FOUND_GAME_TO_LOAD b_FoundRecentSavedGameWantToLoad
+./src/core/main.cpp:137:#define CLEARMODE (rwCAMERACLEARZ | rwCAMERACLEARSTENCIL)
+./src/core/main.cpp:139:#define CLEARMODE (rwCAMERACLEARZ)
+./src/core/main.cpp:375:#define TILE_WIDTH 576
+./src/core/main.cpp:376:#define TILE_HEIGHT 432
+./src/core/main.cpp:471:#define NUM_PREALLOC_ATOMICS 3245
+./src/core/main.cpp:472:#define NUM_PREALLOC_CLUMPS 101
+./src/core/main.cpp:473:#define NUM_PREALLOC_FRAMES 2821
+./src/core/main.cpp:474:#define NUM_PREALLOC_GEOMETRIES 1404
+./src/core/main.cpp:475:#define NUM_PREALLOC_TEXDICTS 106
+./src/core/main.cpp:476:#define NUM_PREALLOC_TEXTURES 1900
+./src/core/main.cpp:477:#define NUM_PREALLOC_MATERIALS 3300
+./src/core/CdStreamPosix.cpp:21:#define CDDEBUG(f, ...)   debug ("%s: " f "\n", "cdvd_stream", ## __VA_ARGS__)
+./src/core/CdStreamPosix.cpp:22:#define CDTRACE(f, ...)   printf("%s: " f "\n", "cdvd_stream", ## __VA_ARGS__)
+./src/core/Frontend.h:9:#define MENUHEADER_POS_X 50.0f
+./src/core/Frontend.h:10:#define MENUHEADER_POS_Y 75.0f
+./src/core/Frontend.h:11:#define MENUHEADER_HEIGHT 1.3f
+./src/core/Frontend.h:13:#define MENUHEADER_POS_X 35.0f
+./src/core/Frontend.h:14:#define MENUHEADER_POS_Y 93.0f
+./src/core/Frontend.h:15:#define MENUHEADER_HEIGHT 1.6f
+./src/core/Frontend.h:17:#define MENUHEADER_WIDTH 0.84f
+./src/core/Frontend.h:19:#define MENU_X_MARGIN 40.0f
+./src/core/Frontend.h:20:#define MENUACTION_POS_Y 60.0f
+./src/core/Frontend.h:21:#define MENUACTION_SCALE_MULT 0.9f
+./src/core/Frontend.h:23:#define MENURADIO_ICON_SCALE 60.0f
+./src/core/Frontend.h:25:#define MENUSLIDER_X 256.0f
+./src/core/Frontend.h:26:#define MENUSLIDER_UNK 256.0f
+./src/core/Frontend.h:28:#define BIGTEXT_X_SCALE 0.75f // For FONT_HEADING
+./src/core/Frontend.h:29:#define BIGTEXT_Y_SCALE 0.9f
+./src/core/Frontend.h:30:#define MEDIUMTEXT_X_SCALE 0.55f // For FONT_HEADING
+./src/core/Frontend.h:31:#define MEDIUMTEXT_Y_SCALE 0.8f
+./src/core/Frontend.h:32:#define SMALLTEXT_X_SCALE 0.45f // used for FONT_HEADING and FONT_BANK, but looks off for HEADING 
+./src/core/Frontend.h:33:#define SMALLTEXT_Y_SCALE 0.7f
+./src/core/Frontend.h:34:#define SMALLESTTEXT_X_SCALE 0.4f // used for both FONT_HEADING and FONT_BANK
+./src/core/Frontend.h:35:#define SMALLESTTEXT_Y_SCALE 0.6f
+./src/core/Frontend.h:37:#define HELPER_TEXT_LEFT_MARGIN 320.0f
+./src/core/Frontend.h:38:#define HELPER_TEXT_BOTTOM_MARGIN 120.0f
+./src/core/Frontend.h:40:#define PLAYERSETUP_LIST_TOP 28.0f
+./src/core/Frontend.h:41:#define PLAYERSETUP_LIST_BOTTOM 125.0f
+./src/core/Frontend.h:42:#define PLAYERSETUP_LIST_LEFT 200.0f
+./src/core/Frontend.h:43:#define PLAYERSETUP_LIST_RIGHT 36.0f
+./src/core/Frontend.h:45:#define PLAYERSETUP_SCROLLBAR_WIDTH 19.0f
+./src/core/Frontend.h:47:#define PLAYERSETUP_SCROLLBAR_WIDTH 16.0f
+./src/core/Frontend.h:49:#define PLAYERSETUP_SCROLLBUTTON_HEIGHT 17.0f
+./src/core/Frontend.h:50:#define PLAYERSETUP_SCROLLBUTTON_TXD_DIMENSION 64
+./src/core/Frontend.h:51:#define PLAYERSETUP_SKIN_COLUMN_LEFT 220.0f
+./src/core/Frontend.h:52:#define PLAYERSETUP_DATE_COLUMN_RIGHT 56.0f
+./src/core/Frontend.h:53:#define PLAYERSETUP_LIST_BODY_TOP 47
+./src/core/Frontend.h:54:#define PLAYERSETUP_ROW_HEIGHT 9
+./src/core/Frontend.h:56:#define STATS_SLIDE_Y_PER_SECOND 30.0f
+./src/core/Frontend.h:57:#define STATS_ROW_HEIGHT 20.0f
+./src/core/Frontend.h:58:#define STATS_ROW_X_MARGIN 50.0f
+./src/core/Frontend.h:59:#define STATS_BOTTOM_MARGIN 135.0f
+./src/core/Frontend.h:60:#define STATS_TOP_MARGIN 40.0f
+./src/core/Frontend.h:61:#define STATS_TOP_DIMMING_AREA_LENGTH (93.0f - STATS_TOP_MARGIN)
+./src/core/Frontend.h:62:#define STATS_BOTTOM_DIMMING_AREA_LENGTH 55.0f
+./src/core/Frontend.h:63:#define STATS_PUT_BACK_TO_BOTTOM_Y 50.0f
+./src/core/Frontend.h:64:#define STATS_RATING_X 24.0f
+./src/core/Frontend.h:65:#define STATS_RATING_Y 20.0f
+./src/core/Frontend.h:67:#define BRIEFS_TOP_MARGIN 40.0f
+./src/core/Frontend.h:68:#define BRIEFS_LINE_X 50.0f
+./src/core/Frontend.h:69:#define BRIEFS_LINE_HEIGHT 60.0f
+./src/core/Frontend.h:71:#define CONTSETUP_STANDARD_ROW_HEIGHT 10.7f
+./src/core/Frontend.h:72:#define CONTSETUP_CLASSIC_ROW_HEIGHT 9.0f
+./src/core/Frontend.h:73:#define CONTSETUP_BOUND_HIGHLIGHT_HEIGHT 10
+./src/core/Frontend.h:74:#define CONTSETUP_BOUND_COLUMN_WIDTH 190.0f
+./src/core/Frontend.h:75:#define CONTSETUP_LIST_HEADER_HEIGHT 20.0f
+./src/core/Frontend.h:76:#define CONTSETUP_LIST_TOP 28.0f
+./src/core/Frontend.h:77:#define CONTSETUP_LIST_RIGHT 18.0f
+./src/core/Frontend.h:78:#define CONTSETUP_LIST_BOTTOM 120.0f
+./src/core/Frontend.h:79:#define CONTSETUP_LIST_LEFT 18.0f
+./src/core/Frontend.h:80:#define CONTSETUP_COLUMN_1_X 40.0f
+./src/core/Frontend.h:81:#define CONTSETUP_COLUMN_2_X 210.0f
+./src/core/Frontend.h:82:#define CONTSETUP_COLUMN_3_X (CONTSETUP_COLUMN_2_X + CONTSETUP_BOUND_COLUMN_WIDTH + 10.0f)
+./src/core/Frontend.h:83:#define CONTSETUP_BACK_RIGHT 35.0f
+./src/core/Frontend.h:84:#define CONTSETUP_BACK_BOTTOM 122.0f
+./src/core/Frontend.h:85:#define CONTSETUP_BACK_HEIGHT 25.0f
+./src/core/Frontend.h:721:	#define ISLAND_LOADING_IS(p) if (CMenuManager::m_PrefsIslandLoading == CMenuManager::ISLAND_LOADING_##p)
+./src/core/Frontend.h:722:	#define ISLAND_LOADING_ISNT(p) if (CMenuManager::m_PrefsIslandLoading != CMenuManager::ISLAND_LOADING_##p)
+./src/core/Frontend.h:724:	#define ISLAND_LOADING_IS(p)
+./src/core/Frontend.h:725:	#define ISLAND_LOADING_ISNT(p)
+./src/core/World.h:11:#define SECTOR_SIZE_X (40.0f)
+./src/core/World.h:12:#define SECTOR_SIZE_Y (40.0f)
+./src/core/World.h:14:#define NUMSECTORS_X (100)
+./src/core/World.h:15:#define NUMSECTORS_Y (100)
+./src/core/World.h:17:#define WORLD_SIZE_X (NUMSECTORS_X * SECTOR_SIZE_X)
+./src/core/World.h:18:#define WORLD_SIZE_Y (NUMSECTORS_Y * SECTOR_SIZE_Y)
+./src/core/World.h:20:#define WORLD_MIN_X (-2000.0f)
+./src/core/World.h:21:#define WORLD_MIN_Y (-2000.0f)
+./src/core/World.h:23:#define WORLD_MAX_X (WORLD_MIN_X + WORLD_SIZE_X)
+./src/core/World.h:24:#define WORLD_MAX_Y (WORLD_MIN_Y + WORLD_SIZE_Y)
+./src/core/World.h:26:#define MAP_Z_LOW_LIMIT -100.0f
+./src/core/Cam.cpp:3459:#define MS(t) (uint32)((t)*1000.0f)
+./src/core/Cam.cpp:3750:#define KEYJUSTDOWN(k) ControlsManager.GetIsKeyboardKeyJustDown((RsKeyCodes)k)
+./src/core/Cam.cpp:3751:#define KEYDOWN(k) ControlsManager.GetIsKeyboardKeyDown((RsKeyCodes)k)
+./src/core/Cam.cpp:3752:#define CTRLJUSTDOWN(key) \
+./src/core/Cam.cpp:3755:#define CTRLDOWN(key) ((KEYDOWN(rsLCTRL) || KEYDOWN(rsRCTRL)) && KEYDOWN((RsKeyCodes)key))
+./src/core/Cam.cpp:5247:#define IS_TRAFFIC_LIGHT(ent) (ent->IsObject() && (IsStreetLight(ent->GetModelIndex())))
+./src/core/Pad.cpp:1:#define WITHDINPUT
+./src/core/Pad.cpp:638:#define _RECONCILE_BUTTON(button) \
+./src/core/Pad.cpp:641:#define _RECONCILE_AXIS_POSITIVE(axis) \
+./src/core/Pad.cpp:644:#define _RECONCILE_AXIS_NEGATIVE(axis) \
+./src/core/Pad.cpp:647:#define _RECONCILE_AXIS(axis) \
+./src/core/Pad.cpp:650:#define _FIX_AXIS_DIR(axis) \
+./src/core/Pad.cpp:653:#define _FIX_RECON_DIR(pos, neg, axis) \
+./src/core/Pad.cpp:776:#define _CHEATCMP(str)	strncmp(str, CheatString, sizeof(str)-1)
+./src/core/Pad.cpp:903:	#define _CHEATCMP(str) strncmp(str, KeyBoardCheatString, sizeof(str)-1)
+./src/core/Pad.cpp:1361:						#define CLAMP_AXIS(x) (((x) < 43 && (x) >= -42) ? 0 : (((x) > 0) ? (Max((x)-42, 0)*127/85) : Min((x)+42, 0)*127/85))
+./src/core/Pad.cpp:1362:						#define FIX_AXIS(x) CLAMP_AXIS((x)-128)
+./src/core/Pad.cpp:1518:#define CURMODE (IsAffectedByController ? Mode : 0)
+./src/core/Pad.cpp:1520:#define CURMODE (Mode)
+./src/core/ControllerConfig.h:4:#define DIRECTINPUT_VERSION 0x0800
+./src/core/ControllerConfig.h:101:#define JOY_BUTTONS 16
+./src/core/ControllerConfig.h:102:#define MAX_BUTTONS (JOY_BUTTONS+1)
+./src/core/ControllerConfig.h:104:#define ACTIONNAME_LENGTH 40
+./src/core/Frontend.cpp:1:#define FORCE_PC_SCALING
+./src/core/Frontend.cpp:2:#define WITHWINDOWS
+./src/core/Frontend.cpp:3:#define WITHDINPUT
+./src/core/Frontend.cpp:62:#define TIDY_UP_PBP // ProcessButtonPresses
+./src/core/Frontend.cpp:63:#define MAX_VISIBLE_LIST_ROW 30
+./src/core/Frontend.cpp:64:#define SCROLLBAR_MAX_HEIGHT 263.0f // not in end result
+./src/core/Frontend.cpp:65:#define SCROLLABLE_PAGES
+./src/core/Frontend.cpp:66:#define RED_DELETE_BACKGROUND
+./src/core/Frontend.cpp:69:#define isPlainTextScreen(screen) (screen == MENUPAGE_BRIEFS)
+./src/core/Frontend.cpp:71:#define isPlainTextScreen(screen) (screen == MENUPAGE_BRIEFS || screen == MENUPAGE_STATS)
+./src/core/Frontend.cpp:74:#define hasNativeList(screen) (screen == MENUPAGE_MULTIPLAYER_FIND_GAME || screen == MENUPAGE_SKIN_SELECT \
+./src/core/Frontend.cpp:78:#define MAX_VISIBLE_OPTION 12
+./src/core/Frontend.cpp:79:#define MAX_VISIBLE_OPTION_ON_SCREEN (hasNativeList(m_nCurrScreen) ? MAX_VISIBLE_LIST_ROW : MAX_VISIBLE_OPTION)
+./src/core/Frontend.cpp:80:#define SCREEN_HAS_AUTO_SCROLLBAR (m_nTotalListRow > MAX_VISIBLE_OPTION && !hasNativeList(m_nCurrScreen))
+./src/core/Frontend.cpp:89:#define SETUP_SCROLLING(screen) \
+./src/core/Frontend.cpp:99:#define MAX_VISIBLE_OPTION_ON_SCREEN MAX_VISIBLE_LIST_ROW
+./src/core/Frontend.cpp:100:#define SETUP_SCROLLING(screen)
+./src/core/Frontend.cpp:104:#define GetBackJustUp GetTriangleJustUp
+./src/core/Frontend.cpp:105:#define GetBackJustDown GetTriangleJustDown
+./src/core/Frontend.cpp:107:#define GetBackJustUp GetCircleJustUp
+./src/core/Frontend.cpp:108:#define GetBackJustDown GetCircleJustDown
+./src/core/Frontend.cpp:110:#define GetBackJustUp GetSquareJustUp
+./src/core/Frontend.cpp:111:#define GetBackJustDown GetSquareJustDown
+./src/core/Frontend.cpp:279:#define MENU_X_RIGHT_ALIGNED(x) SCALE_AND_CENTER_X(DEFAULT_SCREEN_WIDTH - (x))
+./src/core/Frontend.cpp:283:#define MENU_X_LEFT_ALIGNED(x) SCALE_AND_CENTER_X(x)
+./src/core/Frontend.cpp:284:#define MENU_X(x) SCREEN_SCALE_X(x)
+./src/core/Frontend.cpp:285:#define MENU_Y(y) SCREEN_SCALE_Y(y)
+./src/core/Frontend.cpp:287:#define MENU_X_LEFT_ALIGNED(x) StretchX(x)
+./src/core/Frontend.cpp:288:#define MENU_X(x) StretchX(x)
+./src/core/Frontend.cpp:289:#define MENU_Y(y) StretchY(y)
+./src/core/Frontend.cpp:293:#define PAGE_NAME_X MENU_X_RIGHT_ALIGNED
+./src/core/Frontend.cpp:295:#define PAGE_NAME_X SCREEN_SCALE_FROM_RIGHT
+./src/core/Frontend.cpp:299:#define ChangeScreen(screen, option, updateDelay, clearAlpha) \
+./src/core/Frontend.cpp:312:#define SET_FONT_FOR_MENU_HEADER \
+./src/core/Frontend.cpp:318:#define RESET_FONT_FOR_NEW_PAGE \
+./src/core/Frontend.cpp:329:#define SET_FONT_FOR_HELPER_TEXT \
+./src/core/Frontend.cpp:334:#define SET_FONT_FOR_LIST_ITEM \
+./src/core/Frontend.cpp:339:#define ProcessSlider(value, increaseAction, decreaseAction, hoverStartX, hoverEndX) \
+./src/core/Frontend.cpp:356:#define ProcessRadioIcon(sprite, x, y, radioId, hoverOpt) \
+./src/core/Frontend.cpp:1843:	#define SCROLLBAR_BOTTOM_Y 125.0f // only for background, scrollbar's itself is calculated
+./src/core/Frontend.cpp:1844:	#define SCROLLBAR_RIGHT_X 36.0f
+./src/core/Frontend.cpp:1845:	#define SCROLLBAR_WIDTH 9.5f
+./src/core/Frontend.cpp:1846:	#define SCROLLBAR_TOP_Y 64
+./src/core/Frontend.cpp:2522:	#define setBbItem(a, b, c) strcpy(a.name, b); a.screenId = c;
+./src/core/Frontend.cpp:2759:	#define optionWidth		MENU_X(66.0f)
+./src/core/Frontend.cpp:2760:	#define rawOptionHeight	22.0f
+./src/core/Frontend.cpp:2761:	#define optionBottom	SCREEN_SCALE_FROM_BOTTOM(20.0f)
+./src/core/Frontend.cpp:2762:	#define optionTop		SCREEN_SCALE_FROM_BOTTOM(20.0f + rawOptionHeight)
+./src/core/Frontend.cpp:2763:	#define leftPadding		MENU_X_LEFT_ALIGNED(90.0f)
+./src/core/Frontend.cpp:5844:#define X(f) ((f)*scale + centerX)
+./src/core/Frontend.cpp:5845:#define Y(f) ((f)*scale + centerY)
+./src/core/Frontend.cpp:6350:#define ZOOM(x, y, in) \
+./src/core/Frontend.cpp:6524:#define TEXT_PIECE(key,extraSpace) \
+./src/core/Frontend.cpp:6532:#define TEXT_PIECE(key,extraSpace) \
+./src/core/Frontend.cpp:6564:#define int_STAT_IS_FLOAT false
+./src/core/Frontend.cpp:6565:#define float_STAT_IS_FLOAT true
+./src/core/Frontend.cpp:6566:#define STAT_LINE_1(varType, left, right1) \
+./src/core/Frontend.cpp:6575:#define STAT_LINE_2(varType, left, right1, right2) \
+./src/core/Frontend.cpp:6585:#define TEXT_ON_LEFT_GXT(name) \
+./src/core/Frontend.cpp:6593:#define TEXT_ON_RIGHT(text) \
+./src/control/RoadBlocks.cpp:18:#define ROADBLOCKDIST (80.0f)
+./src/control/Garages.h:79:#define SWITCH_GARAGE_DISTANCE_CLOSE 40.0f
+./src/control/Replay.h:8:#define FIX_REPLAY_BUGS
+./src/control/Replay.h:65:#define REPLAY_STUB
+./src/control/Replay.h:67:#define REPLAY_STUB {}
+./src/control/CarAI.cpp:22:#define DISTANCE_TO_SWITCH_DISTANCE_GOTO 20.0f
+./src/control/Garages.cpp:28:#define CRUSHER_GARAGE_X1 (1135.5f)
+./src/control/Garages.cpp:29:#define CRUSHER_GARAGE_Y1 (57.0f)
+./src/control/Garages.cpp:30:#define CRUSHER_GARAGE_Z1 (-1.0f)
+./src/control/Garages.cpp:31:#define CRUSHER_GARAGE_X2 (1149.5f)
+./src/control/Garages.cpp:32:#define CRUSHER_GARAGE_Y2 (63.7f)
+./src/control/Garages.cpp:33:#define CRUSHER_GARAGE_Z2 (3.5f)
+./src/control/Garages.cpp:35:#define ROTATED_DOOR_OPEN_SPEED (0.015f)
+./src/control/Garages.cpp:36:#define ROTATED_DOOR_CLOSE_SPEED (0.02f)
+./src/control/Garages.cpp:37:#define DEFAULT_DOOR_OPEN_SPEED (0.035f)
+./src/control/Garages.cpp:38:#define DEFAULT_DOOR_CLOSE_SPEED (0.04f)
+./src/control/Garages.cpp:39:#define CRUSHER_CRANE_SPEED (0.005f)
+./src/control/Garages.cpp:42:#define BOMB_PRICE (1000)
+./src/control/Garages.cpp:43:#define RESPRAY_PRICE (1000)
+./src/control/Garages.cpp:46:#define DISTANCE_TO_CALL_OFF_CHASE (10.0f)
+./src/control/Garages.cpp:47:#define DISTANCE_FOR_MRWHOOP_HACK (4.0f)
+./src/control/Garages.cpp:48:#define DISTANCE_TO_ACTIVATE_GARAGE (8.0f)
+./src/control/Garages.cpp:49:#define DISTANCE_TO_ACTIVATE_KEEPCAR_GARAGE (17.0f)
+./src/control/Garages.cpp:50:#define DISTANCE_TO_CLOSE_MISSION_GARAGE (30.0f)
+./src/control/Garages.cpp:51:#define DISTANCE_TO_CLOSE_COLLECTSPECIFICCARS_GARAGE (25.0f)
+./src/control/Garages.cpp:52:#define DISTANCE_TO_CLOSE_COLLECTCARS_GARAGE (40.0f)
+./src/control/Garages.cpp:53:#define DISTANCE_TO_CLOSE_HIDEOUT_GARAGE_ON_FOOT (2.2f)
+./src/control/Garages.cpp:54:#define DISTANCE_TO_CLOSE_HIDEOUT_GARAGE_IN_CAR (15.0f)
+./src/control/Garages.cpp:55:#define DISTANCE_TO_FORCE_CLOSE_HIDEOUT_GARAGE (70.0f)
+./src/control/Garages.cpp:56:#define DISTANCE_TO_OPEN_HIDEOUT_GARAGE_ON_FOOT (1.7f)
+./src/control/Garages.cpp:57:#define DISTANCE_TO_OPEN_HIDEOUT_GARAGE_IN_CAR (10.0f)
+./src/control/Garages.cpp:58:#define DISTANCE_TO_SHOW_HIDEOUT_MESSAGE (5.0f)
+./src/control/Garages.cpp:60:#define DISTANCE_TO_CONSIDER_DOOR_FOR_GARAGE (20.0f)
+./src/control/Garages.cpp:63:#define TIME_TO_RESPRAY (2000)
+./src/control/Garages.cpp:64:#define TIME_TO_SETUP_BOMB (2000)
+./src/control/Garages.cpp:65:#define TIME_TO_CRUSH_CAR (3000)
+./src/control/Garages.cpp:66:#define TIME_TO_PROCESS_KEEPCAR_GARAGE (2000)
+./src/control/Garages.cpp:69:#define FREE_RESPRAY_HEALTH_THRESHOLD (970.0f)
+./src/control/Garages.cpp:70:#define NUM_PARTICLES_IN_RESPRAY (200)
+./src/control/Garages.cpp:71:#define RESPRAY_CENTERING_COEFFICIENT (0.75f)
+./src/control/Garages.cpp:74:#define KGS_OF_EXPLOSIVES_IN_BOMB (10)
+./src/control/Garages.cpp:77:#define REWARD_FOR_FIRST_POLICE_CAR (5000)
+./src/control/Garages.cpp:78:#define REWARD_FOR_FIRST_BANK_VAN (5000)
+./src/control/Garages.cpp:79:#define MAX_POLICE_CARS_TO_COLLECT (10)
+./src/control/Garages.cpp:80:#define MAX_BANK_VANS_TO_COLLECT (10)
+./src/control/Garages.cpp:83:#define MAX_SPEED_TO_SHOW_COLLECTED_MESSAGE (0.03f)
+./src/control/Garages.cpp:84:#define IMPORT_REWARD (1000)
+./src/control/Garages.cpp:85:#define IMPORT_ALLCARS_REWARD (200000)
+./src/control/Garages.cpp:88:#define CRUSHER_VEHICLE_TEST_SPAN (8)
+./src/control/Garages.cpp:89:#define CRUSHER_MIN_REWARD (25)
+./src/control/Garages.cpp:90:#define CRUSHER_MAX_REWARD (125)
+./src/control/Garages.cpp:91:#define CRUSHER_REWARD_COEFFICIENT (1.0f/500000)
+./src/control/Garages.cpp:94:#define MAX_STORED_CARS_IN_INDUSTRIAL (1)
+./src/control/Garages.cpp:95:#define MAX_STORED_CARS_IN_COMMERCIAL (NUM_GARAGE_STORED_CARS)
+./src/control/Garages.cpp:96:#define MAX_STORED_CARS_IN_SUBURBAN (NUM_GARAGE_STORED_CARS)
+./src/control/Garages.cpp:97:#define LIMIT_CARS_IN_INDUSTRIAL (1)
+./src/control/Garages.cpp:98:#define LIMIT_CARS_IN_COMMERCIAL (2)
+./src/control/Garages.cpp:99:#define LIMIT_CARS_IN_SUBURBAN (3)
+./src/control/Garages.cpp:100:#define HIDEOUT_DOOR_SPEED_COEFFICIENT (1.7f)
+./src/control/Garages.cpp:101:#define TIME_BETWEEN_HIDEOUT_MESSAGES (18000)
+./src/control/Garages.cpp:104:#define MARGIN_FOR_CAMERA_COLLECTCARS (1.3f)
+./src/control/Garages.cpp:105:#define MARGIN_FOR_CAMERA_DEFAULT (4.0f)
+./src/control/Script.cpp:117:#define REGISTER_COMMAND(command, in, out, cond, ovrd, visual) { command, #command, in, out, cond, ovrd, visual }
+./src/control/Script.cpp:118:#define INPUT_ARGUMENTS(...) { __VA_ARGS__ ARGTYPE_NONE }
+./src/control/Script.cpp:119:#define OUTPUT_ARGUMENTS(...) { __VA_ARGS__ ARGTYPE_NONE }
+./src/control/PathFind.cpp:17:#define MAX_DIST INT16_MAX-1
+./src/control/PathFind.cpp:18:#define MIN_PED_ROUTE_DISTANCE 23.8f
+./src/control/PathFind.cpp:21:#define NUMTEMPNODES 4000
+./src/control/PathFind.cpp:22:#define NUMDETACHED_CARS 100
+./src/control/PathFind.cpp:23:#define NUMDETACHED_PEDS 50
+./src/control/PathFind.cpp:564:#define OBJECTINDEX(n) (m_pathNodes[(n)].objectIndex)
+./src/control/CarCtrl.cpp:35:#define DISTANCE_TO_SPAWN_ROADBLOCK_PEDS 51.0f
+./src/control/CarCtrl.cpp:36:#define DISTANCE_TO_SCAN_FOR_DANGER 11.0f
+./src/control/CarCtrl.cpp:37:#define SAFE_DISTANCE_TO_PED 3.0f
+./src/control/CarCtrl.cpp:38:#define INFINITE_Z 1000000000.0f
+./src/control/CarCtrl.cpp:40:#define VEHICLE_HEIGHT_DIFF_TO_CONSIDER_WEAVING 4.0f
+./src/control/CarCtrl.cpp:41:#define PED_HEIGHT_DIFF_TO_CONSIDER_WEAVING 4.0f
+./src/control/CarCtrl.cpp:42:#define OBJECT_HEIGHT_DIFF_TO_CONSIDER_WEAVING 8.0f
+./src/control/CarCtrl.cpp:43:#define WIDTH_COEF_TO_WEAVE_SAFELY 1.2f
+./src/control/CarCtrl.cpp:44:#define OBJECT_WIDTH_TO_WEAVE 0.3f
+./src/control/CarCtrl.cpp:45:#define PED_WIDTH_TO_WEAVE 0.8f
+./src/control/CarCtrl.cpp:47:#define PATH_DIRECTION_NONE 0
+./src/control/CarCtrl.cpp:48:#define PATH_DIRECTION_STRAIGHT 1
+./src/control/CarCtrl.cpp:49:#define PATH_DIRECTION_RIGHT 2
+./src/control/CarCtrl.cpp:50:#define PATH_DIRECTION_LEFT 4
+./src/control/CarCtrl.cpp:52:#define ATTEMPTS_TO_FIND_NEXT_NODE 15
+./src/control/CarCtrl.cpp:54:#define DISTANCE_TO_SWITCH_FROM_BLOCK_TO_STOP 5.0f
+./src/control/CarCtrl.cpp:55:#define DISTANCE_TO_SWITCH_FROM_STOP_TO_BLOCK 10.0f
+./src/control/CarCtrl.cpp:56:#define MAX_SPEED_TO_ACCOUNT_IN_INTERCEPTING 0.13f
+./src/control/CarCtrl.cpp:57:#define DISTANCE_TO_NEXT_NODE_TO_CONSIDER_SLOWING_DOWN 40.0f
+./src/control/CarCtrl.cpp:58:#define MAX_ANGLE_TO_STEER_AT_HIGH_SPEED 0.2f
+./src/control/CarCtrl.cpp:59:#define MIN_SPEED_TO_START_LIMITING_STEER 0.45f
+./src/control/CarCtrl.cpp:60:#define DISTANCE_TO_NEXT_NODE_TO_SELECT_NEW 5.0f
+./src/control/CarCtrl.cpp:61:#define DISTANCE_TO_FACING_NEXT_NODE_TO_SELECT_NEW 8.0f
+./src/control/CarCtrl.cpp:62:#define DEFAULT_MAX_STEER_ANGLE 0.5f
+./src/control/CarCtrl.cpp:63:#define MIN_LOWERING_SPEED_COEFFICIENT 0.4f
+./src/control/CarCtrl.cpp:64:#define MAX_ANGLE_FOR_SPEED_LIMITING 1.2f
+./src/control/CarCtrl.cpp:65:#define MIN_ANGLE_FOR_SPEED_LIMITING 0.4f
+./src/control/CarCtrl.cpp:66:#define MIN_ANGLE_FOR_SPEED_LIMITING_BETWEEN_NODES 0.1f
+./src/control/CarCtrl.cpp:67:#define MIN_ANGLE_TO_APPLY_HANDBRAKE 0.7f
+./src/control/CarCtrl.cpp:68:#define MIN_SPEED_TO_APPLY_HANDBRAKE 0.3f
+./src/control/CarCtrl.h:6:#define GAME_SPEED_TO_METERS_PER_SECOND 50.0f
+./src/control/CarCtrl.h:7:#define METERS_PER_SECOND_TO_GAME_SPEED (1.0f / GAME_SPEED_TO_METERS_PER_SECOND)
+./src/control/CarCtrl.h:8:#define GAME_SPEED_TO_CARAI_SPEED 60.0f
+./src/control/CarCtrl.h:9:#define TIME_COPS_WAIT_TO_EXIT_AFTER_STOPPING 2500
+./src/control/CarCtrl.h:18:#define LANE_WIDTH 5.0f
+./src/control/CarCtrl.h:21:#define FIX_PATHFIND_BUG
+./src/control/Script.h:19:#define script_assert(_Expression) FlushLog(); assert(_Expression);
+./src/control/Script.h:21:#define PICKUP_PLACEMENT_OFFSET (0.5f)
+./src/control/Script.h:22:#define PED_FIND_Z_OFFSET (5.0f)
+./src/control/Script.h:24:#define UPSIDEDOWN_UP_THRESHOLD (-0.97f)
+./src/control/Script.h:25:#define UPSIDEDOWN_MOVE_SPEED_THRESHOLD (0.01f)
+./src/control/Script.h:26:#define UPSIDEDOWN_TURN_SPEED_THRESHOLD (0.02f)
+./src/control/Script.h:27:#define UPSIDEDOWN_TIMER_THRESHOLD (1000)
+./src/control/Script.h:29:#define SPHERE_MARKER_R (0)
+./src/control/Script.h:30:#define SPHERE_MARKER_G (128)
+./src/control/Script.h:31:#define SPHERE_MARKER_B (255)
+./src/control/Script.h:32:#define SPHERE_MARKER_A (128)
+./src/control/Script.h:33:#define SPHERE_MARKER_PULSE_PERIOD (2048)
+./src/control/Script.h:34:#define SPHERE_MARKER_PULSE_FRACTION (0.1f)
+./src/control/Script.h:37:#define MILES_IN_METER (0.000621371192f)
+./src/control/Script.h:38:#define METERS_IN_FOOT (0.3048f)
+./src/control/Script.h:39:#define FEET_IN_METER (3.28084f)
+./src/control/Script.h:41:#define MILES_IN_METER (1 / 1670.f)
+./src/control/Script.h:42:#define METERS_IN_FOOT (0.3f)
+./src/control/Script.h:43:#define FEET_IN_METER (3.33f)
+./src/control/Script.h:46:#define KEY_LENGTH_IN_SCRIPT (8)
+./src/control/Script.h:49:#define GTA_SCRIPT_COLLECTIVE
+./src/control/Script5.cpp:1911:#define SCRIPT_DATA_SIZE sizeof(CTheScripts::OnAMissionFlag) + sizeof(CTheScripts::BaseBriefIdForContact) + sizeof(CTheScripts::OnAMissionForContactFlag) +\
+./src/control/SceneEdit.cpp:52:#define SHADOW_OFFSET (2.0f)
+./src/control/SceneEdit.cpp:53:#define ACTION_MESSAGE_X_RIGHT (60.0f)
+./src/control/SceneEdit.cpp:54:#define ACTION_MESSAGE_Y (8.0f)
+./src/control/SceneEdit.cpp:55:#define SELECTED_MESSAGE_X_RIGHT (60.0f)
+./src/control/SceneEdit.cpp:56:#define SELECTED_MESSAGE_Y (248.0f)
+./src/control/SceneEdit.cpp:57:#define COMMAND_NAME_X_RIGHT (60.0f)
+./src/control/SceneEdit.cpp:58:#define COMMAND_NAME_Y (38.0f)
+./src/control/SceneEdit.cpp:59:#define COMMAND_NAME_HEIGHT (16.0f)
+./src/control/SceneEdit.cpp:61:#define NUM_COMMANDS_TO_DRAW (9)
+./src/control/Restart.h:3:#define NUM_RESTART_POINTS 8
+./src/control/Darkel.cpp:20:#define FRENZY_ANY_PED -1
+./src/control/Darkel.cpp:21:#define FRENZY_ANY_CAR -2
+./src/control/Darkel.cpp:143:#define DARKEL_COUNTER_HEIGHT 143.0f
+./src/control/Darkel.cpp:145:#define DARKEL_COUNTER_HEIGHT 128.0f
+./src/control/Pickups.cpp:667:#define PICKUPS_FRAME_SPAN (6)
+./src/control/Pickups.cpp:1117:#define PACMANPICKUPS_FRAME_SPAN (4)
+./src/control/Record.cpp:20:#define MEMORY_FOR_GAME_RECORD (150000)
+./src/control/Record.cpp:93:#define PROCESS_BUTTON_STATE_STORE(buf, os, ns, field, id) \
+./src/control/Record.cpp:127:#define PROCESS_BUTTON_STATE_RESTORE(buf, state, field, id) case id: state->field = *buf++; break;
+./src/control/Record.cpp:190:#define CHASE_SCENE_LENGTH_IN_SECONDS (80)
+./src/control/Record.cpp:191:#define CHASE_SCENE_FRAMES_PER_SECOND (15) // skipping every second frame
+./src/control/Record.cpp:192:#define CHASE_SCENE_FRAMES_IN_RECORDING (CHASE_SCENE_LENGTH_IN_SECONDS * CHASE_SCENE_FRAMES_PER_SECOND)
+./src/control/Record.cpp:193:#define CHASE_SCENE_LENGTH_IN_FRAMES (CHASE_SCENE_FRAMES_IN_RECORDING * 2)
+./src/peds/Ped.h:14:#define FEET_OFFSET	1.04f
+./src/peds/Ped.h:15:#define CHECK_NEARBY_THINGS_MAX_DIST	15.0f
+./src/peds/Ped.h:16:#define ENTER_CAR_MAX_DIST	30.0f
+./src/peds/Ped.h:17:#define CAN_SEE_ENTITY_ANGLE_THRESHOLD	DEGTORAD(60.0f)
+./src/peds/Population.cpp:27:#define MIN_CREATION_DIST		40.0f // not for start of the game (look at the GeneratePedsAtStartOfGame)
+./src/peds/Population.cpp:28:#define CREATION_RANGE			10.0f // added over the MIN_CREATION_DIST.
+./src/peds/Population.cpp:29:#define OFFSCREEN_CREATION_MULT	0.5f
+./src/peds/Population.cpp:30:#define PED_REMOVE_DIST			(MIN_CREATION_DIST + CREATION_RANGE + 1.0f)
+./src/peds/Population.cpp:31:#define PED_REMOVE_DIST_SPECIAL	(MIN_CREATION_DIST + CREATION_RANGE + 15.0f) // for peds with bCullExtraFarAway flag
+./src/peds/PlayerPed.cpp:20:#define PAD_MOVE_TO_GAME_WORLD_MOVE 60.0f
+./src/peds/PlayerPed.cpp:1488:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/peds/PlayerPed.cpp:1489:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/peds/Ped.cpp:8454:#define CopyFromBuf(buf, data) memcpy(&data, buf, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/peds/Ped.cpp:8455:#define CopyToBuf(buf, data) memcpy(buf, &data, sizeof(data)); SkipSaveBuf(buf, sizeof(data));
+./src/extras/frontendoption.h:24:#define FEOPTION_ACTION_LEFT 0
+./src/extras/frontendoption.h:25:#define FEOPTION_ACTION_RIGHT 1
+./src/extras/frontendoption.h:26:#define FEOPTION_ACTION_SELECT 2
+./src/extras/frontendoption.h:27:#define FEOPTION_ACTION_FOCUSLOSS 3
+./src/extras/frontendoption.h:30:#define FESCREEN_CENTER 0
+./src/extras/frontendoption.h:31:#define FESCREEN_LEFT_ALIGN 1
+./src/extras/frontendoption.h:32:#define FESCREEN_RIGHT_ALIGN 2
+./src/extras/debugmenu.cpp:13:#define snprintf _snprintf
+./src/extras/debugmenu.cpp:15:#define strdup _strdup
+./src/extras/debugmenu.cpp:189:#define INTTYPES \
+./src/extras/debugmenu.cpp:198:#define FLOATTYPES \
+./src/extras/debugmenu.cpp:202:#define X(NAME, TYPE, MAXLEN, FMT) \
+./src/extras/debugmenu.cpp:222:#define X(NAME, TYPE, MAXLEN, FMT) \
+./src/extras/debugmenu.cpp:254:#define MUHKEYS \
+./src/extras/debugmenu.cpp:262:#define MUHBUTTONS \
+./src/extras/debugmenu.cpp:267:#define REPEATDELAY 700
+./src/extras/debugmenu.cpp:268:#define REPEATINTERVAL 50
+./src/extras/debugmenu.cpp:269:#define X(var, keycode) static int var;
+./src/extras/debugmenu.cpp:305:#define KEYJUSTDOWN(k) ControlsManager.GetIsKeyboardKeyJustDown((RsKeyCodes)k)
+./src/extras/debugmenu.cpp:306:#define KEYDOWN(k) ControlsManager.GetIsKeyboardKeyDown((RsKeyCodes)k)
+./src/extras/debugmenu.cpp:307:#define CTRLJUSTDOWN(key) \
+./src/extras/debugmenu.cpp:310:#define CTRLDOWN(key) ((KEYDOWN(rsLCTRL) || KEYDOWN(rsRCTRL)) && KEYDOWN((RsKeyCodes)key))
+./src/extras/debugmenu.cpp:359:#define X(NAME, TYPE, MAXLEN, FMT) \
+./src/extras/debugmenu.cpp:445:#define X(NAME, TYPE, MAXLEN, FMT) \
+./src/extras/debugmenu.cpp:839:#define X(var, keycode) var = KEYJUSTDOWN(keycode);
+./src/extras/debugmenu.cpp:844:#define X(var, keycode) \
+./src/extras/debugmenu.cpp:867:#define X(var, num)							  \
+./src/extras/debugmenu.cpp:1246:#define X(NAME, TYPE, unused1, unused2) \
+./src/extras/debugmenu.cpp:1260:#define X(NAME, TYPE, unused1, unused2) \
+./src/extras/screendroplets.cpp:1:#define WITHD3D
+./src/extras/screendroplets.cpp:26:#define MAXSIZE 15
+./src/extras/screendroplets.cpp:27:#define MINSIZE 4
+./src/extras/screendroplets.cpp:585:#define NUMINDICES 1024
+./src/extras/screendroplets.cpp:586:#define NUMVERTICES 1024
+./src/extras/screendroplets.cpp:710:#define NUMINDICES 1024
+./src/extras/screendroplets.cpp:711:#define NUMVERTICES 1024
+./src/extras/shaders/standardConstants.h:9:#define surfAmbient (surfProps.x)
+./src/extras/shaders/standardConstants.h:10:#define surfSpecular (surfProps.y)
+./src/extras/shaders/standardConstants.h:11:#define surfDiffuse (surfProps.z)
+./src/extras/shaders/standardConstants.h:13:#define fogStart (fogData.x)
+./src/extras/shaders/standardConstants.h:14:#define fogEnd (fogData.y)
+./src/extras/shaders/standardConstants.h:15:#define fogRange (fogData.z)
+./src/extras/shaders/standardConstants.h:16:#define fogDisable (fogData.w)
+./src/extras/shaders/standardConstants.h:26:#define firstDirLight (firstLight.x)
+./src/extras/shaders/standardConstants.h:27:#define firstPointLight (firstLight.y)
+./src/extras/shaders/standardConstants.h:28:#define firstSpotLight (firstLight.z)
+./src/extras/GitSHA1.cpp:1:#define GIT_SHA1 "49fd9911"
+./src/extras/custompipes_gl.cpp:36:#define U(i) currentShader->uniformLocations[i]
+./src/extras/custompipes.cpp:1:#define WITHD3D
+./src/extras/custompipes.cpp:230:#define INTERP_SETUP \
+./src/extras/custompipes.cpp:240:#define INTERP(v) v[h1][w1]*c0 + v[h2][w1]*c1 + v[h1][w2]*c2 + v[h2][w2]*c3;
+./src/extras/custompipes.cpp:241:#define INTERPF(v,f) v[h1][w1].f*c0 + v[h2][w1].f*c1 + v[h1][w2].f*c2 + v[h2][w2].f*c3;
+./src/extras/re3_inttypes.h:1:#define PRId8     "hhd"
+./src/extras/re3_inttypes.h:2:#define PRId16    "hd"
+./src/extras/re3_inttypes.h:3:#define PRId32    "ld"
+./src/extras/re3_inttypes.h:4:#define PRId64    "lld"
+./src/extras/re3_inttypes.h:6:#define PRIdFAST8    "hhd"
+./src/extras/re3_inttypes.h:7:#define PRIdFAST16    "hd"
+./src/extras/re3_inttypes.h:8:#define PRIdFAST32    "ld"
+./src/extras/re3_inttypes.h:9:#define PRIdFAST64   "lld"
+./src/extras/re3_inttypes.h:11:#define PRIdLEAST8   "hhd"
+./src/extras/re3_inttypes.h:12:#define PRIdLEAST16  "hd"
+./src/extras/re3_inttypes.h:13:#define PRIdLEAST32  "ld"
+./src/extras/re3_inttypes.h:14:#define PRIdLEAST64  "lld"
+./src/extras/re3_inttypes.h:16:#define PRIdMAX   "lld"
+./src/extras/re3_inttypes.h:17:#define PRIdPTR   "lld"
+./src/extras/re3_inttypes.h:19:#define PRIi8     "hhi"
+./src/extras/re3_inttypes.h:20:#define PRIi16    "hi"
+./src/extras/re3_inttypes.h:21:#define PRIi32    "li"
+./src/extras/re3_inttypes.h:22:#define PRIi64    "lli"
+./src/extras/re3_inttypes.h:24:#define PRIiFAST8    "hhi"
+./src/extras/re3_inttypes.h:25:#define PRIiFAST16    "hi"
+./src/extras/re3_inttypes.h:26:#define PRIiFAST32    "li"
+./src/extras/re3_inttypes.h:27:#define PRIiFAST64    "lli"
+./src/extras/re3_inttypes.h:29:#define PRIiLEAST8   "hhi"
+./src/extras/re3_inttypes.h:30:#define PRIiLEAST16  "hi"
+./src/extras/re3_inttypes.h:31:#define PRIiLEAST32  "li"
+./src/extras/re3_inttypes.h:32:#define PRIiLEAST64  "lli"
+./src/extras/re3_inttypes.h:34:#define PRIiMAX   "lli"
+./src/extras/re3_inttypes.h:35:#define PRIiPTR   "lli"
+./src/extras/re3_inttypes.h:37:#define PRIo8     "hho"
+./src/extras/re3_inttypes.h:38:#define PRIo16    "ho"
+./src/extras/re3_inttypes.h:39:#define PRIo32    "lo"
+./src/extras/re3_inttypes.h:40:#define PRIo64    "llo"
+./src/extras/re3_inttypes.h:42:#define PRIoFAST8    "hho"
+./src/extras/re3_inttypes.h:43:#define PRIoFAST16    "ho"
+./src/extras/re3_inttypes.h:44:#define PRIoFAST32    "lo"
+./src/extras/re3_inttypes.h:45:#define PRIoFAST64   "llo"
+./src/extras/re3_inttypes.h:47:#define PRIoLEAST8   "hho"
+./src/extras/re3_inttypes.h:48:#define PRIoLEAST16  "ho"
+./src/extras/re3_inttypes.h:49:#define PRIoLEAST32  "lo"
+./src/extras/re3_inttypes.h:50:#define PRIoLEAST64  "llo"
+./src/extras/re3_inttypes.h:52:#define PRIoMAX   "llo"
+./src/extras/re3_inttypes.h:53:#define PRIoPTR   "llo"
+./src/extras/re3_inttypes.h:55:#define PRIu8     "hhu"
+./src/extras/re3_inttypes.h:56:#define PRIu16    "hu"
+./src/extras/re3_inttypes.h:57:#define PRIu32    "lu"
+./src/extras/re3_inttypes.h:58:#define PRIu64    "llu"
+./src/extras/re3_inttypes.h:60:#define PRIuFAST8    "hhu"
+./src/extras/re3_inttypes.h:61:#define PRIuFAST16    "hu"
+./src/extras/re3_inttypes.h:62:#define PRIuFAST32    "lu"
+./src/extras/re3_inttypes.h:63:#define PRIuFAST64   "llu"
+./src/extras/re3_inttypes.h:65:#define PRIuLEAST8   "hhu"
+./src/extras/re3_inttypes.h:66:#define PRIuLEAST16  "hu"
+./src/extras/re3_inttypes.h:67:#define PRIuLEAST32  "lu"
+./src/extras/re3_inttypes.h:68:#define PRIuLEAST64  "llu"
+./src/extras/re3_inttypes.h:70:#define PRIuMAX   "llu"
+./src/extras/re3_inttypes.h:71:#define PRIuPTR   "llu"
+./src/extras/re3_inttypes.h:73:#define PRIx8     "hhx"
+./src/extras/re3_inttypes.h:74:#define PRIx16    "hx"
+./src/extras/re3_inttypes.h:75:#define PRIx32    "lx"
+./src/extras/re3_inttypes.h:76:#define PRIx64    "llx"
+./src/extras/re3_inttypes.h:78:#define PRIxFAST8    "hhx"
+./src/extras/re3_inttypes.h:79:#define PRIxFAST16    "hx"
+./src/extras/re3_inttypes.h:80:#define PRIxFAST32    "lx"
+./src/extras/re3_inttypes.h:81:#define PRIxFAST64   "llx"
+./src/extras/re3_inttypes.h:83:#define PRIxLEAST8   "hhx"
+./src/extras/re3_inttypes.h:84:#define PRIxLEAST16  "hx"
+./src/extras/re3_inttypes.h:85:#define PRIxLEAST32  "lx"
+./src/extras/re3_inttypes.h:86:#define PRIxLEAST64  "llx"
+./src/extras/re3_inttypes.h:88:#define PRIxMAX   "llx"
+./src/extras/re3_inttypes.h:89:#define PRIxPTR   "llx"
+./src/extras/re3_inttypes.h:91:#define PRIX8     "hhX"
+./src/extras/re3_inttypes.h:92:#define PRIX16    "hX"
+./src/extras/re3_inttypes.h:93:#define PRIX32    "lX"
+./src/extras/re3_inttypes.h:94:#define PRIX64    "llX"
+./src/extras/re3_inttypes.h:96:#define PRIXFAST8    "hhX"
+./src/extras/re3_inttypes.h:97:#define PRIXFAST16    "hX"
+./src/extras/re3_inttypes.h:98:#define PRIXFAST32    "lX"
+./src/extras/re3_inttypes.h:99:#define PRIXFAST64   "llX"
+./src/extras/re3_inttypes.h:101:#define PRIXLEAST8   "hhX"
+./src/extras/re3_inttypes.h:102:#define PRIXLEAST16  "hX"
+./src/extras/re3_inttypes.h:103:#define PRIXLEAST32  "lX"
+./src/extras/re3_inttypes.h:104:#define PRIXLEAST64  "llX"
+./src/extras/re3_inttypes.h:106:#define PRIXMAX   "llX"
+./src/extras/re3_inttypes.h:107:#define PRIXPTR   "llX"
+./src/extras/re3_inttypes.h:110:#define SCNd8     "hhd"
+./src/extras/re3_inttypes.h:111:#define SCNd16    "hd"
+./src/extras/re3_inttypes.h:112:#define SCNd32    "ld"
+./src/extras/re3_inttypes.h:113:#define SCNd64    "lld"
+./src/extras/re3_inttypes.h:115:#define SCNdFAST8    "hhd"
+./src/extras/re3_inttypes.h:116:#define SCNdFAST16    "hd"
+./src/extras/re3_inttypes.h:117:#define SCNdFAST32    "ld"
+./src/extras/re3_inttypes.h:118:#define SCNdFAST64   "lld"
+./src/extras/re3_inttypes.h:120:#define SCNdLEAST8   "hhd"
+./src/extras/re3_inttypes.h:121:#define SCNdLEAST16  "hd"
+./src/extras/re3_inttypes.h:122:#define SCNdLEAST32  "ld"
+./src/extras/re3_inttypes.h:123:#define SCNdLEAST64  "lld"
+./src/extras/re3_inttypes.h:125:#define SCNdMAX   "lld"
+./src/extras/re3_inttypes.h:126:#define SCNdPTR   "lld"
+./src/extras/re3_inttypes.h:128:#define SCNi8     "hhi"
+./src/extras/re3_inttypes.h:129:#define SCNi16    "hi"
+./src/extras/re3_inttypes.h:130:#define SCNi32    "li"
+./src/extras/re3_inttypes.h:131:#define SCNi64    "lli"
+./src/extras/re3_inttypes.h:133:#define SCNiFAST8    "hhi"
+./src/extras/re3_inttypes.h:134:#define SCNiFAST16    "hi"
+./src/extras/re3_inttypes.h:135:#define SCNiFAST32    "li"
+./src/extras/re3_inttypes.h:136:#define SCNiFAST64   "lli"
+./src/extras/re3_inttypes.h:138:#define SCNiLEAST8   "hhi"
+./src/extras/re3_inttypes.h:139:#define SCNiLEAST16  "hi"
+./src/extras/re3_inttypes.h:140:#define SCNiLEAST32  "li"
+./src/extras/re3_inttypes.h:141:#define SCNiLEAST64  "lli"
+./src/extras/re3_inttypes.h:143:#define SCNiMAX   "lli"
+./src/extras/re3_inttypes.h:144:#define SCNiPTR   "lli"
+./src/extras/re3_inttypes.h:146:#define SCNo8     "hho"
+./src/extras/re3_inttypes.h:147:#define SCNo16    "ho"
+./src/extras/re3_inttypes.h:148:#define SCNo32    "lo"
+./src/extras/re3_inttypes.h:149:#define SCNo64    "llo"
+./src/extras/re3_inttypes.h:151:#define SCNoFAST8    "hho"
+./src/extras/re3_inttypes.h:152:#define SCNoFAST16    "ho"
+./src/extras/re3_inttypes.h:153:#define SCNoFAST32    "lo"
+./src/extras/re3_inttypes.h:154:#define SCNoFAST64   "llo"
+./src/extras/re3_inttypes.h:156:#define SCNoLEAST8   "hho"
+./src/extras/re3_inttypes.h:157:#define SCNoLEAST16  "ho"
+./src/extras/re3_inttypes.h:158:#define SCNoLEAST32  "lo"
+./src/extras/re3_inttypes.h:159:#define SCNoLEAST64  "llo"
+./src/extras/re3_inttypes.h:161:#define SCNoMAX   "llo"
+./src/extras/re3_inttypes.h:162:#define SCNoPTR   "llo"
+./src/extras/re3_inttypes.h:164:#define SCNu8     "hhu"
+./src/extras/re3_inttypes.h:165:#define SCNu16    "hu"
+./src/extras/re3_inttypes.h:166:#define SCNu32    "lu"
+./src/extras/re3_inttypes.h:167:#define SCNu64    "llu"
+./src/extras/re3_inttypes.h:169:#define SCNuFAST8    "hhu"
+./src/extras/re3_inttypes.h:170:#define SCNuFAST16    "hu"
+./src/extras/re3_inttypes.h:171:#define SCNuFAST32    "lu"
+./src/extras/re3_inttypes.h:172:#define SCNuFAST64   "llu"
+./src/extras/re3_inttypes.h:174:#define SCNuLEAST8   "hhu"
+./src/extras/re3_inttypes.h:175:#define SCNuLEAST16  "hu"
+./src/extras/re3_inttypes.h:176:#define SCNuLEAST32  "lu"
+./src/extras/re3_inttypes.h:177:#define SCNuLEAST64  "llu"
+./src/extras/re3_inttypes.h:179:#define SCNuMAX   "llu"
+./src/extras/re3_inttypes.h:180:#define SCNuPTR   "llu"
+./src/extras/re3_inttypes.h:182:#define SCNx8     "hhx"
+./src/extras/re3_inttypes.h:183:#define SCNx16    "hx"
+./src/extras/re3_inttypes.h:184:#define SCNx32    "lx"
+./src/extras/re3_inttypes.h:185:#define SCNx64    "llx"
+./src/extras/re3_inttypes.h:187:#define SCNxFAST8    "hhx"
+./src/extras/re3_inttypes.h:188:#define SCNxFAST16    "hx"
+./src/extras/re3_inttypes.h:189:#define SCNxFAST32    "lx"
+./src/extras/re3_inttypes.h:190:#define SCNxFAST64   "llx"
+./src/extras/re3_inttypes.h:192:#define SCNxLEAST8   "hhx"
+./src/extras/re3_inttypes.h:193:#define SCNxLEAST16  "hx"
+./src/extras/re3_inttypes.h:194:#define SCNxLEAST32  "lx"
+./src/extras/re3_inttypes.h:195:#define SCNxLEAST64  "llx"
+./src/extras/re3_inttypes.h:197:#define SCNxMAX   "llx"
+./src/extras/re3_inttypes.h:198:#define SCNxPTR   "llx"
+./src/extras/re3_inttypes.h:200:#define SCNX8     "hhX"
+./src/extras/re3_inttypes.h:201:#define SCNX16    "hX"
+./src/extras/re3_inttypes.h:202:#define SCNX32    "lX"
+./src/extras/re3_inttypes.h:203:#define SCNX64    "llX"
+./src/extras/re3_inttypes.h:205:#define SCNXFAST8    "hhX"
+./src/extras/re3_inttypes.h:206:#define SCNXFAST16    "hX"
+./src/extras/re3_inttypes.h:207:#define SCNXFAST32    "lX"
+./src/extras/re3_inttypes.h:208:#define SCNXFAST64   "llX"
+./src/extras/re3_inttypes.h:210:#define SCNXLEAST8   "hhX"
+./src/extras/re3_inttypes.h:211:#define SCNXLEAST16  "hX"
+./src/extras/re3_inttypes.h:212:#define SCNXLEAST32  "lX"
+./src/extras/re3_inttypes.h:213:#define SCNXLEAST64  "llX"
+./src/extras/re3_inttypes.h:215:#define SCNXMAX   "llX"
+./src/extras/re3_inttypes.h:216:#define SCNXPTR   "llX"
+./src/extras/custompipes_d3d9.cpp:1:#define WITHD3D
+./src/extras/postfx.cpp:1:#define WITHD3D
+./src/vehicles/Automobile.cpp:2546:#define HYDRAULIC_UPPER_EXT (-0.12f)
+./src/vehicles/Automobile.cpp:2547:#define HYDRAULIC_LOWER_EXT (0.14f)
+./src/vehicles/Plane.cpp:649:#define CRUISE_SPEED (50.0f)
+./src/vehicles/Plane.cpp:650:#define TAXI_SPEED (5.0f)
+./src/vehicles/Cranes.cpp:15:#define MAX_DISTANCE_TO_FIND_CRANE (10.0f)
+./src/vehicles/Cranes.cpp:16:#define CRANE_UPDATE_RADIUS (300.0f)
+./src/vehicles/Cranes.cpp:17:#define CRANE_MOVEMENT_PROCESSING_RADIUS (150.0f)
+./src/vehicles/Cranes.cpp:18:#define CRUSHER_Z (-0.951f)
+./src/vehicles/Cranes.cpp:19:#define MILITARY_Z (10.7862f)
+./src/vehicles/Cranes.cpp:20:#define DISTANCE_FROM_PLAYER_TO_REMOVE_VEHICLE (5.0f)
+./src/vehicles/Cranes.cpp:21:#define DISTANCE_FROM_HOOK_TO_VEHICLE_TO_COLLECT (0.5f)
+./src/vehicles/Cranes.cpp:22:#define CAR_REWARD_MILITARY_CRANE (1500)
+./src/vehicles/Cranes.cpp:23:#define CAR_MOVING_SPEED_THRESHOLD (0.01f)
+./src/vehicles/Cranes.cpp:24:#define CRANE_SLOWDOWN_MULTIPLIER (0.3f)
+./src/vehicles/Cranes.cpp:26:#define OSCILLATION_SPEED (0.002f)
+./src/vehicles/Cranes.cpp:27:#define CAR_ROTATION_SPEED (0.0035f)
+./src/vehicles/Cranes.cpp:28:#define CRANE_MOVEMENT_SPEED (0.001f)
+./src/vehicles/Cranes.cpp:29:#define HOOK_ANGLE_MOVEMENT_SPEED (0.004f)
+./src/vehicles/Cranes.cpp:30:#define HOOK_OFFSET_MOVEMENT_SPEED (0.1f)
+./src/vehicles/Cranes.cpp:31:#define HOOK_HEIGHT_MOVEMENT_SPEED (0.06f)
+./src/vehicles/Cranes.cpp:33:#define MESSAGE_SHOW_DURATION (4000)
+./src/vehicles/Cranes.cpp:35:#define MAX_DISTANCE (99999.9f)
+./src/vehicles/Cranes.cpp:36:#define MIN_VALID_POSITION (-10000.0f)
+./src/vehicles/Cranes.cpp:37:#define DEFAULT_OFFSET (20.0f)
+./src/vehicles/Vehicle.cpp:39:#define DAMAGE_FLEE_IN_CAR_PROBABILITY_VALUE (MYRAND_MAX * 35 / 100)
+./src/vehicles/Vehicle.cpp:40:#define DAMAGE_FLEE_ON_FOOT_PROBABILITY_VALUE (MYRAND_MAX * 70 / 100)
+./src/vehicles/Vehicle.cpp:42:#define DAMAGE_FLEE_IN_CAR_PROBABILITY_VALUE (35000)
+./src/vehicles/Vehicle.cpp:43:#define DAMAGE_FLEE_ON_FOOT_PROBABILITY_VALUE (70000)
+./src/vehicles/Vehicle.cpp:45:#define DAMAGE_HEALTH_TO_FLEE_ALWAYS (200.0f)
+./src/vehicles/Vehicle.cpp:46:#define DAMAGE_HEALTH_TO_CATCH_FIRE (250.0f)
+./src/vehicles/Boat.cpp:23:#define INVALID_ORIENTATION (-9999.99f)
+./src/audio/eax/eax-util.h:12:#define EAXUTIL_INCLUDED
+./src/audio/eax/eax-util.h:37:#define EAX30_PRESET_GENERIC \
+./src/audio/eax/eax-util.h:39:#define EAX30_PRESET_PADDEDCELL \
+./src/audio/eax/eax-util.h:41:#define EAX30_PRESET_ROOM \
+./src/audio/eax/eax-util.h:43:#define EAX30_PRESET_BATHROOM \
+./src/audio/eax/eax-util.h:45:#define EAX30_PRESET_LIVINGROOM \
+./src/audio/eax/eax-util.h:47:#define EAX30_PRESET_STONEROOM \
+./src/audio/eax/eax-util.h:49:#define EAX30_PRESET_AUDITORIUM \
+./src/audio/eax/eax-util.h:51:#define EAX30_PRESET_CONCERTHALL \
+./src/audio/eax/eax-util.h:53:#define EAX30_PRESET_CAVE \
+./src/audio/eax/eax-util.h:55:#define EAX30_PRESET_ARENA \
+./src/audio/eax/eax-util.h:57:#define EAX30_PRESET_HANGAR \
+./src/audio/eax/eax-util.h:59:#define EAX30_PRESET_CARPETTEDHALLWAY \
+./src/audio/eax/eax-util.h:61:#define EAX30_PRESET_HALLWAY \
+./src/audio/eax/eax-util.h:63:#define EAX30_PRESET_STONECORRIDOR \
+./src/audio/eax/eax-util.h:65:#define EAX30_PRESET_ALLEY \
+./src/audio/eax/eax-util.h:67:#define EAX30_PRESET_FOREST \
+./src/audio/eax/eax-util.h:69:#define EAX30_PRESET_CITY \
+./src/audio/eax/eax-util.h:71:#define EAX30_PRESET_MOUNTAINS \
+./src/audio/eax/eax-util.h:73:#define EAX30_PRESET_QUARRY \
+./src/audio/eax/eax-util.h:75:#define EAX30_PRESET_PLAIN \
+./src/audio/eax/eax-util.h:77:#define EAX30_PRESET_PARKINGLOT \
+./src/audio/eax/eax-util.h:79:#define EAX30_PRESET_SEWERPIPE \
+./src/audio/eax/eax-util.h:81:#define EAX30_PRESET_UNDERWATER \
+./src/audio/eax/eax-util.h:83:#define EAX30_PRESET_DRUGGED \
+./src/audio/eax/eax-util.h:85:#define EAX30_PRESET_DIZZY \
+./src/audio/eax/eax-util.h:87:#define EAX30_PRESET_PSYCHOTIC \
+./src/audio/eax/eax-util.h:103:#define EAX30_PRESET_CASTLE_SMALLROOM \
+./src/audio/eax/eax-util.h:105:#define EAX30_PRESET_CASTLE_SHORTPASSAGE \
+./src/audio/eax/eax-util.h:107:#define EAX30_PRESET_CASTLE_MEDIUMROOM \
+./src/audio/eax/eax-util.h:109:#define EAX30_PRESET_CASTLE_LONGPASSAGE \
+./src/audio/eax/eax-util.h:111:#define EAX30_PRESET_CASTLE_LARGEROOM \
+./src/audio/eax/eax-util.h:113:#define EAX30_PRESET_CASTLE_HALL \
+./src/audio/eax/eax-util.h:115:#define EAX30_PRESET_CASTLE_CUPBOARD \
+./src/audio/eax/eax-util.h:117:#define EAX30_PRESET_CASTLE_COURTYARD \
+./src/audio/eax/eax-util.h:119:#define EAX30_PRESET_CASTLE_ALCOVE \
+./src/audio/eax/eax-util.h:126:#define EAX30_PRESET_FACTORY_ALCOVE \
+./src/audio/eax/eax-util.h:128:#define EAX30_PRESET_FACTORY_SHORTPASSAGE \
+./src/audio/eax/eax-util.h:130:#define EAX30_PRESET_FACTORY_MEDIUMROOM \
+./src/audio/eax/eax-util.h:132:#define EAX30_PRESET_FACTORY_LONGPASSAGE \
+./src/audio/eax/eax-util.h:134:#define EAX30_PRESET_FACTORY_LARGEROOM \
+./src/audio/eax/eax-util.h:136:#define EAX30_PRESET_FACTORY_HALL \
+./src/audio/eax/eax-util.h:138:#define EAX30_PRESET_FACTORY_CUPBOARD \
+./src/audio/eax/eax-util.h:140:#define EAX30_PRESET_FACTORY_COURTYARD \
+./src/audio/eax/eax-util.h:142:#define EAX30_PRESET_FACTORY_SMALLROOM \
+./src/audio/eax/eax-util.h:148:#define EAX30_PRESET_ICEPALACE_ALCOVE \
+./src/audio/eax/eax-util.h:150:#define EAX30_PRESET_ICEPALACE_SHORTPASSAGE \
+./src/audio/eax/eax-util.h:152:#define EAX30_PRESET_ICEPALACE_MEDIUMROOM \
+./src/audio/eax/eax-util.h:154:#define EAX30_PRESET_ICEPALACE_LONGPASSAGE \
+./src/audio/eax/eax-util.h:156:#define EAX30_PRESET_ICEPALACE_LARGEROOM \
+./src/audio/eax/eax-util.h:158:#define EAX30_PRESET_ICEPALACE_HALL \
+./src/audio/eax/eax-util.h:160:#define EAX30_PRESET_ICEPALACE_CUPBOARD \
+./src/audio/eax/eax-util.h:162:#define EAX30_PRESET_ICEPALACE_COURTYARD \
+./src/audio/eax/eax-util.h:164:#define EAX30_PRESET_ICEPALACE_SMALLROOM \
+./src/audio/eax/eax-util.h:170:#define EAX30_PRESET_SPACESTATION_ALCOVE \
+./src/audio/eax/eax-util.h:172:#define EAX30_PRESET_SPACESTATION_MEDIUMROOM \
+./src/audio/eax/eax-util.h:174:#define EAX30_PRESET_SPACESTATION_SHORTPASSAGE \
+./src/audio/eax/eax-util.h:176:#define EAX30_PRESET_SPACESTATION_LONGPASSAGE \
+./src/audio/eax/eax-util.h:178:#define EAX30_PRESET_SPACESTATION_LARGEROOM \
+./src/audio/eax/eax-util.h:180:#define EAX30_PRESET_SPACESTATION_HALL \
+./src/audio/eax/eax-util.h:182:#define EAX30_PRESET_SPACESTATION_CUPBOARD \
+./src/audio/eax/eax-util.h:184:#define EAX30_PRESET_SPACESTATION_SMALLROOM \
+./src/audio/eax/eax-util.h:190:#define EAX30_PRESET_WOODEN_ALCOVE \
+./src/audio/eax/eax-util.h:192:#define EAX30_PRESET_WOODEN_SHORTPASSAGE \
+./src/audio/eax/eax-util.h:194:#define EAX30_PRESET_WOODEN_MEDIUMROOM \
+./src/audio/eax/eax-util.h:196:#define EAX30_PRESET_WOODEN_LONGPASSAGE \
+./src/audio/eax/eax-util.h:198:#define EAX30_PRESET_WOODEN_LARGEROOM \
+./src/audio/eax/eax-util.h:200:#define EAX30_PRESET_WOODEN_HALL \
+./src/audio/eax/eax-util.h:202:#define EAX30_PRESET_WOODEN_CUPBOARD \
+./src/audio/eax/eax-util.h:204:#define EAX30_PRESET_WOODEN_SMALLROOM \
+./src/audio/eax/eax-util.h:206:#define EAX30_PRESET_WOODEN_COURTYARD \
+./src/audio/eax/eax-util.h:215:#define EAX30_PRESET_SPORT_EMPTYSTADIUM \
+./src/audio/eax/eax-util.h:217:#define EAX30_PRESET_SPORT_SQUASHCOURT \
+./src/audio/eax/eax-util.h:219:#define EAX30_PRESET_SPORT_SMALLSWIMMINGPOOL \
+./src/audio/eax/eax-util.h:221:#define EAX30_PRESET_SPORT_LARGESWIMMINGPOOL\
+./src/audio/eax/eax-util.h:223:#define EAX30_PRESET_SPORT_GYMNASIUM \
+./src/audio/eax/eax-util.h:225:#define EAX30_PRESET_SPORT_FULLSTADIUM \
+./src/audio/eax/eax-util.h:227:#define EAX30_PRESET_SPORT_STADIUMTANNOY \
+./src/audio/eax/eax-util.h:233:#define EAX30_PRESET_PREFAB_WORKSHOP \
+./src/audio/eax/eax-util.h:235:#define EAX30_PRESET_PREFAB_SCHOOLROOM \
+./src/audio/eax/eax-util.h:237:#define EAX30_PRESET_PREFAB_PRACTISEROOM \
+./src/audio/eax/eax-util.h:239:#define EAX30_PRESET_PREFAB_OUTHOUSE \
+./src/audio/eax/eax-util.h:241:#define EAX30_PRESET_PREFAB_CARAVAN \
+./src/audio/eax/eax-util.h:249:#define EAX30_PRESET_DOME_TOMB \
+./src/audio/eax/eax-util.h:251:#define EAX30_PRESET_PIPE_SMALL \
+./src/audio/eax/eax-util.h:253:#define EAX30_PRESET_DOME_SAINTPAULS \
+./src/audio/eax/eax-util.h:255:#define EAX30_PRESET_PIPE_LONGTHIN \
+./src/audio/eax/eax-util.h:257:#define EAX30_PRESET_PIPE_LARGE \
+./src/audio/eax/eax-util.h:259:#define EAX30_PRESET_PIPE_RESONANT \
+./src/audio/eax/eax-util.h:265:#define EAX30_PRESET_OUTDOORS_BACKYARD \
+./src/audio/eax/eax-util.h:267:#define EAX30_PRESET_OUTDOORS_ROLLINGPLAINS \
+./src/audio/eax/eax-util.h:269:#define EAX30_PRESET_OUTDOORS_DEEPCANYON \
+./src/audio/eax/eax-util.h:271:#define EAX30_PRESET_OUTDOORS_CREEK \
+./src/audio/eax/eax-util.h:273:#define EAX30_PRESET_OUTDOORS_VALLEY \
+./src/audio/eax/eax-util.h:280:#define EAX30_PRESET_MOOD_HEAVEN \
+./src/audio/eax/eax-util.h:282:#define EAX30_PRESET_MOOD_HELL \
+./src/audio/eax/eax-util.h:284:#define EAX30_PRESET_MOOD_MEMORY \
+./src/audio/eax/eax-util.h:290:#define EAX30_PRESET_DRIVING_COMMENTATOR \
+./src/audio/eax/eax-util.h:292:#define EAX30_PRESET_DRIVING_PITGARAGE \
+./src/audio/eax/eax-util.h:294:#define EAX30_PRESET_DRIVING_INCAR_RACER \
+./src/audio/eax/eax-util.h:296:#define EAX30_PRESET_DRIVING_INCAR_SPORTS \
+./src/audio/eax/eax-util.h:298:#define EAX30_PRESET_DRIVING_INCAR_LUXURY \
+./src/audio/eax/eax-util.h:300:#define EAX30_PRESET_DRIVING_FULLGRANDSTAND \
+./src/audio/eax/eax-util.h:302:#define EAX30_PRESET_DRIVING_EMPTYGRANDSTAND \
+./src/audio/eax/eax-util.h:304:#define EAX30_PRESET_DRIVING_TUNNEL \
+./src/audio/eax/eax-util.h:310:#define EAX30_PRESET_CITY_STREETS \
+./src/audio/eax/eax-util.h:312:#define EAX30_PRESET_CITY_SUBWAY \
+./src/audio/eax/eax-util.h:314:#define EAX30_PRESET_CITY_MUSEUM \
+./src/audio/eax/eax-util.h:316:#define EAX30_PRESET_CITY_LIBRARY \
+./src/audio/eax/eax-util.h:318:#define EAX30_PRESET_CITY_UNDERPASS \
+./src/audio/eax/eax-util.h:320:#define EAX30_PRESET_CITY_ABANDONED \
+./src/audio/eax/eax-util.h:326:#define EAX30_PRESET_DUSTYROOM  \
+./src/audio/eax/eax-util.h:328:#define EAX30_PRESET_CHAPEL \
+./src/audio/eax/eax-util.h:330:#define EAX30_PRESET_SMALLWATERROOM \
+./src/audio/eax/eax-util.h:362:#define EAX30_NUM_SCENARIOS					14
+./src/audio/eax/eax-util.h:369:#define EAX30_NUM_STANDARD_SCENARIOS		5
+./src/audio/eax/eax-util.h:399:#define EAX30_NUM_LOCATIONS						9
+./src/audio/eax/eax-util.h:411:#define EAX30_NUM_ORIGINAL_PRESETS		26
+./src/audio/eax/eax-util.h:412:#define EAX30_NUM_CASTLE_PRESETS		EAX30_NUM_LOCATIONS
+./src/audio/eax/eax-util.h:413:#define EAX30_NUM_FACTORY_PRESETS		EAX30_NUM_LOCATIONS
+./src/audio/eax/eax-util.h:414:#define EAX30_NUM_ICEPALACE_PRESETS		EAX30_NUM_LOCATIONS
+./src/audio/eax/eax-util.h:415:#define EAX30_NUM_SPACESTATION_PRESETS	EAX30_NUM_LOCATIONS
+./src/audio/eax/eax-util.h:416:#define EAX30_NUM_WOODGALLEON_PRESETS	EAX30_NUM_LOCATIONS
+./src/audio/eax/eax-util.h:417:#define EAX30_NUM_SPORTS_PRESETS		7
+./src/audio/eax/eax-util.h:418:#define EAX30_NUM_PREFAB_PRESETS		5
+./src/audio/eax/eax-util.h:419:#define EAX30_NUM_DOMESNPIPES_PRESETS	6
+./src/audio/eax/eax-util.h:420:#define EAX30_NUM_OUTDOORS_PRESETS		5
+./src/audio/eax/eax-util.h:421:#define EAX30_NUM_MOOD_PRESETS			3
+./src/audio/eax/eax-util.h:422:#define EAX30_NUM_DRIVING_PRESETS		8
+./src/audio/eax/eax-util.h:423:#define EAX30_NUM_CITY_PRESETS			6
+./src/audio/eax/eax-util.h:424:#define EAX30_NUM_MISC_PRESETS			3
+./src/audio/eax/eax-util.h:725:#define EAX_MATERIAL_SINGLEWINDOW          (-2800)
+./src/audio/eax/eax-util.h:726:#define EAX_MATERIAL_SINGLEWINDOWLF        0.71f
+./src/audio/eax/eax-util.h:727:#define EAX_MATERIAL_SINGLEWINDOWROOMRATIO 0.43f
+./src/audio/eax/eax-util.h:730:#define EAX_MATERIAL_DOUBLEWINDOW          (-5000)
+./src/audio/eax/eax-util.h:731:#define EAX_MATERIAL_DOUBLEWINDOWLF        0.40f
+./src/audio/eax/eax-util.h:732:#define EAX_MATERIAL_DOUBLEWINDOWROOMRATIO 0.24f
+./src/audio/eax/eax-util.h:735:#define EAX_MATERIAL_THINDOOR              (-1800)
+./src/audio/eax/eax-util.h:736:#define EAX_MATERIAL_THINDOORLF            0.66f
+./src/audio/eax/eax-util.h:737:#define EAX_MATERIAL_THINDOORROOMRATIO     0.66f
+./src/audio/eax/eax-util.h:740:#define EAX_MATERIAL_THICKDOOR             (-4400)
+./src/audio/eax/eax-util.h:741:#define EAX_MATERIAL_THICKDOORLF           0.64f
+./src/audio/eax/eax-util.h:742:#define EAX_MATERIAL_THICKDOORROOMRATIO	   0.27f
+./src/audio/eax/eax-util.h:745:#define EAX_MATERIAL_WOODWALL              (-4000)
+./src/audio/eax/eax-util.h:746:#define EAX_MATERIAL_WOODWALLLF            0.50f
+./src/audio/eax/eax-util.h:747:#define EAX_MATERIAL_WOODWALLROOMRATIO     0.30f
+./src/audio/eax/eax-util.h:750:#define EAX_MATERIAL_BRICKWALL             (-5000)
+./src/audio/eax/eax-util.h:751:#define EAX_MATERIAL_BRICKWALLLF           0.60f
+./src/audio/eax/eax-util.h:752:#define EAX_MATERIAL_BRICKWALLROOMRATIO    0.24f
+./src/audio/eax/eax-util.h:755:#define EAX_MATERIAL_STONEWALL             (-6000)
+./src/audio/eax/eax-util.h:756:#define EAX_MATERIAL_STONEWALLLF           0.68f
+./src/audio/eax/eax-util.h:757:#define EAX_MATERIAL_STONEWALLROOMRATIO    0.20f
+./src/audio/eax/eax-util.h:760:#define EAX_MATERIAL_CURTAIN               (-1200)
+./src/audio/eax/eax-util.h:761:#define EAX_MATERIAL_CURTAINLF             0.15f
+./src/audio/eax/eax-util.h:762:#define EAX_MATERIAL_CURTAINROOMRATIO      1.00f
+./src/audio/eax/eax.h:9:#define EAX_H_INCLUDED
+./src/audio/eax/eax.h:57:		#define GUID_DEFINED
+./src/audio/eax/eax.h:69:			#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
+./src/audio/eax/eax.h:72:			#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
+./src/audio/eax/eax.h:97:#define DSPROPSETID_EAX_ListenerProperties DSPROPSETID_EAX30_ListenerProperties
+./src/audio/eax/eax.h:130:#define DSPROPERTY_EAXLISTENER_IMMEDIATE 0x00000000 // changes take effect immediately
+./src/audio/eax/eax.h:131:#define DSPROPERTY_EAXLISTENER_DEFERRED  0x80000000 // changes take effect later
+./src/audio/eax/eax.h:132:#define DSPROPERTY_EAXLISTENER_COMMITDEFERREDSETTINGS (DSPROPERTY_EAXLISTENER_NONE | \
+./src/audio/eax/eax.h:228:#define EAXLISTENERFLAGS_DECAYTIMESCALE        0x00000001 // reverberation decay time
+./src/audio/eax/eax.h:229:#define EAXLISTENERFLAGS_REFLECTIONSSCALE      0x00000002 // reflection level
+./src/audio/eax/eax.h:230:#define EAXLISTENERFLAGS_REFLECTIONSDELAYSCALE 0x00000004 // initial reflection delay time
+./src/audio/eax/eax.h:231:#define EAXLISTENERFLAGS_REVERBSCALE           0x00000008 // reflections level
+./src/audio/eax/eax.h:232:#define EAXLISTENERFLAGS_REVERBDELAYSCALE      0x00000010 // late reverberation delay time
+./src/audio/eax/eax.h:233:#define EAXLISTENERFLAGS_ECHOTIMESCALE         0x00000040 // echo time
+./src/audio/eax/eax.h:234:#define EAXLISTENERFLAGS_MODULATIONTIMESCALE   0x00000080 // modulation time
+./src/audio/eax/eax.h:237:#define EAXLISTENERFLAGS_DECAYHFLIMIT          0x00000020
+./src/audio/eax/eax.h:239:#define EAXLISTENERFLAGS_RESERVED              0xFFFFFF00 // reserved future use
+./src/audio/eax/eax.h:243:#define EAXLISTENER_MINENVIRONMENT                0
+./src/audio/eax/eax.h:244:#define EAXLISTENER_MAXENVIRONMENT                (EAX_ENVIRONMENT_COUNT-1)
+./src/audio/eax/eax.h:245:#define EAXLISTENER_DEFAULTENVIRONMENT            EAX_ENVIRONMENT_GENERIC
+./src/audio/eax/eax.h:247:#define EAXLISTENER_MINENVIRONMENTSIZE            1.0f
+./src/audio/eax/eax.h:248:#define EAXLISTENER_MAXENVIRONMENTSIZE            100.0f
+./src/audio/eax/eax.h:249:#define EAXLISTENER_DEFAULTENVIRONMENTSIZE        7.5f
+./src/audio/eax/eax.h:251:#define EAXLISTENER_MINENVIRONMENTDIFFUSION       0.0f
+./src/audio/eax/eax.h:252:#define EAXLISTENER_MAXENVIRONMENTDIFFUSION       1.0f
+./src/audio/eax/eax.h:253:#define EAXLISTENER_DEFAULTENVIRONMENTDIFFUSION   1.0f
+./src/audio/eax/eax.h:255:#define EAXLISTENER_MINROOM                       (-10000)
+./src/audio/eax/eax.h:256:#define EAXLISTENER_MAXROOM                       0
+./src/audio/eax/eax.h:257:#define EAXLISTENER_DEFAULTROOM                   (-1000)
+./src/audio/eax/eax.h:259:#define EAXLISTENER_MINROOMHF                     (-10000)
+./src/audio/eax/eax.h:260:#define EAXLISTENER_MAXROOMHF                     0
+./src/audio/eax/eax.h:261:#define EAXLISTENER_DEFAULTROOMHF                 (-100)
+./src/audio/eax/eax.h:263:#define EAXLISTENER_MINROOMLF                     (-10000)
+./src/audio/eax/eax.h:264:#define EAXLISTENER_MAXROOMLF                     0
+./src/audio/eax/eax.h:265:#define EAXLISTENER_DEFAULTROOMLF                 0
+./src/audio/eax/eax.h:267:#define EAXLISTENER_MINDECAYTIME                  0.1f
+./src/audio/eax/eax.h:268:#define EAXLISTENER_MAXDECAYTIME                  20.0f
+./src/audio/eax/eax.h:269:#define EAXLISTENER_DEFAULTDECAYTIME              1.49f
+./src/audio/eax/eax.h:271:#define EAXLISTENER_MINDECAYHFRATIO               0.1f
+./src/audio/eax/eax.h:272:#define EAXLISTENER_MAXDECAYHFRATIO               2.0f
+./src/audio/eax/eax.h:273:#define EAXLISTENER_DEFAULTDECAYHFRATIO           0.83f
+./src/audio/eax/eax.h:275:#define EAXLISTENER_MINDECAYLFRATIO               0.1f
+./src/audio/eax/eax.h:276:#define EAXLISTENER_MAXDECAYLFRATIO               2.0f
+./src/audio/eax/eax.h:277:#define EAXLISTENER_DEFAULTDECAYLFRATIO           1.00f
+./src/audio/eax/eax.h:279:#define EAXLISTENER_MINREFLECTIONS                (-10000)
+./src/audio/eax/eax.h:280:#define EAXLISTENER_MAXREFLECTIONS                1000
+./src/audio/eax/eax.h:281:#define EAXLISTENER_DEFAULTREFLECTIONS            (-2602)
+./src/audio/eax/eax.h:283:#define EAXLISTENER_MINREFLECTIONSDELAY           0.0f
+./src/audio/eax/eax.h:284:#define EAXLISTENER_MAXREFLECTIONSDELAY           0.3f
+./src/audio/eax/eax.h:285:#define EAXLISTENER_DEFAULTREFLECTIONSDELAY       0.007f
+./src/audio/eax/eax.h:287:#define EAXLISTENER_MINREVERB                     (-10000)
+./src/audio/eax/eax.h:288:#define EAXLISTENER_MAXREVERB                     2000
+./src/audio/eax/eax.h:289:#define EAXLISTENER_DEFAULTREVERB                 200
+./src/audio/eax/eax.h:291:#define EAXLISTENER_MINREVERBDELAY                0.0f
+./src/audio/eax/eax.h:292:#define EAXLISTENER_MAXREVERBDELAY                0.1f
+./src/audio/eax/eax.h:293:#define EAXLISTENER_DEFAULTREVERBDELAY            0.011f
+./src/audio/eax/eax.h:295:#define EAXLISTENER_MINECHOTIME                   0.075f
+./src/audio/eax/eax.h:296:#define EAXLISTENER_MAXECHOTIME	                  0.25f
+./src/audio/eax/eax.h:297:#define EAXLISTENER_DEFAULTECHOTIME               0.25f
+./src/audio/eax/eax.h:299:#define EAXLISTENER_MINECHODEPTH                  0.0f
+./src/audio/eax/eax.h:300:#define EAXLISTENER_MAXECHODEPTH                  1.0f
+./src/audio/eax/eax.h:301:#define EAXLISTENER_DEFAULTECHODEPTH              0.0f
+./src/audio/eax/eax.h:303:#define EAXLISTENER_MINMODULATIONTIME             0.04f
+./src/audio/eax/eax.h:304:#define EAXLISTENER_MAXMODULATIONTIME             4.0f
+./src/audio/eax/eax.h:305:#define EAXLISTENER_DEFAULTMODULATIONTIME         0.25f
+./src/audio/eax/eax.h:307:#define EAXLISTENER_MINMODULATIONDEPTH            0.0f
+./src/audio/eax/eax.h:308:#define EAXLISTENER_MAXMODULATIONDEPTH            1.0f
+./src/audio/eax/eax.h:309:#define EAXLISTENER_DEFAULTMODULATIONDEPTH        0.0f
+./src/audio/eax/eax.h:311:#define EAXLISTENER_MINAIRABSORPTIONHF            (-100.0f)
+./src/audio/eax/eax.h:312:#define EAXLISTENER_MAXAIRABSORPTIONHF            0.0f
+./src/audio/eax/eax.h:313:#define EAXLISTENER_DEFAULTAIRABSORPTIONHF        (-5.0f)
+./src/audio/eax/eax.h:315:#define EAXLISTENER_MINHFREFERENCE                1000.0f
+./src/audio/eax/eax.h:316:#define EAXLISTENER_MAXHFREFERENCE                20000.0f
+./src/audio/eax/eax.h:317:#define EAXLISTENER_DEFAULTHFREFERENCE            5000.0f
+./src/audio/eax/eax.h:319:#define EAXLISTENER_MINLFREFERENCE                20.0f
+./src/audio/eax/eax.h:320:#define EAXLISTENER_MAXLFREFERENCE                1000.0f
+./src/audio/eax/eax.h:321:#define EAXLISTENER_DEFAULTLFREFERENCE            250.0f
+./src/audio/eax/eax.h:323:#define EAXLISTENER_MINROOMROLLOFFFACTOR          0.0f
+./src/audio/eax/eax.h:324:#define EAXLISTENER_MAXROOMROLLOFFFACTOR          10.0f
+./src/audio/eax/eax.h:325:#define EAXLISTENER_DEFAULTROOMROLLOFFFACTOR      0.0f
+./src/audio/eax/eax.h:327:#define EAXLISTENER_DEFAULTFLAGS                  (EAXLISTENERFLAGS_DECAYTIMESCALE |        \
+./src/audio/eax/eax.h:346:#define DSPROPSETID_EAX_BufferProperties DSPROPSETID_EAX30_BufferProperties
+./src/audio/eax/eax.h:347:#define DSPROPSETID_EAX_SourceProperties DSPROPSETID_EAX30_BufferProperties
+./src/audio/eax/eax.h:377:#define DSPROPERTY_EAXBUFFER_IMMEDIATE 0x00000000 // changes take effect immediately
+./src/audio/eax/eax.h:378:#define DSPROPERTY_EAXBUFFER_DEFERRED  0x80000000 // changes take effect later
+./src/audio/eax/eax.h:379:#define DSPROPERTY_EAXBUFFER_COMMITDEFERREDSETTINGS (DSPROPERTY_EAXBUFFER_NONE | \
+./src/audio/eax/eax.h:450:#define EAXBUFFERFLAGS_DIRECTHFAUTO          0x00000001 // affects DSPROPERTY_EAXBUFFER_DIRECTHF
+./src/audio/eax/eax.h:451:#define EAXBUFFERFLAGS_ROOMAUTO              0x00000002 // affects DSPROPERTY_EAXBUFFER_ROOM
+./src/audio/eax/eax.h:452:#define EAXBUFFERFLAGS_ROOMHFAUTO            0x00000004 // affects DSPROPERTY_EAXBUFFER_ROOMHF
+./src/audio/eax/eax.h:454:#define EAXBUFFERFLAGS_RESERVED              0xFFFFFFF8 // reserved future use
+./src/audio/eax/eax.h:458:#define EAXBUFFER_MINDIRECT                    (-10000)
+./src/audio/eax/eax.h:459:#define EAXBUFFER_MAXDIRECT                    1000
+./src/audio/eax/eax.h:460:#define EAXBUFFER_DEFAULTDIRECT                0
+./src/audio/eax/eax.h:462:#define EAXBUFFER_MINDIRECTHF                  (-10000)
+./src/audio/eax/eax.h:463:#define EAXBUFFER_MAXDIRECTHF                  0
+./src/audio/eax/eax.h:464:#define EAXBUFFER_DEFAULTDIRECTHF              0
+./src/audio/eax/eax.h:466:#define EAXBUFFER_MINROOM                      (-10000)
+./src/audio/eax/eax.h:467:#define EAXBUFFER_MAXROOM                      1000
+./src/audio/eax/eax.h:468:#define EAXBUFFER_DEFAULTROOM                  0
+./src/audio/eax/eax.h:470:#define EAXBUFFER_MINROOMHF                    (-10000)
+./src/audio/eax/eax.h:471:#define EAXBUFFER_MAXROOMHF                    0
+./src/audio/eax/eax.h:472:#define EAXBUFFER_DEFAULTROOMHF                0
+./src/audio/eax/eax.h:474:#define EAXBUFFER_MINOBSTRUCTION               (-10000)
+./src/audio/eax/eax.h:475:#define EAXBUFFER_MAXOBSTRUCTION               0
+./src/audio/eax/eax.h:476:#define EAXBUFFER_DEFAULTOBSTRUCTION           0
+./src/audio/eax/eax.h:478:#define EAXBUFFER_MINOBSTRUCTIONLFRATIO        0.0f
+./src/audio/eax/eax.h:479:#define EAXBUFFER_MAXOBSTRUCTIONLFRATIO        1.0f
+./src/audio/eax/eax.h:480:#define EAXBUFFER_DEFAULTOBSTRUCTIONLFRATIO    0.0f
+./src/audio/eax/eax.h:482:#define EAXBUFFER_MINOCCLUSION                 (-10000)
+./src/audio/eax/eax.h:483:#define EAXBUFFER_MAXOCCLUSION                 0
+./src/audio/eax/eax.h:484:#define EAXBUFFER_DEFAULTOCCLUSION             0
+./src/audio/eax/eax.h:486:#define EAXBUFFER_MINOCCLUSIONLFRATIO          0.0f
+./src/audio/eax/eax.h:487:#define EAXBUFFER_MAXOCCLUSIONLFRATIO          1.0f
+./src/audio/eax/eax.h:488:#define EAXBUFFER_DEFAULTOCCLUSIONLFRATIO      0.25f
+./src/audio/eax/eax.h:490:#define EAXBUFFER_MINOCCLUSIONROOMRATIO        0.0f
+./src/audio/eax/eax.h:491:#define EAXBUFFER_MAXOCCLUSIONROOMRATIO        10.0f
+./src/audio/eax/eax.h:492:#define EAXBUFFER_DEFAULTOCCLUSIONROOMRATIO    1.5f
+./src/audio/eax/eax.h:494:#define EAXBUFFER_MINOCCLUSIONDIRECTRATIO      0.0f
+./src/audio/eax/eax.h:495:#define EAXBUFFER_MAXOCCLUSIONDIRECTRATIO      10.0f
+./src/audio/eax/eax.h:496:#define EAXBUFFER_DEFAULTOCCLUSIONDIRECTRATIO  1.0f
+./src/audio/eax/eax.h:498:#define EAXBUFFER_MINEXCLUSION                 (-10000)
+./src/audio/eax/eax.h:499:#define EAXBUFFER_MAXEXCLUSION                 0
+./src/audio/eax/eax.h:500:#define EAXBUFFER_DEFAULTEXCLUSION             0
+./src/audio/eax/eax.h:502:#define EAXBUFFER_MINEXCLUSIONLFRATIO          0.0f
+./src/audio/eax/eax.h:503:#define EAXBUFFER_MAXEXCLUSIONLFRATIO          1.0f
+./src/audio/eax/eax.h:504:#define EAXBUFFER_DEFAULTEXCLUSIONLFRATIO      1.0f
+./src/audio/eax/eax.h:506:#define EAXBUFFER_MINOUTSIDEVOLUMEHF           (-10000)
+./src/audio/eax/eax.h:507:#define EAXBUFFER_MAXOUTSIDEVOLUMEHF           0
+./src/audio/eax/eax.h:508:#define EAXBUFFER_DEFAULTOUTSIDEVOLUMEHF       0
+./src/audio/eax/eax.h:510:#define EAXBUFFER_MINDOPPLERFACTOR             0.0f
+./src/audio/eax/eax.h:511:#define EAXBUFFER_MAXDOPPLERFACTOR             10.f
+./src/audio/eax/eax.h:512:#define EAXBUFFER_DEFAULTDOPPLERFACTOR         0.0f
+./src/audio/eax/eax.h:514:#define EAXBUFFER_MINROLLOFFFACTOR             0.0f
+./src/audio/eax/eax.h:515:#define EAXBUFFER_MAXROLLOFFFACTOR             10.f
+./src/audio/eax/eax.h:516:#define EAXBUFFER_DEFAULTROLLOFFFACTOR         0.0f
+./src/audio/eax/eax.h:518:#define EAXBUFFER_MINROOMROLLOFFFACTOR         0.0f
+./src/audio/eax/eax.h:519:#define EAXBUFFER_MAXROOMROLLOFFFACTOR         10.f
+./src/audio/eax/eax.h:520:#define EAXBUFFER_DEFAULTROOMROLLOFFFACTOR     0.0f
+./src/audio/eax/eax.h:522:#define EAXBUFFER_MINAIRABSORPTIONFACTOR       0.0f
+./src/audio/eax/eax.h:523:#define EAXBUFFER_MAXAIRABSORPTIONFACTOR       10.0f
+./src/audio/eax/eax.h:524:#define EAXBUFFER_DEFAULTAIRABSORPTIONFACTOR   1.0f
+./src/audio/eax/eax.h:526:#define EAXBUFFER_DEFAULTFLAGS                 (EAXBUFFERFLAGS_DIRECTHFAUTO |       \
+./src/audio/AudioManager.cpp:20:#define SPEED_OF_SOUND 343.f
+./src/audio/AudioManager.cpp:21:#define TIME_SPENT 50
+./src/audio/oal/stream.cpp:219:#define CLOSE_ON_ERROR(op)\
+./src/audio/oal/stream.cpp:324:#define SAMPLES_IN_LINE (8)
+./src/audio/oal/stream.cpp:468:#define MP3_USE_FUZZY_SEEK
+./src/audio/oal/stream.cpp:572:#define VAG_LINE_SIZE (0x10)
+./src/audio/oal/stream.cpp:573:#define VAG_SAMPLES_IN_LINE (28)
+./src/audio/oal/stream.cpp:637:#define VB_BLOCK_SIZE (0x2000)
+./src/audio/oal/stream.cpp:638:#define NUM_VAG_LINES_IN_BLOCK (VB_BLOCK_SIZE / VAG_LINE_SIZE)
+./src/audio/oal/stream.cpp:639:#define NUM_VAG_SAMPLES_IN_BLOCK (NUM_VAG_LINES_IN_BLOCK * VAG_SAMPLES_IN_LINE)
+./src/audio/oal/stream.h:6:#define NUM_STREAMBUFFERS 8
+./src/audio/oal/aldlist.cpp:28:#define _stricmp strcasecmp
+./src/audio/oal/aldlist.cpp:29:#define _strnicmp strncasecmp
+./src/audio/oal/aldlist.cpp:30:#define _strdup strdup
+./src/audio/oal/oal_utils.cpp:55:#define LOAD_PROC(T, x)  ((x) = (T)alGetProcAddress(#x))
+./src/audio/oal/aldlist.h:2:#define ALDEVICELIST_H
+./src/audio/PoliceRadio.cpp:42:#define SETZONESFX(i, name, sample) \
+./src/audio/sampman.h:4:#define MAX_VOLUME 127
+./src/audio/sampman.h:5:#define MAX_FREQ DIGITALRATE
+./src/audio/sampman.h:16:#define PS2BANK(e) e
+./src/audio/sampman.h:18:#define PS2BANK(e) e = SFX_BANK_0
+./src/audio/sampman.h:97:#define MAX_PEDSFX                 7
+./src/audio/sampman.h:98:#define PED_BLOCKSIZE              79000
+./src/audio/sampman.h:100:#define MAXPROVIDERS               64
+./src/audio/sampman.h:102:#define MAXCHANNELS                28
+./src/audio/sampman.h:103:#define MAXCHANNELS_SURROUND       24
+./src/audio/sampman.h:104:#define MAX2DCHANNELS              1
+./src/audio/sampman.h:105:#define CHANNEL2D                  MAXCHANNELS
+./src/audio/sampman.h:107:#define MAX_STREAMS                2
+./src/audio/sampman.h:109:#define DIGITALRATE                32000
+./src/audio/sampman.h:110:#define DIGITALBITS                16
+./src/audio/sampman.h:111:#define DIGITALCHANNELS            2
+./src/audio/sampman.h:113:#define MAX_DIGITAL_MIXER_CHANNELS 32
+./src/audio/sampman_oal.cpp:1://#define JUICY_OAL
+./src/audio/sampman_oal.cpp:22:#define _getcwd getcwd
+./src/audio/sampman_oal.cpp:1414:	#define ZR(v, a, b) (((v)==0)?(a):(b))
+./src/audio/sampman_oal.cpp:1415:	#define CALCRATIO(x,y,z,min,max,val) (ZR(y, ZR(x, ZR(z, min, max), min), ZR(x, ZR(z, min, max), ZR(z, min, val))))
+./src/audio/DMAudio.h:7:#define AEHANDLE_IS_FAILED(h) ((h)<0)
+./src/audio/DMAudio.h:8:#define AEHANDLE_IS_OK(h)     ((h)>=0)
+./src/audio/AudioCollision.h:3:#define NUMAUDIOCOLLISIONS 10
+./src/render/Font.cpp:43:#define JAP_TERMINATION (0x8000 | '~')
+./src/render/Fluff.h:21:#define NUMMOVINGTHINGS 128
+./src/render/Rubbish.cpp:15:#define RUBBISH_MAX_DIST (18.0f)
+./src/render/Rubbish.cpp:16:#define RUBBISH_FADE_DIST (16.5f)
+./src/render/Console.cpp:8:#define CONSOLE_X_POS (30.0f)
+./src/render/Console.cpp:9:#define CONSOLE_Y_POS (10.0f)
+./src/render/Console.cpp:10:#define CONSOLE_LINE_HEIGHT (12.0f)
+./src/render/Renderer.cpp:1:#define WITHD3D
+./src/render/Renderer.cpp:86:#define BACKFACE_CULLING_ON SetCullMode(rwCULLMODECULLBACK)
+./src/render/Renderer.cpp:87:#define BACKFACE_CULLING_OFF SetCullMode(rwCULLMODECULLNONE)
+./src/render/Renderer.cpp:89:#define BACKFACE_CULLING_ON
+./src/render/Renderer.cpp:90:#define BACKFACE_CULLING_OFF
+./src/render/Renderer.cpp:664:#define OTHERUNAVAILABLE (other != -1 && CModelInfo::GetModelInfo(other)->GetRwObject() == nil)
+./src/render/Renderer.cpp:665:#define CANTIMECULL (!OTHERUNAVAILABLE)
+./src/render/Renderer.cpp:1245:#define TOINT(x) ((int)Floor(x))
+./src/render/Renderer.cpp:1247:#define TOINT(x) ((int)(x))
+./src/render/Weather.cpp:79:#define MIN_TIME_BETWEEN_LIGHTNING_FLASH_CHANGES (50)
+./src/render/Weather.cpp:81:#define RAIN_CHANGE_SPEED (0.003f)
+./src/render/Weather.cpp:83:#define DROPLETS_LEFT_OFFSET (10.0f)
+./src/render/Weather.cpp:84:#define DROPLETS_RIGHT_OFFSET (10.0f)
+./src/render/Weather.cpp:85:#define DROPLETS_TOP_OFFSET (10.0f)
+./src/render/Weather.cpp:86:#define DROPLETS_BOTTOM_OFFSET (10.0f)
+./src/render/Weather.cpp:88:#define STREAK_U (10.0f)
+./src/render/Weather.cpp:89:#define STREAK_V (18.0f)
+./src/render/Weather.cpp:90:#define LARGE_STREAK_COEFFICIENT (1.23f)
+./src/render/Weather.cpp:91:#define STREAK_MIN_DISTANCE (8.0f)
+./src/render/Weather.cpp:92:#define STREAK_MAX_DISTANCE (16.0f)
+./src/render/Weather.cpp:94:#define SPLASH_CHECK_RADIUS (7.0f)
+./src/render/Weather.cpp:95:#define SPLASH_OFFSET_RADIUS (2.0f)
+./src/render/Weather.cpp:97:#define STREAK_LIFETIME (4.0f)
+./src/render/Weather.cpp:98:#define STREAK_INTEROLATION_TIME (0.3f)
+./src/render/Weather.cpp:100:#define RAIN_COLOUR_R (200)
+./src/render/Weather.cpp:101:#define RAIN_COLOUR_G (200)
+./src/render/Weather.cpp:102:#define RAIN_COLOUR_B (256)
+./src/render/Weather.cpp:103:#define RAIN_ALPHA (255)
+./src/render/WaterCannon.cpp:15:#define WATERCANNONVERTS 4
+./src/render/WaterCannon.cpp:16:#define WATERCANNONINDEXES 12
+./src/render/Hud.cpp:25:#define MONEY_X 100.0f
+./src/render/Hud.cpp:26:#define WEAPON_X 91.0f
+./src/render/Hud.cpp:27:#define AMMO_X 59.0f
+./src/render/Hud.cpp:28:#define HEALTH_X 100.0f
+./src/render/Hud.cpp:29:#define STARS_X 49.0f
+./src/render/Hud.cpp:30:#define ZONE_Y 61.0f
+./src/render/Hud.cpp:31:#define VEHICLE_Y 81.0f
+./src/render/Hud.cpp:32:#define CLOCK_X 101.0f
+./src/render/Hud.cpp:33:#define SUBS_Y 83.0f
+./src/render/Hud.cpp:34:#define WASTEDBUSTED_Y 122.0f
+./src/render/Hud.cpp:35:#define BIGMESSAGE_Y 80.0f
+./src/render/Hud.cpp:37:#define MONEY_X 110.0f
+./src/render/Hud.cpp:38:#define WEAPON_X 99.0f
+./src/render/Hud.cpp:39:#define AMMO_X 66.0f
+./src/render/Hud.cpp:40:#define HEALTH_X 110.0f
+./src/render/Hud.cpp:41:#define STARS_X 60.0f
+./src/render/Hud.cpp:42:#define ZONE_Y 30.0f
+./src/render/Hud.cpp:43:#define VEHICLE_Y 55.0f
+./src/render/Hud.cpp:44:#define CLOCK_X 111.0f
+./src/render/Hud.cpp:45:#define SUBS_Y 68.0f
+./src/render/Hud.cpp:46:#define WASTEDBUSTED_Y 82.0f
+./src/render/Hud.cpp:47:#define BIGMESSAGE_Y 84.0f
+./src/render/Hud.cpp:51:#define TIMER_RIGHT_OFFSET 34.0f // Taken from VC frenzy timer
+./src/render/Hud.cpp:52:#define BIGMESSAGE_Y_OFFSET 18.0f
+./src/render/Hud.cpp:54:#define TIMER_RIGHT_OFFSET 27.0f
+./src/render/Hud.cpp:55:#define BIGMESSAGE_Y_OFFSET 20.0f
+./src/render/Hud.cpp:59:	#define SCREEN_SCALE_X_PC(a) (a)
+./src/render/Hud.cpp:60:	#define SCREEN_SCALE_Y_PC(a) (a)
+./src/render/Hud.cpp:61:	#define SCALE_AND_CENTER_X_PC(a) (a)
+./src/render/Hud.cpp:63:	#define SCREEN_SCALE_X_PC(a) SCREEN_SCALE_X(a)
+./src/render/Hud.cpp:64:	#define SCREEN_SCALE_Y_PC(a) SCREEN_SCALE_Y(a)
+./src/render/Hud.cpp:65:	#define SCALE_AND_CENTER_X_PC(a) SCALE_AND_CENTER_X(a)
+./src/render/Hud.cpp:69:	#define SCREEN_SCALE_X_FIX(a) SCREEN_SCALE_X(a)
+./src/render/Hud.cpp:70:	#define SCREEN_SCALE_Y_FIX(a) SCREEN_SCALE_Y(a)
+./src/render/Hud.cpp:71:	#define SCALE_AND_CENTER_X_FIX(a) SCALE_AND_CENTER_X(a)
+./src/render/Hud.cpp:73:	#define SCREEN_SCALE_X_FIX(a) (a)
+./src/render/Hud.cpp:74:	#define SCREEN_SCALE_Y_FIX(a) (a)
+./src/render/Hud.cpp:75:	#define SCALE_AND_CENTER_X_FIX(a) (a)
+./src/render/Sprite.cpp:50:#define SPRITEBUFFERSIZE 64
+./src/render/RenderBuffer.h:12:#define TEMPBUFFERVERTSIZE 256
+./src/render/RenderBuffer.h:13:#define TEMPBUFFERINDEXSIZE 1024
+./src/render/WaterCannon.h:3:#define WATERCANNON_GRAVITY (0.009f)
+./src/render/WaterCannon.h:4:#define WATERCANNON_LIFETIME (150)
+./src/render/Font.h:63:#define FONT_LOCALE(style) (CFont::IsJapanese() ? FONT_JAPANESE : style)
+./src/render/Font.h:65:#define FONT_LOCALE(style) (style)
+./src/render/Glass.cpp:58:#define TEMPBUFFERVERTHILIGHTOFFSET     0
+./src/render/Glass.cpp:59:#define TEMPBUFFERINDEXHILIGHTOFFSET    0
+./src/render/Glass.cpp:60:#define TEMPBUFFERVERTHILIGHTSIZE       128
+./src/render/Glass.cpp:61:#define TEMPBUFFERINDEXHILIGHTSIZE      512
+./src/render/Glass.cpp:63:#define TEMPBUFFERVERTSHATTEREDOFFSET   TEMPBUFFERVERTHILIGHTSIZE
+./src/render/Glass.cpp:64:#define TEMPBUFFERINDEXSHATTEREDOFFSET  TEMPBUFFERINDEXHILIGHTSIZE
+./src/render/Glass.cpp:65:#define TEMPBUFFERVERTSHATTEREDSIZE     192
+./src/render/Glass.cpp:66:#define TEMPBUFFERINDEXSHATTEREDSIZE    768
+./src/render/Glass.cpp:68:#define TEMPBUFFERVERTREFLECTIONOFFSET  TEMPBUFFERVERTSHATTEREDSIZE
+./src/render/Glass.cpp:69:#define TEMPBUFFERINDEXREFLECTIONOFFSET TEMPBUFFERINDEXSHATTEREDSIZE
+./src/render/Glass.cpp:70:#define TEMPBUFFERVERTREFLECTIONSIZE    256
+./src/render/Glass.cpp:71:#define TEMPBUFFERINDEXREFLECTIONSIZE   1024
+./src/render/Hud.h:4:#define HELP_MSG_LENGTH 256
+./src/render/WaterLevel.h:3:#define WATER_Z_OFFSET (1.5f)
+./src/render/WaterLevel.h:5:#define NO_WATER -128
+./src/render/WaterLevel.h:7:#define MAX_SMALL_SECTORS      128
+./src/render/WaterLevel.h:8:#define MAX_LARGE_SECTORS      64
+./src/render/WaterLevel.h:9:#define MAX_HUGE_SECTORS       32
+./src/render/WaterLevel.h:10:#define MAX_EXTRAHUGE_SECTORS  16
+./src/render/WaterLevel.h:12:#define SMALL_SECTOR_SIZE      32
+./src/render/WaterLevel.h:13:#define LARGE_SECTOR_SIZE      64
+./src/render/WaterLevel.h:14:#define HUGE_SECTOR_SIZE       128
+./src/render/WaterLevel.h:15:#define EXTRAHUGE_SECTOR_SIZE  256
+./src/render/WaterLevel.h:17:#define WATER_START_X -2048.0f
+./src/render/WaterLevel.h:18:#define WATER_END_X    2048.0f
+./src/render/WaterLevel.h:20:#define WATER_START_Y -2048.0f
+./src/render/WaterLevel.h:21:#define WATER_END_Y    2048.0f
+./src/render/WaterLevel.h:23:#define WATER_WIDTH		((WATER_END_X - WATER_START_X))
+./src/render/WaterLevel.h:24:#define WATER_HEIGHT	((WATER_END_Y - WATER_START_Y))
+./src/render/WaterLevel.h:26:#define WATER_UNSIGN_X(x)                   ( (x) + (WATER_WIDTH /2) )
+./src/render/WaterLevel.h:27:#define WATER_UNSIGN_Y(y)                   ( (y) + (WATER_HEIGHT/2) )
+./src/render/WaterLevel.h:28:#define WATER_SIGN_X(x)                     ( (x) - (WATER_WIDTH /2) )
+./src/render/WaterLevel.h:29:#define WATER_SIGN_Y(y)                     ( (y) - (WATER_HEIGHT/2) )
+./src/render/WaterLevel.h:32:#define WATER_SMALL_X(x)                    ( WATER_UNSIGN_X(x)					/ MAX_SMALL_SECTORS     )
+./src/render/WaterLevel.h:33:#define WATER_SMALL_Y(y)                    ( WATER_UNSIGN_Y(y)					/ MAX_SMALL_SECTORS     )
+./src/render/WaterLevel.h:34:#define WATER_FROM_SMALL_SECTOR_X(x)        ( ((x) - (MAX_SMALL_SECTORS/2)    ) * SMALL_SECTOR_SIZE     )
+./src/render/WaterLevel.h:35:#define WATER_FROM_SMALL_SECTOR_Y(y)        ( ((y) - (MAX_SMALL_SECTORS/2)    ) * SMALL_SECTOR_SIZE     )
+./src/render/WaterLevel.h:36:#define WATER_TO_SMALL_SECTOR_X(x)          ( WATER_UNSIGN_X(x)					/ SMALL_SECTOR_SIZE     )
+./src/render/WaterLevel.h:37:#define WATER_TO_SMALL_SECTOR_Y(y)          ( WATER_UNSIGN_Y(y)					/ SMALL_SECTOR_SIZE     )
+./src/render/WaterLevel.h:40:#define WATER_LARGE_X(x)                    ( WATER_UNSIGN_X(x)					/ MAX_LARGE_SECTORS     )
+./src/render/WaterLevel.h:41:#define WATER_LARGE_Y(y)                    ( WATER_UNSIGN_Y(y)					/ MAX_LARGE_SECTORS     )
+./src/render/WaterLevel.h:42:#define WATER_FROM_LARGE_SECTOR_X(x)        ( ((x) - (MAX_LARGE_SECTORS/2)    ) * LARGE_SECTOR_SIZE     )
+./src/render/WaterLevel.h:43:#define WATER_FROM_LARGE_SECTOR_Y(y)        ( ((y) - (MAX_LARGE_SECTORS/2)    ) * LARGE_SECTOR_SIZE     )
+./src/render/WaterLevel.h:44:#define WATER_TO_LARGE_SECTOR_X(x)          ( WATER_UNSIGN_X(x)					/ LARGE_SECTOR_SIZE     )
+./src/render/WaterLevel.h:45:#define WATER_TO_LARGE_SECTOR_Y(y)          ( WATER_UNSIGN_Y(y)					/ LARGE_SECTOR_SIZE     )
+./src/render/WaterLevel.h:48:#define WATER_HUGE_X(x)                     ( WATER_UNSIGN_X(x)					/ MAX_HUGE_SECTORS      )
+./src/render/WaterLevel.h:49:#define WATER_HUGE_Y(y)                     ( WATER_UNSIGN_Y(y)					/ MAX_HUGE_SECTORS      )
+./src/render/WaterLevel.h:50:#define WATER_FROM_HUGE_SECTOR_X(x)         ( ((x) - (MAX_HUGE_SECTORS/2)     ) * HUGE_SECTOR_SIZE      )
+./src/render/WaterLevel.h:51:#define WATER_FROM_HUGE_SECTOR_Y(y)         ( ((y) - (MAX_HUGE_SECTORS/2)     ) * HUGE_SECTOR_SIZE      )
+./src/render/WaterLevel.h:52:#define WATER_TO_HUGE_SECTOR_X(x)           ( WATER_UNSIGN_X(x)					/ HUGE_SECTOR_SIZE      )
+./src/render/WaterLevel.h:53:#define WATER_TO_HUGE_SECTOR_Y(y)           ( WATER_UNSIGN_Y(y)					/ HUGE_SECTOR_SIZE      )
+./src/render/WaterLevel.h:56:#define WATER_EXTRAHUGE_X(x)                ( WATER_UNSIGN_X(x)					/ MAX_EXTRAHUGE_SECTORS )
+./src/render/WaterLevel.h:57:#define WATER_EXTRAHUGE_Y(y)                ( WATER_UNSIGN_Y(y)					/ MAX_EXTRAHUGE_SECTORS )
+./src/render/WaterLevel.h:58:#define WATER_FROM_EXTRAHUGE_SECTOR_X(x)    ( ((x) - (MAX_EXTRAHUGE_SECTORS/2)) * EXTRAHUGE_SECTOR_SIZE )
+./src/render/WaterLevel.h:59:#define WATER_FROM_EXTRAHUGE_SECTOR_Y(y)    ( ((y) - (MAX_EXTRAHUGE_SECTORS/2)) * EXTRAHUGE_SECTOR_SIZE )
+./src/render/WaterLevel.h:60:#define WATER_TO_EXTRAHUGE_SECTOR_X(x)      ( WATER_UNSIGN_X(x)					/ EXTRAHUGE_SECTOR_SIZE )
+./src/render/WaterLevel.h:61:#define WATER_TO_EXTRAHUGE_SECTOR_Y(y)      ( WATER_UNSIGN_Y(y)					/ EXTRAHUGE_SECTOR_SIZE )
+./src/render/WaterLevel.h:64:#define MAX_BOAT_WAKES 8
+./src/render/SpecialFX.cpp:653:#define BRIGHTLIGHTS_MAX_DIST (60.0f)	// invisible beyond this
+./src/render/SpecialFX.cpp:654:#define BRIGHTLIGHTS_FADE_DIST (45.0f)	// strongest between these two
+./src/render/SpecialFX.cpp:655:#define CARLIGHTS_MAX_DIST (30.0f)
+./src/render/SpecialFX.cpp:656:#define CARLIGHTS_FADE_DIST (15.0f)	// 31 for close lights
+./src/render/SpecialFX.cpp:1042:#define MONEY_MESSAGE_LIFETIME_MS 2000
+./src/render/Timecycle.cpp:230:#define INTERP(v) v[h1][w1]*c0 + v[h2][w1]*c1 + v[h1][w2]*c2 + v[h2][w2]*c3
+./src/render/PlayerSkin.h:3:#define DEFAULT_SKIN_NAME "$$\"\""
+./src/render/MBlur.cpp:2:#define WITHD3D
+./src/render/Particle.cpp:18:#define MAX_PARTICLES_ON_SCREEN   (1000)
+./src/render/Particle.cpp:22:#define MAX_SMOKE_FILES           ARRAY_SIZE(SmokeFiles)
+./src/render/Particle.cpp:25:#define MAX_SMOKE2_FILES          ARRAY_SIZE(Smoke2Files)
+./src/render/Particle.cpp:27:#define MAX_RUBBER_FILES          ARRAY_SIZE(RubberFiles)
+./src/render/Particle.cpp:29:#define MAX_RAINSPLASH_FILES      ARRAY_SIZE(RainSplashFiles)
+./src/render/Particle.cpp:31:#define MAX_WATERSPRAY_FILES      ARRAY_SIZE(WatersprayFiles)
+./src/render/Particle.cpp:33:#define MAX_EXPLOSIONMEDIUM_FILES ARRAY_SIZE(ExplosionMediumFiles)
+./src/render/Particle.cpp:35:#define MAX_GUNFLASH_FILES        ARRAY_SIZE(GunFlashFiles)
+./src/render/Particle.cpp:37:#define MAX_RAINSPLASHUP_FILES    ARRAY_SIZE(RainSplashupFiles)
+./src/render/Particle.cpp:39:#define MAX_BIRDFRONT_FILES       ARRAY_SIZE(BirdfrontFiles)
+./src/render/Particle.cpp:41:#define MAX_CARDEBRIS_FILES       ARRAY_SIZE(CardebrisFiles)
+./src/render/Particle.cpp:43:#define MAX_CARSPLASH_FILES       ARRAY_SIZE(CarsplashFiles)
+./src/render/Particle.cpp:46:#define MAX_RAINDROP_FILES        ARRAY_SIZE(RaindropFiles)
+./src/render/Renderer.h:6:#define LOD_DISTANCE (300.0f*TheCamera.LODDistMultiplier)
+./src/render/Renderer.h:8:#define LOD_DISTANCE 300.0f
+./src/render/Renderer.h:10:#define FADE_DISTANCE 20.0f
+./src/render/Renderer.h:11:#define STREAM_DISTANCE 30.0f
+./src/render/Clouds.cpp:16:#define SMALLSTRIPHEIGHT 4.0f
+./src/render/Clouds.cpp:17:#define HORIZSTRIPHEIGHT 48.0f
+./src/render/Shadows.h:3:#define MAX_STOREDSHADOWS    48
+./src/render/Shadows.h:4:#define MAX_POLYBUNCHES      300
+./src/render/Shadows.h:5:#define MAX_STATICSHADOWS    64
+./src/render/Shadows.h:6:#define MAX_PERMAMENTSHADOWS 48
+./src/render/PointLights.cpp:22:#define MAX_DIST 22.0f
+./src/render/PointLights.cpp:125:#define FOG_AREA_LENGTH 12.0f
+./src/render/PointLights.cpp:126:#define FOG_AREA_WIDTH 5.0f
+./src/render/PointLights.cpp:128:#define FOG_AREA_RADIUS 9.0f
+./src/collision/TempColModels.cpp:40:#define SET_COLMODEL_SPHERES(colmodel, sphrs)\
+./src/collision/Collision.cpp:1792:#define SPR(off) ((uint8*)(0x70000000 + (off)))
+./src/collision/Collision.cpp:1795:#define SPR(off) ((uint8*)(fakeSPR + (off)))
+./src/collision/Collision.h:21:#define MAX_COLLISION_POINTS 64
+./src/collision/Collision.h:23:#define MAX_COLLISION_POINTS 32

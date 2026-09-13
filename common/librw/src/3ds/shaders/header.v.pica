@@ -1,0 +1,39 @@
+	;; Typical constants
+.constf const  (0.0, 1.0, 2.0, 1.0/255.0)
+.alias  zeros  const.xxxx
+.alias  ones   const.yyyy
+.alias  fixclr const.wwww
+
+	;; light type (u_lightParams[aL].x)
+.alias	DIRECT  const.yyyy
+.alias	POINT   const.zzzz
+
+	;; Loop Constant
+	;; for (aL = y; aL <= x; aL += z)
+.consti u_nLights(7, 0, 1, 0)
+;;.ivec u_nLights
+
+	;; Uniforms
+.fvec u_proj[4]
+.fvec u_view[4]
+.fvec u_world[4]
+.fvec u_texMatrix[4]
+
+	;; for im2d
+.fvec u_xform
+.fvec u_flip
+
+	;; for lighting
+.fvec u_lightParams[8]
+.fvec u_lightPosition[8]
+.fvec u_lightDirection[8]
+.fvec u_lightColor[8]
+
+.fvec u_ambLight
+.fvec u_matColor
+.fvec u_surfProps
+
+.alias surfAmbient  u_surfProps.x
+.alias surfSpecular u_surfProps.y
+.alias surfDiffuse  u_surfProps.z
+

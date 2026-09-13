@@ -1,0 +1,2705 @@
+./src/modelinfo/SimpleModelInfo.cpp:79:#ifdef EXTENDED_PIPELINES
+./src/modelinfo/SimpleModelInfo.cpp:164:#ifdef FIX_BUGS
+./src/modelinfo/PedModelInfo.h:31:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.h:41:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.h:58:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.h:65:#ifndef PED_SKIN
+./src/modelinfo/ClumpModelInfo.cpp:20:#ifdef PED_SKIN
+./src/modelinfo/ClumpModelInfo.cpp:35:#ifdef PED_SKIN
+./src/modelinfo/ClumpModelInfo.cpp:82:#ifdef PED_SKIN
+./src/modelinfo/VehicleModelInfo.cpp:965:#if GTA_VERSION >= GTA3_PC_11
+./src/modelinfo/VehicleModelInfo.cpp:993:#ifndef PS2_MATFX
+./src/modelinfo/VehicleModelInfo.cpp:1016:#ifdef GTA_PS2
+./src/modelinfo/VehicleModelInfo.cpp:1049:#ifdef EXTENDED_PIPELINES
+./src/modelinfo/BaseModelInfo.h:33:#ifdef EXTRA_MODEL_FLAGS
+./src/modelinfo/PedModelInfo.cpp:19:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.cpp:58:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.cpp:95:#ifdef EXTENDED_PIPELINES
+./src/modelinfo/PedModelInfo.cpp:98:#ifdef PED_SKIN
+./src/modelinfo/PedModelInfo.cpp:306:#ifdef PED_SKIN
+./src/rw/VisibilityPlugins.cpp:18:#ifdef NEW_RENDERER
+./src/rw/VisibilityPlugins.cpp:38:#ifdef GTA_PS2	// maybe something else?
+./src/rw/VisibilityPlugins.cpp:44:#if THIS_IS_COMPATIBLE_WITH_GTA3_RW31
+./src/rw/VisibilityPlugins.cpp:157:#ifdef ASPECT_RATIO_SCALE
+./src/rw/VisibilityPlugins.cpp:166:#ifdef NEW_RENDERER
+./src/rw/VisibilityPlugins.cpp:178:#ifdef NEW_RENDERER
+./src/rw/VisibilityPlugins.cpp:187:#ifdef NEW_RENDERER
+./src/rw/VisibilityPlugins.cpp:195:#ifdef FIX_BUGS
+./src/rw/VisibilityPlugins.cpp:202:#ifdef NEW_RENDERER
+./src/rw/VisibilityPlugins.cpp:291:#ifdef EXTENDED_PIPELINES
+./src/rw/VisibilityPlugins.cpp:296:#ifdef FIX_BUGS
+./src/rw/VisibilityPlugins.cpp:302:#ifdef EXTRA_MODEL_FLAGS
+./src/rw/VisibilityPlugins.cpp:316:#ifdef EXTRA_MODEL_FLAGS
+./src/rw/VisibilityPlugins.cpp:320:#ifdef FIX_BUGS
+./src/rw/VisibilityPlugins.cpp:342:#ifdef FIX_BUGS
+./src/rw/VisibilityPlugins.cpp:856:#if GTA_VERSION <= GTA3_PS2_160
+./src/rw/MemoryHeap.cpp:10:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryHeap.cpp:134:#ifdef FIX_BUGS
+./src/rw/MemoryHeap.cpp:150:#ifndef FIX_BUGS
+./src/rw/MemoryHeap.cpp:220:#ifdef FIX_BUGS
+./src/rw/RwHelper.h:18:#ifdef PED_SKIN
+./src/rw/RwHelper.h:56:#if defined(FIX_BUGS) && defined (GTA_PC)
+./src/rw/TexturePools.cpp:1:#ifndef LIBRW
+./src/rw/RwPS2AlphaTest.cpp:1:#ifndef LIBRW
+./src/rw/RwPS2AlphaTest.cpp:5:#ifdef PS2_ALPHA_TEST
+./src/rw/TexRead.cpp:6:#ifdef ANISOTROPIC_FILTERING
+./src/rw/TexRead.cpp:13:#ifdef GTA_PC
+./src/rw/TexRead.cpp:31:#ifdef LIBRW
+./src/rw/TexRead.cpp:56:#ifdef ANISOTROPIC_FILTERING
+./src/rw/TexRead.cpp:163:#ifdef GTA_PC
+./src/rw/TexRead.cpp:165:#ifdef LIBRW
+./src/rw/TexRead.cpp:185:#ifdef RW_GL3
+./src/rw/TexRead.cpp:189:#ifdef RW_D3D9
+./src/rw/TexRead.cpp:335:#ifdef LIBRW
+./src/rw/TexRead.cpp:350:#ifndef LIBRW
+./src/rw/TexRead.cpp:366:#ifdef RW_GL3
+./src/rw/TexRead.cpp:373:#ifdef DISABLE_VSYNC_ON_TEXTURE_CONVERSION
+./src/rw/TexRead.cpp:387:#ifdef FIX_BUGS
+./src/rw/TexRead.cpp:409:#ifdef RW_GL3
+./src/rw/TexRead.cpp:435:#ifdef DISABLE_VSYNC_ON_TEXTURE_CONVERSION
+./src/rw/TexRead.cpp:444:#ifdef RW_GL3
+./src/rw/RwHelper.cpp:9:#if !defined(FINAL) || defined(DEBUGMENU)
+./src/rw/RwHelper.cpp:12:#ifndef FINAL
+./src/rw/RwHelper.cpp:16:#ifdef PS2_ALPHA_TEST
+./src/rw/RwHelper.cpp:23:#if !defined(FINAL) || defined(DEBUGMENU)
+./src/rw/RwHelper.cpp:35:#ifndef FINAL
+./src/rw/RwHelper.cpp:45:#ifndef FINAL
+./src/rw/RwHelper.cpp:54:#ifndef FINAL
+./src/rw/RwHelper.cpp:61:#ifndef FINAL
+./src/rw/RwHelper.cpp:86:#ifdef LIBRW
+./src/rw/RwHelper.cpp:100:#ifdef LIBRW
+./src/rw/RwHelper.cpp:184:#ifdef PED_SKIN
+./src/rw/RwHelper.cpp:278:#ifdef FIX_BUGS
+./src/rw/RwHelper.cpp:301:#if defined FIX_BUGS || defined LIBRW
+./src/rw/RwHelper.cpp:315:#if defined FIX_BUGS || defined LIBRW
+./src/rw/RwHelper.cpp:403:#if defined FIX_BUGS || defined LIBRW
+./src/rw/RwHelper.cpp:588:#ifdef LIBRW
+./src/rw/RwHelper.cpp:665:#if defined(FIX_BUGS) && defined(GTA_PC)
+./src/rw/RwHelper.cpp:671:#ifdef LIBRW
+./src/rw/RwHelper.cpp:689:#ifdef LIBRW
+./src/rw/Lights.cpp:80:#ifdef FIX_BUGS
+./src/rw/TexturePools.h:21:#ifdef FIX_BUGS
+./src/rw/RwMatFX.cpp:1:#ifndef LIBRW
+./src/rw/RwMatFX.cpp:59:#ifdef PS2_MATFX
+./src/rw/VisibilityPlugins.h:25:#ifdef NEW_RENDERER
+./src/rw/MemoryHeap.h:4:#ifdef MoveMemory
+./src/rw/MemoryHeap.h:8:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryHeap.h:96:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:11:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:12:#ifdef GTA_PS2
+./src/rw/MemoryMgr.cpp:29:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:40:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:53:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:66:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:73:#ifdef FIX_BUGS
+./src/rw/MemoryMgr.cpp:82:#ifdef USE_CUSTOM_ALLOCATOR
+./src/rw/MemoryMgr.cpp:83:#ifdef FIX_BUGS
+./src/rw/MemoryMgr.cpp:96:#if defined (FIX_BUGS) || defined(FIX_BUGS_64)
+./src/animation/AnimManager.cpp:60:#if GTA_VERSION <= GTA3_PS2_160
+./src/animation/AnimManager.cpp:84:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimManager.cpp:202:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimManager.cpp:250:#if GTA_VERSION <= GTA3_PS2_160
+./src/animation/AnimManager.cpp:274:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimManager.cpp:505:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimManager.cpp:571:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimManager.cpp:779:#ifdef PED_SKIN
+./src/animation/AnimManager.cpp:863:#ifdef PED_SKIN
+./src/animation/AnimBlendHierarchy.cpp:62:#ifdef ANIM_COMPRESSION
+./src/animation/AnimBlendHierarchy.cpp:76:#ifdef ANIM_COMPRESSION
+./src/animation/AnimBlendHierarchy.cpp:85:#ifdef USE_CUSTOM_ALLOCATOR
+./src/animation/AnimBlendAssociation.h:65:#ifndef FIX_BUGS
+./src/animation/AnimBlendSequence.cpp:12:#ifdef PED_SKIN
+./src/animation/AnimBlendSequence.cpp:180:#ifdef USE_CUSTOM_ALLOCATOR
+./src/animation/AnimManager.h:27:#ifdef PC_PLAYER_CONTROLS
+./src/animation/AnimBlendHierarchy.h:5:#ifdef MoveMemory
+./src/animation/AnimBlendSequence.h:5:#ifdef MoveMemory
+./src/animation/AnimBlendSequence.h:40:#ifdef PED_SKIN
+./src/animation/AnimBlendSequence.h:62:#ifdef PED_SKIN
+./src/animation/AnimBlendSequence.h:66:#ifndef PED_SKIN
+./src/animation/FrameUpdate.cpp:50:#ifdef FIX_BUGS
+./src/animation/FrameUpdate.cpp:109:#ifdef FIX_BUGS
+./src/animation/FrameUpdate.cpp:193:#ifdef FIX_BUGS
+./src/animation/FrameUpdate.cpp:231:#ifdef PED_SKIN
+./src/animation/FrameUpdate.cpp:262:#ifdef FIX_BUGS
+./src/animation/FrameUpdate.cpp:322:#ifdef FIX_BUGS
+./src/animation/FrameUpdate.cpp:406:#ifdef FIX_BUGS
+./src/animation/AnimBlendAssocGroup.cpp:3:#if defined _WIN32 && !defined __MINGW32__
+./src/animation/AnimBlendAssocGroup.cpp:4:#if defined __MWERKS__
+./src/animation/AnimBlendAssocGroup.cpp:90:#ifndef ASCII_STRCMP
+./src/animation/AnimBlendAssocGroup.cpp:96:#ifndef ASCII_STRCMP
+./src/animation/AnimBlendAssocGroup.cpp:143:#ifdef PED_SKIN
+./src/animation/AnimBlendClumpData.h:17:#ifdef PED_SKIN
+./src/animation/AnimBlendClumpData.h:27:#ifndef PED_SKIN
+./src/animation/AnimBlendClumpData.h:37:#ifdef PED_SKIN
+./src/animation/AnimBlendClumpData.h:50:#ifdef PED_SKIN
+./src/animation/AnimBlendClumpData.h:55:#ifndef PED_SKIN
+./src/animation/Bones.cpp:5:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:13:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:145:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:203:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:367:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:382:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:401:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:415:#ifdef PED_SKIN
+./src/animation/RpAnimBlend.cpp:456:#ifdef PED_SKIN
+./src/animation/AnimationId.h:45:#if GTA_VERSION <= GTA3_PS2_160
+./src/animation/AnimationId.h:81:#ifdef PC_PLAYER_CONTROLS
+./src/skel/skeleton.cpp:20:#ifdef _WIN32
+./src/skel/skeleton.cpp:159:#ifndef MASTER
+./src/skel/events.h:1:#ifndef EVENTS_H
+./src/skel/crossplatform.cpp:5:#ifndef _WIN32
+./src/skel/crossplatform.cpp:27:#ifndef _WIN32
+./src/skel/crossplatform.cpp:114:#ifndef _WIN32
+./src/skel/skeleton.h:1:#ifndef SKELETON_H
+./src/skel/skeleton.h:9:#if (!defined(RsSprintf))
+./src/skel/skeleton.h:13:#ifdef    __cplusplus
+./src/skel/skeleton.h:18:#if (!defined(RSASSERT))
+./src/skel/skeleton.h:257:#ifdef _WIN32
+./src/skel/skeleton.h:286:#ifdef    __cplusplus
+./src/skel/glfw/glfw.cpp:1:#if defined RW_GL3 && !defined LIBRW_SDL2
+./src/skel/glfw/glfw.cpp:3:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:15:#ifndef __APPLE__
+./src/skel/glfw/glfw.cpp:28:#if (defined(_MSC_VER))
+./src/skel/glfw/glfw.cpp:55:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:74:#ifndef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:89:#ifdef DETECT_JOYSTICK_MENU
+./src/skel/glfw/glfw.cpp:98:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:128:#if defined USE_MY_DOCUMENTS && defined _WIN32
+./src/skel/glfw/glfw.cpp:203:#ifndef LIBRW
+./src/skel/glfw/glfw.cpp:222:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:246:#if defined(CLOCK_MONOTONIC_RAW)
+./src/skel/glfw/glfw.cpp:248:#elif defined(CLOCK_MONOTONIC_FAST)
+./src/skel/glfw/glfw.cpp:279:#ifdef USE_CUSTOM_ALLOCATOR
+./src/skel/glfw/glfw.cpp:308:#ifdef UNDER_CE
+./src/skel/glfw/glfw.cpp:332:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:341:#ifndef _WIN32
+./src/skel/glfw/glfw.cpp:390:#if GTA_VERSION < GTA3_PC_11
+./src/skel/glfw/glfw.cpp:398:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:442:#ifndef PS2_MENU
+./src/skel/glfw/glfw.cpp:444:#if GTA_VERSION >= GTA3_PC_11
+./src/skel/glfw/glfw.cpp:451:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:459:#elif defined (__APPLE__)
+./src/skel/glfw/glfw.cpp:627:#ifdef FIX_BUGS
+./src/skel/glfw/glfw.cpp:669:#ifdef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:681:#ifdef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:685:#ifndef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:695:#ifdef DEFAULT_NATIVE_RESOLUTION
+./src/skel/glfw/glfw.cpp:720:#ifdef DEFAULT_NATIVE_RESOLUTION
+./src/skel/glfw/glfw.cpp:781:#ifdef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:791:#ifndef PS2_MENU
+./src/skel/glfw/glfw.cpp:816:#ifndef IMPROVED_VIDEOMODE
+./src/skel/glfw/glfw.cpp:835:#ifdef MULTISAMPLING
+./src/skel/glfw/glfw.cpp:850:#ifndef DETECT_JOYSTICK_MENU
+./src/skel/glfw/glfw.cpp:915:#ifdef DETECT_JOYSTICK_MENU
+./src/skel/glfw/glfw.cpp:1083:#ifndef _WIN32
+./src/skel/glfw/glfw.cpp:1138:#ifdef NASTY_GAME
+./src/skel/glfw/glfw.cpp:1206:#ifndef _WIN32
+./src/skel/glfw/glfw.cpp:1223:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1243:#ifndef _WIN32
+./src/skel/glfw/glfw.cpp:1248:#ifdef FLUSHABLE_STREAMING
+./src/skel/glfw/glfw.cpp:1466:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1478:#ifndef MASTER
+./src/skel/glfw/glfw.cpp:1496:#ifdef USE_CUSTOM_ALLOCATOR
+./src/skel/glfw/glfw.cpp:1500:#ifndef _WIN32
+./src/skel/glfw/glfw.cpp:1505:#ifdef FLUSHABLE_STREAMING
+./src/skel/glfw/glfw.cpp:1523:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1568:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1605:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1625:#ifdef LOAD_INI_SETTINGS
+./src/skel/glfw/glfw.cpp:1642:#ifdef LOAD_INI_SETTINGS
+./src/skel/glfw/glfw.cpp:1651:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:1655:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1689:#ifndef MASTER
+./src/skel/glfw/glfw.cpp:1695:#ifndef PS2_MENU
+./src/skel/glfw/glfw.cpp:1701:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1715:#ifndef MASTER
+./src/skel/glfw/glfw.cpp:1727:#ifdef NO_MOVIES
+./src/skel/glfw/glfw.cpp:1767://#ifndef NO_MOVIES
+./src/skel/glfw/glfw.cpp:1806:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1820:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1829:#ifndef PS2_MENU
+./src/skel/glfw/glfw.cpp:1855:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1865:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1882:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1945:#ifdef PS2_MENU	
+./src/skel/glfw/glfw.cpp:1958:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1964:#ifdef PS2_MENU
+./src/skel/glfw/glfw.cpp:1995:#ifndef MASTER
+./src/skel/glfw/glfw.cpp:2023:#ifndef MASTER
+./src/skel/glfw/glfw.cpp:2046:#ifdef _WIN32
+./src/skel/glfw/glfw.cpp:2168:#ifdef DETECT_JOYSTICK_MENU
+./src/skel/glfw/glfw.cpp:2172:#ifdef LOAD_INI_SETTINGS
+./src/skel/glfw/glfw.cpp:2188:#if (defined(_MSC_VER))
+./src/skel/crossplatform.h:15:#ifdef _WIN32
+./src/skel/crossplatform.h:19:#ifndef _INC_WINDOWS
+./src/skel/crossplatform.h:20:	#ifndef __MWERKS__
+./src/skel/crossplatform.h:26:#if defined RW_D3D9 || defined RWLIBS
+./src/skel/crossplatform.h:55:#ifdef RW_GL3
+./src/skel/crossplatform.h:74:#ifdef DETECT_JOYSTICK_MENU
+./src/skel/crossplatform.h:95:#ifndef MAX_PATH
+./src/skel/crossplatform.h:96:    #if !defined _WIN32 || defined __MINGW32__
+./src/skel/crossplatform.h:104:#ifndef _WIN32
+./src/skel/crossplatform.h:125:#ifndef _WIN32
+./src/skel/platform.h:1:#ifndef PLATFORM_H
+./src/skel/platform.h:9:#ifdef    __cplusplus
+./src/skel/platform.h:14:#ifdef _WIN32
+./src/skel/platform.h:55:#ifdef    __cplusplus
+./src/skel/win/win.cpp:1:#if defined RW_D3D9 || defined RWLIBS || defined __MWERKS__
+./src/skel/win/win.cpp:22:#ifdef __MWERKS__
+./src/skel/win/win.cpp:32:#ifndef USE_D3D9
+./src/skel/win/win.cpp:44:#if (defined(_MSC_VER))
+./src/skel/win/win.cpp:98:#ifdef PS2_MENU
+./src/skel/win/win.cpp:124:#ifdef DETECT_JOYSTICK_MENU
+./src/skel/win/win.cpp:129:#ifndef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:177:#ifdef USE_MY_DOCUMENTS
+./src/skel/win/win.cpp:253:#ifndef LIBRW
+./src/skel/win/win.cpp:318:#ifdef USE_CUSTOM_ALLOCATOR
+./src/skel/win/win.cpp:463:#ifdef USE_D3D9
+./src/skel/win/win.cpp:522:#ifndef _WIN64
+./src/skel/win/win.cpp:601:#ifdef UNDER_CE
+./src/skel/win/win.cpp:626:#ifdef PS2_MENU
+./src/skel/win/win.cpp:664:#if GTA_VERSION < GTA3_PC_11
+./src/skel/win/win.cpp:672:#ifndef _WIN64
+./src/skel/win/win.cpp:714:#ifndef PS2_MENU
+./src/skel/win/win.cpp:716:#if GTA_VERSION >= GTA3_PC_11
+./src/skel/win/win.cpp:754:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1114:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1131:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1148:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1165:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1333:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1358:#ifdef USE_D3D9
+./src/skel/win/win.cpp:1375:#ifdef USE_D3D9
+./src/skel/win/win.cpp:1385:#ifdef USE_D3D9
+./src/skel/win/win.cpp:1394:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1406:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:1448:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1460:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1464:#ifndef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1474:#ifdef DEFAULT_NATIVE_RESOLUTION
+./src/skel/win/win.cpp:1499:#ifdef DEFAULT_NATIVE_RESOLUTION
+./src/skel/win/win.cpp:1559:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1569:#ifndef PS2_MENU
+./src/skel/win/win.cpp:1580:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1597:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1610:#ifdef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:1641:#ifdef MULTISAMPLING
+./src/skel/win/win.cpp:1808:#ifdef NASTY_GAME
+./src/skel/win/win.cpp:1914:#ifdef FIX_BUGS // will also return S_FALSE if it has already been inited in the same thread
+./src/skel/win/win.cpp:2023:#ifndef MASTER
+./src/skel/win/win.cpp:2033:#ifdef USE_CUSTOM_ALLOCATOR
+./src/skel/win/win.cpp:2097:#ifndef IMPROVED_VIDEOMODE
+./src/skel/win/win.cpp:2165:#ifdef LOAD_INI_SETTINGS
+./src/skel/win/win.cpp:2182:#ifdef LOAD_INI_SETTINGS
+./src/skel/win/win.cpp:2194:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2210:#ifndef MASTER
+./src/skel/win/win.cpp:2216:#ifndef PS2_MENU
+./src/skel/win/win.cpp:2240:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2265:#ifndef MASTER
+./src/skel/win/win.cpp:2277:#ifdef NO_MOVIES
+./src/skel/win/win.cpp:2317:#ifndef NO_MOVIES
+./src/skel/win/win.cpp:2354:#ifndef NO_MOVIES
+./src/skel/win/win.cpp:2359:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:2364:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2378:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2387:#ifndef PS2_MENU
+./src/skel/win/win.cpp:2415:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2425:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2442:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2506:#ifdef PS2_MENU	
+./src/skel/win/win.cpp:2519:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2524:#ifdef PS2_MENU
+./src/skel/win/win.cpp:2555:#ifndef MASTER
+./src/skel/win/win.cpp:2583:#ifndef MASTER
+./src/skel/win/win.cpp:2990:#ifdef FIX_BUGS
+./src/skel/win/win.cpp:3418:#if (defined(_MSC_VER))
+./src/skel/win/win.h:4:#if (!defined(_PLATFORM_WIN_H))
+./src/skel/win/win.h:7:#if (!defined(RSREGSETBREAKALLOC))
+./src/skel/win/win.h:11:#ifdef __DINPUT_INCLUDED__
+./src/skel/win/win.h:66:#ifdef    __cplusplus
+./src/skel/win/win.h:71:#ifdef __DINPUT_INCLUDED__
+./src/skel/win/win.h:87:#ifdef    __cplusplus
+./src/skel/win/resource.h:14:#ifdef APSTUDIO_INVOKED
+./src/skel/win/resource.h:15:#ifndef APSTUDIO_READONLY_SYMBOLS
+./src/save/GenericGameStorage.h:46:#ifdef MISSION_REPLAY
+./src/save/MemoryCard.h:3:#ifdef PS2_MENU
+./src/save/MemoryCard.h:6:#if defined(PS2)
+./src/save/MemoryCard.h:28:#if defined(PS2)
+./src/save/PCSave.cpp:7:#ifdef MORE_LANGUAGES
+./src/save/PCSave.cpp:45:#ifdef MISSION_REPLAY
+./src/save/PCSave.cpp:97:#ifdef FIX_BUGS
+./src/save/PCSave.cpp:141:#ifdef MORE_LANGUAGES
+./src/save/GenericGameStorage.cpp:46:#ifdef MISSION_REPLAY
+./src/save/GenericGameStorage.cpp:125:#ifdef FIX_BUGS
+./src/save/GenericGameStorage.cpp:143:#ifdef MISSION_REPLAY
+./src/save/GenericGameStorage.cpp:178:#ifdef COMPATIBLE_SAVES
+./src/save/GenericGameStorage.cpp:254:#ifdef MISSION_REPLAY
+./src/save/GenericGameStorage.cpp:271:#ifdef MISSION_REPLAY // a hack to keep compatibility but get new data from save
+./src/save/GenericGameStorage.cpp:303:#ifdef COMPATIBLE_SAVES
+./src/save/GenericGameStorage.cpp:316:#ifdef MISSION_REPLAY
+./src/save/GenericGameStorage.cpp:594:#ifdef MISSION_REPLAY
+./src/save/MemoryCard.cpp:3:#ifdef PS2_MENU
+./src/save/MemoryCard.cpp:146:#if defined(GTA_PC)
+./src/save/MemoryCard.cpp:190:#if defined(PS2)
+./src/save/MemoryCard.cpp:406:#ifdef PS2
+./src/save/MemoryCard.cpp:534:#if defined(PS2)
+./src/save/MemoryCard.cpp:573:#if defined(PS2)
+./src/save/MemoryCard.cpp:654:#if defined(PS2)
+./src/save/MemoryCard.cpp:694:#if defined (PS2)
+./src/save/MemoryCard.cpp:773:#if defined(PS2)
+./src/save/MemoryCard.cpp:835:#if defined(PS2)
+./src/save/MemoryCard.cpp:906:#if defined(PS2)
+./src/save/MemoryCard.cpp:995:#if defined(PS2)
+./src/save/MemoryCard.cpp:1120:#if defined(PS2)
+./src/save/MemoryCard.cpp:1169:#if defined(PS2)
+./src/save/MemoryCard.cpp:1252:#if defined(PS2)
+./src/save/MemoryCard.cpp:1334:#if defined(PS2)
+./src/save/MemoryCard.cpp:1398:#if defined(PS2)
+./src/save/MemoryCard.cpp:1503:#if defined(PS2)
+./src/save/MemoryCard.cpp:1746:#ifdef PS2
+./src/save/MemoryCard.cpp:1896:#if defined(PS2)
+./src/save/MemoryCard.cpp:1934:#if defined(PS2)	
+./src/save/MemoryCard.cpp:2054:#if defined(PS2)
+./src/save/MemoryCard.cpp:2321:#if defined(PS2)
+./src/save/MemoryCard.cpp:2536:#if defined(PS2)
+./src/save/MemoryCard.cpp:2664:#if defined(PS2)
+./src/save/MemoryCard.cpp:2791:#if defined(PS2)
+./src/save/MemoryCard.cpp:2804:#if defined(PS2)
+./src/save/MemoryCard.cpp:2812:#if defined(PS2)
+./src/save/MemoryCard.cpp:2872:#if defined(PS2)
+./src/save/MemoryCard.cpp:2991:#ifdef FIX_BUGS
+./src/text/Text.cpp:4:#ifdef MORE_LANGUAGES
+./src/text/Text.cpp:49:#ifdef MORE_LANGUAGES
+./src/text/Text.cpp:100:#if defined (FIX_BUGS) || defined(FIX_BUGS_64)
+./src/text/Text.cpp:204:#if !defined(FIX_BUGS) && !defined(FIX_BUGS_64)
+./src/text/Text.cpp:232:#if defined (FIX_BUGS) || defined(FIX_BUGS_64)
+./src/text/Text.cpp:242:#if defined (FIX_BUGS) || defined(FIX_BUGS_64)
+./src/text/Text.cpp:287:#ifdef MORE_LANGUAGES
+./src/text/Messages.cpp:57:#ifdef MORE_LANGUAGES
+./src/text/Messages.cpp:379:#ifdef MORE_LANGUAGES
+./src/text/Messages.cpp:420:#ifdef MORE_LANGUAGES
+./src/text/Messages.cpp:457:#ifdef MORE_LANGUAGES
+./src/text/Text.h:10:#if defined(FIX_BUGS) || defined(FIX_BUGS_64)
+./src/text/Text.h:33:#if defined (FIX_BUGS) || defined(FIX_BUGS_64)
+./src/objects/CutsceneObject.cpp:25:#ifdef PED_SKIN
+./src/objects/CutsceneObject.cpp:54:#ifdef PED_SKIN
+./src/objects/CutsceneObject.cpp:88:#ifdef PED_SKIN
+./src/objects/CutsceneObject.cpp:98:#ifdef PED_SKIN
+./src/objects/CutsceneHead.cpp:15:#ifdef GTA_PS2_STUFF
+./src/objects/CutsceneHead.cpp:25:#ifdef PED_SKIN
+./src/objects/CutsceneHead.cpp:71:#ifdef PED_SKIN
+./src/objects/CutsceneHead.cpp:94:#ifdef GTA_PS2_STUFF
+./src/objects/CutsceneHead.cpp:106:#ifdef PED_SKIN
+./src/objects/CutsceneHead.cpp:117:#ifndef FIX_BUGS
+./src/objects/CutsceneHead.cpp:137:#ifdef PED_SKIN
+./src/objects/CutsceneHead.cpp:143:#ifndef FIX_BUGS
+./src/objects/CutsceneHead.cpp:179:#ifdef GTA_PS2_STUFF
+./src/objects/CutsceneHead.cpp:206:#ifdef GTA_PS2_STUFF
+./src/objects/CutsceneHead.cpp:207:#ifdef LIBRW
+./src/objects/CutsceneObject.h:8:#ifdef PED_SKIN
+./src/objects/CutsceneObject.h:31:#ifndef PED_SKIN
+./src/objects/ParticleObject.cpp:176:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:198:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:220:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:247:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:253:#ifdef SCREEN_DROPLETS
+./src/objects/ParticleObject.cpp:262:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:276:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:290:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:324:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:640:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:804:#ifdef PC_PARTICLE
+./src/objects/ParticleObject.cpp:1136:#if 0 // todo better
+./src/objects/ParticleObject.cpp:1146:#if 0 // todo better
+./src/objects/CutsceneHead.h:9:#ifdef PED_SKIN
+./src/objects/CutsceneHead.h:26:#ifndef PED_SKIN
+./src/weapons/Weapon.cpp:114:#ifdef FIX_BUGS
+./src/weapons/Weapon.cpp:1009:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1032:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1288:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1307:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1533:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1619:#ifdef FIX_BUGS
+./src/weapons/Weapon.cpp:1809:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1880:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:1949:#ifndef FIX_BUGS
+./src/weapons/Weapon.cpp:2306:#ifdef COMPATIBLE_SAVES
+./src/weapons/Explosion.cpp:99:#ifdef FIX_BUGS
+./src/weapons/Explosion.cpp:107:#ifdef FIX_BUGS
+./src/weapons/ShotInfo.cpp:16:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ShotInfo.cpp:47:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ShotInfo.cpp:63:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ShotInfo.cpp:100:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ShotInfo.cpp:114:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/WeaponEffects.cpp:49:#if GTA_VERSION >= GTA3_PC_11
+./src/weapons/Weapon.h:71:#ifdef COMPATIBLE_SAVES
+./src/weapons/ProjectileInfo.cpp:16:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:38:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:131:#ifdef FIX_BUGS
+./src/weapons/ProjectileInfo.cpp:169:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:184:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:214:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:227:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:283:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:301:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:308:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:322:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/ProjectileInfo.cpp:333:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:8:#ifdef FIX_BUGS
+./src/weapons/BulletInfo.cpp:27:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:54:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:82:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:90:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:104:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:130:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:159:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:174:#ifdef FIX_BUGS
+./src/weapons/BulletInfo.cpp:176:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:196:#ifdef FIX_BUGS
+./src/weapons/BulletInfo.cpp:198:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:253:#ifdef SQUEEZE_PERFORMANCE
+./src/weapons/BulletInfo.cpp:264:#ifdef FIX_BUGS // original code is not going work anyway...
+./src/weapons/BulletInfo.cpp:290:#ifdef FIX_BUGS
+./src/fakerw/rwplcore.h:16:#ifndef FALSE
+./src/fakerw/rwplcore.h:20:#ifndef TRUE
+./src/fakerw/rwplcore.h:452:#if 0
+./src/fakerw/fake.cpp:10:#ifndef _WIN32
+./src/fakerw/fake.cpp:306:#ifdef LIBRW
+./src/fakerw/fake.cpp:363:#ifndef _WIN32
+./src/fakerw/fake.cpp:568:#ifdef RW_D3D9
+./src/fakerw/fake.cpp:915:#ifndef _WIN32
+./src/fakerw/fake.cpp:932:#ifndef _WIN32
+./src/fakerw/fake.cpp:952:#ifndef _WIN32
+./src/fakerw/fake.cpp:969:#ifndef _WIN32
+./src/entities/Physical.cpp:25:#ifdef FIX_BUGS
+./src/entities/Physical.cpp:71:#ifdef FIX_BUGS
+./src/entities/Physical.cpp:786:#ifdef FIX_BUGS
+./src/entities/Physical.cpp:832:#if GTA_VERSION >= GTA3_PC_11
+./src/entities/Physical.cpp:888:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:901:#ifdef FIX_BUGS
+./src/entities/Physical.cpp:924:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:957:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:990:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:1032:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:1055:#ifdef FIX_BUGS // division by 0
+./src/entities/Physical.cpp:1978:#ifdef GTA_TRAIN
+./src/entities/Entity.h:102:#ifdef COMPATIBLE_SAVES
+./src/entities/Entity.h:164:#ifdef PED_SKIN
+./src/entities/Entity.cpp:142:#ifdef PED_SKIN
+./src/entities/Entity.cpp:148:#ifdef LIBRW
+./src/entities/Entity.cpp:176:#ifdef PED_SKIN
+./src/entities/Entity.cpp:237:#ifdef PED_SKIN
+./src/entities/Entity.cpp:244:#if 0
+./src/entities/Entity.cpp:410:#ifdef GTA_PS2
+./src/entities/Entity.cpp:691:#ifdef COMPATIBLE_SAVES
+./src/core/Frontend_PS2.h:65:#ifdef GTA_PC
+./src/core/Frontend_PS2.h:83:#ifdef MORE_LANGUAGES
+./src/core/Frontend_PS2.h:166:#ifdef GTA_PC
+./src/core/Frontend_PS2.h:185:#ifndef MASTER
+./src/core/Frontend_PS2.h:190:#ifdef MENU_MAP
+./src/core/Frontend_PS2.h:197:#ifdef IMPROVED_VIDEOMODE	
+./src/core/Frontend_PS2.h:212:#ifdef FIX_BUGS
+./src/core/FileMgr.cpp:3:#ifdef _WIN32
+./src/core/FileMgr.cpp:31:#if !defined(_WIN32)
+./src/core/FileMgr.cpp:255:#ifndef FIX_BUGS
+./src/core/FrontendTriggers.h:1376:#ifdef GTA_PC
+./src/core/Fire.cpp:94:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:76:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:183:#ifdef VC_PED_PORTS
+./src/core/PlayerInfo.cpp:398:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:410:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:424:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:472:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:484:#ifdef FIX_BUGS
+./src/core/PlayerInfo.cpp:622:#ifdef MONEY_MESSAGES
+./src/core/PlayerInfo.cpp:636:#ifdef GTA_PC
+./src/core/EventList.cpp:67:#ifdef SQUEEZE_PERFORMANCE
+./src/core/ZoneCull.cpp:78:#ifndef MASTER
+./src/core/ZoneCull.cpp:231:#ifdef FIX_BUGS
+./src/core/ZoneCull.cpp:794:#ifdef FIX_BUGS
+./src/core/CdStream.cpp:1:#ifdef _WIN32
+./src/core/CdStream.cpp:73:#ifdef FIX_BUGS
+./src/core/CdStream.cpp:112:#ifndef FIX_BUGS // this just slows down streaming
+./src/core/CdStream.cpp:248:#ifdef BIG_IMG
+./src/core/CdStream.cpp:327:#ifdef FIX_BUGS
+./src/core/CdStream.cpp:469:#ifdef FIX_BUGS
+./src/core/Zones.cpp:126:#ifdef SQUEEZE_PERFORMANCE
+./src/core/Game.cpp:90:#ifdef USE_TEXTURE_POOL
+./src/core/Game.cpp:102:#ifdef MORE_LANGUAGES
+./src/core/Game.cpp:112:#ifdef PS2_MENU
+./src/core/Game.cpp:126:#ifdef FIX_BUGS
+./src/core/Game.cpp:134:#ifdef FIX_BUGS
+./src/core/Game.cpp:147:#ifdef FIX_BUGS
+./src/core/Game.cpp:164:#ifdef EXTENDED_COLOURFILTER
+./src/core/Game.cpp:167:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Game.cpp:175:#ifndef LIBRW
+./src/core/Game.cpp:176:#ifdef PS2_MATFX
+./src/core/Game.cpp:179:#ifdef PS2_ALPHA_TEST
+./src/core/Game.cpp:187:#ifdef USE_TEXTURE_POOL
+./src/core/Game.cpp:191:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:198:#ifdef GTA_PS2
+./src/core/Game.cpp:240:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:246:#ifdef LIBRW
+./src/core/Game.cpp:247:#ifdef PS2_MATFX
+./src/core/Game.cpp:253:#ifdef PS2_MATFX
+./src/core/Game.cpp:256:#ifdef PS2_ALPHA_TEST
+./src/core/Game.cpp:262:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:272:#ifdef EXTENDED_PIPELINES
+./src/core/Game.cpp:275:#ifdef SCREEN_DROPLETS
+./src/core/Game.cpp:285:#ifdef SCREEN_DROPLETS
+./src/core/Game.cpp:288:#ifdef EXTENDED_PIPELINES
+./src/core/Game.cpp:318:#ifdef USE_TEXTURE_POOL
+./src/core/Game.cpp:326:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:336:#ifndef GTA_PS2
+./src/core/Game.cpp:346:#ifdef AUDIO_OAL
+./src/core/Game.cpp:355:#if defined(AUDIO_MSS)
+./src/core/Game.cpp:358:#elif defined(AUDIO_OAL)
+./src/core/Game.cpp:389:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:395:#ifdef GTA_PS2
+./src/core/Game.cpp:399:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:405:#ifndef GTA_PS2
+./src/core/Game.cpp:417:#ifdef EXTENDED_PIPELINES
+./src/core/Game.cpp:430:#ifdef GTA_PS2
+./src/core/Game.cpp:444:#ifdef PS2_MENU	// TODO: is this the right define?
+./src/core/Game.cpp:450:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:460:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:470:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:486:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:491:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:512:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:517:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:526:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:540:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:552:#ifdef SCREEN_DROPLETS
+./src/core/Game.cpp:569:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:582:#ifdef GTA_SCENE_EDIT
+./src/core/Game.cpp:593:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:597:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:605:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:609:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:614:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:620:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:626:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:631:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:641:#ifdef PS2_MENU
+./src/core/Game.cpp:664:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:705:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Game.cpp:716:#ifdef PS2_MENU
+./src/core/Game.cpp:731:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:744:#ifdef SCREEN_DROPLETS
+./src/core/Game.cpp:754:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:777:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/Game.cpp:786:#ifdef PS2_MENU
+./src/core/Game.cpp:847:#if GTA_VERSION >= GTA3_PS2_160
+./src/core/Game.cpp:862:#ifdef PS2_MENU
+./src/core/Game.cpp:872:#ifdef PS2_MENU
+./src/core/Game.cpp:880:#ifdef PS2_MENU
+./src/core/Game.cpp:896:#ifdef PS2_MENU
+./src/core/Game.cpp:922:#ifdef FIX_BUGS
+./src/core/Game.cpp:929:#ifdef ASPECT_RATIO_SCALE
+./src/core/Game.cpp:943:#ifdef FIX_BUGS
+./src/core/Game.cpp:1005:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Game.cpp:1011:#ifdef DEBUGMENU
+./src/core/Game.cpp:1046:#ifdef GTA_SCENE_EDIT
+./src/core/Game.cpp:1095:#ifdef GTA_PS2
+./src/core/Game.cpp:1100:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Game.cpp:1143:#ifdef GTA_PS2
+./src/core/Game.cpp:1204:#if THIS_IS_COMPATIBLE_WITH_GTA3_RW31
+./src/core/Game.cpp:1247:#if GTA_VERSION >= GTA3_PS2_160
+./src/core/Game.cpp:1313:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Game.cpp:1352:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Game.cpp:1357:#ifdef GTA_PS2
+./src/core/Game.cpp:1401:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Game.cpp:1429:#ifdef FIX_BUGS
+./src/core/Camera.h:29:#ifdef FREE_CAM // LCS values
+./src/core/Camera.h:216:#ifdef GTA_SCENE_EDIT
+./src/core/Camera.h:421:#ifdef FIX_BUGS
+./src/core/Camera.h:430:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.h:435:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.h:465:#ifdef FIX_BUGS
+./src/core/Camera.h:496:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.h:508:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.h:552:#ifdef FREE_CAM
+./src/core/Camera.h:644:#ifdef GTA_PS2
+./src/core/Profile.cpp:4:#ifndef MASTER
+./src/core/timebars.h:3:#ifdef TIMEBARS
+./src/core/MenuScreensCustom.cpp:2:#if defined DETECT_JOYSTICK_MENU && defined XINPUT
+./src/core/MenuScreensCustom.cpp:5:#if !defined(PSAPI_VERSION) || (PSAPI_VERSION > 1)
+./src/core/MenuScreensCustom.cpp:32:#ifdef PC_MENU
+./src/core/MenuScreensCustom.cpp:34:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/MenuScreensCustom.cpp:36:#ifdef IMPROVED_VIDEOMODE
+./src/core/MenuScreensCustom.cpp:42:#ifdef MULTISAMPLING
+./src/core/MenuScreensCustom.cpp:48:#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/MenuScreensCustom.cpp:54:#ifdef FREE_CAM
+./src/core/MenuScreensCustom.cpp:60:#ifdef PS2_ALPHA_TEST
+./src/core/MenuScreensCustom.cpp:66:#ifdef NO_ISLAND_LOADING
+./src/core/MenuScreensCustom.cpp:72:#ifdef EXTENDED_COLOURFILTER
+./src/core/MenuScreensCustom.cpp:80:#ifdef INVERT_LOOK_FOR_PAD
+./src/core/MenuScreensCustom.cpp:86:#ifdef GAMEPAD_MENU
+./src/core/MenuScreensCustom.cpp:99:	#ifdef PS2_ALPHA_TEST
+./src/core/MenuScreensCustom.cpp:102:	#ifdef MULTISAMPLING
+./src/core/MenuScreensCustom.cpp:105:	#ifdef NO_ISLAND_LOADING
+./src/core/MenuScreensCustom.cpp:117:	#ifdef GRAPHICS_MENU_OPTIONS // otherwise Frontend will handle those
+./src/core/MenuScreensCustom.cpp:123:		#if GTA_VERSION >= GTA3_PC_11
+./src/core/MenuScreensCustom.cpp:142:	#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/MenuScreensCustom.cpp:145:	#ifdef FREE_CAM
+./src/core/MenuScreensCustom.cpp:148:	#ifdef GRAPHICS_MENU_OPTIONS // otherwise Frontend will handle those
+./src/core/MenuScreensCustom.cpp:157:#ifdef NO_ISLAND_LOADING
+./src/core/MenuScreensCustom.cpp:198:#ifndef MULTISAMPLING
+./src/core/MenuScreensCustom.cpp:267:#ifdef IMPROVED_VIDEOMODE
+./src/core/MenuScreensCustom.cpp:277:#ifdef DETECT_JOYSTICK_MENU
+./src/core/MenuScreensCustom.cpp:283:#if defined RW_GL3 && !defined LIBRW_SDL2
+./src/core/MenuScreensCustom.cpp:314:#elif defined XINPUT
+./src/core/MenuScreensCustom.cpp:354:#ifdef LOAD_INI_SETTINGS
+./src/core/MenuScreensCustom.cpp:365:#ifdef GAMEPAD_MENU
+./src/core/MenuScreensCustom.cpp:396:#ifdef GAMEPAD_MENU
+./src/core/MenuScreensCustom.cpp:421:#ifndef GRAPHICS_MENU_OPTIONS
+./src/core/MenuScreensCustom.cpp:428:#ifndef EXTENDED_COLOURFILTER
+./src/core/MenuScreensCustom.cpp:593:#ifdef PS2_SAVE_DIALOG
+./src/core/MenuScreensCustom.cpp:668:#ifdef PC_PLAYER_CONTROLS
+./src/core/MenuScreensCustom.cpp:672:#ifdef GAMEPAD_MENU
+./src/core/MenuScreensCustom.cpp:675:#ifdef DETECT_JOYSTICK_MENU
+./src/core/MenuScreensCustom.cpp:730:#ifdef GRAPHICS_MENU_OPTIONS
+./src/core/MenuScreensCustom.cpp:828:#ifndef GAMEPAD_MENU
+./src/core/MenuScreensCustom.cpp:835:#ifdef MISSION_REPLAY
+./src/core/MenuScreensCustom.cpp:848:#ifdef MENU_MAP
+./src/core/MenuScreensCustom.cpp:856:#ifdef GRAPHICS_MENU_OPTIONS
+./src/core/MenuScreensCustom.cpp:869:#ifdef EXTENDED_COLOURFILTER
+./src/core/MenuScreensCustom.cpp:880:#ifdef DETECT_JOYSTICK_MENU
+./src/core/General.h:136:#ifndef ASCII_STRCMP
+./src/core/re3.cpp:4:#if defined DETECT_JOYSTICK_MENU && defined XINPUT
+./src/core/re3.cpp:6:#if !defined(PSAPI_VERSION) || (PSAPI_VERSION > 1)
+./src/core/re3.cpp:45:#ifdef DETECT_JOYSTICK_MENU
+./src/core/re3.cpp:49:#ifndef _WIN32
+./src/core/re3.cpp:54:#ifdef RWLIBS
+./src/core/re3.cpp:59:#ifdef USE_PS2_RAND
+./src/core/re3.cpp:68:#ifdef USE_PS2_RAND
+./src/core/re3.cpp:85:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/re3.cpp:88:#ifdef MORE_LANGUAGES
+./src/core/re3.cpp:127:#ifdef EXTENDED_PIPELINES
+./src/core/re3.cpp:132:#ifdef GRAPHICS_MENU_OPTIONS
+./src/core/re3.cpp:150:#ifdef MORE_LANGUAGES
+./src/core/re3.cpp:181:#ifdef LOAD_INI_SETTINGS
+./src/core/re3.cpp:297:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/re3.cpp:317:#ifdef DETECT_JOYSTICK_MENU
+./src/core/re3.cpp:318:#ifdef XINPUT
+./src/core/re3.cpp:448:#ifdef DETECT_JOYSTICK_MENU
+./src/core/re3.cpp:449:#ifdef XINPUT
+./src/core/re3.cpp:464:#ifdef IMPROVED_VIDEOMODE
+./src/core/re3.cpp:496:#ifdef EXTENDED_COLOURFILTER
+./src/core/re3.cpp:499:#ifdef EXTENDED_PIPELINES
+./src/core/re3.cpp:506:#ifdef NEW_RENDERER
+./src/core/re3.cpp:510:#ifdef PROPER_SCALING
+./src/core/re3.cpp:513:#ifdef FIX_RADAR
+./src/core/re3.cpp:516:#ifdef FIX_SPRITES
+./src/core/re3.cpp:519:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/re3.cpp:524:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/re3.cpp:555:#ifdef IMPROVED_VIDEOMODE
+./src/core/re3.cpp:587:#ifdef EXTENDED_COLOURFILTER
+./src/core/re3.cpp:590:#ifdef EXTENDED_PIPELINES
+./src/core/re3.cpp:597:#ifdef NEW_RENDERER
+./src/core/re3.cpp:601:#ifdef PROPER_SCALING	
+./src/core/re3.cpp:604:#ifdef FIX_RADAR
+./src/core/re3.cpp:607:#ifdef FIX_SPRITES
+./src/core/re3.cpp:610:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/re3.cpp:614:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/re3.cpp:635:#ifdef DEBUGMENU
+./src/core/re3.cpp:716:#ifdef MENU_MAP
+./src/core/re3.cpp:762:#ifdef MISSION_SWITCHER
+./src/core/re3.cpp:771:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/re3.cpp:919:#ifdef PROPER_SCALING	
+./src/core/re3.cpp:922:#ifdef FIX_RADAR
+./src/core/re3.cpp:925:#ifdef FIX_SPRITES
+./src/core/re3.cpp:932:#ifdef NEW_RENDERER
+./src/core/re3.cpp:956:#ifdef EXTENDED_COLOURFILTER
+./src/core/re3.cpp:963:#ifdef EXTENDED_PIPELINES
+./src/core/re3.cpp:992:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/re3.cpp:997:#ifdef TIMEBARS
+./src/core/re3.cpp:1000:#ifndef FINAL
+./src/core/re3.cpp:1002:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/re3.cpp:1010:#ifdef GTA_SCENE_EDIT
+./src/core/re3.cpp:1016:#ifdef MENU_MAP
+./src/core/re3.cpp:1026:#ifdef MISSION_SWITCHER
+./src/core/re3.cpp:1053:#ifdef FREE_CAM
+./src/core/re3.cpp:1069:#ifndef __MWERKS__
+./src/core/re3.cpp:1070:#ifndef MASTER
+./src/core/re3.cpp:1075:#ifndef MASTER
+./src/core/re3.cpp:1078:#ifdef _WIN32
+./src/core/re3.cpp:1133:#ifndef MASTER
+./src/core/re3.cpp:1136:#ifdef _WIN32
+./src/core/re3.cpp:1148:#ifndef MASTER
+./src/core/re3.cpp:1154:#ifdef _WIN32
+./src/core/re3.cpp:1170:#ifndef MASTER
+./src/core/re3.cpp:1175:#ifdef _WIN32
+./src/core/re3.cpp:1193:#ifdef VALIDATE_SAVE_SIZE
+./src/core/config.h:14:#if defined __MWERKS__ || defined VANILLA_DEFINES
+./src/core/config.h:166:#ifdef MASTER
+./src/core/config.h:186:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/config.h:197:#if defined GTA_PS2
+./src/core/config.h:203:#elif defined GTA_PC
+./src/core/config.h:212:#elif defined GTA_XBOX
+./src/core/config.h:215:#ifdef VU_COLLISION
+./src/core/config.h:219:#ifdef MASTER
+./src/core/config.h:230:#ifdef FINAL
+./src/core/config.h:244:#if defined(__LP64__) || defined(_WIN64)
+./src/core/config.h:250:#if !defined _WIN32 || defined __MWERKS__ || defined __MINGW32__ || defined VANILLA_DEFINES
+./src/core/config.h:255:#ifdef DEBUGMENU
+./src/core/config.h:270:#ifdef DISABLE_LOADING_SCREEN
+./src/core/config.h:277:#ifdef LIBRW
+./src/core/config.h:286:#ifndef EXTENDED_COLOURFILTER
+./src/core/config.h:295:#if !defined(RW_GL3) && defined(_WIN32)
+./src/core/config.h:298:#if defined XINPUT || (defined RW_GL3 && !defined LIBRW_SDL2 && !defined __SWITCH__)
+./src/core/config.h:319:#ifndef PC_MENU
+./src/core/config.h:349:#ifdef PC_MENU
+./src/core/config.h:356:#if SCRIPT_LOG_FILE_LEVEL == 0
+./src/core/config.h:360:#ifndef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/core/config.h:364:#ifdef MASTER
+./src/core/config.h:401:#ifdef AUDIO_OPUS
+./src/core/config.h:406:#ifndef AUDIO_OAL_USE_OPUS
+./src/core/config.h:414:#if !defined(_WIN32) && !defined(__SWITCH__)
+./src/core/config.h:421:#ifdef SQUEEZE_PERFORMANCE
+./src/core/config.h:431:#if defined __MWERKS__ || defined VANILLA_DEFINES
+./src/core/Radar.cpp:1:#if (!defined(GTA_PS2_STUFF) && defined(RWLIBS)) || defined(__MWERKS__)
+./src/core/Radar.cpp:89:#ifdef MENU_MAP
+./src/core/Radar.cpp:228:#ifdef MENU_MAP
+./src/core/Radar.cpp:275:#ifndef MENU_MAP
+./src/core/Radar.cpp:455:#ifdef MENU_MAP
+./src/core/Radar.cpp:461:#ifdef FIX_BUGS
+./src/core/Radar.cpp:477:#ifdef MENU_MAP
+./src/core/Radar.cpp:483:#ifdef MENU_MAP
+./src/core/Radar.cpp:532:#ifdef TRIANGULAR_BLIPS
+./src/core/Radar.cpp:571:#ifdef TRIANGULAR_BLIPS
+./src/core/Radar.cpp:637:#ifdef TRIANGULAR_BLIPS
+./src/core/Radar.cpp:686:#ifdef TRIANGULAR_BLIPS
+./src/core/Radar.cpp:707:#ifdef MENU_MAP
+./src/core/Radar.cpp:722:#if 1 // from VC
+./src/core/Radar.cpp:791:#if !defined(GTA_PS2_STUFF) && defined(RWLIBS)
+./src/core/Radar.cpp:820:#if !defined(GTA_PS2_STUFF) && defined(RWLIBS)
+./src/core/Radar.cpp:995:#ifdef MENU_MAP
+./src/core/Radar.cpp:1060:#ifdef MENU_MAP
+./src/core/Radar.cpp:1088:#ifdef FIX_BUGS
+./src/core/Radar.cpp:1113:#ifdef FIX_BUGS
+./src/core/Radar.cpp:1258:#if 1
+./src/core/Radar.cpp:1295:#ifdef MENU_MAP
+./src/core/Radar.cpp:1303:#ifdef FIX_BUGS
+./src/core/Radar.cpp:1315:#if 1
+./src/core/Radar.cpp:1356:#ifdef MENU_MAP
+./src/core/Radar.cpp:1380:#ifdef MENU_MAP
+./src/core/Radar.cpp:1426:#ifdef FIX_BUGS
+./src/core/FileLoader.cpp:62:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/FileLoader.cpp:75:#ifdef FIX_BUGS
+./src/core/FileLoader.cpp:124:#ifndef DISABLE_LOADING_SCREEN
+./src/core/FileLoader.cpp:127:#ifndef GTA_PS2
+./src/core/FileLoader.cpp:362:#ifdef LIBRW
+./src/core/FileLoader.cpp:495:#ifdef HARDCODED_MODEL_FLAGS
+./src/core/FileLoader.cpp:1069:#ifdef EXTRA_MODEL_FLAGS
+./src/core/FileLoader.cpp:1076:#ifdef HARDCODED_MODEL_FLAGS
+./src/core/FileLoader.cpp:1464:#ifdef FIX_BUGS
+./src/core/FileLoader.cpp:1815:#ifdef FIX_BUGS
+./src/core/FileLoader.cpp:1839:#ifdef FIX_BUGS
+./src/core/References.cpp:89:#ifdef FIX_BUGS
+./src/core/MenuScreens.cpp:3:#ifdef PC_MENU
+./src/core/MenuScreens.cpp:8:#ifndef CUSTOM_FRONTEND_OPTIONS
+./src/core/MenuScreens.cpp:199:#ifdef PS2_SAVE_DIALOG
+./src/core/MenuScreens.cpp:274:#ifdef PC_PLAYER_CONTROLS
+./src/core/MenuScreens.cpp:428:#ifdef MISSION_REPLAY
+./src/core/AnimViewer.cpp:50:#ifdef FIX_BUGS
+./src/core/AnimViewer.cpp:51:#ifdef PED_SKIN
+./src/core/AnimViewer.cpp:102:#ifdef FIX_BUGS
+./src/core/AnimViewer.cpp:256:#ifdef DEBUGMENU
+./src/core/AnimViewer.cpp:298:#ifdef FIX_BUGS
+./src/core/AnimViewer.cpp:352:#ifdef PED_SKIN
+./src/core/CdStream.h:46:#ifdef FLUSHABLE_STREAMING
+./src/core/timebars.cpp:2:#ifndef MASTER
+./src/core/timebars.cpp:32:#ifdef FRAMETIME
+./src/core/timebars.cpp:44:#ifdef FRAMETIME
+./src/core/timebars.cpp:48:#ifdef FRAMETIME
+./src/core/timebars.cpp:82:#ifdef FRAMETIME
+./src/core/timebars.cpp:102:#ifndef FINAL
+./src/core/timebars.cpp:111:#ifdef FRAMETIME
+./src/core/Timer.h:61:#ifdef FIX_BUGS
+./src/core/Timer.h:67:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:31:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:51:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/Streaming.cpp:205:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/Streaming.cpp:219:#ifdef GTA_PC
+./src/core/Streaming.cpp:266:#ifdef USE_TXD_CDIMAGE
+./src/core/Streaming.cpp:293:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:299:#ifndef MASTER
+./src/core/Streaming.cpp:311:#ifndef MASTER
+./src/core/Streaming.cpp:341:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:351:#ifndef MASTER
+./src/core/Streaming.cpp:373:#ifdef GTA_PC
+./src/core/Streaming.cpp:436:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:465:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:469:#if THIS_IS_COMPATIBLE_WITH_GTA3_RW31
+./src/core/Streaming.cpp:516:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:524:#ifndef FIX_BUGS
+./src/core/Streaming.cpp:540:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:551:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:637:#ifndef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:683:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:703:#ifndef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:830:#ifdef NO_ISLAND_LOADING
+./src/core/Streaming.cpp:947:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:973:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:1083:#ifdef NO_ISLAND_LOADING
+./src/core/Streaming.cpp:1419:#ifdef FIX_BUGS
+./src/core/Streaming.cpp:1942:#if 0 //def ONE_THREAD_PER_CHANNEL
+./src/core/Streaming.cpp:2151:#ifdef FLUSHABLE_STREAMING
+./src/core/Streaming.cpp:2179:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/Streaming.cpp:2687:#ifdef FIX_BUGS
+./src/core/Game.h:20:#ifdef MORE_LANGUAGES
+./src/core/Game.h:33:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/main.h:17:#ifdef TIMEBARS
+./src/core/main.h:23:#ifndef FINAL
+./src/core/main.h:43:#ifndef MASTER
+./src/core/main.h:47:#ifdef LOAD_INI_SETTINGS
+./src/core/main.h:54:#ifdef NEW_RENDERER
+./src/core/Debug.cpp:44:#ifndef MASTER
+./src/core/Debug.cpp:49:#ifdef FIX_BUGS
+./src/core/Frontend_PS2.cpp:2:#ifdef PS2_MENU
+./src/core/Frontend_PS2.cpp:131:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:221:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:233:#ifndef MASTER
+./src/core/Frontend_PS2.cpp:238:#ifdef MENU_MAP
+./src/core/Frontend_PS2.cpp:282:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:343:#ifdef FIX_BUGS
+./src/core/Frontend_PS2.cpp:701:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:1070:#ifdef PS2
+./src/core/Frontend_PS2.cpp:1315:#ifdef PS2
+./src/core/Frontend_PS2.cpp:1459:#ifdef PS2_MENU_USEALLPAGEICONS
+./src/core/Frontend_PS2.cpp:1937:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:1944:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2067:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2116:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2245:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2266:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2287:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2294:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2301:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2331:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2361:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2368:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2403:#ifdef GTA_PC
+./src/core/Frontend_PS2.cpp:2410:#ifdef GTA_PC
+./src/core/Directory.cpp:45:#ifdef FIX_BUGS
+./src/core/Timer.cpp:22:#ifdef _WIN32
+./src/core/Timer.cpp:36:#ifdef FIX_BUGS
+./src/core/Timer.cpp:53:#ifdef _WIN32
+./src/core/Timer.cpp:87:#ifdef _WIN32
+./src/core/Timer.cpp:100:#ifndef FIX_BUGS
+./src/core/Timer.cpp:124:#ifndef FIX_BUGS
+./src/core/Timer.cpp:170:#ifdef _WIN32
+./src/core/Timer.cpp:183:#ifdef _WIN32
+./src/core/Timer.cpp:198:#ifdef _WIN32
+./src/core/Timer.cpp:208:#ifdef _WIN32
+./src/core/templates.h:95:#ifdef FIX_BUGS
+./src/core/templates.h:138:#ifdef FIX_BUGS
+./src/core/Radar.h:25:#ifdef MENU_MAP
+./src/core/Radar.h:90:#ifdef PS2_HUD
+./src/core/Radar.h:96:#ifdef FIX_RADAR
+./src/core/Radar.h:146:#ifdef MENU_MAP
+./src/core/Streaming.h:88:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/ControllerConfig.cpp:34:#ifdef LOAD_INI_SETTINGS
+./src/core/ControllerConfig.cpp:46:#ifdef RW_GL3
+./src/core/ControllerConfig.cpp:90:#ifdef __DINPUT_INCLUDED__
+./src/core/ControllerConfig.cpp:91:#ifdef FIX_BUGS
+./src/core/ControllerConfig.cpp:100:#elif defined RW_GL3
+./src/core/ControllerConfig.cpp:134:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:148:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:175:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:189:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:251:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:269:#ifndef FIX_BUGS
+./src/core/ControllerConfig.cpp:322:#ifdef BIND_VEHICLE_FIREWEAPON	
+./src/core/ControllerConfig.cpp:351:#ifdef LOAD_INI_SETTINGS
+./src/core/ControllerConfig.cpp:357:#ifdef XINPUT
+./src/core/ControllerConfig.cpp:368:#ifdef LOAD_INI_SETTINGS
+./src/core/ControllerConfig.cpp:385:#if defined RW_D3D9 || defined RWLIBS
+./src/core/ControllerConfig.cpp:435:#ifdef BIND_VEHICLE_FIREWEAPON	
+./src/core/ControllerConfig.cpp:488:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:529:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:566:#ifdef REGISTER_START_BUTTON
+./src/core/ControllerConfig.cpp:595:#if defined RW_D3D9 || defined RWLIBS
+./src/core/ControllerConfig.cpp:717:#ifdef REGISTER_START_BUTTON
+./src/core/ControllerConfig.cpp:727:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:781:#ifdef FIX_BUGS
+./src/core/ControllerConfig.cpp:783:#ifdef ALLCARSHELI_CHEAT
+./src/core/ControllerConfig.cpp:876:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:962:#ifndef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1023:#ifdef REGISTER_START_BUTTON
+./src/core/ControllerConfig.cpp:1052:#if defined RW_D3D9 || defined RWLIBS
+./src/core/ControllerConfig.cpp:1136:#ifdef REGISTER_START_BUTTON
+./src/core/ControllerConfig.cpp:1690:#ifndef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1726:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1747:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1786:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/core/ControllerConfig.cpp:1796:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1815:#ifndef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1910:#ifndef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1934:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:1957:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:2430:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.cpp:2617:#ifdef BUTTON_ICONS
+./src/core/ControllerConfig.cpp:2622:#if 0 // set 1 for ps2 fonts
+./src/core/ControllerConfig.cpp:2637:#ifdef BUTTON_ICONS
+./src/core/ControllerConfig.cpp:2652:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/ControllerConfig.cpp:2658:#ifdef BUTTON_ICONS
+./src/core/ControllerConfig.cpp:2659:	#ifdef GAMEPAD_MENU
+./src/core/ControllerConfig.cpp:2670:	#ifdef GAMEPAD_MENU
+./src/core/ControllerConfig.cpp:2749:#ifdef __DINPUT_INCLUDED__
+./src/core/ControllerConfig.cpp:2757:#elif defined RW_GL3
+./src/core/common.h:10:#ifdef __MWERKS__
+./src/core/common.h:18:#ifdef __MWERKS__
+./src/core/common.h:23:#if !defined RW_D3D9 && defined LIBRW
+./src/core/common.h:28:#if (defined WITHD3D && !defined LIBRW)
+./src/core/common.h:32:#if defined _WIN32 && defined WITHWINDOWS && !defined _INC_WINDOWS
+./src/core/common.h:36:#ifdef WITHD3D
+./src/core/common.h:37:	#ifdef LIBRW
+./src/core/common.h:40:		#ifndef USE_D3D9
+./src/core/common.h:48:#ifdef WITHDINPUT
+./src/core/common.h:57:#ifdef LIBRW
+./src/core/common.h:73:#ifdef RWHALFPIXEL
+./src/core/common.h:91:#ifndef __MWERKS__
+./src/core/common.h:109:#if defined(_MSC_VER) || defined (__MWERKS__)
+./src/core/common.h:113:#ifndef nil
+./src/core/common.h:119:#ifdef PED_SKIN
+./src/core/common.h:124:#ifdef __GNUC__
+./src/core/common.h:127:#ifdef _MSC_VER
+./src/core/common.h:151:#if defined(PROPER_SCALING) || defined(PS2_HUD)
+./src/core/common.h:152:	#ifdef FORCE_PC_SCALING
+./src/core/common.h:159:#elif defined(GTA_PS2)
+./src/core/common.h:172:#ifdef GTA_PS2
+./src/core/common.h:173:	#ifdef GTA_PAL
+./src/core/common.h:203:#ifdef ASPECT_RATIO_SCALE
+./src/core/common.h:206:#ifdef PROPER_SCALING
+./src/core/common.h:207:	#ifndef FORCE_PC_SCALING			
+./src/core/common.h:231:#ifdef RWCORE_H
+./src/core/common.h:257:#ifdef RWCORE_H
+./src/core/common.h:281:#if (defined(_MSC_VER))
+./src/core/common.h:292:#ifdef __MWERKS__
+./src/core/common.h:314:#ifdef USE_PS2_RAND
+./src/core/common.h:331:#if 1 
+./src/core/common.h:337:#ifdef __MWERKS__
+./src/core/common.h:345:#ifndef MASTER
+./src/core/common.h:354:#ifndef MASTER
+./src/core/common.h:361:#ifdef __MWERKS__
+./src/core/common.h:368:#ifdef CHECK_STRUCT_SIZES
+./src/core/common.h:391:#ifdef DEBUGMENU
+./src/core/common.h:507:#ifdef VALIDATE_SAVE_SIZE
+./src/core/common.h:519:#ifdef VALIDATE_SAVE_SIZE
+./src/core/Camera.cpp:63:#ifdef PC_PLAYER_CONTROLS
+./src/core/Camera.cpp:70:#ifdef IMPROVED_CAMERA
+./src/core/Camera.cpp:81:#if GTA_VERSION >= GTA3_PC_11 || defined(FIX_BUGS)
+./src/core/Camera.cpp:95:#if GTA_VERSION >= GTA3_PC_11 || defined(FIX_BUGS)
+./src/core/Camera.cpp:100:#ifdef PS2_MENU
+./src/core/Camera.cpp:104:	#ifdef FIX_BUGS
+./src/core/Camera.cpp:111:	#if GTA_VERSION >= GTA3_PC_11 || defined(FIX_BUGS)
+./src/core/Camera.cpp:185:#ifdef PS2_MENU
+./src/core/Camera.cpp:199:#ifdef PS2_MENU
+./src/core/Camera.cpp:242:#if GTA_VERSION < GTA3_PC_11 && !defined(FIX_BUGS)
+./src/core/Camera.cpp:284:#ifdef IMPROVED_CAMERA
+./src/core/Camera.cpp:314:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:349:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:619:#ifndef FIX_BUGS
+./src/core/Camera.cpp:722:#ifndef FIX_BUGS
+./src/core/Camera.cpp:728:#if GTA_VERSION > GTA3_PS2_160
+./src/core/Camera.cpp:793:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:880:#ifdef FIX_BUGS
+./src/core/Camera.cpp:889:#ifdef FIX_BUGS
+./src/core/Camera.cpp:951:#ifdef FREE_CAM
+./src/core/Camera.cpp:1056:#ifdef FREE_CAM
+./src/core/Camera.cpp:1156:#ifdef FIX_BUGS
+./src/core/Camera.cpp:1165:#ifdef FIX_BUGS
+./src/core/Camera.cpp:1553:#ifdef FIX_BUGS
+./src/core/Camera.cpp:1583:#ifdef GTA_SCENE_EDIT
+./src/core/Camera.cpp:1629:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:1653:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:1739:#ifndef GTA_PS2_STUFF
+./src/core/Camera.cpp:1768:#ifdef GTA_PS2_STUFF
+./src/core/Camera.cpp:1775:#ifdef GTA_PS2_STUFF
+./src/core/Camera.cpp:2061:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2084:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2106:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2141:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2149:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2159:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2175:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2185:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2201:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2261:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2272:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2279:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2288:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2323:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2329:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2336:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2346:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2379:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2421:#ifdef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2431:#ifndef PS2_CAM_TRANSITION
+./src/core/Camera.cpp:2482:#ifdef FIX_BUGS
+./src/core/Camera.cpp:2492:#ifdef FIX_BUGS
+./src/core/Camera.cpp:2782:#ifdef FIX_BUGS
+./src/core/Camera.cpp:2810:#ifdef FIX_BUGS
+./src/core/Camera.cpp:2907:#ifdef FIX_BUGS
+./src/core/Camera.cpp:3133:#ifdef FIX_BUGS
+./src/core/Camera.cpp:3199:#ifdef FIX_BUGS
+./src/core/Camera.cpp:3209:#ifdef FIX_BUGS
+./src/core/Camera.cpp:3282:#ifdef FREE_CAM
+./src/core/Camera.cpp:3373:#ifdef PS2_MENU
+./src/core/Camera.cpp:3632:#ifdef GTA_PS2
+./src/core/Camera.cpp:3637:	#ifdef FIX_BUGS
+./src/core/Camera.cpp:3655:#ifdef GTA_PS2
+./src/core/Camera.cpp:3660:	#ifdef FIX_BUGS
+./src/core/Camera.cpp:3683:#ifdef GTA_PS2
+./src/core/Camera.cpp:3691:#ifdef GTA_PS2
+./src/core/Camera.cpp:3694:	#ifdef FIX_BUGS
+./src/core/User.cpp:70:#ifdef FIX_BUGS
+./src/core/User.cpp:119:#ifdef FIX_BUGS
+./src/core/World.cpp:51:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/World.cpp:340:#ifdef PED_SKIN
+./src/core/World.cpp:348:#ifdef ANIMATE_PED_COL_MODEL
+./src/core/World.cpp:697:#ifdef FIX_BUGS
+./src/core/World.cpp:704:#ifdef FIX_BUGS
+./src/core/World.cpp:848:#ifdef FIX_BUGS
+./src/core/World.cpp:855:#ifdef FIX_BUGS
+./src/core/World.cpp:950:#ifdef FIX_BUGS
+./src/core/World.cpp:1650:#ifndef FIX_BUGS
+./src/core/World.cpp:1667:#ifdef FIX_BUGS
+./src/core/World.cpp:1703:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/World.cpp:1867:#ifdef FIX_BUGS // from VC
+./src/core/Wanted.cpp:164:#if defined FIX_SIGNIFICANT_BUGS || defined PEDS_REPORT_CRIMES_ON_PHONE
+./src/core/Wanted.cpp:226:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/core/Wanted.cpp:450:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/core/Wanted.cpp:481:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/core/Pools.cpp:7:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:27:#ifdef GTA_PS2	// or USE_CUSTOM_ALLOCATOR
+./src/core/Pools.cpp:115:#if 0 // todo better
+./src/core/Pools.cpp:142:#ifdef COMPATIBLE_SAVES
+./src/core/Pools.cpp:198:#ifdef FIX_BUGS //must be copypaste
+./src/core/Pools.cpp:231:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:233:#ifdef FIX_BUGS
+./src/core/Pools.cpp:264:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:267:#if defined FIX_BUGS && defined MISSION_REPLAY
+./src/core/Pools.cpp:272:#ifdef COMPATIBLE_SAVES
+./src/core/Pools.cpp:273:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:284:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:295:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:363:#ifdef COMPATIBLE_SAVES
+./src/core/Pools.cpp:412:#ifndef COMPATIBLE_SAVES
+./src/core/Pools.cpp:420:#ifdef COMPATIBLE_SAVES
+./src/core/Pools.cpp:437:#ifndef COMPATIBLE_SAVES
+./src/core/Pools.cpp:457:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:471:#ifdef MISSION_REPLAY
+./src/core/Pools.cpp:480:#ifdef COMPATIBLE_SAVES
+./src/core/Pools.cpp:509:#ifdef COMPATIBLE_SAVES
+./src/core/main.cpp:8:#ifdef ANISOTROPIC_FILTERING
+./src/core/main.cpp:75:#ifdef USE_OUR_VERSIONING
+./src/core/main.cpp:91:#ifdef TIMEBARS
+./src/core/main.cpp:94:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/main.cpp:105:#ifdef GTA_PS2
+./src/core/main.cpp:119:#ifdef DEBUGMENU
+./src/core/main.cpp:123:#ifndef FINAL
+./src/core/main.cpp:127:#ifdef PS2_MENU
+./src/core/main.cpp:135:#ifdef NEW_RENDERER
+./src/core/main.cpp:142:#ifdef __MWERKS__
+./src/core/main.cpp:146:#ifndef MASTER
+./src/core/main.cpp:154:#ifndef MASTER
+./src/core/main.cpp:201:#ifndef ASPECT_RATIO_SCALE
+./src/core/main.cpp:212:#ifdef FIX_BUGS
+./src/core/main.cpp:226:#ifndef ASPECT_RATIO_SCALE
+./src/core/main.cpp:256:#ifdef PS2_MENU
+./src/core/main.cpp:268:#ifdef PS2_MENU
+./src/core/main.cpp:319:#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/main.cpp:327:#ifdef FIX_BUGS
+./src/core/main.cpp:365:#ifndef LIBRW
+./src/core/main.cpp:386:#ifndef MASTER
+./src/core/main.cpp:388:#ifdef THIS_IS_STUPID
+./src/core/main.cpp:460:#ifdef ANISOTROPIC_FILTERING
+./src/core/main.cpp:463:#ifdef EXTENDED_PIPELINES
+./src/core/main.cpp:470:#ifdef GTA_PS2
+./src/core/main.cpp:532:#ifdef DEBUGMENU
+./src/core/main.cpp:546:#ifdef DEBUGMENU
+./src/core/main.cpp:650:#ifdef DISABLE_LOADING_SCREEN
+./src/core/main.cpp:655:#ifndef RANDOMSPLASH
+./src/core/main.cpp:664:#ifndef GTA_PS2
+./src/core/main.cpp:669:#ifndef GTA_PS2
+./src/core/main.cpp:700:#ifdef CHATTYSPLASH
+./src/core/main.cpp:737:#ifndef GTA_PS2
+./src/core/main.cpp:751:#ifdef FIX_BUGS
+./src/core/main.cpp:758:#ifdef FIX_BUGS
+./src/core/main.cpp:769:#if !defined(PS2_HUD) && defined(GTA_PC)
+./src/core/main.cpp:773:#ifdef PS2_HUD
+./src/core/main.cpp:774:	#ifdef FIX_BUGS
+./src/core/main.cpp:780:	#ifdef FIX_BUGS
+./src/core/main.cpp:789:#if !defined(PS2_HUD) && defined(GTA_PC)
+./src/core/main.cpp:793:#ifdef PS2_HUD
+./src/core/main.cpp:794:	#ifdef FIX_BUGS
+./src/core/main.cpp:800:	#ifdef FIX_BUGS
+./src/core/main.cpp:906:#ifndef MASTER
+./src/core/main.cpp:951:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/main.cpp:1095:#ifndef FINAL
+./src/core/main.cpp:1109:#ifdef DRAW_GAME_VERSION_TEXT
+./src/core/main.cpp:1115:#ifdef USE_OUR_VERSIONING
+./src/core/main.cpp:1118:#if defined _WIN32
+./src/core/main.cpp:1120:#elif defined __linux__
+./src/core/main.cpp:1122:#elif defined __APPLE__
+./src/core/main.cpp:1124:#elif defined __FreeBSD__
+./src/core/main.cpp:1129:#if defined __LP64__ || defined _WIN64
+./src/core/main.cpp:1134:#if defined RW_D3D9
+./src/core/main.cpp:1136:#elif defined RWLIBS
+./src/core/main.cpp:1138:#elif defined RW_GL3
+./src/core/main.cpp:1141:#if defined AUDIO_OAL
+./src/core/main.cpp:1143:#elif defined AUDIO_MSS
+./src/core/main.cpp:1146:#if defined _DEBUG || defined DEBUG
+./src/core/main.cpp:1167:#ifdef FIX_BUGS
+./src/core/main.cpp:1173:#endif // #ifdef DRAW_GAME_VERSION_TEXT
+./src/core/main.cpp:1176:#ifdef FIX_BUGS
+./src/core/main.cpp:1231:#ifdef FIX_BUGS
+./src/core/main.cpp:1240:#ifdef FIX_BUGS
+./src/core/main.cpp:1248:#ifdef FIX_BUGS
+./src/core/main.cpp:1255:#ifdef FIX_BUGS
+./src/core/main.cpp:1264:#ifdef NEW_RENDERER
+./src/core/main.cpp:1378:#ifdef NEW_RENDERER
+./src/core/main.cpp:1394:#ifndef SQUEEZE_PERFORMANCE
+./src/core/main.cpp:1404:#ifndef FINAL
+./src/core/main.cpp:1416:#ifdef NEW_RENDERER
+./src/core/main.cpp:1453:#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/main.cpp:1491:#ifdef GTA_SCENE_EDIT
+./src/core/main.cpp:1504:#ifdef DEBUGMENU
+./src/core/main.cpp:1523:#ifndef MASTER
+./src/core/main.cpp:1534:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:1546:#ifdef PS2_SAVE_DIALOG
+./src/core/main.cpp:1605:#if defined(GTA_PC) && !defined(RW_GL3) && defined(FIX_BUGS)
+./src/core/main.cpp:1617:#ifdef NEW_RENDERER
+./src/core/main.cpp:1631:#ifdef FIX_BUGS
+./src/core/main.cpp:1650:#ifndef FIX_BUGS
+./src/core/main.cpp:1659:#ifdef EXTENDED_PIPELINES
+./src/core/main.cpp:1670:#ifdef SCREEN_DROPLETS
+./src/core/main.cpp:1684:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:1695:#ifdef PS2_SAVE_DIALOG
+./src/core/main.cpp:1703:#ifdef PS2_MENU
+./src/core/main.cpp:1736:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:1750:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:1835:#ifdef PS2_SAVE_DIALOG
+./src/core/main.cpp:1858:#ifndef MASTER
+./src/core/main.cpp:1862:#if (defined(GTA_PS2) || defined(GTA_XBOX))
+./src/core/main.cpp:1868:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:1891:#ifdef GTA_PS2
+./src/core/main.cpp:1900:#if GTA_VERSION <= GTA3_PS2_160
+./src/core/main.cpp:1910:#ifdef GTA_PS2
+./src/core/main.cpp:1978:#ifdef FIX_BUGS
+./src/core/main.cpp:1990:#ifndef FIX_BUGS
+./src/core/main.cpp:2007:#ifdef ASPECT_RATIO_SCALE
+./src/core/main.cpp:2074:#ifdef __MWERKS__
+./src/core/main.cpp:2078:#ifdef USE_CUSTOM_ALLOCATOR
+./src/core/main.cpp:2082:#ifdef GTA_PS2
+./src/core/main.cpp:2105:#ifdef GTA_PS2
+./src/core/main.cpp:2142:#ifdef GTA_PS2
+./src/core/main.cpp:2157:#ifdef GTA_PS2_STUFF
+./src/core/main.cpp:2167:#ifdef GTA_PS2
+./src/core/main.cpp:2195:#ifdef GTA_PS2
+./src/core/main.cpp:2218:#ifdef GTA_PS2
+./src/core/main.cpp:2238:#ifdef GTA_PS2
+./src/core/main.cpp:2244:#ifdef GTA_PS2
+./src/core/main.cpp:2258:#ifdef GTA_PAL
+./src/core/main.cpp:2349:#ifdef GTA_PS2
+./src/core/main.cpp:2365:#ifdef GTA_PS2
+./src/core/main.cpp:2382:#ifdef GTA_PS2
+./src/core/main.cpp:2388:#ifdef GTA_PAL
+./src/core/main.cpp:2413:#ifdef __MWERKS__
+./src/core/main.cpp:2419:#ifdef GTA_PS2
+./src/core/main.cpp:2456:#ifdef __MWERKS__
+./src/core/CdStreamPosix.cpp:1:#ifndef _WIN32
+./src/core/CdStreamPosix.cpp:24:#ifdef FLUSHABLE_STREAMING
+./src/core/CdStreamPosix.cpp:36:#ifdef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:52:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:73:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:103:#ifdef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:128:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:155:#ifdef __linux__
+./src/core/CdStreamPosix.cpp:218:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:250:#ifdef FLUSHABLE_STREAMING
+./src/core/CdStreamPosix.cpp:265:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:284:#ifdef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:323:#ifdef FLUSHABLE_STREAMING
+./src/core/CdStreamPosix.cpp:326:#ifdef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:399:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:424:#ifdef __linux__
+./src/core/CdStreamPosix.cpp:425:#ifdef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:451:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:464:#ifndef ONE_THREAD_PER_CHANNEL
+./src/core/CdStreamPosix.cpp:536:#ifdef FLUSHABLE_STREAMING
+./src/core/Frontend.h:2:#ifdef PS2_MENU
+./src/core/Frontend.h:8:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.h:44:#ifdef FIX_BUGS // See the scrollbar button drawing code
+./src/core/Frontend.h:161:#ifdef MENU_MAP
+./src/core/Frontend.h:238:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.h:240:#ifdef MENU_MAP
+./src/core/Frontend.h:243:#ifdef GRAPHICS_MENU_OPTIONS
+./src/core/Frontend.h:246:#ifdef DETECT_JOYSTICK_MENU
+./src/core/Frontend.h:258:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.h:377://#ifdef ANISOTROPIC_FILTERING
+./src/core/Frontend.h:463:#ifndef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.h:631:#ifdef IMPROVED_VIDEOMODE
+./src/core/Frontend.h:639:#ifdef MULTISAMPLING
+./src/core/Frontend.h:651:#ifdef MORE_LANGUAGES
+./src/core/Frontend.h:693:#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/Frontend.h:697:#ifndef MASTER
+./src/core/Frontend.h:702:#ifdef MENU_MAP
+./src/core/Frontend.h:711:#ifdef NO_ISLAND_LOADING
+./src/core/Frontend.h:728:#ifdef GAMEPAD_MENU
+./src/core/Frontend.h:757:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.h:800:#ifdef GAMEPAD_MENU
+./src/core/Frontend.h:805:#ifndef IMPROVED_VIDEOMODE
+./src/core/PlayerInfo.h:57:#ifdef GTA_PC
+./src/core/PlayerInfo.h:80:#ifdef GTA_PC
+./src/core/SurfaceTable.h:63:#if defined(FIX_BUGS) || defined(GTA_PS2)
+./src/core/Cam.cpp:32:#ifdef FREE_CAM
+./src/core/Cam.cpp:147:#ifdef PC_PLAYER_CONTROLS
+./src/core/Cam.cpp:152:#ifdef FREE_CAM
+./src/core/Cam.cpp:195:#ifdef FREE_CAM
+./src/core/Cam.cpp:212:#ifdef FREE_CAM
+./src/core/Cam.cpp:268:#ifdef GTA_SCENE_EDIT
+./src/core/Cam.cpp:279:#ifdef FREE_CAM
+./src/core/Cam.cpp:671:#ifdef FIX_BUGS
+./src/core/Cam.cpp:736:#ifdef FIX_BUGS
+./src/core/Cam.cpp:785:#ifdef FIX_BUGS
+./src/core/Cam.cpp:1561:#ifdef FREE_CAM
+./src/core/Cam.cpp:1631:#ifndef FIX_BUGS
+./src/core/Cam.cpp:1695:#if 1
+./src/core/Cam.cpp:2438:#ifdef FIX_BUGS
+./src/core/Cam.cpp:2577:#if GTA_VERSION < GTA3_PC_11
+./src/core/Cam.cpp:2612:#if GTA_VERSION >= GTA3_PC_11
+./src/core/Cam.cpp:2783:#ifdef FIX_BUGS
+./src/core/Cam.cpp:3678:#ifdef PC_PLAYER_CONTROLS
+./src/core/Cam.cpp:3748:#ifdef IMPROVED_CAMERA
+./src/core/Cam.cpp:3842:#ifdef FIX_BUGS
+./src/core/Cam.cpp:3927:#ifdef GTA_SCENE_EDIT
+./src/core/Cam.cpp:4020:#ifdef IMPROVED_CAMERA
+./src/core/Cam.cpp:4098:#ifdef FIX_BUGS
+./src/core/Cam.cpp:4462:#ifdef FIX_BUGS
+./src/core/Cam.cpp:4504:#ifdef FIX_BUGS
+./src/core/Cam.cpp:4559:#ifdef FREE_CAM
+./src/core/Cam.cpp:5047:#ifdef INVERT_LOOK_FOR_PAD
+./src/core/Pad.cpp:5:#ifdef XINPUT
+./src/core/Pad.cpp:7:#if !defined(PSAPI_VERSION) || (PSAPI_VERSION > 1)
+./src/core/Pad.cpp:38:#ifdef GTA_PS2
+./src/core/Pad.cpp:44:#ifdef GTA_PS2
+./src/core/Pad.cpp:55:#ifdef INVERT_LOOK_FOR_PAD
+./src/core/Pad.cpp:58:#ifdef GTA_PS2
+./src/core/Pad.cpp:73:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.cpp:118:#ifdef FIX_BUGS
+./src/core/Pad.cpp:293:#ifdef KANGAROO_CHEAT
+./src/core/Pad.cpp:315:#ifdef ALLCARSHELI_CHEAT
+./src/core/Pad.cpp:331:#ifdef ALT_DODO_CHEAT
+./src/core/Pad.cpp:399:#ifdef GTA_PS2_STUFF
+./src/core/Pad.cpp:402:#ifdef GTA_PS2
+./src/core/Pad.cpp:496:#if defined RW_D3D9 || defined RWLIBS
+./src/core/Pad.cpp:548:#if defined RW_D3D9 || defined RWLIBS
+./src/core/Pad.cpp:768:#ifdef GTA_PS2_STUFF
+./src/core/Pad.cpp:869:#ifdef KANGAROO_CHEAT
+./src/core/Pad.cpp:875:#ifndef MASTER
+./src/core/Pad.cpp:881:#ifdef ALLCARSHELI_CHEAT
+./src/core/Pad.cpp:887:#ifdef ALT_DODO_CHEAT
+./src/core/Pad.cpp:957:#if GTA_VERSION < GTA3_PC_11
+./src/core/Pad.cpp:1003:#ifdef KANGAROO_CHEAT
+./src/core/Pad.cpp:1009:#ifndef MASTER
+./src/core/Pad.cpp:1015:#ifdef ALLCARSHELI_CHEAT
+./src/core/Pad.cpp:1021:#ifdef ALT_DODO_CHEAT
+./src/core/Pad.cpp:1030:#ifdef XINPUT
+./src/core/Pad.cpp:1059:#ifdef REGISTER_START_BUTTON
+./src/core/Pad.cpp:1103:#ifdef XINPUT
+./src/core/Pad.cpp:1111:#ifdef FIX_BUGS
+./src/core/Pad.cpp:1116:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.cpp:1125:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.cpp:1137:#ifndef MASTER
+./src/core/Pad.cpp:1145:#ifndef FIX_BUGS
+./src/core/Pad.cpp:1160:#ifdef GTA_PS2
+./src/core/Pad.cpp:1417:#if (defined GTA_PS2 || defined FIX_BUGS)
+./src/core/Pad.cpp:1443:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.cpp:1451:#ifdef GTA_PS2_STUFF
+./src/core/Pad.cpp:1497:#ifdef GTA_PS2_STUFF
+./src/core/Pad.cpp:1501:#ifdef GTA_PS2
+./src/core/Pad.cpp:1517:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.cpp:2345:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2677:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2680:#ifndef INVERT_LOOK_FOR_PAD
+./src/core/Pad.cpp:2716:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2719:#ifdef INVERT_LOOK_FOR_PAD
+./src/core/Pad.cpp:2746:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2753:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2771:#ifdef FIX_BUGS
+./src/core/Pad.cpp:2778:#ifdef FIX_BUGS
+./src/core/Accident.cpp:56:#ifdef SQUEEZE_PERFORMANCE
+./src/core/ControllerConfig.h:3:#if defined RW_D3D9 || defined RWLIBS
+./src/core/ControllerConfig.h:35:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/ControllerConfig.h:106:#ifdef RW_GL3
+./src/core/ControllerConfig.h:132:#if defined RW_GL3
+./src/core/ControllerConfig.h:135:#elif defined WITHDINPUT
+./src/core/ControllerConfig.h:145:#ifdef LOAD_INI_SETTINGS
+./src/core/ControllerConfig.h:195:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/core/ControllerConfig.h:222:#ifndef RW_GL3
+./src/core/Pad.h:163:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/core/Pad.h:173:#ifdef INVERT_LOOK_FOR_PAD
+./src/core/Pad.h:186:#ifdef GTA_PS2_STUFF
+./src/core/Pad.h:196:#ifdef GTA_PS2_STUFF
+./src/core/Pad.h:265:#ifdef XINPUT
+./src/core/Pad.h:472:#ifdef ALLCARSHELI_CHEAT
+./src/core/Frontend.cpp:5:#ifndef PS2_MENU
+./src/core/Frontend.cpp:56:#if defined(FIX_BUGS) && !defined(PS2_LIKE_MENU)
+./src/core/Frontend.cpp:68:#ifdef SCROLLABLE_STATS_PAGE
+./src/core/Frontend.cpp:77:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:103:#ifdef TRIANGLE_BACK_BUTTON
+./src/core/Frontend.cpp:106:#elif defined(CIRCLE_BACK_BUTTON)
+./src/core/Frontend.cpp:114:#ifdef MENU_MAP
+./src/core/Frontend.cpp:121:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:131:#ifdef CUTSCENE_BORDERS_SWITCH
+./src/core/Frontend.cpp:135:#ifdef MULTISAMPLING
+./src/core/Frontend.cpp:140:#ifdef NO_ISLAND_LOADING
+./src/core/Frontend.cpp:144:#ifdef GAMEPAD_MENU
+./src/core/Frontend.cpp:165:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:204:#ifndef MASTER
+./src/core/Frontend.cpp:240:#ifdef MENU_MAP
+./src/core/Frontend.cpp:281:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:292:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:432:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:448:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:455:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:460:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:476:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:484:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:503:#ifndef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:539:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:681:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:765:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:794:#if defined RW_D3D9 || defined RWLIBS
+./src/core/Frontend.cpp:800:#elif defined RW_GL3
+./src/core/Frontend.cpp:840:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:869:#ifdef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:881:#ifdef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:925:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:947:#ifndef FIX_BUGS
+./src/core/Frontend.cpp:1035:#ifdef PC_PLAYER_CONTROLS
+./src/core/Frontend.cpp:1059:#if GTA_VERSION >= GTA3_PC_11 && defined(DRAW_MENU_VERSION_TEXT)
+./src/core/Frontend.cpp:1080:#ifdef MENU_MAP
+./src/core/Frontend.cpp:1091:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:1135:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:1144:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:1150:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:1168:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:1233:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:1243:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1275:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:1298:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:1302:#ifdef MENU_MAP
+./src/core/Frontend.cpp:1321:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1326:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:1333:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1337:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:1469:#ifndef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:1589:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1641:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:1650:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:1663:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:1698:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:1702:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:1730:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1764:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1778:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1810:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:1838:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:1842:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:1880:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:2042:#ifdef BIND_VEHICLE_FIREWEAPON
+./src/core/Frontend.cpp:2125:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:2146:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:2181:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:2438:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:2447:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:2521:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:2565:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:2575:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:2619:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:2877:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:2935:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:2948:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:2983:#ifdef RED_DELETE_BACKGROUND
+./src/core/Frontend.cpp:3136:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3279:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3301:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3311:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3323:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3333:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3410:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3419:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3429:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3547:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:3573:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:3598:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:3629:#if GTA_VERSION < GTA3_PC_11
+./src/core/Frontend.cpp:3639:#ifdef GAMEPAD_MENU
+./src/core/Frontend.cpp:3657:#ifdef MENU_MAP
+./src/core/Frontend.cpp:3672:#if GTA_VERSION >= GTA3_PC_11
+./src/core/Frontend.cpp:3680:#ifdef GAMEPAD_MENU
+./src/core/Frontend.cpp:3752:#if GTA_VERSION >= GTA3_PC_11
+./src/core/Frontend.cpp:3768:#ifdef IMPROVED_VIDEOMODE
+./src/core/Frontend.cpp:3821:#ifdef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:3874:#ifndef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:3882:#ifdef IMPROVED_VIDEOMODE
+./src/core/Frontend.cpp:4007:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:4012:#if defined(FIX_BUGS) || defined(PS2_LIKE_MENU)
+./src/core/Frontend.cpp:4021:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:4042:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:4054:#if GTA_VERSION >= GTA3_PC_11
+./src/core/Frontend.cpp:4061:#ifdef SCROLLABLE_STATS_PAGE
+./src/core/Frontend.cpp:4115:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:4123:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:4187:#ifdef MISSION_REPLAY
+./src/core/Frontend.cpp:4195:#ifdef USE_DEBUG_SCRIPT_LOADER
+./src/core/Frontend.cpp:4198:#ifdef PC_PLAYER_CONTROLS
+./src/core/Frontend.cpp:4319:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:4323:#ifdef USE_DEBUG_SCRIPT_LOADER
+./src/core/Frontend.cpp:4325:#ifdef RW_GL3
+./src/core/Frontend.cpp:4336:#elif defined _WIN32
+./src/core/Frontend.cpp:4370:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4391:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4406:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4416:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:4522:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4598:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:4608:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:4636:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:4669:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4691:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:4724:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:4784:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:4804:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4867:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:4878:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:4951:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:5035:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:5073:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:5109:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:5116:#if GTA_VERSION >= GTA3_PC_11
+./src/core/Frontend.cpp:5127:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:5139:#if !defined RW_GL3
+./src/core/Frontend.cpp:5154:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5164:#ifdef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:5171:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:5189:#ifdef MISSION_REPLAY
+./src/core/Frontend.cpp:5201:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:5240:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:5253:#if defined(FIX_BUGS) || defined(PS2_LIKE_MENU)
+./src/core/Frontend.cpp:5257:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:5265:#ifndef TIDY_UP_PBP
+./src/core/Frontend.cpp:5278:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:5289:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5295:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:5302:#ifdef TIDY_UP_PBP
+./src/core/Frontend.cpp:5325:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:5338:#ifdef SCROLLABLE_PAGES
+./src/core/Frontend.cpp:5354:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5384:#ifdef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:5442:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/core/Frontend.cpp:5503:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5507:#ifndef FIX_BUGS
+./src/core/Frontend.cpp:5543:#ifndef ASPECT_RATIO_SCALE
+./src/core/Frontend.cpp:5656:#if defined(RW_GL3) && defined(IMPROVED_VIDEOMODE)
+./src/core/Frontend.cpp:5689:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5704:#ifdef PS2_LIKE_MENU
+./src/core/Frontend.cpp:5707:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:5712:#ifdef LOAD_INI_SETTINGS
+./src/core/Frontend.cpp:5720:#ifdef REGISTER_START_BUTTON
+./src/core/Frontend.cpp:5726:#ifdef REGISTER_START_BUTTON
+./src/core/Frontend.cpp:5741:#ifdef PS2_SAVE_DIALOG
+./src/core/Frontend.cpp:5762:#if defined(RW_GL3) && defined(IMPROVED_VIDEOMODE)
+./src/core/Frontend.cpp:5784:#ifdef GAMEPAD_MENU
+./src/core/Frontend.cpp:5793:#ifdef MENU_MAP
+./src/core/Frontend.cpp:5809:#if (!(defined RANDOMSPLASH) && GTA_VERSION < GTA3_PC_11)
+./src/core/Frontend.cpp:5831:#ifdef GAMEPAD_MENU
+./src/core/Frontend.cpp:6348:#ifdef MENU_MAP
+./src/core/Frontend.cpp:6523:#ifdef MORE_LANGUAGES
+./src/core/Frontend.cpp:6635:#ifdef FIX_BUGS
+./src/core/Frontend.cpp:6709:#ifndef USE_MEASUREMENTS_IN_METERS
+./src/core/Frontend.cpp:6721:#ifdef MORE_LANGUAGES
+./src/control/RoadBlocks.cpp:36:#ifndef MASTER
+./src/control/RoadBlocks.cpp:107:#ifdef SQUEEZE_PERFORMANCE
+./src/control/SceneEdit.h:2:#ifdef GTA_SCENE_EDIT
+./src/control/Garages.h:130:#ifdef FIX_BUGS
+./src/control/Garages.h:206:#ifndef PS2
+./src/control/Script3.cpp:346:#if GTA_VERSION <= GTA3_PS2_160
+./src/control/Script3.cpp:857:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script3.cpp:872:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script3.cpp:1197:#if defined(GTA_PC) && !defined(DETECT_PAD_INPUT_SWITCH)
+./src/control/Script3.cpp:1304:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Replay.h:6:#ifdef FIX_BUGS
+./src/control/Replay.h:7:#ifndef DONT_FIX_REPLAY_BUGS
+./src/control/Replay.h:48:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.h:57:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.h:64:#ifdef GTA_REPLAY
+./src/control/Replay.h:275:#ifdef FIX_BUGS
+./src/control/Replay.h:295:#ifndef GTA_REPLAY
+./src/control/AutoPilot.h:116:#ifdef COMPATIBLE_SAVES
+./src/control/CarAI.cpp:98:#ifdef FIX_BUGS
+./src/control/CarAI.cpp:157:#ifdef FIX_BUGS
+./src/control/CarAI.cpp:282:#ifdef FIX_BUGS
+./src/control/CarAI.cpp:287:#ifdef FIX_BUGS
+./src/control/Garages.cpp:6:#ifdef FIX_BUGS
+./src/control/Garages.cpp:146:#ifdef FIX_BUGS
+./src/control/Garages.cpp:170:#ifndef PS2
+./src/control/Garages.cpp:375:#ifdef FIX_BUGS
+./src/control/Garages.cpp:397:#ifdef FIX_BUGS
+./src/control/Garages.cpp:428:#ifdef FIX_BUGS
+./src/control/Garages.cpp:487:#ifdef FIX_BUGS // FindPlayerVehicle() can never be NULL here because IsStaticPlayerCarEntirelyInside() is true, and there is no IsCar() check
+./src/control/Garages.cpp:535:#ifdef DETECT_PAD_INPUT_SWITCH
+./src/control/Garages.cpp:694:#ifdef FIX_BUGS // not possible though
+./src/control/Garages.cpp:755:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1094:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1391:#ifndef FIX_BUGS
+./src/control/Garages.cpp:1402:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1410:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1419:#if defined(PS2_HUD) || defined (FIX_BUGS)
+./src/control/Garages.cpp:1427:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1433:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1441:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1449:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1456:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1899:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1907:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1926:#ifdef FIX_BUGS
+./src/control/Garages.cpp:1931:#ifdef FIX_BUGS
+./src/control/Garages.cpp:2037:#ifdef FIX_BUGS
+./src/control/Garages.cpp:2059:#ifdef FIX_BUGS
+./src/control/Garages.cpp:2308:#ifdef FIX_GARAGE_SIZE
+./src/control/Garages.cpp:2331:#ifdef FIX_GARAGE_SIZE
+./src/control/Garages.cpp:2357:#ifdef FIX_GARAGE_SIZE
+./src/control/Garages.cpp:2391:#ifdef FIX_GARAGE_SIZE
+./src/control/Script.cpp:37:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:83:#ifdef MISSION_REPLAY
+./src/control/Script.cpp:115:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:1228:#if GTA_VERSION > GTA3_PS2_160
+./src/control/Script.cpp:1276:#if GTA_VERSION < GTA3_PC_11
+./src/control/Script.cpp:1287:#if SCRIPT_LOG_FILE_LEVEL == 1 || SCRIPT_LOG_FILE_LEVEL == 2
+./src/control/Script.cpp:1296:#ifdef _WIN32
+./src/control/Script.cpp:1303:#if SCRIPT_LOG_FILE_LEVEL == 1 || SCRIPT_LOG_FILE_LEVEL == 2
+./src/control/Script.cpp:1313:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:1314:#if SCRIPT_LOG_FILE_LEVEL == 1 || SCRIPT_LOG_FILE_LEVEL == 2
+./src/control/Script.cpp:1323:#ifdef COMPATIBLE_SAVES
+./src/control/Script.cpp:1490:#ifdef FIX_BUGS
+./src/control/Script.cpp:1562:#ifdef FIX_BUGS
+./src/control/Script.cpp:1629:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:1769:#ifdef USE_DEBUG_SCRIPT_LOADER
+./src/control/Script.cpp:1772:#ifdef _WIN32
+./src/control/Script.cpp:1778:#ifdef _WIN32
+./src/control/Script.cpp:1808:#ifdef USE_DEBUG_SCRIPT_LOADER
+./src/control/Script.cpp:1877:#if defined USE_ADVANCED_SCRIPT_DEBUG_OUTPUT && SCRIPT_LOG_FILE_LEVEL == 2
+./src/control/Script.cpp:1947:#ifdef MISSION_REPLAY
+./src/control/Script.cpp:1983:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:1984:#if SCRIPT_LOG_FILE_LEVEL == 1
+./src/control/Script.cpp:2004:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:2006:#if SCRIPT_LOG_FILE_LEVEL == 1
+./src/control/Script.cpp:2025:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:2057:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:2114:#if GTA_VERSION <= GTA3_PS2_160
+./src/control/Script.cpp:2123:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:2154:#elif defined USE_BASIC_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.cpp:2654:#ifdef MISSION_REPLAY
+./src/control/Script.cpp:2657:#if 0 // makeing autosave is pointless and is a bit buggy
+./src/control/Script.cpp:2972:#ifdef FIX_BUGS
+./src/control/Script.cpp:2980:#ifdef FIX_BUGS
+./src/control/Script.cpp:3010:#ifdef FIX_BUGS // in SA it was fixed by reversing their order in enum
+./src/control/Script.cpp:3018:#ifdef FIX_BUGS
+./src/control/Script.cpp:3156:#ifdef FIX_BUGS
+./src/control/Script.cpp:3260:#ifdef FIX_BUGS
+./src/control/Script.cpp:3594:#if defined MISSION_REPLAY && defined SIMPLIER_MISSIONS
+./src/control/Script.cpp:3669:#ifdef MISSION_REPLAY
+./src/control/Script.cpp:4266:#ifdef FIX_BUGS
+./src/control/Script.cpp:4330:#ifdef MISSION_REPLAY
+./src/control/Script.cpp:4370:#ifdef MISSION_SWITCHER
+./src/control/Script.cpp:4391:#ifdef MISSION_REPLAY
+./src/control/Replay.cpp:2:#ifdef GTA_REPLAY
+./src/control/Replay.cpp:13:#ifdef FIX_BUGS
+./src/control/Replay.cpp:29:#ifdef FIX_BUGS
+./src/control/Replay.cpp:112:#ifdef FIX_BUGS
+./src/control/Replay.cpp:262:#ifdef USE_BETA_REPLAY_MODE
+./src/control/Replay.cpp:271:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:365:#ifndef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:448:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:474:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:573:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:583:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:595:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:612:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:624:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:802:#ifndef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:1127:#ifdef FIX_BUGS
+./src/control/Replay.cpp:1172:#ifdef FIX_BUGS
+./src/control/Replay.cpp:1212:#ifdef FIX_BUGS
+./src/control/Replay.cpp:1349:#ifdef FIX_BUGS
+./src/control/Replay.cpp:1433:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:1466:#ifdef FIX_REPLAY_BUGS
+./src/control/Replay.cpp:1623:#ifdef FIX_BUGS
+./src/control/PathFind.cpp:545:#ifndef MASTER
+./src/control/PathFind.cpp:1250:#ifdef FIX_BUGS
+./src/control/PathFind.cpp:1652:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:401:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:719:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1481:#ifdef FIX_PATHFIND_BUG
+./src/control/CarCtrl.cpp:1494:#ifdef FIX_PATHFIND_BUG
+./src/control/CarCtrl.cpp:1511:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1619:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1643:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1650:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1699:#ifdef FIX_PATHFIND_BUG
+./src/control/CarCtrl.cpp:1730:#ifdef FIX_PATHFIND_BUG
+./src/control/CarCtrl.cpp:1740:#ifdef FIX_PATHFIND_BUG
+./src/control/CarCtrl.cpp:1941:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:1966:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:2342:#ifdef FIX_BUGS
+./src/control/CarCtrl.cpp:2472:#ifdef FIX_BUGS
+./src/control/Script6.cpp:17:#ifdef MISSION_REPLAY
+./src/control/Script6.cpp:41:#if GTA_VERSION <= GTA3_PS2_160
+./src/control/Script6.cpp:84:#ifdef MISSION_REPLAY
+./src/control/Script6.cpp:300:#ifdef MISSION_REPLAY
+./src/control/Script6.cpp:426:#ifdef USE_MEASUREMENTS_IN_METERS
+./src/control/Script6.cpp:752:#if GTA_VERSION > GTA3_PS2_160
+./src/control/Script6.cpp:844:#if GTA_VERSION > GTA3_PS2_160
+./src/control/Script6.cpp:1331:#ifdef FIX_BUGS
+./src/control/Script6.cpp:1338:#if GTA_VERSION < GTA3_PC_11
+./src/control/Script6.cpp:1341:#ifdef FIX_BUGS
+./src/control/CarCtrl.h:20:#ifdef FIX_BUGS
+./src/control/CarCtrl.h:84:#ifdef FIX_PATHFIND_BUG
+./src/control/AutoPilot.cpp:33:#ifdef FIX_BUGS
+./src/control/AutoPilot.cpp:49:#ifdef COMPATIBLE_SAVES
+./src/control/Script2.cpp:712:#ifdef FIX_BUGS
+./src/control/Script2.cpp:1156:#ifdef FIX_BUGS
+./src/control/Script2.cpp:1542:#ifdef FIX_BUGS
+./src/control/ScriptCommands.h:1111:#if GTA_VERSION > GTA3_PS2_160
+./src/control/ScriptCommands.h:1159:#if GTA_VERSION < GTA3_PC_11
+./src/control/ScriptCommands.h:1162:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/ScriptCommands.h:1168:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Phones.h:64:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Phones.h:74:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Script.h:36:#ifdef USE_PRECISE_MEASUREMENT_CONVERTION
+./src/control/Script.h:48:#if GTA_VERSION <= GTA3_PS2_160
+./src/control/Script.h:251:#if GTA_VERSION > GTA3_PS2_160
+./src/control/Script.h:341:#if GTA_VERSION > GTA3_PS2_160
+./src/control/Script.h:358:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script.h:366:#ifdef MISSION_REPLAY
+./src/control/Script.h:370:#ifdef USE_ADVANCED_SCRIPT_DEBUG_OUTPUT
+./src/control/Script.h:556:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script.h:575:#ifdef MISSION_SWITCHER
+./src/control/Script.h:581:#ifdef MISSION_REPLAY
+./src/control/Script.h:593:#ifdef USE_DEBUG_SCRIPT_LOADER
+./src/control/Script5.cpp:223:#ifdef FIX_BUGS
+./src/control/Script5.cpp:493:#ifdef FIX_BUGS
+./src/control/Script5.cpp:1240:#ifdef MISSION_REPLAY
+./src/control/Script5.cpp:1307:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script5.cpp:1926:#ifdef CHECK_STRUCT_SIZES
+./src/control/Script5.cpp:2080:#ifdef COMPATIBLE_SAVES
+./src/control/Script5.cpp:2085:#ifdef CHECK_STRUCT_SIZES
+./src/control/Script5.cpp:2092:#ifdef CHECK_STRUCT_SIZES
+./src/control/Script5.cpp:2115:#ifdef COMPATIBLE_SAVES
+./src/control/Script5.cpp:2120:#ifdef CHECK_STRUCT_SIZES
+./src/control/Script5.cpp:2127:#ifdef CHECK_STRUCT_SIZES
+./src/control/Script5.cpp:2275:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script5.cpp:2560:#ifdef FIX_BUGS
+./src/control/GameLogic.cpp:87:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:96:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:121:#ifdef SCREEN_DROPLETS
+./src/control/GameLogic.cpp:146:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:154:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:203:#ifdef SCREEN_DROPLETS
+./src/control/GameLogic.cpp:229:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:237:#ifdef MISSION_REPLAY
+./src/control/GameLogic.cpp:255:#ifdef SCREEN_DROPLETS
+./src/control/SceneEdit.cpp:4:#ifdef GTA_SCENE_EDIT
+./src/control/SceneEdit.cpp:71:#ifdef CHECK_STRUCT_SIZES
+./src/control/SceneEdit.cpp:90:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:94:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:109:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:201:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:262:#ifndef FIX_BUGS
+./src/control/SceneEdit.cpp:271:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:283:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:289:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:297:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:303:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:309:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:314:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:329:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:338:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:374:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:440:#ifndef FIX_BUGS // why? it crashes, also makes no sense
+./src/control/SceneEdit.cpp:455:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:476:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:542:#ifndef FIX_BUGS // again, why? works wrong
+./src/control/SceneEdit.cpp:809:#ifdef FIX_BUGS
+./src/control/SceneEdit.cpp:836:#ifdef FIX_BUGS
+./src/control/Phones.cpp:16:#ifdef FIX_BUGS
+./src/control/Phones.cpp:37:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Phones.cpp:50:#ifdef FIX_BUGS
+./src/control/Phones.cpp:165:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Phones.cpp:218:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Phones.cpp:296:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Phones.cpp:380:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/control/Script4.cpp:248:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script4.cpp:464:#ifdef FIX_BUGS
+./src/control/Script4.cpp:517:#ifdef FIX_BUGS
+./src/control/Script4.cpp:1099:#ifdef GTA_SCRIPT_COLLECTIVE
+./src/control/Script4.cpp:2077:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:16:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:66:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:75:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:85:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:99:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:112:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:126:#if defined(PS2_HUD) || defined(FIX_BUGS)
+./src/control/Darkel.cpp:127:	#ifdef FIX_BUGS
+./src/control/Darkel.cpp:142:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:148:#if defined(PS2_HUD) || defined(FIX_BUGS)
+./src/control/Darkel.cpp:149:	#ifdef FIX_BUGS
+./src/control/Darkel.cpp:168:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:174:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:182:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:226:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:244:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:273:#ifdef FIX_BUGS
+./src/control/Darkel.cpp:368:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:23:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:273:#ifdef MONEY_MESSAGES
+./src/control/Pickups.cpp:306:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:330:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:338:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:636:#ifdef FIX_BUGS // RIP speedrunning (solution from SA)
+./src/control/Pickups.cpp:640:#ifdef CAMERA_PICKUP
+./src/control/Pickups.cpp:668:#ifdef FIX_BUGS
+./src/control/Pickups.cpp:967:#ifdef FIX_BUGS
+./src/control/Record.cpp:28:#ifndef GTA_PS2 // this stuff is not present on PS2
+./src/control/Record.cpp:228:#ifdef FIX_BUGS
+./src/control/Record.cpp:445:#ifdef NO_ISLAND_LOADING
+./src/peds/PlayerPed.h:79:#ifdef COMPATIBLE_SAVES
+./src/peds/PlayerPed.h:87:#ifndef PED_SKIN
+./src/peds/Ped.h:193:#ifdef VC_PED_PORTS
+./src/peds/Ped.h:385:#ifdef VC_PED_PORTS
+./src/peds/Ped.h:388:#ifdef PED_SKIN
+./src/peds/Ped.h:409:#ifdef PED_SKIN
+./src/peds/Ped.h:459:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.h:576:#ifdef _MSC_VER
+./src/peds/Ped.h:597:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.h:792:#ifdef VC_PED_PORTS
+./src/peds/Ped.h:877:#ifdef PED_SKIN
+./src/peds/Ped.h:897:#ifdef PED_SKIN
+./src/peds/Ped.h:923:#ifdef DEBUGMENU
+./src/peds/Ped.h:927:#ifndef MASTER
+./src/peds/Ped.h:946:#ifdef PED_SKIN
+./src/peds/Ped.h:950:#ifdef COMPATIBLE_SAVES
+./src/peds/Ped.h:958:#ifndef PED_SKIN
+./src/peds/PedDebug.cpp:2:#ifndef MASTER
+./src/peds/PedDebug.cpp:46:#ifdef VC_PED_PORTS
+./src/peds/PedDebug.cpp:176:#ifndef FINAL
+./src/peds/PedDebug.cpp:184:#ifndef FINAL
+./src/peds/PedDebug.cpp:192:#ifndef FINAL
+./src/peds/PedDebug.cpp:201:#ifndef FINAL
+./src/peds/PedDebug.cpp:210:#ifndef FINAL
+./src/peds/PedDebug.cpp:218:#ifndef FINAL
+./src/peds/PedDebug.cpp:226:#ifndef FINAL
+./src/peds/PedDebug.cpp:234:#ifndef FINAL
+./src/peds/Population.cpp:722:#if !defined(FIX_BUGS) && GTA_VERSION >= GTA3_PC_10
+./src/peds/Population.cpp:844:#ifdef FIX_BUGS
+./src/peds/Population.cpp:1023:#ifdef FIX_BUGS
+./src/peds/Population.cpp:1030:#ifdef FIX_BUGS
+./src/peds/Population.cpp:1107:#ifndef SQUEEZE_PERFORMANCE
+./src/peds/Population.cpp:1124:#ifdef SQUEEZE_PERFORMANCE
+./src/peds/PedChat.cpp:111:#ifdef VC_PED_PORTS
+./src/peds/PedChat.cpp:118:#ifdef VC_PED_PORTS
+./src/peds/PedChat.cpp:127:#ifdef VC_PED_PORTS
+./src/peds/CopPed.h:39:#ifndef PED_SKIN
+./src/peds/Gangs.cpp:27:#ifdef FIX_BUGS
+./src/peds/EmergencyPed.h:39:#ifndef PED_SKIN
+./src/peds/PlayerPed.cpp:23:#ifdef COMPATIBLE_SAVES
+./src/peds/PlayerPed.cpp:38:#ifdef FIX_BUGS
+./src/peds/PlayerPed.cpp:52:#ifndef FIX_BUGS
+./src/peds/PlayerPed.cpp:100:#ifdef FIX_BUGS
+./src/peds/PlayerPed.cpp:146:#ifdef FIX_BUGS
+./src/peds/PlayerPed.cpp:802:#ifdef VC_PED_PORTS
+./src/peds/PlayerPed.cpp:934:#ifdef PC_PLAYER_CONTROLS
+./src/peds/PlayerPed.cpp:998:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1023:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1056:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1078:#ifdef VC_PED_PORTS
+./src/peds/PlayerPed.cpp:1114:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1136:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1149:#ifndef VC_PED_PORTS
+./src/peds/PlayerPed.cpp:1333:#ifdef FREE_CAM
+./src/peds/PlayerPed.cpp:1481:#ifdef PED_SKIN
+./src/peds/PlayerPed.cpp:1487:#ifdef COMPATIBLE_SAVES
+./src/peds/CivilianPed.h:14:#ifndef PED_SKIN
+./src/peds/CopPed.cpp:75:#ifdef FIX_BUGS
+./src/peds/CopPed.cpp:281:#ifdef FIX_BUGS
+./src/peds/CopPed.cpp:307:#ifdef FIX_BUGS
+./src/peds/CopPed.cpp:425:#ifdef VC_PED_PORTS
+./src/peds/CopPed.cpp:436:#ifndef FIX_BUGS
+./src/peds/CopPed.cpp:510:#ifdef VC_PED_PORTS
+./src/peds/CopPed.cpp:659:#if defined(VC_PED_PORTS) || defined(FIX_BUGS)
+./src/peds/CopPed.cpp:667:#if GTA_VERSION < GTA3_PC_11 && !defined(VC_PED_PORTS)
+./src/peds/CivilianPed.cpp:13:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:140:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:150:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:187:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:197:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:203:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:210:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:218:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:265:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:428:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/CivilianPed.cpp:453:#ifndef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/EmergencyPed.cpp:108:#ifdef FIX_BUGS
+./src/peds/EmergencyPed.cpp:120:#ifdef FIX_BUGS
+./src/peds/EmergencyPed.cpp:149:#ifdef FIX_BUGS
+./src/peds/EmergencyPed.cpp:157:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:55:#ifdef DEBUGMENU
+./src/peds/Ped.cpp:76:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:132:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:234:#ifdef KANGAROO_CHEAT
+./src/peds/Ped.cpp:237:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:281:#ifdef PED_SKIN
+./src/peds/Ped.cpp:336:#ifdef PED_SKIN
+./src/peds/Ped.cpp:624:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:713:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:724:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:736:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:838:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:855:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:1002:#ifndef FIX_BUGS
+./src/peds/Ped.cpp:1078:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/Ped.cpp:1199:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:1370:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:1385:#ifdef PED_SKIN
+./src/peds/Ped.cpp:1528:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:1556:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:1587:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:1620:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:1657:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:1677:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:1683:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:1723:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:1785:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:1817:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:1840:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:2050:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2379:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2395:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2419:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2448:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2451:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:2480:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:2495:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:2573:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2612:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2646:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2650:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:2694:#ifdef CANCELLABLE_CAR_ENTER
+./src/peds/Ped.cpp:2788:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:2854:#ifdef CAR_AIRBREAK
+./src/peds/Ped.cpp:2999:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:3032:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3037:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3061:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3114:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:3139:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3154:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3204:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:3233:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3241:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:3263:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:3333:#ifdef GTA_PS2_STUFF
+./src/peds/Ped.cpp:3408:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:3422:#ifdef PC_PARTICLE
+./src/peds/Ped.cpp:3466:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3532:#ifndef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:3574:#ifndef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3622:#ifndef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3652:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3689:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3728:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3766:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:3867:#ifdef NEW_WALK_AROUND_ALGORITHM
+./src/peds/Ped.cpp:4097:#ifdef FREE_CAM
+./src/peds/Ped.cpp:4167:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4231:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4263:#ifndef FIX_BUGS // RemoveDriver does it anyway
+./src/peds/Ped.cpp:4304:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:4351:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4385:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4428:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/Ped.cpp:4442:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/Ped.cpp:4490:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4497:#if !defined VC_PED_PORTS && !defined FIX_BUGS
+./src/peds/Ped.cpp:4574:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:4615:#ifndef FIX_BUGS
+./src/peds/Ped.cpp:4652:#ifdef PED_SKIN
+./src/peds/Ped.cpp:4685:#ifdef PED_SKIN
+./src/peds/Ped.cpp:4798:#ifdef PED_SKIN
+./src/peds/Ped.cpp:4896:#ifdef PED_SKIN
+./src/peds/Ped.cpp:4950:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:5088:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:5150:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:6186:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:6254:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6408:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/Ped.cpp:6483:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6520:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6575:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6590:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6601:#ifndef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6606:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:6632:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:6708:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:6733:#ifndef VC_PED_PORTS
+./src/peds/Ped.cpp:7063:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7070:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7223:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7260:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7276:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7322:#ifdef FIX_BUGS
+./src/peds/Ped.cpp:7530:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:7546:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:7598:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:7754:#ifdef FIX_ICECREAM
+./src/peds/Ped.cpp:7919:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:7970:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/Ped.cpp:8025:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:8034:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:8039:#ifdef FREE_CAM
+./src/peds/Ped.cpp:8051:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:8321:#ifdef VC_PED_PORTS
+./src/peds/Ped.cpp:8329:#ifndef FIX_BUGS
+./src/peds/Ped.cpp:8355:#ifdef PEDS_REPORT_CRIMES_ON_PHONE
+./src/peds/Ped.cpp:8412:#ifdef PED_SKIN
+./src/peds/Ped.cpp:8453:#ifdef COMPATIBLE_SAVES
+./src/peds/PedRoutes.cpp:48:#ifdef FIX_BUGS
+./src/peds/PedRoutes.cpp:70:#ifdef FIX_BUGS	
+./src/peds/PedIK.cpp:34:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:53:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:56:#ifndef FIX_BUGS
+./src/peds/PedIK.cpp:145:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:229:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:245:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:353:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:389:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:414:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:430:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:455:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:490:#ifdef PED_SKIN
+./src/peds/PedIK.cpp:551:#ifdef PED_SKIN
+./src/peds/PedAI.cpp:100:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:114:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:196:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:219:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:226:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:273:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:345:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:420:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:486:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:493:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/PedAI.cpp:500:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:603:#ifndef VC_PED_PORTS
+./src/peds/PedAI.cpp:681:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:700:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/PedAI.cpp:1414:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1438:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1450:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1482:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1869:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1886:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1893:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1899:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:1911:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2145:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2212:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2225:#ifdef FIX_BUGS
+./src/peds/PedAI.cpp:2262:#ifdef FIX_BUGS
+./src/peds/PedAI.cpp:2273:#ifdef FIX_BUGS
+./src/peds/PedAI.cpp:2344:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2379:#ifdef CANCELLABLE_CAR_ENTER
+./src/peds/PedAI.cpp:2529:#ifdef CANCELLABLE_CAR_ENTER
+./src/peds/PedAI.cpp:2611:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2706:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2772:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2778:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/PedAI.cpp:2806:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2893:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2968:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:2982:#ifdef FIX_BUGS
+./src/peds/PedAI.cpp:3087:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3102:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3112:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3127:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3200:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3215:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3224:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3239:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3454:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3534:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3545:#ifndef FIX_BUGS
+./src/peds/PedAI.cpp:3614:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3638:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:3664:#ifdef FIX_BUGS
+./src/peds/PedAI.cpp:3677:#ifndef VC_PED_PORTS
+./src/peds/PedAI.cpp:4391:#ifndef VC_PED_PORTS
+./src/peds/PedAI.cpp:4398:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:4434:#ifndef VC_PED_PORTS
+./src/peds/PedAI.cpp:4486:#ifndef VC_PED_PORTS
+./src/peds/PedAI.cpp:4494:#ifdef VC_PED_PORTS
+./src/peds/PedAI.cpp:5172:#if defined VC_PED_PORTS || defined FIX_BUGS
+./src/peds/PedAI.cpp:5265:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:156:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:220:#ifndef VC_PED_PORTS
+./src/peds/PedFight.cpp:238:#ifndef VC_PED_PORTS
+./src/peds/PedFight.cpp:390:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:687:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:726:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:880:#ifndef VC_PED_PORTS
+./src/peds/PedFight.cpp:914:#ifndef VC_PED_PORTS
+./src/peds/PedFight.cpp:982:#ifndef VC_PED_PORTS
+./src/peds/PedFight.cpp:1403:#ifndef FIX_BUGS
+./src/peds/PedFight.cpp:1562:#ifdef PED_SKIN
+./src/peds/PedFight.cpp:1571:#ifdef ANIMATE_PED_COL_MODEL
+./src/peds/PedFight.cpp:2411:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2530:#ifdef PED_SKIN
+./src/peds/PedFight.cpp:2534:#ifdef DEBUGMENU
+./src/peds/PedFight.cpp:2574:#ifdef PED_SKIN
+./src/peds/PedFight.cpp:2695:#ifdef FIX_BUGS
+./src/peds/PedFight.cpp:2792:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2846:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2855:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2869:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2892:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:2905:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:3194:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:3226:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:3233:#ifdef VC_PED_PORTS
+./src/peds/PedFight.cpp:3238:#ifdef FIX_BUGS
+./src/extras/custompipes.h:3:#ifdef LIBRW
+./src/extras/custompipes.h:4:#ifdef EXTENDED_PIPELINES
+./src/extras/frontendoption.h:4:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/extras/debugmenu.h:3:#ifdef DEBUGMENU
+./src/extras/debugmenu.cpp:2:#ifdef DEBUGMENU
+./src/extras/debugmenu.cpp:12:#ifdef _WIN32
+./src/extras/screendroplets.h:3:#ifdef SCREEN_DROPLETS
+./src/extras/screendroplets.cpp:4:#ifdef SCREEN_DROPLETS
+./src/extras/screendroplets.cpp:6:#ifndef LIBRW
+./src/extras/screendroplets.cpp:57:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:60:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:114:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:118:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:145:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:151:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:209:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:213:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:224:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:228:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:574:#ifdef RW_D3D9
+./src/extras/screendroplets.cpp:708:#ifdef RW_GL3
+./src/extras/screendroplets.cpp:737:#ifdef RW_GL_USE_VAOS
+./src/extras/screendroplets.cpp:754:#ifdef RW_GL_USE_VAOS
+./src/extras/screendroplets.cpp:766:#ifdef RW_GL_USE_VAOS
+./src/extras/screendroplets.cpp:781:#ifdef RW_GL_USE_VAOS
+./src/extras/screendroplets.cpp:802:#ifndef RW_GL_USE_VAOS
+./src/extras/screendroplets.cpp:811:#ifndef RW_GL_USE_VAOS
+./src/extras/frontendoption.cpp:3:#ifdef CUSTOM_FRONTEND_OPTIONS
+./src/extras/custompipes_gl.cpp:3:#ifdef RW_OPENGL
+./src/extras/custompipes_gl.cpp:16:#ifdef EXTENDED_PIPELINES
+./src/extras/custompipes_gl.cpp:18:#ifndef LIBRW
+./src/extras/custompipes_gl.cpp:94:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:140:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:213:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:257:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:321:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:370:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:456:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:485:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:507:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:534:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:626:#ifdef NEW_RENDERER
+./src/extras/custompipes_gl.cpp:627:#ifndef LIBRW
+./src/extras/custompipes_gl.cpp:699:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:716:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:757:#ifdef RW_GL_USE_VAOS
+./src/extras/custompipes_gl.cpp:785:#ifndef RW_GL_USE_VAOS
+./src/extras/custompipes.cpp:4:#ifdef EXTENDED_PIPELINES
+./src/extras/custompipes.cpp:18:#ifndef LIBRW
+./src/extras/custompipes.cpp:505:#ifdef RW_OPENGL
+./src/extras/custompipes_d3d9.cpp:4:#ifdef RW_D3D9
+./src/extras/custompipes_d3d9.cpp:17:#ifdef EXTENDED_PIPELINES
+./src/extras/custompipes_d3d9.cpp:19:#ifndef LIBRW
+./src/extras/custompipes_d3d9.cpp:559:#ifdef NEW_RENDERER
+./src/extras/custompipes_d3d9.cpp:560:#ifndef LIBRW
+./src/extras/postfx.cpp:4:#ifdef EXTENDED_COLOURFILTER
+./src/extras/postfx.cpp:6:#ifndef LIBRW
+./src/extras/postfx.cpp:25:#ifdef RW_D3D9
+./src/extras/postfx.cpp:29:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:40:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:143:#ifdef RW_D3D9
+./src/extras/postfx.cpp:149:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:183:#ifdef RW_D3D9
+./src/extras/postfx.cpp:193:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:275:#ifdef RW_D3D9
+./src/extras/postfx.cpp:281:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:294:#ifdef RW_D3D9
+./src/extras/postfx.cpp:298:#ifdef RW_OPENGL
+./src/extras/postfx.cpp:305:#ifdef RW_D3D9
+./src/extras/postfx.cpp:308:#ifdef RW_OPENGL
+./src/extras/postfx.h:3:#ifdef EXTENDED_COLOURFILTER
+./src/math/math.cpp:10:#ifdef GTA_PS2
+./src/math/math.cpp:30:#ifdef GTA_PS2
+./src/math/math.cpp:54:#ifdef GTA_PS3
+./src/math/math.cpp:92:#ifdef GTA_PS2
+./src/math/Matrix.h:63:#ifdef FIX_BUGS // BUGFIX from VC
+./src/math/Matrix.cpp:31:#ifdef FIX_BUGS
+./src/math/Matrix.cpp:459:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:466:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:472:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:478:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:485:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:492:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:499:#ifndef FIX_BUGS
+./src/math/Matrix.cpp:506:#ifndef FIX_BUGS
+./src/vehicles/Train.cpp:67:#ifdef FIX_BUGS
+./src/vehicles/Train.cpp:655:#ifdef FIX_BUGS
+./src/vehicles/Automobile.cpp:56:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Automobile.cpp:644:#ifndef FIX_BUGS
+./src/vehicles/Automobile.cpp:868:#ifdef FIX_BUGS
+./src/vehicles/Automobile.cpp:1025:#ifdef ALT_DODO_CHEAT
+./src/vehicles/Automobile.cpp:1034:#ifdef ALLCARSHELI_CHEAT
+./src/vehicles/Automobile.cpp:2273:#if 1
+./src/vehicles/Automobile.cpp:2320:#if 0	// old comedy controls from PS2 - same as bike's
+./src/vehicles/Automobile.cpp:2377:#ifdef FREE_CAM
+./src/vehicles/Automobile.cpp:2452:#ifdef FREE_CAM
+./src/vehicles/Automobile.cpp:2889:#if defined(PC_PARTICLE) || defined (PS2_ALTERNATIVE_CARSPLASH)
+./src/vehicles/Automobile.cpp:2975:#ifdef GTA_PS2_STUFF
+./src/vehicles/Automobile.cpp:2981:#ifdef PC_PARTICLE
+./src/vehicles/Automobile.cpp:3590:#ifdef PC_PARTICLE	
+./src/vehicles/Automobile.cpp:3596:#if defined(FIX_BUGS) && !defined(PC_PARTICLE) // looks wrong on PC particles
+./src/vehicles/Automobile.cpp:3602:#ifdef PC_PARTICLE
+./src/vehicles/Automobile.cpp:4550:#ifdef FIX_BUGS
+./src/vehicles/Automobile.cpp:4706:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Heli.cpp:27:#ifdef FIX_BUGS
+./src/vehicles/Heli.cpp:269:#ifdef FIX_BUGS
+./src/vehicles/Heli.cpp:470:#ifdef FIX_BUGS
+./src/vehicles/Heli.cpp:607:#ifdef FIX_BUGS
+./src/vehicles/Heli.cpp:781:#if GTA_VERSION >= GTA3_PS2_160
+./src/vehicles/Heli.cpp:794:#if GTA_VERSION < GTA3_PS2_160
+./src/vehicles/Heli.cpp:850:#ifdef FIX_BUGS
+./src/vehicles/CarGen.cpp:25:#ifdef FIX_BUGS
+./src/vehicles/CarGen.cpp:124:#ifdef FIX_BUGS
+./src/vehicles/DamageManager.cpp:35:#ifdef FIX_BUGS
+./src/vehicles/DamageManager.cpp:45:#ifndef FIX_BUGS
+./src/vehicles/Automobile.h:180:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Vehicle.h:227:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Vehicle.h:272:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.h:286:#ifdef ALT_DODO_CHEAT
+./src/vehicles/Plane.cpp:89:#ifdef FIX_BUGS
+./src/vehicles/Plane.cpp:910:#ifdef EXPLODING_AIRTRAIN
+./src/vehicles/Cranes.cpp:122:#ifdef FIX_BUGS // classic
+./src/vehicles/Cranes.cpp:168:#ifdef FIX_BUGS // classic
+./src/vehicles/Cranes.cpp:215:#ifdef FIX_BUGS
+./src/vehicles/Cranes.cpp:247:#ifdef FIX_BUGS
+./src/vehicles/Cranes.cpp:449:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:27:#ifdef ALT_DODO_CHEAT
+./src/vehicles/Vehicle.cpp:37:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:62:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:408:#if GTA_VERSION >= GTA3_PC_11
+./src/vehicles/Vehicle.cpp:472:#ifdef FIX_SIGNIFICANT_BUGS
+./src/vehicles/Vehicle.cpp:500:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:525:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:537:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:715:#ifdef FIX_BUGS // removing dumb case when shooting police car in player's own garage gives wanted level
+./src/vehicles/Vehicle.cpp:1028:#ifdef VC_PED_PORTS
+./src/vehicles/Vehicle.cpp:1174:#ifdef FIX_BUGS
+./src/vehicles/Vehicle.cpp:1259:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Boat.h:69:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Boat.cpp:37:#ifdef COMPATIBLE_SAVES
+./src/vehicles/Boat.cpp:188:#ifdef FIX_BUGS
+./src/vehicles/Boat.cpp:356:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:367:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:375:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:391:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:451:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:466:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:479:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:490:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:503:#ifdef PC_PARTICLE
+./src/vehicles/Boat.cpp:723:#ifdef NEW_RENDERER
+./src/vehicles/Boat.cpp:771:#ifdef NEW_RENDERER
+./src/vehicles/Boat.cpp:785:#ifdef NEW_RENDERER
+./src/vehicles/Boat.cpp:937:#ifdef COMPATIBLE_SAVES
+./src/audio/MusicManager.cpp:18:#if !defined FIX_BUGS && (defined RADIO_SCROLL_TO_PREV_STATION || defined RADIO_OFF_TEXT)
+./src/audio/MusicManager.cpp:89:#ifdef FIX_BUGS
+./src/audio/MusicManager.cpp:95:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/audio/MusicManager.cpp:125:#ifdef FIX_BUGS
+./src/audio/MusicManager.cpp:132:#ifndef FIX_BUGS
+./src/audio/MusicManager.cpp:177:#ifdef RADIO_OFF_TEXT
+./src/audio/MusicManager.cpp:211:#ifdef FIX_BUGS
+./src/audio/MusicManager.cpp:503:#ifndef FIX_BUGS
+./src/audio/MusicManager.cpp:510:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/audio/MusicManager.cpp:564:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/audio/MusicManager.cpp:944:#ifdef RADIO_SCROLL_TO_PREV_STATION
+./src/audio/MusicManager.cpp:962:#ifdef FIX_BUGS
+./src/audio/MusicManager.cpp:968:#ifndef FIX_BUGS
+./src/audio/eax/eax-util.h:11:#ifndef EAXUTIL_INCLUDED
+./src/audio/eax/eax.h:8:#ifndef EAX_H_INCLUDED
+./src/audio/eax/eax.h:11:#ifdef __cplusplus
+./src/audio/eax/eax.h:15:#ifndef AUDIO_OAL
+./src/audio/eax/eax.h:38:#ifdef DIRECTSOUND_VERSION		
+./src/audio/eax/eax.h:39:#if DIRECTSOUND_VERSION >= 0x0800
+./src/audio/eax/eax.h:56:	#ifndef GUID_DEFINED
+./src/audio/eax/eax.h:67:	#ifndef DEFINE_GUID
+./src/audio/eax/eax.h:68:		#ifndef INITGUID
+./src/audio/eax/eax.h:532:#ifdef __cplusplus
+./src/audio/sampman_miles.cpp:3:#ifdef AUDIO_MSS
+./src/audio/sampman_miles.cpp:67:#if GTA_VERSION >= GTA3_PC_11 || defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:388:#ifdef FIX_BUGS
+./src/audio/sampman_miles.cpp:740:#ifndef FIX_BUGS
+./src/audio/sampman_miles.cpp:961:#ifdef AUDIO_CACHE
+./src/audio/sampman_miles.cpp:1045:#if GTA_VERSION < GTA3_PC_STEAM && !defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:1062:#if GTA_VERSION >= GTA3_PC_11 || defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:1126:#ifdef AUDIO_CACHE
+./src/audio/sampman_miles.cpp:1299:#if GTA_VERSION < GTA3_PC_STEAM && !defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:1302:#if GTA_VERSION >= GTA3_PC_11
+./src/audio/sampman_miles.cpp:1309:#endif // #if GTA_VERSION >= GTA3_PC_11
+./src/audio/sampman_miles.cpp:1326:#endif // #if GTA_VERSION < GTA3_PC_STEAM && !defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:1332:#if GTA_VERSION >= GTA3_PC_11 || defined(NO_CDCHECK)
+./src/audio/sampman_miles.cpp:1467:#ifdef FIX_BUGS
+./src/audio/sampman_miles.cpp:1486:#ifdef FIX_BUGS
+./src/audio/sampman_miles.cpp:1819:#ifndef FIX_BUGS
+./src/audio/sampman_miles.cpp:2317:#ifdef FIX_BUGS
+./src/audio/sampman_null.cpp:2:#if !defined(AUDIO_OAL) &&  !defined(AUDIO_MSS)
+./src/audio/AudioManager.cpp:274:#ifdef AUDIO_OAL
+./src/audio/AudioManager.cpp:327:#ifdef AUDIO_OAL
+./src/audio/AudioManager.cpp:457:#ifdef GTA_PC
+./src/audio/AudioManager.cpp:461:#ifdef AUDIO_OAL
+./src/audio/AudioManager.cpp:805:#ifdef FIX_BUGS
+./src/audio/AudioManager.cpp:966:#ifdef GTA_PC
+./src/audio/oal/stream.cpp:3:#ifdef AUDIO_OAL
+./src/audio/oal/stream.cpp:7:#if defined _MSC_VER && !defined RE3_NO_AUTOLINK
+./src/audio/oal/stream.cpp:8:#ifdef AUDIO_OAL_USE_SNDFILE
+./src/audio/oal/stream.cpp:11:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:15:#ifdef AUDIO_OAL_USE_SNDFILE
+./src/audio/oal/stream.cpp:18:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:21:#ifdef AUDIO_OAL_USE_OPUS
+./src/audio/oal/stream.cpp:25:#ifndef _WIN32
+./src/audio/oal/stream.cpp:395:#ifdef AUDIO_OAL_USE_SNDFILE
+./src/audio/oal/stream.cpp:466:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:486:#ifdef MP3_USE_FUZZY_SEEK
+./src/audio/oal/stream.cpp:561:#if defined(__LP64__) || defined(_WIN64)
+./src/audio/oal/stream.cpp:809:#ifdef AUDIO_OAL_USE_OPUS
+./src/audio/oal/stream.cpp:907:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:914:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:934:#if !defined(_WIN32)
+./src/audio/oal/stream.cpp:949:#ifdef AUDIO_OAL_USE_SNDFILE
+./src/audio/oal/stream.cpp:954:#ifdef AUDIO_OAL_USE_MPG123
+./src/audio/oal/stream.cpp:960:#ifdef AUDIO_OAL_USE_OPUS
+./src/audio/oal/channel.cpp:3:#ifdef AUDIO_OAL
+./src/audio/oal/channel.cpp:7:#ifndef _WIN32
+./src/audio/oal/stream.h:3:#ifdef AUDIO_OAL
+./src/audio/oal/channel.h:3:#ifdef AUDIO_OAL
+./src/audio/oal/aldlist.cpp:27:#ifndef _WIN32
+./src/audio/oal/aldlist.cpp:33:#ifdef AUDIO_OAL
+./src/audio/oal/oal_utils.h:3:#ifdef AUDIO_OAL
+./src/audio/oal/oal_utils.cpp:4:#ifdef AUDIO_OAL
+./src/audio/oal/aldlist.h:1:#ifndef ALDEVICELIST_H
+./src/audio/oal/aldlist.h:6:#ifdef AUDIO_OAL
+./src/audio/PoliceRadio.cpp:160:#ifdef FIX_BUGS // Crash at 0x5fe6ef
+./src/audio/PoliceRadio.cpp:386:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:402:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:419:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:436:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:453:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:470:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:483:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:491:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:507:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:542:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:549:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:560:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:570:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:582:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:589:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:594:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:620:#ifdef FIX_BUGS
+./src/audio/PoliceRadio.cpp:647:#ifdef FIX_BUGS
+./src/audio/sampman.h:15:#ifdef GTA_PS2
+./src/audio/sampman.h:207:#ifdef AUDIO_OAL
+./src/audio/sampman.h:216:#ifdef AUDIO_OAL
+./src/audio/sampman.h:220:#if defined(OPUS_AUDIO_PATHS)
+./src/audio/sampman.h:256:#if defined(PS2_AUDIO_PATHS)
+./src/audio/AudioManager.h:494:#ifdef GTA_PC
+./src/audio/AudioManager.h:501:#ifdef AUDIO_MSS
+./src/audio/sampman_oal.cpp:3:#ifdef AUDIO_OAL
+./src/audio/sampman_oal.cpp:9:#ifdef _WIN32
+./src/audio/sampman_oal.cpp:25:#if defined _MSC_VER && !defined CMAKE_NO_AUTOLINK
+./src/audio/sampman_oal.cpp:43:#ifdef AUDIO_OAL_USE_OPUS
+./src/audio/sampman_oal.cpp:82:#ifdef OPUS_SFX
+./src/audio/sampman_oal.cpp:462:#ifdef _WIN32
+./src/audio/sampman_oal.cpp:496:#ifdef FIX_BUGS
+./src/audio/sampman_oal.cpp:788:#ifndef FIX_BUGS
+./src/audio/sampman_oal.cpp:966:#ifdef AUDIO_CACHE
+./src/audio/sampman_oal.cpp:989:#ifdef AUDIO_CACHE
+./src/audio/sampman_oal.cpp:1216:#ifdef OPUS_SFX
+./src/audio/sampman_oal.cpp:1268:#ifdef FIX_BUGS
+./src/audio/sampman_oal.cpp:1288:#ifdef FIX_BUGS
+./src/audio/sampman_oal.cpp:1329:#ifdef OPUS_SFX
+./src/audio/sampman_oal.cpp:1427:#ifdef JUICY_OAL
+./src/audio/sampman_oal.cpp:1989:#ifndef OPUS_SFX
+./src/audio/sampman_oal.cpp:2007:#ifdef OPUS_SFX
+./src/audio/sampman_oal.cpp:2015:#ifdef FIX_BUGS
+./src/audio/AudioLogic.cpp:62:#ifdef GTA_PS2
+./src/audio/AudioLogic.cpp:235:#ifdef FIX_BUGS
+./src/audio/AudioLogic.cpp:887:#ifdef FIX_BUGS
+./src/audio/AudioLogic.cpp:1089:#ifdef GTA_PS2
+./src/audio/AudioLogic.cpp:1943:#ifdef THIS_IS_STUPID
+./src/audio/AudioLogic.cpp:1981:#ifdef THIS_IS_STUPID
+./src/audio/AudioLogic.cpp:5954:#ifdef FIX_BUGS
+./src/audio/AudioLogic.cpp:6302:#ifdef FIX_BUGS
+./src/audio/AudioLogic.cpp:6308:#ifdef FIX_BUGS
+./src/render/Font.cpp:6:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:40:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:51:#if !defined(GTA_PS2) || defined(FIX_BUGS)
+./src/render/Font.cpp:99:#else // #if defined(GTA_PS2) && !defined(FIX_BUGS)
+./src/render/Font.cpp:149:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:251:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:282:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:294:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:319:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:334:#ifdef FIX_BUGS
+./src/render/Font.cpp:351:#if !defined(GAMEPAD_MENU) && defined(BUTTON_ICONS)
+./src/render/Font.cpp:357:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:374:#if 0  // unused
+./src/render/Font.cpp:403:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:449:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:460:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:476:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:482:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:487:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:514:#ifdef FIX_BUGS
+./src/render/Font.cpp:524:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:535:#ifdef FIX_BUGS
+./src/render/Font.cpp:540:#ifdef FIX_BUGS
+./src/render/Font.cpp:558:#ifdef FIX_BUGS
+./src/render/Font.cpp:571:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:575:#ifdef FIX_BUGS
+./src/render/Font.cpp:580:#ifdef FIX_BUGS
+./src/render/Font.cpp:610:#ifdef FIX_BUGS
+./src/render/Font.cpp:626:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:686:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:691:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:701:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:714:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:733:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:739:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:771:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:797:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:825:#ifdef FIX_BUGS
+./src/render/Font.cpp:833:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:839:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:853:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:865:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:873:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:879:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:901:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:907:#ifdef FIX_BUGS
+./src/render/Font.cpp:917:#ifdef FIX_BUGS
+./src/render/Font.cpp:929:#ifdef FIX_BUGS
+./src/render/Font.cpp:956:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:964:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:972:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:978:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:986:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:995:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1004:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1040:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:1078:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1087:#ifdef XBOX_SUBTITLES
+./src/render/Font.cpp:1112:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1156:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1204:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1213:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:1215:#if 0 // unused
+./src/render/Font.cpp:1251:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:1253:#if 0 // unused
+./src/render/Font.cpp:1276:#ifndef FIX_BUGS
+./src/render/Font.cpp:1290:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1315:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1337:#ifndef FIX_BUGS
+./src/render/Font.cpp:1347:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1369:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:1370:#if 0 // unused
+./src/render/Font.cpp:1393:#ifdef FIX_BUGS
+./src/render/Font.cpp:1420:#ifdef BUTTON_ICONS
+./src/render/Font.cpp:1421:#if 0 // unused
+./src/render/Font.cpp:1450:#ifdef MORE_LANGUAGES
+./src/render/Font.cpp:1460:#ifdef MORE_LANGUAGES
+./src/render/Sprite2d.cpp:31:#ifndef SQUEEZE_PERFORMANCE
+./src/render/Sprite2d.cpp:40:#ifndef SQUEEZE_PERFORMANCE
+./src/render/Sprite2d.cpp:67:#ifndef SQUEEZE_PERFORMANCE
+./src/render/Sprite2d.cpp:361:#if !defined(GTA_PS2_STUFF) && defined(RWLIBS)
+./src/render/Rubbish.cpp:417:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Rubbish.cpp:421:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Rubbish.cpp:425:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Rubbish.cpp:429:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Console.cpp:67:#ifndef FIX_BUGS
+./src/render/Renderer.cpp:73:#ifdef NEW_RENDERER
+./src/render/Renderer.cpp:85:#ifdef EXTRA_MODEL_FLAGS
+./src/render/Renderer.cpp:120:#ifdef NEW_RENDERER
+./src/render/Renderer.cpp:135:#ifdef SQUEEZE_PERFORMANCE
+./src/render/Renderer.cpp:158:#ifdef EXTENDED_PIPELINES
+./src/render/Renderer.cpp:161:#ifdef EXTRA_MODEL_FLAGS
+./src/render/Renderer.cpp:180:#ifndef MASTER
+./src/render/Renderer.cpp:197:#ifndef MASTER
+./src/render/Renderer.cpp:205:#ifndef MASTER
+./src/render/Renderer.cpp:231:#ifdef EXTRA_MODEL_FLAGS
+./src/render/Renderer.cpp:282:#ifndef MASTER
+./src/render/Renderer.cpp:293:#ifndef MASTER
+./src/render/Renderer.cpp:318:#ifdef EXTENDED_PIPELINES
+./src/render/Renderer.cpp:376:#ifdef NEW_RENDERER
+./src/render/Renderer.cpp:377:#ifndef LIBRW
+./src/render/Renderer.cpp:904:#ifdef NEW_RENDERER
+./src/render/Renderer.cpp:962:#ifndef MASTER
+./src/render/Renderer.cpp:1019:#ifdef FIX_BUGS
+./src/render/Renderer.cpp:1082:#ifdef NO_ISLAND_LOADING
+./src/render/Renderer.cpp:1090:	#ifdef FIX_BUGS
+./src/render/Renderer.cpp:1099:#ifndef MASTER
+./src/render/Renderer.cpp:1158:#ifdef FIX_BUGS
+./src/render/Renderer.cpp:1213:#ifndef MASTER
+./src/render/Renderer.cpp:1244:#ifdef FIX_BUGS
+./src/render/Renderer.cpp:1399:#ifdef FIX_BUGS
+./src/render/Renderer.cpp:1403:#ifdef NEW_RENDERER
+./src/render/Renderer.cpp:1422:#ifndef MASTER
+./src/render/Renderer.cpp:1429:#ifndef MASTER
+./src/render/Renderer.cpp:1479:#ifndef MASTER
+./src/render/Renderer.cpp:1507:#ifndef MASTER
+./src/render/Renderer.cpp:1557:#ifndef MASTER
+./src/render/Renderer.cpp:1585:#ifndef MASTER
+./src/render/Renderer.cpp:1696:#ifndef MASTER
+./src/render/PlayerSkin.cpp:113:#ifdef FIX_BUGS
+./src/render/Weather.cpp:131:#ifdef FIX_BUGS
+./src/render/Weather.cpp:205:#ifndef VC_RAIN_NERF
+./src/render/Weather.cpp:487:#ifndef FIX_BUGS // remove useless code
+./src/render/Weather.cpp:545:#ifdef FIX_BUGS // it's not used anyway though
+./src/render/Lines.cpp:11:#ifdef THIS_IS_STUPID
+./src/render/Fluff.cpp:156:#ifndef SQUEEZE_PERFORMANCE
+./src/render/Hud.cpp:24:#ifdef PS2_HUD
+./src/render/Hud.cpp:50:#ifdef FIX_BUGS
+./src/render/Hud.cpp:58:#if defined(PS2_HUD) && !defined(FIX_BUGS)
+./src/render/Hud.cpp:68:#if defined(FIX_BUGS)
+./src/render/Hud.cpp:324:#ifdef GTA_PC
+./src/render/Hud.cpp:331:#ifdef GTA_PC
+./src/render/Hud.cpp:339:#ifdef GTA_PC
+./src/render/Hud.cpp:347:#ifdef GTA_PC
+./src/render/Hud.cpp:364:#ifdef GTA_PC
+./src/render/Hud.cpp:378:#ifdef GTA_PC
+./src/render/Hud.cpp:382:#ifdef ASPECT_RATIO_SCALE
+./src/render/Hud.cpp:408:#ifdef GTA_PC
+./src/render/Hud.cpp:421:#ifdef GTA_PC
+./src/render/Hud.cpp:433:#ifdef GTA_PC
+./src/render/Hud.cpp:588:#ifdef FIX_BUGS
+./src/render/Hud.cpp:616:#ifdef FIX_BUGS
+./src/render/Hud.cpp:736:#ifndef HUD_ENHANCEMENTS
+./src/render/Hud.cpp:830:#ifndef HUD_ENHANCEMENTS
+./src/render/Hud.cpp:964:#ifdef FIX_BUGS
+./src/render/Hud.cpp:1061:#ifdef PS2_HUD
+./src/render/Hud.cpp:1062:	#ifdef FIX_BUGS
+./src/render/Hud.cpp:1068:	#ifdef FIX_BUGS
+./src/render/Hud.cpp:1093:#if !defined(PS2_HUD) || defined(FIX_BUGS)
+./src/render/Hud.cpp:1138:#if defined(PS2_HUD) && !defined(FIX_BUGS)
+./src/render/Hud.cpp:1183:#ifdef XBOX_SUBTITLES
+./src/render/Hud.cpp:1205:#endif // #ifdef XBOX_SUBTITLES
+./src/render/Hud.cpp:1230:#ifdef FIX_BUGS
+./src/render/Hud.cpp:1257:#if defined(PS2_HUD) && !defined(FIX_BUGS) // yeah, that's right. ps2 uses y=ScaleX(a)
+./src/render/Hud.cpp:1263:#if defined(PS2_HUD) && !defined(FIX_BUGS) // same
+./src/render/Hud.cpp:1394:#ifdef MORE_LANGUAGES
+./src/render/Hud.cpp:1403:#ifdef MORE_LANGUAGES
+./src/render/Hud.cpp:1424:#if !defined(PS2_HUD) || defined(FIX_BUGS)
+./src/render/Hud.cpp:1464:#if defined(PS2_HUD) && !defined(FIX_BUGS)
+./src/render/Hud.cpp:1566:#ifdef ASPECT_RATIO_SCALE
+./src/render/Hud.cpp:1574:#ifdef BETA_SLIDING_TEXT
+./src/render/Hud.cpp:1600:#ifdef FIX_BUGS
+./src/render/Hud.cpp:1629:#ifdef BETA_SLIDING_TEXT
+./src/render/Hud.cpp:1641:#ifdef FIX_BUGS
+./src/render/Hud.cpp:1692:#ifndef FIX_BUGS
+./src/render/Sprite.cpp:8:#ifdef ASPECT_RATIO_SCALE
+./src/render/Sprite.cpp:40:#ifdef FIX_SPRITES
+./src/render/Rubbish.h:7:#ifdef SQUEEZE_PERFORMANCE
+./src/render/Credits.cpp:42:#ifdef FIX_BUGS
+./src/render/Credits.cpp:49:#ifdef FIX_BUGS
+./src/render/Credits.cpp:74:#ifdef FIX_BUGS
+./src/render/Credits.cpp:505:#ifdef FIX_BUGS
+./src/render/Font.h:41:#ifdef MORE_LANGUAGES
+./src/render/Font.h:53:#ifdef MORE_LANGUAGES
+./src/render/Font.h:68:#ifdef BUTTON_ICONS
+./src/render/Font.h:72:#if 0 // unused
+./src/render/Font.h:95:#ifdef MORE_LANGUAGES
+./src/render/Font.h:107:#ifdef BUTTON_ICONS
+./src/render/Font.h:123:#ifdef XBOX_SUBTITLES
+./src/render/Font.h:128:#ifdef MORE_LANGUAGES
+./src/render/Font.h:136:#ifdef MORE_LANGUAGES
+./src/render/Font.h:140:#ifdef MORE_LANGUAGES
+./src/render/Font.h:173:#ifdef MORE_LANGUAGES
+./src/render/Glass.cpp:141:#ifdef FIX_BUGS
+./src/render/Glass.cpp:345:#ifdef FIX_BUGS
+./src/render/Glass.cpp:399:#ifdef FIX_BUGS
+./src/render/2dEffect.h:81:#if GTA_VERSION >= GTA3_PC_11
+./src/render/2dEffect.h:86:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Shadows.cpp:16:#ifdef FIX_BUGS
+./src/render/Shadows.cpp:23:#ifdef DEBUGMENU
+./src/render/Shadows.cpp:984:#ifndef MASTER
+./src/render/Shadows.cpp:1623:#ifdef FIX_BUGS
+./src/render/Draw.h:23:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.h:38:#ifdef PROPER_SCALING	
+./src/render/Draw.h:41:#ifdef FIX_RADAR
+./src/render/Draw.h:44:#ifdef FIX_SPRITES
+./src/render/Draw.h:55:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.h:62:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.h:70:#ifdef PROPER_SCALING	
+./src/render/SpecialFX.cpp:121:#ifdef PED_SKIN
+./src/render/SpecialFX.cpp:144:#ifdef NEW_RENDERER
+./src/render/SpecialFX.cpp:304:#ifdef FIX_BUGS
+./src/render/SpecialFX.cpp:1065:#ifdef FIX_BUGS
+./src/render/SpecialFX.cpp:1101:#ifdef FIX_BUGS
+./src/render/Coronas.cpp:405:#ifdef FIX_BUGS
+./src/render/Coronas.cpp:431:#ifdef FIX_BUGS
+./src/render/Coronas.cpp:484:#ifdef FIX_BUGS
+./src/render/MBlur.cpp:1:#ifndef LIBRW
+./src/render/MBlur.cpp:5:#ifndef LIBRW
+./src/render/MBlur.cpp:24:#ifndef LIBRW
+./src/render/MBlur.cpp:30:#ifdef EXTENDED_COLOURFILTER
+./src/render/MBlur.cpp:34:#ifdef GTA_PS2
+./src/render/MBlur.cpp:68:#ifndef LIBRW
+./src/render/MBlur.cpp:82:#ifndef LIBRW
+./src/render/MBlur.cpp:119:#ifndef LIBRW
+./src/render/MBlur.cpp:140:#ifdef EXTENDED_COLOURFILTER
+./src/render/MBlur.cpp:208:#ifdef EXTENDED_COLOURFILTER
+./src/render/MBlur.cpp:212:#ifdef GTA_PS2
+./src/render/Particle.cpp:227:#ifdef DEBUGMENU
+./src/render/Particle.cpp:392://#ifdef FIX_BUGS
+./src/render/Particle.cpp:393:#if 0
+./src/render/Particle.cpp:630:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:638:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:646:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:654:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:662:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:670:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:678:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:686:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:694:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:702:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:710:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:718:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:724:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:729:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:734:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:739:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:744:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:749:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:754:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:759:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:764:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:769:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:774:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:779:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:784:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:789:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Particle.cpp:812:#ifdef PC_PARTICLE
+./src/render/Particle.cpp:1396:#ifdef PC_PARTICLE
+./src/render/Particle.cpp:1497:#ifdef PC_PARTICLE
+./src/render/Particle.cpp:1503:#ifdef PC_PARTICLE
+./src/render/Particle.cpp:1559:#ifdef PC_PARTICLE
+./src/render/Particle.cpp:1612:#ifdef PC_PARTICLE
+./src/render/Draw.cpp:8:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.cpp:23:#ifdef PROPER_SCALING	
+./src/render/Draw.cpp:26:#ifdef  FIX_RADAR
+./src/render/Draw.cpp:29:#ifdef FIX_SPRITES
+./src/render/Draw.cpp:36:#ifndef ASPECT_RATIO_SCALE
+./src/render/Draw.cpp:60:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.cpp:81:#ifdef ASPECT_RATIO_SCALE
+./src/render/Draw.cpp:90:#ifdef PROPER_SCALING	
+./src/render/Renderer.h:5:#ifdef FIX_BUGS
+./src/render/Renderer.h:43:#ifdef NEW_RENDERER
+./src/render/Renderer.h:102:#ifdef NEW_RENDERER
+./src/render/Clouds.cpp:47:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Clouds.cpp:51:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Clouds.cpp:55:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Clouds.cpp:59:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Clouds.cpp:63:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Clouds.cpp:72:#ifdef FIX_BUGS
+./src/render/WaterLevel.cpp:62:#ifdef MASTER
+./src/render/WaterLevel.cpp:84:#ifndef MASTER
+./src/render/WaterLevel.cpp:96:#ifdef FIX_BUGS
+./src/render/WaterLevel.cpp:126:#ifdef FIX_BUGS
+./src/render/WaterLevel.cpp:364:#ifndef MASTER
+./src/render/WaterLevel.cpp:642:#ifndef MASTER
+./src/render/WaterLevel.cpp:665:#ifdef FIX_BUGS
+./src/render/Skidmarks.cpp:57:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Skidmarks.cpp:61:#if GTA_VERSION >= GTA3_PC_11
+./src/render/Skidmarks.cpp:65:#if GTA_VERSION >= GTA3_PC_11
+./src/collision/ColTriangle.h:26:#ifdef VU_COLLISION
+./src/collision/ColTriangle.h:34:#ifdef GTA_PS2
+./src/collision/VuCollision.cpp:2:#ifdef VU_COLLISION
+./src/collision/VuCollision.cpp:6:#ifndef GTA_PS2
+./src/collision/VuCollision.cpp:59:#ifdef GTA_PS2
+./src/collision/VuCollision.cpp:118:#ifdef GTA_PS2
+./src/collision/VuCollision.cpp:159:#ifdef GTA_PS2
+./src/collision/VuCollision.cpp:248:#ifdef GTA_PS2
+./src/collision/TempColModels.cpp:24:#ifdef FIX_BUGS
+./src/collision/TempColModels.cpp:67:#ifdef FIX_BUGS
+./src/collision/TempColModels.cpp:136:#ifdef FIX_BUGS
+./src/collision/TempColModels.cpp:238:#ifdef FIX_BUGS
+./src/collision/TempColModels.cpp:260:#ifdef FIX_BUGS
+./src/collision/TempColModels.cpp:282:#ifdef FIX_BUGS
+./src/collision/ColTriangle.cpp:13:#ifdef VU_COLLISION
+./src/collision/CompressedVector.h:5:#ifdef COMPRESSED_COL_VECTORS
+./src/collision/CompressedVector.h:9:#ifdef GTA_PS2
+./src/collision/Collision.cpp:26:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:32:#ifdef GTA_PS2
+./src/collision/Collision.cpp:47:#ifdef GTA_PS2
+./src/collision/Collision.cpp:218:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:260:#ifdef NO_ISLAND_LOADING
+./src/collision/Collision.cpp:272:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:282:#ifdef NO_ISLAND_LOADING
+./src/collision/Collision.cpp:294:#ifdef NO_ISLAND_LOADING
+./src/collision/Collision.cpp:458:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:482:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:591:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:669:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:710:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:789:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:839:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:884:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:1004:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:1039:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:1054:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1157:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1176:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:1267:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1299:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:1379:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1470:#ifndef VU_COLLISION
+./src/collision/Collision.cpp:1487:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1532:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:1618:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1666:#ifdef FIX_BUGS
+./src/collision/Collision.cpp:1790:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:1791:#ifdef GTA_PS2
+./src/collision/Collision.cpp:1808:#ifdef VU_COLLISION
+./src/collision/Collision.cpp:2021:#ifdef FIX_BUGS
+./src/collision/VuCollision.h:7:#ifdef GTA_PS2
+./src/collision/VuCollision.h:20:#ifndef GTA_PS2
+./src/collision/Collision.h:5:#ifdef VU_COLLISION
+./src/collision/Collision.h:11:#ifdef VU_COLLISION
+./src/collision/Collision.h:20:#if defined(FIX_BUGS) && !defined(SQUEEZE_PERFORMANCE)
+./src/collision/Collision.h:31:#ifdef NO_ISLAND_LOADING

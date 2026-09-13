@@ -1,0 +1,82 @@
+.nodvle
+
+.alias in_color v2
+	
+.proc DynamicLights
+	mov	r0, zeros
+
+	for	u_nLights
+	mov	r15, u_lightParams[aL]
+
+	cmp	DIRECT, gt, lt, r15.x
+	breakc	cmp.x				; param.x < DIRECT
+
+	mov	r14, u_lightColor[aL]
+	;mov	r13, u_lightPosition[aL]
+	mov	r12, u_lightDirection[aL]
+
+	jmpc	cmp.y, do_local			; param.x > DIRECT
+
+do_direction:
+	dp3	r1.x, r9.xyz, -r12.xyz		; dp(r1.x) = dot(N, -Ldir[i].xyz)
+	max	r1.x, zeros, r1.x		; luma(r1.x) = max(0, dp)
+	mad	r0.rgb, r1.x, r14.rgb, r0.rgb	; c += luma * Lcol[i].rgb
+	;jmpc	!cmp.y, join			; always true
+
+do_local:
+	;add	r1.xyz, r8, -r13		; dir(r1) = V - u_lightPosition[i].xyz;
+	;dp3	r2.x, r1.xyz, r1.xyz		; inv_dist(r2.x) = 1 / length(dir)
+	;rsq	r2.x, r2.x			;
+	;rcp	r2.y, r2.x			; dist(r2.y) = 1 / inv_dist
+	;mul	r1.xyz, r1.xyz, r2.x		; dir /= dist
+
+	;mov	r3.x, r15.y			; atten(r2.z) = 1.0 - dist/lParam[i].y
+	;rcp	r2.z, r3.x
+	;mad	r2.z, -r2.y, r2.z, ones
+	;max	r2.z, zeros, r2.z		; atten = max(0, atten)
+
+	;dp3	r3.x, r9, -r1			; luma(r3.x) = dot(N, -dir)
+	;max	r3.x, zeros, r3.x		; luma = max(0, luma)
+
+	;cmp	POINT, eq, ne, r15.x
+	;jmpc	cmp.y, do_spot			; param.x > POINT
+
+do_point:
+	;mul	r3.x, r3.x, r2.z		; luma *= atten
+	;mad	r0.rgb, r14.rgb, r3.x, r0.rgb	; C += f * Lcol[i].rgb
+	;jmpc	cmp.x, join			; param.x = POINT (always true)
+
+do_spot:
+	;dp3	r3.y, r1.xyz, r12.xyz		; pcos(r3.y) = dot(dir, lDir[i].xyz)
+	;mov	r3.z, r15.z			; ccos(r3.z) = -lParam[i].z
+	;add	r3.y, r3.y, r3.z		; falloff(r3.y) = (pcos - ccos) / (1.0 - ccos)
+	;add	r4.x, ones, r3.z
+	;rcp	r3.z, r4.x
+	;mul	r3.y, r3.y, r3.z
+
+	;cmp	zeros, lt, ge, r3.y		; if (falloff < 0)
+	;jmpc	cmp.x, f1
+	;mov	r3.x, zeros			; luma(r3.x) = 0
+f1:
+	;max	r3.y, r3.y, r15.w		; falloff = max(falloff, u_lightParams[i].w)
+	;mul	r3.x, r3.x, r3.y		; luma *= falloff
+	;mul	r3.x, r3.x, r2.z		; luma *= atten
+	;mad	r0.rgb, r14, r3.x, r0		; c += Lcol * luma
+	;break					; why do we stop? (glsl)
+
+join:
+	nop
+.end	; for
+	nop
+	
+	mul	r0, surfDiffuse, r0
+
+	mov	r1, u_ambLight
+	mad	r0.rgb, r1.rgb, surfAmbient.rgb, r0.rgb
+
+	mad	r0, in_color, fixclr, r0
+	max	r0, zeros, r0
+	min	r0, ones, r0
+	mul	r0, u_matColor, r0
+	
+.end	; .proc

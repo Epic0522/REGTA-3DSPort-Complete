@@ -1,0 +1,35 @@
+	;; inputs
+.alias in_pos    v0
+.alias in_color  v1
+.alias in_tex0   v2
+
+	;; outputs
+.out v_pos	position
+.out v_color	color
+.out v_tex0	texcoord0
+
+.entry im2d_main
+.proc im2d_main
+	mov	r0, in_pos
+	mul	r0.xy, u_xform.xy, r0.xy
+	add	r0.xy, u_xform.zw, r0.xy
+	;mad	r0.xy, r0.xy, r1.xy, r1.zw
+	mul	r0.xyz, r0.xyz, r0.www
+	
+	;; mov	v_pos.x, r0.x
+	;; mov	v_pos.y, r0.y
+	mov	v_pos.z, r0.z
+	mov	v_pos.w, r0.w
+	
+	mov r1.xy, u_flip.xy
+	mov r1.wz, zeros
+	dp3 v_pos.x, r0, r1
+
+	mov r1.xy, u_flip.zw
+	mov r1.wz, zeros
+	dp3 v_pos.y, r0, r1
+
+	mov v_color, in_color
+	mov v_tex0, in_tex0
+	end
+.end

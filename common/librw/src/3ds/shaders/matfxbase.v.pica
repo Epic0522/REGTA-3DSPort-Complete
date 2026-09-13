@@ -1,0 +1,27 @@
+	;; Lightweight texture/material path for 3DS MatFX vehicles and CPU-skinned
+	;; actors.  These TEV combiners ignore PRIMARY_COLOR.rgb, so calculate only
+	;; the material/vertex alpha which they still consume.
+
+	;; Inputs
+.alias in_pos     v0
+.alias in_color   v2
+.alias in_tex0    v3
+
+	;; Outputs
+.out v_pos      position
+.out v_color    color
+.out v_tex0     texcoord0
+
+.entry matfxbase_main
+.proc matfxbase_main
+	call	xform_vertex
+	mov	v_pos, r0
+
+	mov	r0, ones
+	mul	r0.a, fixclr.a, in_color.a
+	mul	r0.a, u_matColor.a, r0.a
+	mov	v_color, r0
+	mov	v_tex0, in_tex0
+
+	end
+.end

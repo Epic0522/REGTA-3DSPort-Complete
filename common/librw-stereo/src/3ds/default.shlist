@@ -1,0 +1,6 @@
+./shaders/default.v.pica
+./shaders/matfx.v.pica
+./shaders/im2d.v.pica
+./shaders/im3d.v.pica
+./shaders/lighting.v.pica
+

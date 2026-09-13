@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>re3 / reVC 存档转换器</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10131a; --panel:#181d27; --line:#2c3443; --text:#eef2f8; --muted:#9ca9bb; --pink:#ff7eb6; --green:#82e6b1; --orange:#ffc46b; --red:#ff8e8e; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:radial-gradient(circle at 10% 0%,#28263c 0,#10131a 42%); color:var(--text); font:15px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(960px,calc(100% - 28px)); margin:0 auto; padding:38px 0 54px; }
+    header { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:24px; }
+    h1 { font-size:clamp(25px,5vw,38px); line-height:1.15; margin:0 0 8px; letter-spacing:-.03em; }
+    h1 span { color:var(--pink); }
+    .subtitle { color:var(--muted); margin:0; }
+    .badge { white-space:nowrap; color:#152219; background:var(--green); border-radius:999px; padding:5px 11px; font-weight:700; font-size:12px; }
+    .panel { background:rgba(24,29,39,.91); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:0 14px 45px rgba(0,0,0,.18); }
+    .controls { display:grid; grid-template-columns:1fr 1.2fr auto; gap:13px; align-items:end; }
+    label { display:block; color:var(--muted); font-size:12px; margin-bottom:6px; }
+    select, input[type=file], button { width:100%; border:1px solid #3a4557; border-radius:10px; color:var(--text); background:#111620; padding:11px 12px; font:inherit; }
+    input[type=file] { padding:9px 10px; }
+    button { width:auto; min-width:145px; cursor:pointer; background:linear-gradient(135deg,#ff6da9,#da5fbe); border-color:transparent; font-weight:800; }
+    button:disabled { cursor:not-allowed; filter:grayscale(1); opacity:.45; }
+    .status { margin-top:14px; min-height:26px; color:var(--muted); }
+    .status.error { color:var(--red); }
+    .status.ok { color:var(--green); }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+    .stat { border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:#131822; }
+    .stat small { display:block; color:var(--muted); font-size:11px; }
+    .stat strong { display:block; margin-top:3px; font-size:18px; }
+    section { margin-top:18px; }
+    .section-title { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; }
+    h2 { font-size:17px; margin:0; }
+    .hint { color:var(--muted); font-size:12px; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; }
+    table { width:100%; border-collapse:collapse; min-width:570px; }
+    th, td { text-align:left; padding:9px 11px; border-bottom:1px solid #28303d; white-space:nowrap; }
+    th { color:var(--muted); font-size:11px; font-weight:700; background:#131822; }
+    tr:last-child td { border-bottom:0; }
+    .empty { color:var(--muted); padding:14px; }
+    .download { display:inline-flex; margin-top:14px; color:#15151b; background:var(--orange); border-radius:10px; padding:9px 13px; font-weight:800; text-decoration:none; }
+    .download[hidden], .result[hidden], .details[hidden] { display:none; }
+    details { margin-top:18px; color:var(--muted); }
+    summary { cursor:pointer; color:var(--text); }
+    code { color:#ffd797; }
+    @media (max-width:700px) { header { display:block; } .badge { display:inline-block; margin-top:14px; } .controls { grid-template-columns:1fr; } button { width:100%; } .stats { grid-template-columns:repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1><span>re3</span> / reVC 存档转换器</h1>
+      <p class="subtitle">把 2021 版 PC 存档转换成 3DS 可读格式，车库隐藏车会一起保留。</p>
+    </div>
+    <div class="badge">完全离线 · 不上传</div>
+  </header>
+
+  <div class="panel">
+    <div class="controls">
+      <div>
+        <label for="direction">转换方向</label>
+        <select id="direction">
+          <option value="pc-to-3ds" selected>PC → 3DS（主要功能）</option>
+          <option value="3ds-to-pc">3DS → PC</option>
+        </select>
+      </div>
+      <div>
+        <label for="file">选择 .b 存档</label>
+        <input id="file" type="file" accept=".b,application/octet-stream">
+      </div>
+      <button id="convert" disabled>转换并准备下载</button>
+    </div>
+    <div id="status" class="status">请选择一个 GTA3sf*.b 或 GTAVCsf*.b 存档。</div>
+    <div id="stats" class="stats result" hidden>
+      <div class="stat"><small>游戏</small><strong id="game">—</strong></div>
+      <div class="stat"><small>输入格式</small><strong id="format">—</strong></div>
+      <div class="stat"><small>文件大小</small><strong id="size">—</strong></div>
+      <div class="stat"><small>车库隐藏车</small><strong id="garageCount">—</strong></div>
+    </div>
+    <a id="download" class="download" hidden>下载转换后的存档</a>
+  </div>
+
+  <section id="garagePanel" class="panel result" hidden>
+    <div class="section-title">
+      <h2>车库隐藏车预览</h2>
+      <div id="garageHint" class="hint">转换前后会逐条校验这些记录</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>位置</th><th>车型 ID</th><th>坐标</th><th>朝向</th><th>属性字节</th></tr></thead>
+        <tbody id="garageRows"></tbody>
+      </table>
+      <div id="garageEmpty" class="empty" hidden>这个存档的车库没有已存车辆。</div>
+    </div>
+  </section>
+
+  <details>
+    <summary>使用说明与安全边界</summary>
+    <p>转换器只在浏览器本地读取文件。建议先备份原存档；下载文件默认带有 <code>.3ds.b</code> 或 <code>.pc.b</code> 后缀，确认无误后再改回游戏需要的槽位名。</p>
+    <p>车库隐藏车（安全屋车辆和各车库的 stored car）会做 40 字节 PC ↔ 36 字节 3DS 的结构重排。re3 的真标记汽车也会做 1448 字节 PC ↔ 1436 字节 3DS 的车辆对象重排；持久化船只仍会被拒绝，避免猜测未映射的 ABI。</p>
+  </details>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const U32 = 4;
+  const FIXED_FILE_SIZES = {re3: 201820, revc: 201828};
+  const MEANINGFUL_BLOCKS = {re3: 20, revc: 23};
+  const GARAGE_LAYOUTS = {
+    re3: {innerSize:5484, header:40, storedCount:18, pcGarageStride:140, rawGarageStride:136, storedOffset:100},
+    revc: {innerSize:7876, header:44, storedCount:48, pcGarageStride:168, rawGarageStride:164, storedOffset:128}
+  };
+  const PED_LAYOUTS = {
+    re3: {rawSize:1448, pcSize:1520, modelName:24, weaponCount:13,
+      raw:{position:52,createdBy:349,health:684,armour:688,weapons:840,maxWeapon:1102,maxStamina:1284,targets:1316},
+      pc:{position:52,createdBy:352,health:704,armour:708,weapons:860,maxWeapon:1177,maxStamina:1356,targets:1388}},
+    revc: {rawSize:1692, pcSize:1752, modelName:21, weaponCount:10,
+      raw:{position:52,createdBy:350,health:836,armour:840,weapons:1016,maxStamina:1480,targets:1512},
+      pc:{position:52,createdBy:352,health:852,armour:856,weapons:1032,maxStamina:1540,targets:1572}}
+  };
+  const PARTICLE_LAYOUTS = {
+    re3:{rawSize:128,pcSize:136,raw:[52,88,92,93,94,95,96,98,100,112,116,120,124,125],pc:[52,88,92,96,100,101,102,104,108,120,124,128,132,133],max:100},
+    revc:{rawSize:124,pcSize:132,raw:[48,84,88,89,90,91,92,94,96,108,112,116,120,121],pc:[48,84,88,92,96,97,98,100,104,116,120,124,128,129],max:70}
+  };
+  const INDEX = {re3:{ped:1,garage:2,vehicle:3,phones:8,zones:11,particles:14,playerInfo:16},revc:{ped:1,garage:2,vehicle:4,phones:9,zones:12,particles:15,playerInfo:18}};
+  const $ = id => document.getElementById(id);
+  const directionEl = $("direction"), fileEl = $("file"), convertEl = $("convert"), statusEl = $("status");
+  let current = null, downloadUrl = null;
+
+  function fail(message) { throw new Error(message); }
+  function expect(label, actual, expected) { if (actual !== expected) fail(`${label}：应为 ${expected} 字节，实际 ${actual} 字节`); }
+  function readU32(bytes, offset) { return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(offset, true); }
+  function writeU32(bytes, offset, value) { new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).setUint32(offset, value >>> 0, true); }
+  function readF32(bytes, offset) { return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getFloat32(offset, true); }
+  function align4(value) { return (value + 3) & ~3; }
+  function copy(out, targetOffset, source, sourceOffset, length) { out.set(source.subarray(sourceOffset, sourceOffset + length), targetOffset); }
+  function nestedBlock(inner) { const pad = (4 - (inner.length & 3)) & 3; const out = new Uint8Array(4 + inner.length + pad); writeU32(out, 0, inner.length); out.set(inner, 4); return {offset:0, data:out}; }
+  function encoded(block) { const pad = (4 - (block.data.length & 3)) & 3; const out = new Uint8Array(4 + block.data.length + pad); writeU32(out, 0, block.data.length); out.set(block.data, 4); return out; }
+  function inner(block) { if (block.data.length < 4) fail("存档块没有 inner size"); const size = readU32(block.data, 0); if (size > block.data.length - 4) fail("存档块声明的大小越界"); return block.data.subarray(4, 4 + size); }
+  function checksum(bytes) { let sum = 0; for (const byte of bytes) sum = (sum + byte) >>> 0; return sum; }
+  function hex(bytes) { return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join(""); }
+  function inferVariant(name, bytes) { const lower = name.toLowerCase(); if (lower.startsWith("gta3sf")) return "re3"; if (lower.startsWith("gtavcsf")) return "revc"; for (const key of Object.keys(FIXED_FILE_SIZES)) if (bytes.length === FIXED_FILE_SIZES[key]) return key; fail("无法判断游戏，请使用 GTA3sf*.b 或 GTAVCsf*.b 文件名"); }
+  function parseSave(name, bytes) {
+    const variant = inferVariant(name, bytes); expect(`${variant} 存档`, bytes.length, FIXED_FILE_SIZES[variant]);
+    const stored = readU32(bytes, bytes.length - 4); const actual = checksum(bytes.subarray(0, bytes.length - 4)); if (stored !== actual) fail(`校验和不匹配：文件中为 0x${stored.toString(16).padStart(8,"0")}, 计算为 0x${actual.toString(16).padStart(8,"0")}`);
+    const blocks = []; let offset = 0, bodyEnd = bytes.length - 4;
+    while (offset < bodyEnd) { if (offset + 4 > bodyEnd) fail("外层块头被截断"); const size = readU32(bytes, offset); const end = offset + 4 + align4(size); if (end > bodyEnd) fail("外层块越过文件末尾"); blocks.push({offset, data:bytes.slice(offset + 4, offset + 4 + size)}); offset = end; }
+    if (blocks.length < MEANINGFUL_BLOCKS[variant]) fail("存档块数量不足");
+    return {name, variant, raw:bytes, blocks, checksum:stored};
+  }
+  function classify(save) { const size = inner(save.blocks[INDEX[save.variant].ped]).length; const raw = save.variant === "re3" ? 1494 : 1735; const pc = save.variant === "re3" ? 1566 : 1795; if (size === raw) return "3ds-arm"; if (size === pc) return "pc-compatible"; return `unknown-ped-size-${size}`; }
+
+  function weapon3dsToPc(raw) { expect("3DS weapon", raw.length, 20); const out = new Uint8Array(24); writeU32(out,0,raw[0]); writeU32(out,4,raw[1]); copy(out,8,raw,4,12); out[20] = raw[16]; return out; }
+  function weaponPcTo3ds(raw) { expect("PC weapon", raw.length, 24); const out = new Uint8Array(20); out[0]=raw[0]; out[1]=raw[4]; copy(out,4,raw,8,12); out[16]=raw[20]; return out; }
+  function playerObject(variant, raw, direction) {
+    const layout = PED_LAYOUTS[variant], sourceSize = direction === "3ds-to-pc" ? layout.rawSize : layout.pcSize, targetSize = direction === "3ds-to-pc" ? layout.pcSize : layout.rawSize; expect(`${direction} player object`, raw.length, sourceSize);
+    const ro = layout.raw, po = layout.pc, source = direction === "3ds-to-pc" ? ro : po, target = direction === "3ds-to-pc" ? po : ro; const out = new Uint8Array(targetSize);
+    for (const [key,width] of [["position",12],["createdBy",1],["health",4],["armour",4],["maxStamina",4],["targets",16]]) copy(out,target[key],raw,source[key],width);
+    if (variant === "re3") out[target.maxWeapon] = raw[source.maxWeapon];
+    for (let i=0;i<layout.weaponCount;i++) { const a=source.weapons+i*(direction === "3ds-to-pc" ? 20 : 24), b=target.weapons+i*(direction === "3ds-to-pc" ? 24 : 20); const w=direction === "3ds-to-pc" ? weapon3dsToPc(raw.slice(a,a+20)) : weaponPcTo3ds(raw.slice(a,a+24)); out.set(w,b); }
+    return out;
+  }
+  function pedPool(variant, block, direction) {
+    const source = inner(block), layout = PED_LAYOUTS[variant], sourceSize = direction === "3ds-to-pc" ? layout.rawSize : layout.pcSize, targetSize = direction === "3ds-to-pc" ? layout.pcSize : layout.rawSize; expect(`${direction} ped pool`,source.length,4+10+sourceSize+8+layout.modelName); if (readU32(source,0)!==1) fail("ped pool 不是单玩家存档"); const converted=playerObject(variant,source.slice(14,14+sourceSize),direction); const out=new Uint8Array(source.length+targetSize-sourceSize); copy(out,0,source,0,14); out.set(converted,14); copy(out,14+converted.length,source,14+sourceSize,source.length-(14+sourceSize)); return nestedBlock(out); }
+  function vehicleCounts(variant, block) { const source=inner(block), countLen=variant === "re3" ? 8 : 12; if (source.length<countLen) fail("vehicle pool 太短"); const out=[]; for(let i=0;i<countLen;i+=4) out.push(readU32(source,i)); return out; }
+  const RE3_CAR_PC_SIZE=1448, RE3_CAR_3DS_SIZE=1436;
+  function re3CarPcTo3ds(raw) { expect("PC re3 CAutomobile",raw.length,RE3_CAR_PC_SIZE); return raw.slice(0,RE3_CAR_3DS_SIZE); }
+  function re3Car3dsToPc(raw) { expect("3DS re3 CAutomobile",raw.length,RE3_CAR_3DS_SIZE); const out=new Uint8Array(RE3_CAR_PC_SIZE); out.set(raw); return out; }
+  function re3Vehicles(block,direction) { const source=inner(block); if(source.length<8)fail("re3 vehicle pool 太短"); const cars=readU32(source,0), boats=readU32(source,4); if(boats)fail(`re3 车辆池包含持久化船只（counts=${cars},${boats}），目前只支持真标记汽车`); const sourceObject=direction === "3ds-to-pc" ? RE3_CAR_3DS_SIZE : RE3_CAR_PC_SIZE, targetObject=direction === "3ds-to-pc" ? RE3_CAR_PC_SIZE : RE3_CAR_3DS_SIZE, sourceRecord=10+sourceObject; expect(`${direction} re3 vehicle pool`,source.length,8+cars*sourceRecord); const parts=[source.slice(0,8)]; let cursor=8; for(let i=0;i<cars;i++){const header=source.slice(cursor,cursor+10);if(readU32(header,0)!==0)fail(`re3 车辆记录 ${i} 不是汽车`); const object=source.slice(cursor+10,cursor+sourceRecord), converted=direction === "3ds-to-pc" ? re3Car3dsToPc(object) : re3CarPcTo3ds(object); parts.push(header,converted); cursor+=sourceRecord;} return nestedBlock(concat(parts)); }
+  function vehicles(variant,block,direction) { const counts=vehicleCounts(variant,block); if(variant === "re3") return re3Vehicles(block,direction); if(counts.some(Boolean)) fail(`这个转换器暂不处理 reVC 持久化车辆（counts=${counts.join(",")}）`); return block; }
+  function phone3dsToPc(raw) { expect("3DS phone",raw.length,48); const out=new Uint8Array(52); copy(out,0,raw,0,44); writeU32(out,44,raw[44]); out[48]=raw[45]; return out; }
+  function phonePcTo3ds(raw) { expect("PC phone",raw.length,52); const out=new Uint8Array(48); copy(out,0,raw,0,44); out[44]=raw[44]; out[45]=raw[48]; return out; }
+  function phones(block,direction) { const source=inner(block), stride=direction === "3ds-to-pc" ? 48 : 52; expect(`${direction} phone block`,source.length,8+50*stride); const out=new Uint8Array(8+50*(direction === "3ds-to-pc" ? 52 : 48)); copy(out,0,source,0,8); for(let i=0;i<50;i++){const p=8+i*stride,w=direction === "3ds-to-pc" ? phone3dsToPc(source.slice(p,p+48)) : phonePcTo3ds(source.slice(p,p+52)); out.set(w,8+i*w.length);} return nestedBlock(out); }
+  function storedCarPcTo3ds(raw) { expect("PC stored car",raw.length,40); const out=new Uint8Array(36); copy(out,0,raw,0,28); out[28]=raw[28]; copy(out,29,raw,32,6); return out; }
+  function storedCar3dsToPc(raw) { expect("3DS stored car",raw.length,36); const out=new Uint8Array(40); copy(out,0,raw,0,28); writeU32(out,28,raw[28]); copy(out,32,raw,29,6); return out; }
+  function garages(variant, block, direction) {
+    const layout=GARAGE_LAYOUTS[variant], source=inner(block); expect(`${direction} garage block`,source.length,layout.innerSize); const sourceCar=direction === "3ds-to-pc" ? 36 : 40, targetCar=direction === "3ds-to-pc" ? 40 : 36, sourceGarage=direction === "3ds-to-pc" ? layout.rawGarageStride : layout.pcGarageStride, targetGarage=direction === "3ds-to-pc" ? layout.pcGarageStride : layout.rawGarageStride, carConvert=direction === "3ds-to-pc" ? storedCar3dsToPc : storedCarPcTo3ds; let cursor=layout.header; const outParts=[source.slice(0,layout.header)]; for(let i=0;i<layout.storedCount;i++){outParts.push(carConvert(source.slice(cursor,cursor+sourceCar)));cursor+=sourceCar;} for(let i=0;i<32;i++){const target=new Uint8Array(targetGarage), src=source.slice(cursor,cursor+sourceGarage); copy(target,0,src,0,layout.storedOffset); target.set(carConvert(src.slice(layout.storedOffset,layout.storedOffset+sourceCar)),layout.storedOffset); outParts.push(target); cursor+=sourceGarage;} const core=outParts.reduce((n,p)=>n+p.length,0), targetTail=layout.innerSize-core; if(targetTail<0) fail("转换后的 garage block 溢出"); const out=new Uint8Array(layout.innerSize); let at=0; for(const part of outParts){out.set(part,at);at+=part.length;} return nestedBlock(out); }
+  function canonicalCarRecords(variant,block,direction) { const layout=GARAGE_LAYOUTS[variant], source=inner(block), stride=direction === "3ds-to-pc" ? 36 : 40, garageStride=direction === "3ds-to-pc" ? layout.rawGarageStride : layout.pcGarageStride, records=[]; let cursor=layout.header; for(let i=0;i<layout.storedCount;i++){const r=source.slice(cursor,cursor+stride); records.push(direction === "3ds-to-pc" ? storedCar3dsToPc(r) : new Uint8Array([...r.slice(0,38),0,0])); cursor+=stride;} for(let i=0;i<32;i++){const r=source.slice(cursor+layout.storedOffset,cursor+layout.storedOffset+stride); records.push(direction === "3ds-to-pc" ? storedCar3dsToPc(r) : new Uint8Array([...r.slice(0,38),0,0]));cursor+=garageStride;} return records; }
+  function carEqual(a,b){ if(a.length!==b.length)return false; for(let i=0;i<a.length;i++)if(a[i]!==b[i])return false; return true; }
+  function zoneRe3(raw) { expect("re3 3DS zone",raw.length,52); const out=new Uint8Array(56); copy(out,0,raw,0,32); writeU32(out,32,raw[32]); writeU32(out,36,raw[33]); copy(out,40,raw,34,4); copy(out,44,raw,40,12); return out; }
+  function zoneRe3PcTo3ds(raw) { expect("re3 PC zone",raw.length,56); const out=new Uint8Array(52); copy(out,0,raw,0,32); out[32]=raw[32]; out[33]=raw[36]; copy(out,34,raw,40,4); copy(out,40,raw,44,12); return out; }
+  function zoneRevc(raw) { expect("reVC 3DS zone",raw.length,50); const out=new Uint8Array(56); copy(out,0,raw,0,32); writeU32(out,32,raw[32]); writeU32(out,36,raw[33]); copy(out,40,raw,34,16); return out; }
+  function zoneRevcPcTo3ds(raw) { expect("reVC PC zone",raw.length,56); const out=new Uint8Array(50); copy(out,0,raw,0,32); out[32]=raw[32]; out[33]=raw[36]; copy(out,34,raw,40,16); return out; }
+  function setZoneLength(payload){if(payload[0]!==0x5a||payload[1]!==0x4e||payload[2]!==0x53||payload[3]!==0)fail("zone block tag 错误");writeU32(payload,4,payload.length-8);}
+  function zonesRe3(block,direction){
+    const source=inner(block);
+    if(direction === "3ds-to-pc"){
+      expect("re3 3DS zones",source.length,9797);
+      const outParts=[source.slice(0,12),new Uint8Array([source[12],0,0,0]),source.slice(13,15),new Uint8Array(2)];
+      for(let i=0;i<50;i++)outParts.push(zoneRe3(source.slice(16+i*52,16+(i+1)*52)));
+      const infoStart=16+50*52, infoEnd=infoStart+100*58;
+      outParts.push(source.slice(infoStart,infoEnd),source.slice(infoEnd,infoEnd+4));
+      const mapStart=infoEnd+4;
+      for(let i=0;i<25;i++)outParts.push(zoneRe3(source.slice(mapStart+i*52,mapStart+(i+1)*52)));
+      outParts.push(source.slice(mapStart+25*52,source.length-1));
+      const out=concat(outParts);setZoneLength(out);expect("re3 PC zones",out.length,10100);return nestedBlock(out);
+    }
+    expect("re3 PC zones",source.length,10100);
+    const outParts=[source.slice(0,12),source.slice(12,13),source.slice(16,18),new Uint8Array(1)];
+    for(let i=0;i<50;i++)outParts.push(zoneRe3PcTo3ds(source.slice(20+i*56,20+(i+1)*56)));
+    const infoStart=20+50*56, infoEnd=infoStart+100*58;
+    outParts.push(source.slice(infoStart,infoEnd),source.slice(infoEnd,infoEnd+4));
+    const mapStart=infoEnd+4;
+    for(let i=0;i<25;i++)outParts.push(zoneRe3PcTo3ds(source.slice(mapStart+i*56,mapStart+(i+1)*56)));
+    outParts.push(source.slice(mapStart+25*56),new Uint8Array(1));
+    const out=concat(outParts);setZoneLength(out);expect("re3 3DS zones",out.length,9797);return nestedBlock(out);
+  }
+  function zonesRevc(block,direction){const source=inner(block);if(direction === "3ds-to-pc"){expect("reVC 3DS zones",source.length,34437);const outParts=[source.slice(0,8),new Uint8Array([source[8],0,0,0]),source.slice(9,11),new Uint8Array(2)];let cursor=13;for(let i=0;i<189;i++){outParts.push(zoneRevc(source.slice(cursor,cursor+50)));cursor+=50;}outParts.push(source.slice(cursor,cursor+338*68));cursor+=338*68;outParts.push(source.slice(cursor,cursor+8));cursor+=8;for(let i=0;i<39;i++){outParts.push(zoneRevc(source.slice(cursor,cursor+50)));cursor+=50;}outParts.push(source.slice(cursor));const out=concat(outParts);setZoneLength(out);expect("reVC PC zones",out.length,35808);return nestedBlock(out);} expect("reVC PC zones",source.length,35808);const outParts=[source.slice(0,8),source.slice(8,9),source.slice(12,14),new Uint8Array(2)];let cursor=16;for(let i=0;i<189;i++){outParts.push(zoneRevcPcTo3ds(source.slice(cursor,cursor+56)));cursor+=56;}outParts.push(source.slice(cursor,cursor+338*68));cursor+=338*68;outParts.push(source.slice(cursor,cursor+8));cursor+=8;for(let i=0;i<39;i++){outParts.push(zoneRevcPcTo3ds(source.slice(cursor,cursor+56)));cursor+=56;}outParts.push(source.slice(cursor));const out=concat(outParts);setZoneLength(out);expect("reVC 3DS zones",out.length,34437);return nestedBlock(out);}
+  function concat(parts){const out=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let at=0;for(const p of parts){out.set(p,at);at+=p.length;}return out;}
+  function particleRecord(variant,raw,direction){const l=PARTICLE_LAYOUTS[variant], sourceSize=direction === "3ds-to-pc" ? l.rawSize : l.pcSize, targetSize=direction === "3ds-to-pc" ? l.pcSize : l.rawSize;expect(`${direction} particle`,raw.length,sourceSize);const so=direction === "3ds-to-pc" ? l.raw : l.pc,to=direction === "3ds-to-pc" ? l.pc : l.raw,out=new Uint8Array(targetSize),widths=[12,4,1,1,1,1,2,2,12,4,4,4,1,1];for(let i=0;i<widths.length;i++){if(i===2||i===3)out[to[i]]=raw[so[i]];else copy(out,to[i],raw,so[i],widths[i]);}return out;}
+  function particles(variant,block,direction){const source=inner(block),l=PARTICLE_LAYOUTS[variant];if(source.length<4)fail("particle block 太短");const count=readU32(source,0),sourceSize=direction === "3ds-to-pc" ? l.rawSize : l.pcSize,targetSize=direction === "3ds-to-pc" ? l.pcSize : l.rawSize; if(count>l.max)fail("particle count 超过上限");expect(`${direction} particle block`,source.length,4+(count+1)*sourceSize);const parts=[new Uint8Array(4)],outCount=new Uint8Array(4);writeU32(outCount,0,count);parts[0]=outCount;let cursor=4;for(let i=0;i<count;i++){parts.push(particleRecord(variant,source.slice(cursor,cursor+sourceSize),direction));cursor+=sourceSize;}parts.push(new Uint8Array(targetSize));return nestedBlock(concat(parts));}
+  function playerInfo(variant,block,direction){const source=inner(block),target=variant === "re3" ? 316 : 368;if(direction === "3ds-to-pc"){expect(`${variant} 3DS PlayerInfo`,source.length,target);return block;}if(![target,target+(variant === "re3" ? 44 : 48)].includes(source.length))fail(`${variant} PC PlayerInfo 大小不受支持：${source.length}`);return nestedBlock(source.slice(0,target));}
+  function convertSave(save,direction){const format=classify(save), expected=direction === "pc-to-3ds" ? "pc-compatible" : "3ds-arm";if(format!==expected)fail(`输入格式是 ${format}，当前方向要求 ${expected}`);const variant=save.variant,idx=INDEX[variant],blocks=save.blocks.slice(0,MEANINGFUL_BLOCKS[variant]);blocks[idx.vehicle]=vehicles(variant,blocks[idx.vehicle],direction);blocks[idx.ped]=pedPool(variant,blocks[idx.ped],direction);const before=canonicalCarRecords(variant,save.blocks[idx.garage],direction);blocks[idx.garage]=garages(variant,blocks[idx.garage],direction);const reverse=direction === "3ds-to-pc" ? "pc-to-3ds" : "3ds-to-pc";if(!before.every((r,i)=>carEqual(r,canonicalCarRecords(variant,blocks[idx.garage],reverse)[i])))fail("车库隐藏车记录在转换中发生变化");blocks[idx.phones]=phones(blocks[idx.phones],direction);blocks[idx.zones]=variant === "re3" ? zonesRe3(blocks[idx.zones],direction) : zonesRevc(blocks[idx.zones],direction);blocks[idx.particles]=particles(variant,blocks[idx.particles],direction);blocks[idx.playerInfo]=playerInfo(variant,blocks[idx.playerInfo],direction);let body=concat(blocks.map(encoded)),targetBody=FIXED_FILE_SIZES[variant]-4,remaining=targetBody-body.length;if(remaining<8||(remaining&3))fail(`无法生成 ${remaining} 字节的尾部填充`);const pads=[];while(remaining){let payload=Math.min(55000,remaining-4)&~3;if(payload<=4)fail("尾部填充无效");const p=new Uint8Array(4+payload);writeU32(p,0,payload);pads.push(p);remaining-=p.length;}body=concat([body,...pads]);if(body.length!==targetBody)fail("输出总大小错误");return concat([body,(()=>{const c=new Uint8Array(4);writeU32(c,0,checksum(body));return c;})()]);}
+  function recordsForDisplay(save){const format=classify(save), direction=format === "3ds-arm" ? "3ds-to-pc" : "pc-to-3ds", records=canonicalCarRecords(save.variant,save.blocks[INDEX[save.variant].garage],direction), layout=GARAGE_LAYOUTS[save.variant], rows=[]; records.forEach((car,i)=>{if(readU32(car,0)===0)return;const location=i<layout.storedCount ? `安全屋 ${Math.floor(i/(save.variant === "re3" ? 6 : 4))+1} · ${i%(save.variant === "re3" ? 6 : 4)+1}` : `车库 ${i-layout.storedCount+1}`;rows.push({location,model:readU32(car,0),x:readF32(car,4),y:readF32(car,8),z:readF32(car,12),angle:readF32(car,16),attrs:hex(car.slice(32,38))});});return rows;}
+  function formatFloat(v){return Number.isFinite(v)?v.toFixed(2):"—";}
+  function refresh(){ if(!current)return; const format=classify(current), target=directionEl.value === "pc-to-3ds" ? "PC-compatible" : "3DS ARM"; $("game").textContent=current.variant === "re3" ? "re3" : "reVC"; $("format").textContent=format; $("size").textContent=current.raw.length.toLocaleString()+" B"; const rows=recordsForDisplay(current); $("garageCount").textContent=rows.length+" 台"; $("stats").hidden=false; $("garagePanel").hidden=false; const tbody=$("garageRows");tbody.innerHTML="";$("garageEmpty").hidden=rows.length!==0;for(const row of rows){const tr=document.createElement("tr");tr.innerHTML=`<td>${row.location}</td><td>${row.model}</td><td>${formatFloat(row.x)}, ${formatFloat(row.y)}, ${formatFloat(row.z)}</td><td>${formatFloat(row.angle)}°</td><td><code>${row.attrs}</code></td>`;tbody.appendChild(tr);} const compatible=format=== (directionEl.value === "pc-to-3ds" ? "pc-compatible" : "3ds-arm");convertEl.disabled=!compatible;statusEl.className=compatible?"status ok":"status error";statusEl.textContent=compatible?`已读取 ${current.name} · ${target} 输入格式正确，可以转换。`:`当前方向要求 ${target}，请切换方向或选择对应格式的存档。`; }
+  fileEl.addEventListener("change",async()=>{const file=fileEl.files&&fileEl.files[0];if(!file)return;try{const bytes=new Uint8Array(await file.arrayBuffer());current=parseSave(file.name,bytes);refresh();$("download").hidden=true;}catch(error){current=null;convertEl.disabled=true;$("stats").hidden=true;$("garagePanel").hidden=true;statusEl.className="status error";statusEl.textContent=error.message;}});
+  directionEl.addEventListener("change",()=>{if(current)refresh();});
+  convertEl.addEventListener("click",()=>{if(!current)return;try{const result=convertSave(current,directionEl.value),suffix=directionEl.value === "pc-to-3ds" ? ".3ds.b" : ".pc.b",base=current.name.replace(/\.b$/i,"");if(downloadUrl)URL.revokeObjectURL(downloadUrl);downloadUrl=URL.createObjectURL(new Blob([result],{type:"application/octet-stream"}));const link=$("download");link.href=downloadUrl;link.download=base+suffix;link.hidden=false;statusEl.className="status ok";statusEl.textContent=`转换完成，校验和已重算：${link.download}（${result.length.toLocaleString()} B）`;link.scrollIntoView({behavior:"smooth",block:"nearest"});}catch(error){statusEl.className="status error";statusEl.textContent=error.message;}});
+})();
+</script>
+</body>
+</html>

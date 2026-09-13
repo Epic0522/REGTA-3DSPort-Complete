@@ -1,0 +1,2149 @@
+ABS
+	./src/core/common.h:382:#define ABS(a)  (((a) < 0) ? (-(a)) : (a))
+	./src/control/CarAI.cpp:341:				if (ABS(FindPlayerCoors().x - pVehicle->GetPosition().x) > 10.0f ||
+	./src/control/CarAI.cpp:342:				  ABS(FindPlayerCoors().y - pVehicle->GetPosition().y) > 10.0f){
+	./src/control/Script.cpp:269:	REGISTER_COMMAND(COMMAND_ABS_VAR_INT, INPUT_ARGUMENTS(ARGTYPE_INT, ARGTYPE_INT,), OUTPUT_ARGUMENTS(), false, 0, " ABS"),
+	./src/control/Script.cpp:270:	REGISTER_COMMAND(COMMAND_ABS_LVAR_INT, INPUT_ARGUMENTS(ARGTYPE_INT, ARGTYPE_INT,), OUTPUT_ARGUMENTS(), false, 0, " ABS"),
+	./src/control/Script.cpp:271:	REGISTER_COMMAND(COMMAND_ABS_VAR_FLOAT, INPUT_ARGUMENTS(ARGTYPE_FLOAT, ARGTYPE_FLOAT,), OUTPUT_ARGUMENTS(), false, 0, " ABS"),
+	./src/control/Script.cpp:272:	REGISTER_COMMAND(COMMAND_ABS_VAR_FLOAT, INPUT_ARGUMENTS(ARGTYPE_FLOAT, ARGTYPE_FLOAT,), OUTPUT_ARGUMENTS(), false, 0, " ABS"),
+	./src/control/Script.cpp:3129:		*ptr = ABS(*ptr);
+	./src/control/Script.cpp:3135:		*ptr = ABS(*ptr);
+	./src/control/Script.cpp:3141:		*ptr = ABS(*ptr);
+	./src/control/Script.cpp:3147:		*ptr = ABS(*ptr);
+	./src/control/CarCtrl.cpp:505:		if (ABS(colPoint.point.z - finalPosition.z) < ABS(groundZ - finalPosition.z))
+	./src/control/CarCtrl.cpp:508:	if (groundZ == INFINITE_Z || ABS(groundZ - finalPosition.z) > 7.0f) {
+	./src/control/CarCtrl.cpp:955:		if (ABS(vecPedPos.z - pVehicle->GetPosition().z) >= 4.0f)
+	./src/control/CarCtrl.cpp:967:		float sidewaysDistance = ABS(DotProduct(pVehicle->GetRight(), vecToPed));
+	./src/control/CarCtrl.cpp:1005:						float visibilityAngle = ABS(angleCarToPed - pPed->m_headingRate);
+	./src/control/CarCtrl.cpp:1038:				*pSpeed = Min(*pSpeed, ABS(distanceUntilHit - 1.0f) * 0.1f * curSpeed);
+	./src/control/CarCtrl.cpp:1281:	angleDiffLeft = ABS(angleDiffLeft);
+	./src/control/CarCtrl.cpp:1283:	angleDiffRight = ABS(angleDiffRight);
+	./src/control/CarCtrl.cpp:1286:	if (ABS(angleDiffLeft - angleDiffRight) < 0.08f)
+	./src/control/CarCtrl.cpp:1333:	float lenProjection = ABS(pOtherCar->GetColModel()->boundingBox.max.y * sin(angleDiff));
+	./src/control/CarCtrl.cpp:1334:	float widthProjection = ABS(pOtherCar->GetColModel()->boundingBox.max.x * cos(angleDiff));
+	./src/control/CarCtrl.cpp:1337:	diffToLeftAngle = ABS(diffToLeftAngle);
+	./src/control/CarCtrl.cpp:1345:	diffToRightAngle = ABS(diffToRightAngle);
+	./src/control/CarCtrl.cpp:1385:	diffToLeftAngle = ABS(diffToLeftAngle);
+	./src/control/CarCtrl.cpp:1393:	diffToRightAngle = ABS(diffToRightAngle);
+	./src/control/CarCtrl.cpp:1457:	diffToLeftAngle = ABS(diffToLeftAngle);
+	./src/control/CarCtrl.cpp:1465:	diffToRightAngle = ABS(diffToRightAngle);
+	./src/control/CarCtrl.cpp:1763:			angle = ABS(angle);
+	./src/control/CarCtrl.cpp:2414:		if (ABS(steerAngle) > MIN_ANGLE_TO_APPLY_HANDBRAKE)
+	./src/control/CarCtrl.cpp:2741:		if (ABS(colPoint.point.z - spawnPos.z) < ABS(groundZ - spawnPos.z))
+	./src/render/Fluff.cpp:638:	if (!TheCamera.IsSphereVisible(m_Position, 2.0f * 20.0f * (ABS(m_Size.x) + ABS(m_Size.y))))
+ACTION_MESSAGE_X_RIGHT
+	./src/control/SceneEdit.cpp:53:#define ACTION_MESSAGE_X_RIGHT (60.0f)
+	./src/control/SceneEdit.cpp:284:	CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(ACTION_MESSAGE_X_RIGHT - SHADOW_OFFSET), SCREEN_SCALE_Y(ACTION_MESSAGE_Y + SHADOW_OFFSET), wstr);
+	./src/control/SceneEdit.cpp:286:	CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-ACTION_MESSAGE_X_RIGHT) + SHADOW_OFFSET, SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-ACTION_MESSAGE_Y) + SHADOW_OFFSET, wstr);
+	./src/control/SceneEdit.cpp:290:	CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(ACTION_MESSAGE_X_RIGHT), SCREEN_SCALE_Y(ACTION_MESSAGE_Y), wstr);
+	./src/control/SceneEdit.cpp:292:	CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-ACTION_MESSAGE_X_RIGHT), SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-ACTION_MESSAGE_Y), wstr);
+ACTION_MESSAGE_Y
+	./src/control/SceneEdit.cpp:54:#define ACTION_MESSAGE_Y (8.0f)
+	./src/control/SceneEdit.cpp:284:	CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(ACTION_MESSAGE_X_RIGHT - SHADOW_OFFSET), SCREEN_SCALE_Y(ACTION_MESSAGE_Y + SHADOW_OFFSET), wstr);
+	./src/control/SceneEdit.cpp:286:	CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-ACTION_MESSAGE_X_RIGHT) + SHADOW_OFFSET, SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-ACTION_MESSAGE_Y) + SHADOW_OFFSET, wstr);
+	./src/control/SceneEdit.cpp:290:	CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(ACTION_MESSAGE_X_RIGHT), SCREEN_SCALE_Y(ACTION_MESSAGE_Y), wstr);
+	./src/control/SceneEdit.cpp:292:	CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-ACTION_MESSAGE_X_RIGHT), SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-ACTION_MESSAGE_Y), wstr);
+ACTIONNAME_LENGTH
+	./src/core/ControllerConfig.cpp:498:	wchar buf[ACTIONNAME_LENGTH + 2];
+	./src/core/ControllerConfig.cpp:500:#define SETACTIONNAME(name) AsciiToUnicode(#name, buf); CMessages::WideStringCopy(m_aActionNames[name], buf, ACTIONNAME_LENGTH);
+	./src/core/ControllerConfig.h:104:#define ACTIONNAME_LENGTH 40
+	./src/core/ControllerConfig.h:139:	wchar                 m_aActionNames[MAX_CONTROLLERACTIONS][ACTIONNAME_LENGTH];
+AEHANDLE_IS_FAILED
+	./src/objects/ParticleObject.cpp:33:			if ( AEHANDLE_IS_FAILED(List[i].AudioEntity) )
+	./src/audio/DMAudio.h:7:#define AEHANDLE_IS_FAILED(h) ((h)<0)
+AEHANDLE_IS_OK
+	./src/weapons/Weapon.cpp:2021:			if ( m_eWeaponType == WEAPONTYPE_SHOTGUN && AEHANDLE_IS_OK(audioEntity) )
+	./src/weapons/Weapon.cpp:2041:			if  ( AEHANDLE_IS_OK(audioEntity) && m_eWeaponType < WEAPONTYPE_LAST_WEAPONTYPE )
+	./src/audio/DMAudio.cpp:184:	if ( AEHANDLE_IS_OK(audioEntity) )
+	./src/audio/DMAudio.cpp:201:	if ( AEHANDLE_IS_OK(audioEntity) )
+	./src/audio/DMAudio.h:8:#define AEHANDLE_IS_OK(h)     ((h)>=0)
+ALDEVICELIST_H
+	./src/audio/oal/aldlist.h:1:#ifndef ALDEVICELIST_H
+	./src/audio/oal/aldlist.h:2:#define ALDEVICELIST_H
+	./src/audio/oal/aldlist.h:69:#endif // ALDEVICELIST_H
+ALIGNPTR
+	./src/core/common.h:134:#define ALIGNPTR(p) (void*)((((uintptr)(void*)p) + sizeof(void*)-1) & ~(sizeof(void*)-1))
+	./src/collision/ColModel.cpp:74:	*(CLink<CColModel*>**)ALIGNPTR(&trianglePlanes[numTriangles]) = lptr;
+	./src/collision/ColModel.cpp:81:	return *(CLink<CColModel*>**)ALIGNPTR(&trianglePlanes[numTriangles]);
+ALLCARSHELI_CHEAT
+	./src/core/config.h:303:#define ALLCARSHELI_CHEAT
+	./src/core/config.h:476:#undef ALLCARSHELI_CHEAT
+	./src/core/ControllerConfig.cpp:783:#ifdef ALLCARSHELI_CHEAT
+	./src/core/Pad.cpp:315:#ifdef ALLCARSHELI_CHEAT
+	./src/core/Pad.cpp:881:#ifdef ALLCARSHELI_CHEAT
+	./src/core/Pad.cpp:1015:#ifdef ALLCARSHELI_CHEAT
+	./src/core/Pad.h:472:#ifdef ALLCARSHELI_CHEAT
+	./src/vehicles/Automobile.cpp:1034:#ifdef ALLCARSHELI_CHEAT
+ALT_DODO_CHEAT
+	./src/core/config.h:304:#define ALT_DODO_CHEAT
+	./src/core/config.h:477:#undef ALT_DODO_CHEAT
+	./src/core/Pad.cpp:331:#ifdef ALT_DODO_CHEAT
+	./src/core/Pad.cpp:887:#ifdef ALT_DODO_CHEAT
+	./src/core/Pad.cpp:1021:#ifdef ALT_DODO_CHEAT
+	./src/vehicles/Automobile.cpp:1025:#ifdef ALT_DODO_CHEAT
+	./src/vehicles/Vehicle.h:286:#ifdef ALT_DODO_CHEAT
+	./src/vehicles/Vehicle.cpp:27:#ifdef ALT_DODO_CHEAT
+AMMO_X
+	./src/render/Hud.cpp:27:#define AMMO_X 59.0f
+	./src/render/Hud.cpp:39:#define AMMO_X 66.0f
+	./src/render/Hud.cpp:565:			CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(AMMO_X), SCREEN_SCALE_Y(73.0f), sPrint);
+ANIMATE_PED_COL_MODEL
+	./src/core/config.h:383:#define ANIMATE_PED_COL_MODEL
+	./src/core/config.h:510:#undef ANIMATE_PED_COL_MODEL
+	./src/core/World.cpp:348:#ifdef ANIMATE_PED_COL_MODEL
+	./src/peds/PedFight.cpp:1571:#ifdef ANIMATE_PED_COL_MODEL
+ANIM_COMPRESSION
+	./src/animation/AnimBlendHierarchy.cpp:62:#ifdef ANIM_COMPRESSION
+	./src/animation/AnimBlendHierarchy.cpp:76:#ifdef ANIM_COMPRESSION
+	./src/core/config.h:195://#define ANIM_COMPRESSION	// only keep most recently used anims uncompressed
+	./src/core/config.h:202:#	define ANIM_COMPRESSION
+ANISOTROPIC_FILTERING
+	./src/rw/TexRead.cpp:6:#ifdef ANISOTROPIC_FILTERING
+	./src/rw/TexRead.cpp:56:#ifdef ANISOTROPIC_FILTERING
+	./src/core/config.h:275:#define ANISOTROPIC_FILTERING	// set all textures to max anisotropic filtering
+	./src/core/config.h:466:#undef ANISOTROPIC_FILTERING
+	./src/core/main.cpp:8:#ifdef ANISOTROPIC_FILTERING
+	./src/core/main.cpp:460:#ifdef ANISOTROPIC_FILTERING
+	./src/core/Frontend.h:377://#ifdef ANISOTROPIC_FILTERING
+_APS_NEXT_COMMAND_VALUE
+	./src/skel/win/resource.h:17:#define _APS_NEXT_COMMAND_VALUE         40001
+_APS_NEXT_CONTROL_VALUE
+	./src/skel/win/resource.h:18:#define _APS_NEXT_CONTROL_VALUE         1000
+_APS_NEXT_RESOURCE_VALUE
+	./src/skel/win/resource.h:16:#define _APS_NEXT_RESOURCE_VALUE        104
+_APS_NEXT_SYMED_VALUE
+	./src/skel/win/resource.h:19:#define _APS_NEXT_SYMED_VALUE           101
+ARRAY_SIZE
+	./src/animation/AnimManager.cpp:550:#define awc(a) ARRAY_SIZE(a), a
+	./src/save/GenericGameStorage.cpp:128:		if (len > ARRAY_SIZE(saveName)-1)
+	./src/save/GenericGameStorage.cpp:129:			len = ARRAY_SIZE(saveName)-1;
+	./src/save/GenericGameStorage.cpp:136:		if (len > ARRAY_SIZE(saveName)-2)
+	./src/save/GenericGameStorage.cpp:137:			TextCopy(&saveName[ARRAY_SIZE(saveName)-ARRAY_SIZE(suffix)], suffix);
+	./src/save/GenericGameStorage.cpp:138:		saveName[ARRAY_SIZE(saveName)-1] = '\0';
+	./src/save/MemoryCard.cpp:699:	while ( sceMcGetDir(Cards[cardID].port, 0, "*", 0, ARRAY_SIZE(Cards[cardID].table), Cards[cardID].table) != sceMcResSucceed )
+	./src/save/MemoryCard.cpp:757:	} while( FindNextFile(hFind, &fd) && num < ARRAY_SIZE(Cards[cardID].table) );
+	./src/save/MemoryCard.cpp:1937:	while ( sceMcGetDir(Cards[cardID].port, 0, Cards[cardID].dir, 0, ARRAY_SIZE(Cards[cardID].table), Cards[cardID].table) != sceMcResSucceed )
+	./src/save/MemoryCard.cpp:1998:	} while( FindNextFile(hFind, &fd) && num < ARRAY_SIZE(Cards[cardID].table) );
+	./src/save/MemoryCard.cpp:2059:	while ( sceMcGetDir(Cards[cardID].port, 0, "*", 0, ARRAY_SIZE(Cards[cardID].table), Cards[cardID].table) != sceMcResSucceed )
+	./src/save/MemoryCard.cpp:2070:		for ( int32 entry = 7; entry < ARRAY_SIZE(Cards[CARD_ONE].table); entry++ )
+	./src/save/MemoryCard.cpp:2203:	} while( FindNextFile(hFind, &fd) && num < ARRAY_SIZE(Cards[cardID].table) );
+	./src/save/MemoryCard.cpp:2211:		for ( int32 entry = 0; entry < ARRAY_SIZE(Cards[CARD_ONE].table); entry++ )
+	./src/save/MemoryCard.cpp:2311:	for ( int32 i = 0; i < ARRAY_SIZE(Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2365:	for ( int32 i = ARRAY_SIZE(Cards[cardID].table) - 1; i >= 0; i--)
+	./src/save/MemoryCard.cpp:2428:		for ( int32 i = 0; i < ARRAY_SIZE(sizebuff); i++ )
+	./src/save/MemoryCard.cpp:2542:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[CARD_ONE].table); i++ )
+	./src/save/MemoryCard.cpp:2561:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[CARD_ONE].table); i++ )
+	./src/save/MemoryCard.cpp:2580:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[CARD_ONE].table); i++ )
+	./src/save/MemoryCard.cpp:2599:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[CARD_ONE].table); i++ )
+	./src/save/MemoryCard.cpp:2668:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2684:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2700:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2716:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2738:		for ( int32 i = 0; i < ARRAY_SIZE(TheMemoryCard.Cards[cardID].table); i++ )
+	./src/save/MemoryCard.cpp:2765:		for ( int32 j = 0; j < ARRAY_SIZE(SlotFileName[i]); j++ )
+	./src/save/MemoryCard.cpp:2768:		for ( int32 j = 0; j < ARRAY_SIZE(SlotSaveDate[i]); j++ )
+	./src/save/MemoryCard.cpp:2792:		for ( int32 entry = 7; entry < ARRAY_SIZE(Cards[cardID].table); entry++ )
+	./src/save/MemoryCard.cpp:2794:		for ( int32 entry = 0; entry < ARRAY_SIZE(Cards[cardID].table); entry++ )
+	./src/save/MemoryCard.cpp:2813:					for ( int32 i = 7; i < ARRAY_SIZE(Cards[cardID].table) && !bFound; i++ )
+	./src/save/MemoryCard.cpp:2815:					for ( int32 i = 0; i < ARRAY_SIZE(Cards[cardID].table) && !bFound; i++ )
+	./src/save/MemoryCard.cpp:2839:							for ( int32 j = 0; j < ARRAY_SIZE(SlotSaveDate[slot]); j++ )
+	./src/save/MemoryCard.cpp:2842:							for ( int32 j = 0; j < ARRAY_SIZE(slotdate); j++ )
+	./src/save/MemoryCard.cpp:2873:					for ( int32 i = 7; i < ARRAY_SIZE(Cards[cardID].table) && !bFound; i++ ) // again ...
+	./src/save/MemoryCard.cpp:2875:					for ( int32 i = 0; i < ARRAY_SIZE(Cards[cardID].table) && !bFound; i++ ) // again ...
+	./src/save/MemoryCard.cpp:3069:	for ( int32 i = 0; i < ARRAY_SIZE(sizebuff); i++ )
+	./src/weapons/Explosion.cpp:34:	for (int i = 0; i < ARRAY_SIZE(gaExplosion); i++) {
+	./src/weapons/Explosion.cpp:108:	while (n < ARRAY_SIZE(gaExplosion) && gaExplosion[n].m_nIteration != 0)
+	./src/weapons/Explosion.cpp:111:	while (gaExplosion[n].m_nIteration != 0 && n < ARRAY_SIZE(gaExplosion))
+	./src/weapons/Explosion.cpp:114:	if (n == ARRAY_SIZE(gaExplosion))
+	./src/weapons/Explosion.cpp:318:	for (int i = 0; i < ARRAY_SIZE(gaExplosion); i++) {
+	./src/weapons/Explosion.cpp:441:	for (int i = 0; i < ARRAY_SIZE(gaExplosion); i++) {
+	./src/weapons/Explosion.cpp:459:	for (int i = 0; i < ARRAY_SIZE(gaExplosion); i++) {
+	./src/weapons/ShotInfo.cpp:30:	for(int i=0; i<ARRAY_SIZE(gaShotInfo); i++) {
+	./src/weapons/ShotInfo.cpp:42:	for (int i = 0; i < ARRAY_SIZE(ms_afRandTable); i++) {
+	./src/weapons/ShotInfo.cpp:58:	for (slot = 0; slot < ARRAY_SIZE(gaShotInfo) && gaShotInfo[slot].m_inUse; slot++);
+	./src/weapons/ShotInfo.cpp:60:	if (slot == ARRAY_SIZE(gaShotInfo))
+	./src/weapons/ShotInfo.cpp:74:		gaShotInfo[slot].m_areaAffected.x += CShotInfo::ms_afRandTable[CGeneral::GetRandomNumber() % ARRAY_SIZE(ms_afRandTable)] * weaponInfo->m_fSpread;
+	./src/weapons/ShotInfo.cpp:75:		gaShotInfo[slot].m_areaAffected.y += CShotInfo::ms_afRandTable[CGeneral::GetRandomNumber() % ARRAY_SIZE(ms_afRandTable)] * weaponInfo->m_fSpread;
+	./src/weapons/ShotInfo.cpp:76:		gaShotInfo[slot].m_areaAffected.z += CShotInfo::ms_afRandTable[CGeneral::GetRandomNumber() % ARRAY_SIZE(ms_afRandTable)];
+	./src/weapons/ShotInfo.cpp:80:		gaShotInfo[slot].m_areaAffected *= CShotInfo::ms_afRandTable[CGeneral::GetRandomNumber() % ARRAY_SIZE(ms_afRandTable)] + weaponInfo->m_fSpeed;
+	./src/weapons/ShotInfo.cpp:104:	for (int slot = 0; slot < ARRAY_SIZE(gaShotInfo); slot++) {
+	./src/weapons/ProjectileInfo.cpp:28:	for (int i = 0; i < ARRAY_SIZE(ms_apProjectile); i++) {
+	./src/weapons/ProjectileInfo.cpp:132:	while (i < ARRAY_SIZE(gaProjectileInfo) && gaProjectileInfo[i].m_bInUse) i++;
+	./src/weapons/ProjectileInfo.cpp:135:	while (gaProjectileInfo[i].m_bInUse && i < ARRAY_SIZE(gaProjectileInfo)) i++;
+	./src/weapons/ProjectileInfo.cpp:137:	if (i == ARRAY_SIZE(gaProjectileInfo))
+	./src/weapons/ProjectileInfo.cpp:219:	for (int i = 0; i < ARRAY_SIZE(gaProjectileInfo); i++) {
+	./src/weapons/ProjectileInfo.cpp:276:	for (int i = 0; i < ARRAY_SIZE(ms_apProjectile); i++) {
+	./src/weapons/ProjectileInfo.cpp:306:	for (int i = 0; i < ARRAY_SIZE(ms_apProjectile); i++) {
+	./src/weapons/ProjectileInfo.cpp:329:		if (i >= ARRAY_SIZE(ms_apProjectile))
+	./src/core/PlayerInfo.cpp:287:		for (int i = 0; i < ARRAY_SIZE(veh->pPassengers); i++) {
+	./src/core/ZoneCull.cpp:1433:	for(int i = 0; i < ARRAY_SIZE(ExtraFudgePointsCoors); i++)
+	./src/core/Zones.cpp:657:	for(i = 0; i < ARRAY_SIZE(ZoneArray); i++){
+	./src/core/Zones.cpp:664:	for(i = 0; i < ARRAY_SIZE(ZoneInfoArray); i++)
+	./src/core/Zones.cpp:670:	for(i = 0; i < ARRAY_SIZE(MapZoneArray); i++) {
+	./src/core/Zones.cpp:686:	for(i = 0; i < ARRAY_SIZE(AudioZoneArray); i++)
+	./src/core/Zones.cpp:708:	for(i = 0; i < ARRAY_SIZE(ZoneArray); i++){
+	./src/core/Zones.cpp:716:	for(i = 0; i < ARRAY_SIZE(ZoneInfoArray); i++)
+	./src/core/Zones.cpp:722:	for(i = 0; i < ARRAY_SIZE(MapZoneArray); i++){
+	./src/core/Zones.cpp:738:	for(i = 0; i < ARRAY_SIZE(AudioZoneArray); i++)
+	./src/core/MenuScreensCustom.cpp:67:	#define ISLAND_LOADING_SELECTOR MENUACTION_CFO_SELECT, "FEM_ISL", { new CCFOSelect((int8*)&CMenuManager::m_PrefsIslandLoading, "Graphics", "IslandLoading", islandLoadingOpts, ARRAY_SIZE(islandLoadingOpts), true, IslandLoadingAfterChange) },
+	./src/core/MenuScreensCustom.cpp:74:		MENUACTION_CFO_SELECT, "FED_CLF", { new CCFOSelect((int8*)&CPostFX::EffectSwitch, "Graphics", "ColourFilter", filterNames, ARRAY_SIZE(filterNames), false) }, \
+	./src/core/MenuScreensCustom.cpp:87:	#define SELECT_CONTROLLER_TYPE  MENUACTION_CFO_SELECT, "FEC_TYP", { new CCFOSelect((int8*)&CMenuManager::m_PrefsControllerType, "Controller", "Type", controllerTypes, ARRAY_SIZE(controllerTypes), false, ControllerTypeAfterChange) },
+	./src/core/re3.cpp:134:		FrontendOptionAddSelect("FED_VPL", vehPipelineNames, ARRAY_SIZE(vehPipelineNames), (int8*)&CustomPipes::VehiclePipeSwitch, false, nil, "Graphics", "VehiclePipeline");
+	./src/core/re3.cpp:140:		FrontendOptionAddSelect("FED_VPL", vehPipelineNames, ARRAY_SIZE(vehPipelineNames), (int8*)&CustomPipes::VehiclePipeSwitch, false, nil, "Graphics", "VehiclePipeline");
+	./src/core/re3.cpp:366:				for (int32 k = 0; k < ARRAY_SIZE(iniControllerTypes); k++) {
+	./src/core/re3.cpp:388:						for (int32 k = 0; k < ARRAY_SIZE(iniKeyboardButtons); k++) {
+	./src/core/re3.cpp:396:					for (int32 k = 0; k < ARRAY_SIZE(iniMouseButtons); k++) {
+	./src/core/re3.cpp:1045:		missionEntry = DebugMenuAddVar("Game", "Select mission", &nextMissionToSwitch, nil, 1, 0, ARRAY_SIZE(missions) - 1, missions);
+	./src/core/Streaming.cpp:1957:	int streamIds[ARRAY_SIZE(ms_pStreamingBuffer)];
+	./src/core/Streaming.cpp:1958:	int streamSizes[ARRAY_SIZE(ms_pStreamingBuffer)];
+	./src/core/Streaming.cpp:1959:	int streamPoses[ARRAY_SIZE(ms_pStreamingBuffer)];
+	./src/core/Streaming.cpp:1968:		for (int i=0; i<ARRAY_SIZE(ms_pStreamingBuffer); i++) {
+	./src/core/Streaming.cpp:1987:						if (i + 1 == ARRAY_SIZE(ms_pStreamingBuffer))
+	./src/core/Streaming.cpp:2011:					if (first && readI+1 != ARRAY_SIZE(readOrder))
+	./src/core/Streaming.cpp:2014:					readI = (readI + 1) % ARRAY_SIZE(readOrder);
+	./src/core/Streaming.cpp:2055:		processI = (processI + 1) % ARRAY_SIZE(readOrder);
+	./src/core/ControllerConfig.cpp:2034:	for (int32 i = 0; i < ARRAY_SIZE(ActionText); i++)
+	./src/core/common.h:379:#define ARRAY_SIZE(array)                (sizeof(array) / sizeof(array[0]))
+	./src/core/Wanted.cpp:36:	for (int i = 0; i < ARRAY_SIZE(m_pCops); i++)
+	./src/core/Wanted.cpp:389:		for (int i = 0; i < ARRAY_SIZE(m_pCops); i++) {
+	./src/core/Wanted.cpp:405:			for (int i = 0; i < ARRAY_SIZE(m_pCops); i++) {
+	./src/core/Wanted.cpp:407:					for (int j = i; j < ARRAY_SIZE(m_pCops); j++) {
+	./src/core/Wanted.cpp:426:	for(int i = 0; i < ARRAY_SIZE(m_pCops); i++) {
+	./src/core/Wanted.cpp:477:	for(int i = 0; i < ARRAY_SIZE(m_aCrimes); i++) {
+	./src/core/Pools.cpp:227:		for (int j = 0; j < ARRAY_SIZE(pVehicle->pPassengers); j++) {
+	./src/core/Pools.cpp:260:		for (int j = 0; j < ARRAY_SIZE(pVehicle->pPassengers); j++) {
+	./src/core/Pools.cpp:553:			for (int i = 0; i < ARRAY_SIZE(pPlayerPed->m_nTargettableObjects); i++)
+	./src/core/main.cpp:1208:		int32 ZoneId = ARRAY_SIZE(ZonePrint)-1; // no zone
+	./src/core/main.cpp:1210:		for ( int32 i = 0; i < ARRAY_SIZE(ZonePrint)-1; i++ )
+	./src/core/main.cpp:2343:		for ( int32 i = 0; i < ARRAY_SIZE(files); i++ )
+	./src/core/Pad.cpp:372:	for ( int32 i = 0; i < ARRAY_SIZE(F); i++	)
+	./src/core/Pad.cpp:375:	for ( int32 i = 0; i < ARRAY_SIZE(VK_KEYS); i++	 )
+	./src/core/Pad.cpp:452:	for ( int32 i = 0; i < ARRAY_SIZE(CheatString); i++ )
+	./src/core/Pad.cpp:771:	for ( int32 i = ARRAY_SIZE(CheatString) - 2; i >= 0; i-- )
+	./src/core/Pad.cpp:898:	for ( int32 i = ARRAY_SIZE(KeyBoardCheatString) - 2; i >= 0; i-- )
+	./src/core/Frontend.cpp:2420:	for (int i = 0; i < ARRAY_SIZE(actionTexts); ++i) {
+	./src/core/Frontend.cpp:3634:	for (int i = 0; i < ARRAY_SIZE(FrontendFilenames); i++) {
+	./src/core/Frontend.cpp:3653:	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); i++) {
+	./src/core/Frontend.cpp:3659:	for (int i = 0; i < ARRAY_SIZE(MapFilenames); i++) {
+	./src/core/Frontend.cpp:5778:	for (int i = 0; i < ARRAY_SIZE(FrontendFilenames); ++i)
+	./src/core/Frontend.cpp:5791:	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); ++i)
+	./src/core/Frontend.cpp:5794:	for (int i = 0; i < ARRAY_SIZE(MapFilenames); ++i)
+	./src/control/Garages.cpp:2447:	for (int i = 0; i < ARRAY_SIZE(gaCarsToCollectIn60Seconds); i++) {
+	./src/control/Garages.cpp:2456:	for (int i = 0; i < ARRAY_SIZE(gaCarsToCollectIn60Seconds); i++) {
+	./src/control/Garages.cpp:2465:	for (int i = 0; i < ARRAY_SIZE(gaCarsToCollectIn60Seconds); i++) {
+	./src/control/Script.cpp:1285:static_assert(ARRAY_SIZE(commands) == LAST_SCRIPT_COMMAND, "commands array not filled");
+	./src/control/Script.cpp:1609:			script_assert(varIndex >= 0 && varIndex < ARRAY_SIZE(m_anLocalVariables));
+	./src/control/Script.cpp:1649:		script_assert(varIndex >= 0 && varIndex < ARRAY_SIZE(m_anLocalVariables));
+	./src/control/Script.cpp:2060:	if (command < ARRAY_SIZE(commands)) {
+	./src/control/Script.cpp:2124:	if (command < ARRAY_SIZE(commands)) {
+	./src/control/Script.cpp:4338:	for (int i = 0; i < ARRAY_SIZE(nonMissionScripts); i++) {
+	./src/control/PathFind.cpp:1559:	for(i = 0; i < ARRAY_SIZE(m_searchNodes); i++)
+	./src/control/Script6.cpp:564:		script_assert(ScriptParams[1] >= 0 && ScriptParams[1] < ARRAY_SIZE(pVehicle->pPassengers));
+	./src/control/Script6.cpp:1008:		for (int i = 0; i < ARRAY_SIZE(pVehicle->pPassengers); i++)
+	./src/control/SceneEdit.cpp:72:static_assert(ARRAY_SIZE(pCommandStrings) == CSceneEdit::MOVIE_TOTAL_COMMANDS, "Scene edit: not all commands have names");
+	./src/control/Phones.cpp:362:				assert(m_nMax < ARRAY_SIZE(m_aPhones) && "NUMPHONES should be increased");
+	./src/control/Script4.cpp:1292:		for (int i = 0; i < ARRAY_SIZE(CTheScripts::ScriptSprites); i++)
+	./src/control/Script4.cpp:2055:	script_assert(array_idx < ARRAY_SIZE(ScriptSphereArray));
+	./src/control/Record.cpp:431:	for (int i = 0; i < ARRAY_SIZE(dontDeleteArray); i++)
+	./src/control/Record.cpp:434:	for (int i = 0; i < ARRAY_SIZE(dontDeleteArray); i++)
+	./src/peds/Population.cpp:387:	for (int i = 0; i < ARRAY_SIZE(aSafeZones); i++) {
+	./src/peds/Population.cpp:407:	for (int i = 0; i < ARRAY_SIZE(aSafeZones); i++) {
+	./src/peds/Population.cpp:467:	for (int i = 0; i < ARRAY_SIZE(aSafeZones); i++) {
+	./src/peds/PlayerPed.cpp:98:	for (int i = 0; i < ARRAY_SIZE(m_nTargettableObjects); i++) {
+	./src/peds/PlayerPed.cpp:211:	for(int i = 0; i < ARRAY_SIZE(moveAnims); i++) {
+	./src/peds/PlayerPed.cpp:871:	for (int i = 0; i < ARRAY_SIZE(m_nTargettableObjects); i++) {
+	./src/peds/PlayerPed.cpp:916:	for (int i = 0; i < ARRAY_SIZE(m_nTargettableObjects); i++) {
+	./src/peds/CivilianPed.cpp:40:	for (int i = 0; i < ARRAY_SIZE(m_nearPeds); i++) {
+	./src/peds/Ped.cpp:255:	for (int i = 0; i < ARRAY_SIZE(m_nearPeds); i++) {
+	./src/peds/Ped.cpp:257:		if (i < ARRAY_SIZE(m_pPathNodesStates)) {
+	./src/peds/Ped.cpp:372:							assert(gnNumTempPedList < ARRAY_SIZE(gapTempPedList));
+	./src/peds/Ped.cpp:380:		for (m_numNearPeds = 0; m_numNearPeds < ARRAY_SIZE(m_nearPeds); m_numNearPeds++) {
+	./src/peds/Ped.cpp:387:		for (int pedToClear = m_numNearPeds; pedToClear < ARRAY_SIZE(m_nearPeds); pedToClear++)
+	./src/peds/Ped.cpp:390:		for(int i = 0; i < ARRAY_SIZE(m_nearPeds); ) {
+	./src/peds/Ped.cpp:402:				for (int j = i; j < ARRAY_SIZE(m_nearPeds) - 1; j++) {
+	./src/peds/Ped.cpp:407:				m_nearPeds[ARRAY_SIZE(m_nearPeds) - 1] = nil;
+	./src/peds/PedFight.cpp:2438:				for (int i = 0; i < ARRAY_SIZE(m_pMyVehicle->pPassengers); i++) {
+	./src/vehicles/Train.cpp:642:	for (int i = 0; i < ARRAY_SIZE(StationDist); i++) {
+	./src/vehicles/Train.cpp:643:		for (int j = 0; j < ARRAY_SIZE(EngineTrackPosition); j++) {
+	./src/vehicles/DamageManager.cpp:31:	for(i = 0; i < ARRAY_SIZE(m_doorStatus); i++)
+	./src/vehicles/Vehicle.cpp:74:	m_nNumMaxPassengers = ARRAY_SIZE(pPassengers);
+	./src/vehicles/Vehicle.cpp:970:	for(i = 0; i < ARRAY_SIZE(pPassengers); i++){
+	./src/vehicles/Vehicle.cpp:1185:		for (int i = 0; i < ARRAY_SIZE(pPassengers); i++){
+	./src/vehicles/Boat.cpp:91:	for (int16 i = 0; i < ARRAY_SIZE(m_afWakePointLifeTime); i++)
+	./src/vehicles/Boat.cpp:859:	for(i = 0; i < ARRAY_SIZE(m_aBoatNodes); i++)
+	./src/vehicles/Boat.cpp:879:				if (frameId >= ARRAY_SIZE(apFrameWakeGeneratingBoats)) {
+	./src/vehicles/Boat.cpp:881:					for (int16 j = 0; j < ARRAY_SIZE(apFrameWakeGeneratingBoats); j++) {
+	./src/vehicles/Boat.cpp:903:	for(i = 0; i < ARRAY_SIZE(m_afWakePointLifeTime); i++){
+	./src/vehicles/Boat.cpp:921:			for(i = Min(m_nNumWakePoints, ARRAY_SIZE(m_afWakePointLifeTime)-1); i != 0; i--){
+	./src/vehicles/Boat.cpp:927:			if(m_nNumWakePoints < ARRAY_SIZE(m_afWakePointLifeTime))
+	./src/audio/sampman_miles.cpp:1469:			slot += ARRAY_SIZE(nPedSlotSfx);
+	./src/audio/sampman_miles.cpp:1488:			slot += ARRAY_SIZE(nPedSlotSfx);
+	./src/audio/AudioManager.cpp:16:const int channels = ARRAY_SIZE(AudioManager.m_asActiveSamples);
+	./src/audio/AudioManager.cpp:85:			m_anAudioEntityIndices[i] = ARRAY_SIZE(m_anAudioEntityIndices);
+	./src/audio/AudioManager.cpp:131:	for (uint32 i = 0; i < ARRAY_SIZE(m_asAudioEntities); i++) {
+	./src/audio/AudioManager.cpp:187:						if (m_sAudioScriptObjectManager.m_nScriptObjectEntityTotal < ARRAY_SIZE(m_sAudioScriptObjectManager.m_anScriptObjectEntityIndices)) {
+	./src/audio/AudioManager.cpp:196:								if (entity.m_AudioEvents < ARRAY_SIZE(entity.m_awAudioEvent)) {
+	./src/audio/AudioManager.cpp:213:						if (entity.m_AudioEvents < ARRAY_SIZE(entity.m_awAudioEvent))
+	./src/audio/AudioManager.cpp:286:		for (uint32 i = 0; i < ARRAY_SIZE(m_asAudioEntities); i++) {
+	./src/audio/AudioManager.cpp:621:	for (uint32 i = 0; i < ARRAY_SIZE(m_afReflectionsDistances); i++) {
+	./src/audio/AudioManager.cpp:961:	for (int32 i = 0; i < ARRAY_SIZE(m_anRandomTable); i++) {
+	./src/audio/PoliceRadio.cpp:18:const int channels = ARRAY_SIZE(AudioManager.m_asActiveSamples);
+	./src/audio/PoliceRadio.cpp:94:	for (int32 i = 0; i < ARRAY_SIZE(m_sPoliceRadioQueue.crimes); i++)
+	./src/audio/PoliceRadio.cpp:99:	for (int32 i = 0; i < ARRAY_SIZE(gMinTimeToNextReport); i++)
+	./src/audio/PoliceRadio.cpp:301:	for (i = 0; i < ARRAY_SIZE(m_sPoliceRadioQueue.crimes); i++) {
+	./src/audio/PoliceRadio.cpp:306:	if (i == ARRAY_SIZE(m_sPoliceRadioQueue.crimes)) return false;
+	./src/audio/PoliceRadio.cpp:535:				if (color1 >= ARRAY_SIZE(gCarColourTable)) {
+	./src/audio/PoliceRadio.cpp:681:	int32 lastCrime = ARRAY_SIZE(m_sPoliceRadioQueue.crimes);
+	./src/audio/PoliceRadio.cpp:684:		for (int32 i = 0; i < ARRAY_SIZE(m_sPoliceRadioQueue.crimes); i++) {
+	./src/audio/PoliceRadio.cpp:696:		if (lastCrime < ARRAY_SIZE(m_sPoliceRadioQueue.crimes)) {
+	./src/audio/PoliceRadio.cpp:775:	for (uint8 i = 0; i < ARRAY_SIZE(m_sPoliceRadioQueue.crimes); i++) {
+	./src/audio/sampman_oal.cpp:1270:			slot += ARRAY_SIZE(nPedSlotSfx);
+	./src/audio/sampman_oal.cpp:1290:			slot += ARRAY_SIZE(nPedSlotSfx);
+	./src/audio/AudioLogic.cpp:41:const int channels = ARRAY_SIZE(AudioManager.m_asActiveSamples);
+	./src/audio/AudioLogic.cpp:960:							for (int32 i = 0; i < ARRAY_SIZE(automobile->m_aWheelState); i++) {
+	./src/audio/AudioLogic.cpp:1247:		for (uint8 i = 0; i < ARRAY_SIZE(automobile->m_aWheelState); i++) {
+	./src/audio/AudioLogic.cpp:1426:	for (int32 i = 0; i < ARRAY_SIZE(automobile->m_aWheelState); i++) {
+	./src/audio/AudioLogic.cpp:1732:	for (int32 i = 0; i < ARRAY_SIZE(automobile->Doors); i++) {
+	./src/audio/AudioLogic.cpp:2213:			m_sQueueSample.m_nSampleIndex = m_anRandomTable[m_sQueueSample.m_nEntityIndex % ARRAY_SIZE(m_anRandomTable)] % 6 + SFX_BULLET_CAR_1;
+	./src/audio/AudioLogic.cpp:2600:	for (uint32 i = 0; i < ARRAY_SIZE(gHeliSfxRanges); i++) {
+	./src/audio/AudioLogic.cpp:2980:					for (int32 i = DOOR_FRONT_LEFT; i < ARRAY_SIZE(veh->Doors); i++) {
+	./src/audio/AudioLogic.cpp:6157:	for (uint8 i = 0; i < ARRAY_SIZE(gaExplosion); i++) {
+	./src/render/Font.cpp:1094:	for(int i = 0; i < ARRAY_SIZE(offsets); i++){
+	./src/render/Weather.cpp:129:			WeatherTypeInList = (WeatherTypeInList + 1) % ARRAY_SIZE(WeatherTypesList);
+	./src/render/ParticleMgr.cpp:27:	CFileMgr::LoadFile(ParticleFilename, work_buff, ARRAY_SIZE(work_buff), "r");
+	./src/render/Fluff.cpp:145:	for (i = 0; i < ARRAY_SIZE(aScrollBars); ++i)
+	./src/render/Fluff.cpp:147:	for (i = 0; i < ARRAY_SIZE(aTowerClocks); ++i)
+	./src/render/Fluff.cpp:149:	for (i = 0; i < ARRAY_SIZE(aDigitalClocks); ++i)
+	./src/render/Fluff.cpp:172:	for (i = 0; i < ARRAY_SIZE(aScrollBars); ++i)
+	./src/render/Fluff.cpp:177:	for (i = 0; i < ARRAY_SIZE(aTowerClocks); ++i)
+	./src/render/Fluff.cpp:182:	for (i = 0; i < ARRAY_SIZE(aDigitalClocks); ++i)
+	./src/render/Fluff.cpp:192:	for (i = 0; i < ARRAY_SIZE(aScrollBars); ++i)
+	./src/render/Fluff.cpp:197:	for (i = 0; i < ARRAY_SIZE(aTowerClocks); ++i)
+	./src/render/Fluff.cpp:202:	for (i = 0; i < ARRAY_SIZE(aDigitalClocks); ++i)
+	./src/render/Fluff.cpp:317:	for (int i = 0; i < ARRAY_SIZE(m_MessageBar); ++i)
+	./src/render/Fluff.cpp:623:	for (int i = 0; i < ARRAY_SIZE(m_MessageBar)-1; i++)
+	./src/render/Fluff.cpp:625:	m_MessageBar[ARRAY_SIZE(m_MessageBar)-1] = m_Counter < 5 ? ScrollCharSet[m_pMessage[m_MessageCurrentChar] - ' '][m_Counter] : 0;
+	./src/render/Fluff.cpp:630:	case 0x0D: m_MessageBar[ARRAY_SIZE(m_MessageBar)-1] = 0;                 break;
+	./src/render/Fluff.cpp:631:	case 0xE3: m_MessageBar[ARRAY_SIZE(m_MessageBar)-1] = 0xE3;              break;
+	./src/render/Fluff.cpp:632:	case 0x64: m_MessageBar[ARRAY_SIZE(m_MessageBar)-1] = ~m_MessageBar[ARRAY_SIZE(m_MessageBar)-1]; break;
+	./src/render/Fluff.cpp:659:	for (int i = 1; i < ARRAY_SIZE(m_MessageBar); ++i)
+	./src/render/Hud.cpp:282:	for (int i = 0; i < ARRAY_SIZE(m_Message); i++)
+	./src/render/Hud.cpp:1090:		for (int i = 0; i < ARRAY_SIZE(CTheScripts::IntroTextLines); i++) {
+	./src/render/Hud.cpp:1145:		for (int i = 0; i < ARRAY_SIZE(CTheScripts::IntroRectangles); i++) {
+	./src/render/Hud.cpp:1419:	for (int i = 0; i < ARRAY_SIZE(CTheScripts::IntroTextLines); i++) {
+	./src/render/Hud.cpp:1471:	for (int i = 0; i < ARRAY_SIZE(CTheScripts::IntroRectangles); i++) {
+	./src/render/Hud.cpp:1657:	for (i = 0; i < ARRAY_SIZE(m_Message); i++) {
+	./src/render/Hud.cpp:1700:	for (i = 0; i < ARRAY_SIZE(m_PagerMessage); i++) {
+	./src/render/SpecialFX.cpp:320:		for (int i = 0; i < ARRAY_SIZE(TraceVertices); i++)
+	./src/render/SpecialFX.cpp:329:		if (RwIm3DTransform(TraceVertices, ARRAY_SIZE(TraceVertices), nil, rwIM3D_VERTEXUV)) {
+	./src/render/SpecialFX.cpp:330:			RwIm3DRenderIndexedPrimitive(rwPRIMTYPETRILIST, TraceIndexList, ARRAY_SIZE(TraceIndexList));
+	./src/render/Particle.cpp:22:#define MAX_SMOKE_FILES           ARRAY_SIZE(SmokeFiles)
+	./src/render/Particle.cpp:25:#define MAX_SMOKE2_FILES          ARRAY_SIZE(Smoke2Files)
+	./src/render/Particle.cpp:27:#define MAX_RUBBER_FILES          ARRAY_SIZE(RubberFiles)
+	./src/render/Particle.cpp:29:#define MAX_RAINSPLASH_FILES      ARRAY_SIZE(RainSplashFiles)
+	./src/render/Particle.cpp:31:#define MAX_WATERSPRAY_FILES      ARRAY_SIZE(WatersprayFiles)
+	./src/render/Particle.cpp:33:#define MAX_EXPLOSIONMEDIUM_FILES ARRAY_SIZE(ExplosionMediumFiles)
+	./src/render/Particle.cpp:35:#define MAX_GUNFLASH_FILES        ARRAY_SIZE(GunFlashFiles)
+	./src/render/Particle.cpp:37:#define MAX_RAINSPLASHUP_FILES    ARRAY_SIZE(RainSplashupFiles)
+	./src/render/Particle.cpp:39:#define MAX_BIRDFRONT_FILES       ARRAY_SIZE(BirdfrontFiles)
+	./src/render/Particle.cpp:41:#define MAX_CARDEBRIS_FILES       ARRAY_SIZE(CardebrisFiles)
+	./src/render/Particle.cpp:43:#define MAX_CARSPLASH_FILES       ARRAY_SIZE(CarsplashFiles)
+	./src/render/Particle.cpp:46:#define MAX_RAINDROP_FILES        ARRAY_SIZE(RaindropFiles)
+	./src/render/WaterLevel.cpp:424:	for (int32 i = 0; i < ARRAY_SIZE(tab); i++)
+	./src/collision/TempColModels.cpp:41:	colmodel.numSpheres = ARRAY_SIZE(sphrs);\
+	./src/collision/TempColModels.cpp:52:	for (i = 0; i < ARRAY_SIZE(ms_colModelCutObj); i++) {
+	./src/collision/TempColModels.cpp:60:	for (i = 0; i < ARRAY_SIZE(s_aPedSpheres); i++)
+	./src/collision/TempColModels.cpp:68:	for (i = 0; i < ARRAY_SIZE(s_aPedSpheres); i++) {
+	./src/collision/TempColModels.cpp:70:	for (i = 0; i < ARRAY_SIZE(s_aPedGSpheres); i++) {
+	./src/collision/TempColModels.cpp:90:	for (i = 0; i < ARRAY_SIZE(s_aPed2Spheres); i++) {
+	./src/collision/TempColModels.cpp:137:	for (i = 0; i < ARRAY_SIZE(s_aDoorSpheres); i++) {
+	./src/collision/TempColModels.cpp:139:	for (i = 0; i < ARRAY_SIZE(s_aPed2Spheres); i++) {
+	./src/collision/TempColModels.cpp:152:	for (i = 0; i < ARRAY_SIZE(s_aBumperSpheres); i++)
+	./src/collision/TempColModels.cpp:160:	for (i = 0; i < ARRAY_SIZE(s_aBumperSpheres); i++) {
+	./src/collision/TempColModels.cpp:172:	for (i = 0; i < ARRAY_SIZE(s_aPanelSpheres); i++)
+	./src/collision/TempColModels.cpp:180:	for (i = 0; i < ARRAY_SIZE(s_aPanelSpheres); i++) {
+	./src/collision/TempColModels.cpp:192:	for (i = 0; i < ARRAY_SIZE(s_aBonnetSpheres); i++)
+	./src/collision/TempColModels.cpp:200:	for (i = 0; i < ARRAY_SIZE(s_aBonnetSpheres); i++) {
+	./src/collision/TempColModels.cpp:212:	for (i = 0; i < ARRAY_SIZE(s_aBootSpheres); i++)
+	./src/collision/TempColModels.cpp:220:	for (i = 0; i < ARRAY_SIZE(s_aBootSpheres); i++) {
+	./src/collision/TempColModels.cpp:239:	for (i = 0; i < ARRAY_SIZE(s_aWheelSpheres); i++) {
+	./src/collision/TempColModels.cpp:241:	for (i = 0; i < ARRAY_SIZE(s_aBootSpheres); i++) {
+	./src/collision/TempColModels.cpp:261:	for (i = 0; i < ARRAY_SIZE(s_aBodyPartSpheres1); i++) {
+	./src/collision/TempColModels.cpp:263:	for (i = 0; i < ARRAY_SIZE(s_aBootSpheres); i++) {
+	./src/collision/TempColModels.cpp:283:	for (i = 0; i < ARRAY_SIZE(s_aBodyPartSpheres2); i++) {
+	./src/collision/TempColModels.cpp:285:	for (i = 0; i < ARRAY_SIZE(s_aBootSpheres); i++) {
+ASCII_STRCMP
+	./src/animation/AnimBlendAssocGroup.cpp:90:#ifndef ASCII_STRCMP
+	./src/animation/AnimBlendAssocGroup.cpp:96:#ifndef ASCII_STRCMP
+	./src/core/General.h:136:#ifndef ASCII_STRCMP
+	./src/core/config.h:248:#define ASCII_STRCMP // use faster ascii str comparisons
+	./src/core/config.h:251:#undef ASCII_STRCMP
+ASPECT_RATIO_SCALE
+	./src/rw/VisibilityPlugins.cpp:157:#ifdef ASPECT_RATIO_SCALE
+	./src/rw/VisibilityPlugins.cpp:162:#endif // ASPECT_RATIO_SCALE
+	./src/core/Game.cpp:929:#ifdef ASPECT_RATIO_SCALE
+	./src/core/config.h:263:#define ASPECT_RATIO_SCALE	// Not just makes everything scale with aspect ratio, also adds support for all aspect ratios
+	./src/core/config.h:459:#undef ASPECT_RATIO_SCALE
+	./src/core/common.h:203:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:201:#ifndef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:226:#ifndef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:1534:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:1684:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:1736:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:1750:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:1868:#ifdef ASPECT_RATIO_SCALE
+	./src/core/main.cpp:2007:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:165:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:281:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:1144:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:1298:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:1469:#ifndef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:5109:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:5384:#ifdef ASPECT_RATIO_SCALE
+	./src/core/Frontend.cpp:5543:#ifndef ASPECT_RATIO_SCALE
+	./src/audio/MusicManager.cpp:208:		//				Disable ASPECT_RATIO_SCALE and it'll go back to default behaviour; stretching.
+	./src/render/Hud.cpp:382:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Hud.cpp:1566:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Sprite.cpp:8:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.h:23:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.h:55:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.h:62:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.cpp:8:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.cpp:36:#ifndef ASPECT_RATIO_SCALE
+	./src/render/Draw.cpp:60:#ifdef ASPECT_RATIO_SCALE
+	./src/render/Draw.cpp:81:#ifdef ASPECT_RATIO_SCALE
+assert
+	./src/modelinfo/SimpleModelInfo.cpp:146:			assert(mi->IsSimple());
+	./src/modelinfo/ClumpModelInfo.cpp:41:		assert(hier);
+	./src/modelinfo/ClumpModelInfo.cpp:92://		assert(hier);
+	./src/modelinfo/ClumpModelInfo.cpp:98:		assert(hier);
+	./src/modelinfo/ClumpModelInfo.cpp:102:		assert(skinAtomic);
+	./src/modelinfo/VehicleModelInfo.cpp:419:	assert(RwObjectGetType(object) == rpATOMIC);
+	./src/modelinfo/VehicleModelInfo.cpp:428:	assert(RwObjectGetType(object) == rpATOMIC);
+	./src/modelinfo/VehicleModelInfo.cpp:945:			assert(mi);
+	./src/rw/TxdStore.cpp:42:	assert(def);
+	./src/rw/MemoryHeap.cpp:15:#define MEMORYHEAP_ASSERT(cond) assert(cond)
+	./src/rw/MemoryHeap.cpp:16:#define MEMORYHEAP_ASSERT_MESSAGE(cond, message) assert(cond)
+	./src/rw/MemoryHeap.cpp:42:	assert(((uintptr)mem & 0xF) == 0);
+	./src/rw/MemoryHeap.cpp:436:	assert(m_idStack.sp > 0);
+	./src/rw/MemoryHeap.cpp:438:	assert(m_currentMemID != MEMID_FREE);
+	./src/rw/MemoryHeap.cpp:445:	assert(m_idStack.sp < 16);
+	./src/rw/TexRead.cpp:115:	assert(size == 4);
+	./src/rw/RwHelper.cpp:267:	assert(atomic);
+	./src/rw/RwHelper.cpp:269:	assert(skin);
+	./src/rw/RwHelper.cpp:271:	assert(hier);
+	./src/rw/RwHelper.cpp:293:		//assert(parent >= 0 && parent < numBones);
+	./src/rw/ClumpRead.cpp:34:	assert(size == 4);
+	./src/rw/ClumpRead.cpp:101:	assert(size <= sizeof(rpAtomicBinary));
+	./src/rw/ClumpRead.cpp:112:		assert(a.frameIndex < frmList->numFrames);
+	./src/rw/ClumpRead.cpp:117:		assert(a.geomIndex < geomList->numGeoms);
+	./src/rw/ClumpRead.cpp:145:		assert(size == 12);
+	./src/rw/ClumpRead.cpp:149:		assert(size == 4);
+	./src/rw/TxdStore.h:38:		assert(slot >= 0);
+	./src/rw/TxdStore.h:39:		assert(ms_pTxdPool);
+	./src/rw/TxdStore.h:40:		assert(slot < ms_pTxdPool->GetSize());
+	./src/animation/AnimManager.cpp:793:	assert(fd > 0);
+	./src/animation/AnimBlendHierarchy.cpp:64:	assert(compressed);
+	./src/animation/AnimBlendHierarchy.cpp:78:	assert(!compressed);
+	./src/animation/CutsceneMgr.cpp:267:		assert(RwObjectGetType(ms_pCutsceneObjects[i]->m_rwObject) == rpCLUMP);
+	./src/animation/CutsceneMgr.cpp:269:			assert(pAnimBlendAssoc->hierarchy->sequences[0].HasTranslation());
+	./src/animation/CutsceneMgr.cpp:290:	assert(RwObjectGetType(pObject->m_rwObject) == rpCLUMP);
+	./src/animation/CutsceneMgr.cpp:328:		assert(RwObjectGetType((RwObject*)clump) == rpCLUMP);
+	./src/animation/AnimBlendAssocGroup.cpp:140:		assert(model);
+	./src/animation/RpAnimBlend.cpp:160:	assert(atomic);
+	./src/animation/RpAnimBlend.cpp:162:	assert(skin);
+	./src/animation/RpAnimBlend.cpp:166:	assert(hier);
+	./src/animation/AnimBlendAssociation.cpp:57:	assert(nodes != nil);
+	./src/skel/crossplatform.cpp:223:                assert(reportedLen == strlen(c) && "casepath: This is not good at all");
+	./src/skel/glfw/glfw.cpp:2077:		assert("invalid padID");
+	./src/skel/win/win.cpp:2689:		assert("invalid padID");
+	./src/skel/win/win.cpp:2967:		assert("too many pads");
+	./src/save/PCSave.cpp:138:				default: assert(0);
+	./src/save/GenericGameStorage.cpp:189:	assert(buf - work_buff == SIZE_OF_SIMPLEVARS);
+	./src/save/GenericGameStorage.cpp:315:	assert(buf - work_buff == SIZE_OF_SIMPLEVARS);
+	./src/objects/CutsceneObject.cpp:36:	assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:24:	assert(RwObjectGetType(obj->m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:39:			assert(RwObjectGetType((RwObject*)atm) == rpATOMIC);
+	./src/objects/CutsceneHead.cpp:51:	assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:91:	assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:130:	assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:149:	assert(mi->GetModelType() == MITYPE_PED);
+	./src/objects/CutsceneHead.cpp:183:	assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/objects/CutsceneHead.cpp:191:		assert(stream);
+	./src/objects/CutsceneHead.cpp:213:			assert(stream);
+	./src/objects/Object.cpp:129:		assert(mi->GetModelType() == MITYPE_VEHICLE);
+	./src/objects/ObjectData.cpp:49:		assert(id < NUMOBJECTINFO);
+	./src/weapons/ShotInfo.cpp:128:			assert(shot.m_sourceEntity->IsPed());
+	./src/fakerw/fake.cpp:8:#include <assert.h>
+	./src/fakerw/fake.cpp:391:		assert(0 && "unknown type");
+	./src/entities/Physical.cpp:97:	assert(xstart >= 0);
+	./src/entities/Physical.cpp:98:	assert(xend < NUMSECTORS_X);
+	./src/entities/Physical.cpp:99:	assert(ystart >= 0);
+	./src/entities/Physical.cpp:100:	assert(yend < NUMSECTORS_Y);
+	./src/entities/Physical.cpp:116:				assert(0);
+	./src/entities/Physical.cpp:128:				assert(0);
+	./src/entities/Physical.cpp:131:			assert(node);
+	./src/entities/Physical.cpp:162:	assert(xstart >= 0);
+	./src/entities/Physical.cpp:163:	assert(xend < NUMSECTORS_X);
+	./src/entities/Physical.cpp:164:	assert(ystart >= 0);
+	./src/entities/Physical.cpp:165:	assert(yend < NUMSECTORS_Y);
+	./src/entities/Dummy.cpp:25:	assert(xstart >= 0);
+	./src/entities/Dummy.cpp:26:	assert(xend < NUMSECTORS_X);
+	./src/entities/Dummy.cpp:27:	assert(ystart >= 0);
+	./src/entities/Dummy.cpp:28:	assert(yend < NUMSECTORS_Y);
+	./src/entities/Dummy.cpp:38:			assert(node);
+	./src/entities/Entity.h:136:		assert(RwObjectGetType(m_rwObject) == rpATOMIC);
+	./src/entities/Entity.h:140:		assert(RwObjectGetType(m_rwObject) == rpCLUMP);
+	./src/entities/Entity.cpp:467:	assert(xstart >= 0);
+	./src/entities/Entity.cpp:468:	assert(xend < NUMSECTORS_X);
+	./src/entities/Entity.cpp:469:	assert(ystart >= 0);
+	./src/entities/Entity.cpp:470:	assert(yend < NUMSECTORS_Y);
+	./src/entities/Entity.cpp:527:	assert(xstart >= 0);
+	./src/entities/Entity.cpp:528:	assert(xend < NUMSECTORS_X);
+	./src/entities/Entity.cpp:529:	assert(ystart >= 0);
+	./src/entities/Entity.cpp:530:	assert(yend < NUMSECTORS_Y);
+	./src/core/FileMgr.cpp:84:	assert(fd < NUMFILES);
+	./src/core/FileMgr.cpp:260:		assert(len < maxlen);
+	./src/core/Lists.cpp:8:	assert(node);
+	./src/core/Lists.cpp:20:	assert(node);
+	./src/core/ZoneCull.cpp:200:				assert(TempEntityIndicesUsed < NUMTEMPINDICES);
+	./src/core/ZoneCull.cpp:215:				assert(TempEntityIndicesUsed < NUMTEMPINDICES);
+	./src/core/ZoneCull.cpp:244:					assert(TempEntityIndicesUsed < NUMTEMPINDICES);
+	./src/core/ZoneCull.cpp:611:			assert(EntityIndicesUsed < NUMZONEINDICES);
+	./src/core/ZoneCull.cpp:619:			assert(EntityIndicesUsed < NUMZONEINDICES);
+	./src/core/Zones.cpp:32:	assert(info->carThreshold[0] >= 0);
+	./src/core/Zones.cpp:33:	assert(info->carThreshold[0] <= info->carThreshold[1]);
+	./src/core/Zones.cpp:34:	assert(info->carThreshold[1] <= info->carThreshold[2]);
+	./src/core/Zones.cpp:35:	assert(info->carThreshold[2] <= info->carThreshold[3]);
+	./src/core/Zones.cpp:36:	assert(info->carThreshold[3] <= info->carThreshold[4]);
+	./src/core/Zones.cpp:37:	assert(info->carThreshold[4] <= info->carThreshold[5]);
+	./src/core/Zones.cpp:38:	assert(info->carThreshold[5] <= info->copThreshold);
+	./src/core/Zones.cpp:39:	assert(info->copThreshold <= info->gangThreshold[0]);
+	./src/core/Zones.cpp:40:	assert(info->gangThreshold[0] <= info->gangThreshold[1]);
+	./src/core/Zones.cpp:41:	assert(info->gangThreshold[1] <= info->gangThreshold[2]);
+	./src/core/Zones.cpp:42:	assert(info->gangThreshold[2] <= info->gangThreshold[3]);
+	./src/core/Zones.cpp:43:	assert(info->gangThreshold[3] <= info->gangThreshold[4]);
+	./src/core/Zones.cpp:44:	assert(info->gangThreshold[4] <= info->gangThreshold[5]);
+	./src/core/Zones.cpp:45:	assert(info->gangThreshold[5] <= info->gangThreshold[6]);
+	./src/core/Zones.cpp:46:	assert(info->gangThreshold[6] <= info->gangThreshold[7]);
+	./src/core/Zones.cpp:47:	assert(info->gangThreshold[7] <= info->gangThreshold[8]);
+	./src/core/Zones.cpp:402:			assert(n >= 0.0f && n <= 1.0f);
+	./src/core/Zones.cpp:406:			assert(d >= 0.0f && d <= 1.0f);
+	./src/core/Zones.cpp:678:		assert(MapZoneArray[i].child == nil);
+	./src/core/Zones.cpp:679:		assert(MapZoneArray[i].parent == nil);
+	./src/core/Zones.cpp:680:		assert(MapZoneArray[i].next == nil);
+	./src/core/Zones.cpp:733:		assert(MapZoneArray[i].child == nil);
+	./src/core/Zones.cpp:734:		assert(MapZoneArray[i].parent == nil);
+	./src/core/Zones.cpp:735:		assert(MapZoneArray[i].next == nil);
+	./src/core/re3.cpp:50:#include "assert.h"
+	./src/core/re3.cpp:1126:	assert(false);
+	./src/core/re3.cpp:1187:	assert(false);
+	./src/core/Radar.cpp:346:					assert(laste != -1);
+	./src/core/Radar.cpp:840:	assert(CTxdStore::GetSlot(gRadarTxdIds[x + RADAR_NUM_TILES * y]));
+	./src/core/FileLoader.cpp:69:	assert(fd > 0);
+	./src/core/FileLoader.cpp:145:	assert(fd > 0);
+	./src/core/FileLoader.cpp:216:		assert(header.ident == 'LLOC');
+	./src/core/FileLoader.cpp:349:		assert(mi->IsSimple());
+	./src/core/FileLoader.cpp:410:				assert(mi->IsClump());
+	./src/core/FileLoader.cpp:1292:		assert(0);
+	./src/core/FileLoader.cpp:1564:	assert(mi->IsSimple());
+	./src/core/AnimViewer.cpp:154:		assert(modelId < MODELINFOSIZE);
+	./src/core/AnimViewer.cpp:168:		assert(modelId < MODELINFOSIZE);
+	./src/core/timebars.cpp:68:	assert(n != 1500);
+	./src/core/Streaming.cpp:412:	assert(fd > 0);
+	./src/core/Streaming.cpp:415:	assert(sizeof(direntry) == 32);
+	./src/core/Streaming.cpp:418:		assert(dot);
+	./src/core/Streaming.cpp:572:		assert(streamId < NUMSTREAMINFO);
+	./src/core/Streaming.cpp:896:	assert(found);
+	./src/core/Streaming.cpp:1281:		assert(ms_vehiclesLoaded[ms_lastVehicleDeleted] == -1);
+	./src/core/Streaming.cpp:1618:		assert(img >= 0);
+	./src/core/Streaming.cpp:1799:	assert(!(ms_bLoadingBigModel && ch == 1));	// this would clobber the buffer
+	./src/core/Streaming.cpp:2005:						assert(readOrder[readI] == -1);
+	./src/core/Streaming.cpp:2481:		assert(ymin <= ymax);
+	./src/core/Streaming.cpp:2545:		assert(xmin <= xmax);
+	./src/core/Streaming.cpp:2745:	assert(size == NUM_DEFAULT_MODELS);
+	./src/core/Directory.cpp:44:	assert(numEntries < maxEntries);
+	./src/core/templates.h:13:			assert(0);
+	./src/core/templates.h:21:		assert(item >= &store[0]);
+	./src/core/templates.h:22:		assert(item < &store[n]);
+	./src/core/templates.h:26:		assert(index >= 0);
+	./src/core/templates.h:27:		assert(index < n);
+	./src/core/templates.h:151:		assert(!GetIsFree(index));
+	./src/core/templates.h:156:		assert((U*)entry == (U*)&m_entries[index]); // cast is unsafe - check required
+	./src/core/ControllerConfig.cpp:2688:		assert(Buttons[CPad::GetPad(0)->Mode][action] != nil); // we cannot use these
+	./src/core/common.h:355:#define assert(_Expression) (void)( (!!(_Expression)) || (re3_assert(#_Expression, __FILE__, __LINE__, __FUNCTION__), 0) )
+	./src/core/common.h:357:#define assert(_Expression) (_Expression)
+	./src/core/common.h:359:#define ASSERT assert
+	./src/core/common.h:510:#define VALIDATESAVEBUF(b) assert(_saveBufCount == b);
+	./src/core/common.h:552:	assert(ReadSaveBuf<char>(buf) == a);\
+	./src/core/common.h:553:	assert(ReadSaveBuf<char>(buf) == b);\
+	./src/core/common.h:554:	assert(ReadSaveBuf<char>(buf) == c);\
+	./src/core/common.h:555:	assert(ReadSaveBuf<char>(buf) == d);\
+	./src/core/common.h:556:	assert(ReadSaveBuf<uint32>(buf) == size);
+	./src/core/Stats.cpp:120:	assert(index >= 0 && index < TOTAL_FASTEST_TIMES);
+	./src/core/Stats.cpp:129:	assert(index >= 0 && index < TOTAL_HIGHEST_SCORES);
+	./src/core/Stats.cpp:355:	assert(buf - buf_start == *size);
+	./src/core/Stats.cpp:418:	assert(buf - buf_start == size);
+	./src/core/Pools.cpp:96:	assert(ms_pPedPool->GetNoOfUsedSpaces() == 0);
+	./src/core/Pools.cpp:97:	assert(ms_pVehiclePool->GetNoOfUsedSpaces() == 0);
+	./src/core/Pools.cpp:148:			assert(0);
+	./src/core/Pools.cpp:173:			assert(0);
+	./src/core/Pools.cpp:522:			assert(0);
+	./src/core/CdStreamPosix.cpp:508:		assert(false);
+	./src/core/Cam.cpp:2764:		assert(CamTargetEntity->IsVehicle());
+	./src/core/Frontend.cpp:732:			assert(0 && "Holding scrollbar isn't done yet");
+	./src/core/Frontend.cpp:3735:	assert(txdSlot != -1);
+	./src/control/TrafficLights.cpp:41:		assert(mi->Get2dEffect(i));
+	./src/control/Garages.cpp:208:		assert(0);
+	./src/control/Garages.cpp:279:		assert(false);
+	./src/control/Garages.cpp:1611:	assert(garage >= 0 && garage < NUM_GARAGES);
+	./src/control/Garages.cpp:1761:	assert(xstart <= xend);
+	./src/control/Garages.cpp:1762:	assert(ystart <= yend);
+	./src/control/Garages.cpp:1901:	assert(pModelInfo);
+	./src/control/Garages.cpp:2359:	assert(size == (6 * sizeof(uint32) + TOTAL_COLLECTCARS_GARAGES * sizeof(*CarTypesCollected) + sizeof(uint32) + 3 * NUM_GARAGE_STORED_CARS * sizeof(CStoredCar) + NUM_GARAGES * sizeof(CGarage));
+	./src/control/Garages.cpp:2361:	assert(size == 5484);
+	./src/control/Script.cpp:1453:	assert(pVehicle);
+	./src/control/Replay.cpp:946:			assert(false);
+	./src/control/Replay.cpp:1215:		assert(pPlayerPed);
+	./src/control/Replay.cpp:1606:	default: assert(false); break;
+	./src/control/PathFind.cpp:716:					assert(m_numCarPathLinks <= NUM_CARPATHLINKS);
+	./src/control/PathFind.cpp:782:						assert(m_numCarPathLinks <= NUM_CARPATHLINKS);
+	./src/control/CarCtrl.cpp:865:	assert(xstart <= xend);
+	./src/control/CarCtrl.cpp:866:	assert(ystart <= yend);
+	./src/control/CarCtrl.cpp:899:	assert(xstart <= xend);
+	./src/control/CarCtrl.cpp:900:	assert(ystart <= yend);
+	./src/control/CarCtrl.cpp:1245:	assert(xstart <= xend);
+	./src/control/CarCtrl.cpp:1246:	assert(ystart <= yend);
+	./src/control/Script.h:19:#define script_assert(_Expression) FlushLog(); assert(_Expression);
+	./src/control/Script.h:489:	static int32* GetPointerToScriptVariable(int32 offset) { assert(offset >= 8 && offset < CTheScripts::GetSizeOfVariableSpace()); return (int32*)&ScriptSpace[offset]; }
+	./src/control/SceneEdit.cpp:779:		assert(0);
+	./src/control/Phones.cpp:233:				assert(0 && "Number of phones used by script exceeds the NUMPHONES or the stored phones in save file. Ignoring some phones");
+	./src/control/Phones.cpp:362:				assert(m_nMax < ARRAY_SIZE(m_aPhones) && "NUMPHONES should be increased");
+	./src/control/Pickups.cpp:709:		assert(colorId >= 0);
+	./src/control/Pickups.cpp:1288:	assert(pPos != nil);
+	./src/peds/Ped.cpp:372:							assert(gnNumTempPedList < ARRAY_SIZE(gapTempPedList));
+	./src/peds/PedAI.cpp:2359:		default: assert(0);
+	./src/peds/PedAI.cpp:2438:			default: assert(0);
+	./src/peds/PedAI.cpp:2760:			default: assert(0);
+	./src/peds/PedFight.cpp:2575:	assert(!IsClumpSkinned(GetClump()));
+	./src/extras/debugmenu.cpp:81:	assert(fontStyles[MENUFONT_NORMAL]);
+	./src/extras/debugmenu.cpp:86:	assert(fontStyles[MENUFONT_SEL_ACTIVE]);
+	./src/extras/debugmenu.cpp:91:	assert(fontStyles[MENUFONT_SEL_INACTIVE]);
+	./src/extras/debugmenu.cpp:96:	assert(fontStyles[MENUFONT_MOUSE]);
+	./src/extras/debugmenu.cpp:791:	assert(img);
+	./src/extras/debugmenu.cpp:797:	assert(cursor);
+	./src/extras/debugmenu.cpp:801:	assert(img);
+	./src/extras/debugmenu.cpp:807:	assert(arrow);
+	./src/extras/screendroplets.cpp:126:	assert(screenDroplet);
+	./src/extras/screendroplets.cpp:616:	assert(im2ddecl_uv2 == nil);
+	./src/extras/screendroplets.cpp:618:	assert(im2ddecl_uv2);
+	./src/extras/screendroplets.cpp:620:	assert(im2dvertbuf_uv2 == nil);
+	./src/extras/screendroplets.cpp:622:	assert(im2dvertbuf_uv2);
+	./src/extras/screendroplets.cpp:625:	assert(im2dindbuf_uv2 == nil);
+	./src/extras/screendroplets.cpp:627:	assert(im2dindbuf_uv2);
+	./src/extras/screendroplets.cpp:801:		assert(0);//im2dShader->use();
+	./src/extras/frontendoption.cpp:69:	assert(id < MENUPAGES && "No room for new custom frontend screens! Increase MENUPAGES");
+	./src/extras/custompipes_gl.cpp:168:	assert(neoVehicleShader);
+	./src/extras/custompipes_gl.cpp:279:	assert(neoWorldShader);
+	./src/extras/custompipes_gl.cpp:387:	assert(neoGlossShader);
+	./src/extras/custompipes_gl.cpp:561:	assert(neoRimSkinShader);
+	./src/extras/custompipes_gl.cpp:570:	assert(neoRimShader);
+	./src/extras/custompipes_gl.cpp:666:	assert(building->instHeader != nil);
+	./src/extras/custompipes_gl.cpp:667:	assert(building->instHeader->platform == PLATFORM_GL3);
+	./src/extras/custompipes_gl.cpp:733:	assert(building->instHeader != nil);
+	./src/extras/custompipes_gl.cpp:734:	assert(building->instHeader->platform == PLATFORM_GL3);
+	./src/extras/custompipes.cpp:535:	assert(genericTxd);
+	./src/extras/custompipes_d3d9.cpp:155:	assert(neoVehicle_VS);
+	./src/extras/custompipes_d3d9.cpp:159:	assert(neoVehicle_PS);
+	./src/extras/custompipes_d3d9.cpp:265:	assert(neoWorld_VS);
+	./src/extras/custompipes_d3d9.cpp:269:	assert(neoWorldIII_PS);
+	./src/extras/custompipes_d3d9.cpp:352:	assert(neoGloss_VS);
+	./src/extras/custompipes_d3d9.cpp:356:	assert(neoGloss_PS);
+	./src/extras/custompipes_d3d9.cpp:519:	assert(neoRim_VS);
+	./src/extras/custompipes_d3d9.cpp:523:	assert(neoRimSkin_VS);
+	./src/extras/custompipes_d3d9.cpp:611:	assert(building->instHeader != nil);
+	./src/extras/custompipes_d3d9.cpp:612:	assert(building->instHeader->platform == PLATFORM_D3D9);
+	./src/extras/custompipes_d3d9.cpp:670:	assert(building->instHeader != nil);
+	./src/extras/custompipes_d3d9.cpp:671:	assert(building->instHeader->platform == PLATFORM_D3D9);
+	./src/extras/postfx.cpp:157:	assert(colourFilterIII);
+	./src/extras/postfx.cpp:166:	assert(contrast);
+	./src/extras/postfx.cpp:412:	assert(pFrontBuffer);
+	./src/extras/postfx.cpp:413:	assert(pBackBuffer);
+	./src/math/Vector2D.h:16:		// assert(sq != 0.0f);	// just be safe here
+	./src/vehicles/Automobile.cpp:3732:	default: assert(0);
+	./src/vehicles/Automobile.cpp:4406:	assert(RwObjectGetType(object) == rpATOMIC);
+	./src/vehicles/Heli.cpp:450:		assert(timeDiff <= 1000);
+	./src/vehicles/Heli.cpp:683:	assert(RwObjectGetType(object) == rpATOMIC);
+	./src/vehicles/Heli.cpp:866:				assert(0 && "too many helis");
+	./src/vehicles/CarGen.cpp:257:	assert(ReadSaveBuf<uint32>(buffer) == nGeneralDataSize);
+	./src/vehicles/CarGen.cpp:263:	assert(ReadSaveBuf<uint32>(buffer) == sizeof(CarGeneratorArray));
+	./src/vehicles/Transmission.cpp:77:	assert(gear <= nNumberOfGears);
+	./src/vehicles/Cranes.cpp:226:				assert(xstart <= xend);
+	./src/vehicles/Cranes.cpp:227:				assert(ystart <= yend);
+	./src/vehicles/HandlingMgr.cpp:129:					assert(handlingId >= 0 && handlingId < NUMHANDLINGS);
+	./src/vehicles/Boat.cpp:592:	assert(RwObjectGetType(object) == rpATOMIC);
+	./src/audio/AudioScriptObject.cpp:60:		assert(p != nil);
+	./src/audio/oal/stream.cpp:562:		assert("We can't handle audio files more then 2 GB yet :shrug:" && (size < UINT32_MAX));
+	./src/audio/oal/stream.cpp:1282:		assert(buffersProcessed[0] == buffersProcessed[1]);
+	./src/audio/oal/channel.cpp:205:	assert(channelsThatNeedService > 0 && "Ref counting is broken");
+	./src/audio/sampman_oal.cpp:1224:			//assert(0);
+	./src/render/Renderer.cpp:427:	assert(RwObjectGetType(ent->m_rwObject) == rpATOMIC);
+	./src/render/Renderer.cpp:745:		assert(ent->m_rwObject);
+	./src/render/Renderer.cpp:797:	assert(ent->m_rwObject);
+	./src/render/Renderer.cpp:859:		assert(ent->m_rwObject);
+	./src/render/Renderer.cpp:892:	assert(ent->m_rwObject);
+	./src/render/Coronas.cpp:357:					default: assert(0);
+	./src/collision/Collision.cpp:539:		assert(0);
+	./src/collision/Collision.cpp:644:		else assert(0);
+	./src/collision/Collision.cpp:652:		else assert(0);
+	./src/collision/Collision.cpp:659:		assert(0);
+	./src/collision/Collision.cpp:1131:		assert(0);
+	./src/collision/Collision.cpp:1252:		assert(0);
+	./src/collision/Collision.cpp:1357:		assert(0);
+	./src/collision/Collision.cpp:1444:		else assert(0);
+	./src/collision/Collision.cpp:1453:		else assert(0);
+	./src/collision/Collision.cpp:1461:		assert(0);
+	./src/collision/Collision.cpp:2122:	assert(modelA.numSpheres <= MAXNUMSPHERES);
+	./src/collision/Collision.cpp:2123:	assert(modelA.numLines <= MAXNUMLINES);
+	./src/collision/Collision.cpp:2176:	assert(numSpheresB <= MAXNUMSPHERES);
+	./src/collision/Collision.cpp:2177:	assert(numBoxesB <= MAXNUMBOXES);
+	./src/collision/Collision.cpp:2178:	assert(numTrianglesB <= MAXNUMTRIS);
+	./src/collision/Collision.cpp:2293:	assert(model);
+	./src/collision/Collision.cpp:2308:			assert(lptr);
+	./src/collision/Collision.cpp:2309:			assert(lptr->item);
+	./src/collision/Collision.cpp:2314:			assert(lptr);
+	./src/collision/ColModel.cpp:73:	assert(trianglePlanes);
+	./src/collision/ColModel.cpp:80:	assert(trianglePlanes);
+ASSERT
+	./src/rw/MemoryHeap.cpp:12://#define MEMORYHEAP_ASSERT(cond) { if (!(cond)) { printf("ASSERT File:%s Line:%d\n", __FILE__, __LINE__); exit(1); } }
+	./src/rw/MemoryHeap.cpp:13://#define MEMORYHEAP_ASSERT_MESSAGE(cond, message) { if (!(cond)) { printf("ASSERT File:%s Line:%d:\n\t%s\n", __FILE__, __LINE__, message); exit(1); } }
+	./src/rw/MemoryMgr.cpp:100:	ASSERT(mem != nil);
+	./src/rw/MemoryMgr.cpp:104:	ASSERT(addr != nil);
+	./src/rw/MemoryMgr.cpp:108:	ASSERT(mem != nil);
+	./src/rw/MemoryMgr.cpp:112:	ASSERT(addr != nil);
+	./src/rw/MemoryMgr.cpp:123:	ASSERT(mem != nil);
+	./src/rw/MemoryMgr.cpp:127:	ASSERT(addr != nil);
+	./src/skel/glfw/glfw.cpp:597:	ASSERT(d3d != nil);
+	./src/skel/win/win.cpp:902:	ASSERT(pMC != nil);
+	./src/skel/win/win.cpp:920:	ASSERT(pME != nil);
+	./src/skel/win/win.cpp:1179:					ASSERT(pMC != nil);
+	./src/skel/win/win.cpp:1363:	ASSERT(d3d != nil);
+	./src/skel/win/win.cpp:1888:	ASSERT(pVW != nil);
+	./src/skel/win/win.cpp:1951:	ASSERT(pGB != nil);
+	./src/skel/win/win.cpp:1952:	ASSERT(pVW != nil);
+	./src/skel/win/win.cpp:1953:	ASSERT(pME != nil);
+	./src/skel/win/win.cpp:1954:	ASSERT(pMC != nil);
+	./src/objects/ParticleObject.cpp:130:	ASSERT(pobj != NULL);
+	./src/objects/ParticleObject.cpp:1117:	ASSERT( buffer != NULL );
+	./src/objects/ParticleObject.cpp:1118:	ASSERT( length != NULL );
+	./src/objects/ParticleObject.cpp:1162:	ASSERT( buffer != NULL );
+	./src/objects/ParticleObject.cpp:1237:	ASSERT( from != NULL );
+	./src/objects/ParticleObject.cpp:1238:	ASSERT( to   != NULL );
+	./src/objects/ParticleObject.cpp:1239:	ASSERT( obj  != NULL );
+	./src/weapons/Weapon.cpp:56:	ASSERT(info!=nil);
+	./src/weapons/Weapon.cpp:106:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:318:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:357:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:365:	ASSERT(shooter->IsPed());
+	./src/weapons/Weapon.cpp:372:		ASSERT(victimPed!=nil);
+	./src/weapons/Weapon.cpp:510:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:511:	ASSERT(fireSource!=nil);
+	./src/weapons/Weapon.cpp:828:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:858:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:859:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:860:	ASSERT(target!=nil);
+	./src/weapons/Weapon.cpp:861:	ASSERT(point!=nil);
+	./src/weapons/Weapon.cpp:921:									ASSERT(asoc!=nil);
+	./src/weapons/Weapon.cpp:937:								ASSERT(asoc!=nil);
+	./src/weapons/Weapon.cpp:1129:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1130:	ASSERT(fireSource!=nil);
+	./src/weapons/Weapon.cpp:1395:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1396:	ASSERT(fireSource!=nil);
+	./src/weapons/Weapon.cpp:1487:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1488:	ASSERT(fireSource!=nil);
+	./src/weapons/Weapon.cpp:1520:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1538:	ASSERT(cam!=nil);
+	./src/weapons/Weapon.cpp:1570:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1595:	ASSERT(cam!=nil);
+	./src/weapons/Weapon.cpp:1723:				ASSERT(asoc!=nil);
+	./src/weapons/Weapon.cpp:1805:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1806:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:1807:	ASSERT(target !=nil);
+	./src/weapons/Weapon.cpp:1827:		ASSERT(victim!=nil);
+	./src/weapons/Weapon.cpp:1856:		ASSERT(victim !=nil);
+	./src/weapons/Weapon.cpp:1875:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1876:	ASSERT(driver!=nil);
+	./src/weapons/Weapon.cpp:1877:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:1878:	ASSERT(target!=nil);
+	./src/weapons/Weapon.cpp:1897:		ASSERT(victim!=nil);
+	./src/weapons/Weapon.cpp:1933:		ASSERT(victim!=nil);
+	./src/weapons/Weapon.cpp:1945:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:1946:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:1947:	ASSERT(target!=nil);
+	./src/weapons/Weapon.cpp:1967:		ASSERT(victim!=nil);
+	./src/weapons/Weapon.cpp:1986:		ASSERT(victim!=nil);
+	./src/weapons/Weapon.cpp:2063:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:2064:	ASSERT(target!=nil);
+	./src/weapons/Weapon.cpp:2093:				ASSERT(asoc!=nil);
+	./src/weapons/Weapon.cpp:2180:	ASSERT(shooter!=nil);
+	./src/weapons/Weapon.cpp:2181:	ASSERT(source!=nil);
+	./src/weapons/Weapon.cpp:2182:	ASSERT(target!=nil);
+	./src/weapons/Weapon.cpp:2211:	ASSERT(holder!=nil);
+	./src/weapons/Weapon.cpp:2212:	ASSERT(aimingTo!=nil);
+	./src/weapons/Weapon.cpp:2232:	ASSERT(aimEntity!=nil);
+	./src/core/CdStream.cpp:61:				ASSERT(0);
+	./src/core/CdStream.cpp:71:	ASSERT(gChannelRequestQ.items != nil );
+	./src/core/CdStream.cpp:82:		ASSERT(0);
+	./src/core/CdStream.cpp:91:		ASSERT(0);
+	./src/core/CdStream.cpp:127:	ASSERT( pBuffer != nil );
+	./src/core/CdStream.cpp:136:	ASSERT( gpReadInfo != nil );
+	./src/core/CdStream.cpp:165:	ASSERT( pBuffer != nil );
+	./src/core/CdStream.cpp:172:	ASSERT( gImgFiles[0] != nil );
+	./src/core/CdStream.cpp:197:	ASSERT( channel < gNumChannels );
+	./src/core/CdStream.cpp:198:	ASSERT( buffer != nil );
+	./src/core/CdStream.cpp:202:	ASSERT( _GET_INDEX(offset) < MAX_CDIMAGES );
+	./src/core/CdStream.cpp:204:	ASSERT( hImage != nil );
+	./src/core/CdStream.cpp:208:	ASSERT( pChannel != nil );
+	./src/core/CdStream.cpp:235:		ASSERT( channel < gNumChannels );
+	./src/core/CdStream.cpp:237:		ASSERT( pChannel != nil );
+	./src/core/CdStream.cpp:268:	ASSERT( channel < gNumChannels );
+	./src/core/CdStream.cpp:270:	ASSERT( pChannel != nil );
+	./src/core/CdStream.cpp:294:		ASSERT( pChannel->hFile != nil );
+	./src/core/CdStream.cpp:314:	ASSERT( channel < gNumChannels );
+	./src/core/CdStream.cpp:316:	ASSERT( pChannel != nil );
+	./src/core/CdStream.cpp:324:			ASSERT( pChannel->pDoneSemaphore != nil );
+	./src/core/CdStream.cpp:347:		ASSERT(pChannel->hFile != nil );
+	./src/core/CdStream.cpp:361:	ASSERT( queue != nil );
+	./src/core/CdStream.cpp:362:	ASSERT( queue->items != nil );
+	./src/core/CdStream.cpp:374:	ASSERT( queue != nil );
+	./src/core/CdStream.cpp:378:	ASSERT( queue->items != nil );
+	./src/core/CdStream.cpp:385:	ASSERT( queue != nil );
+	./src/core/CdStream.cpp:405:		ASSERT( channel < gNumChannels );
+	./src/core/CdStream.cpp:408:		ASSERT( pChannel != nil );
+	./src/core/CdStream.cpp:418:				ASSERT(pChannel->hFile != nil );
+	./src/core/CdStream.cpp:419:				ASSERT(pChannel->pBuffer != nil );
+	./src/core/CdStream.cpp:444:				ASSERT(pChannel->hFile != nil );
+	./src/core/CdStream.cpp:445:				ASSERT(pChannel->pBuffer != nil );
+	./src/core/CdStream.cpp:467:			ASSERT( pChannel->pDoneSemaphore != nil );
+	./src/core/CdStream.cpp:482:	ASSERT(path != nil);
+	./src/core/CdStream.cpp:483:	ASSERT(gNumImages < MAX_CDIMAGES);
+	./src/core/CdStream.cpp:495:	ASSERT( gImgFiles[gNumImages] != nil );
+	./src/core/CdStream.cpp:509:	ASSERT(cd < MAX_CDIMAGES);
+	./src/core/Game.cpp:210:	ASSERT(Scene.camera != nil);
+	./src/core/Game.cpp:228:	ASSERT(Scene.world != nil);
+	./src/core/re3.cpp:1125:	printf("\nRE3 ASSERT FAILED\n\tFile: %s\n\tLine: %d\n\tFunction: %s\n\tExpression: %s\n",filename,lineno,func,expr);
+	./src/core/common.h:359:#define ASSERT assert
+	./src/core/CdStreamPosix.cpp:78:	ASSERT(gChannelRequestQ.items != nil );
+	./src/core/CdStreamPosix.cpp:84:		ASSERT(0);
+	./src/core/CdStreamPosix.cpp:99:				ASSERT(0);
+	./src/core/CdStreamPosix.cpp:110:				ASSERT(0);
+	./src/core/CdStreamPosix.cpp:121:				ASSERT(0);
+	./src/core/CdStreamPosix.cpp:136:		ASSERT(0);
+	./src/core/CdStreamPosix.cpp:152:		ASSERT(0);
+	./src/core/CdStreamPosix.cpp:169:	ASSERT( pBuffer != nil );
+	./src/core/CdStreamPosix.cpp:174:	ASSERT( gNumChannels != 0 );
+	./src/core/CdStreamPosix.cpp:177:	ASSERT( gpReadInfo != nil );
+	./src/core/CdStreamPosix.cpp:183:	ASSERT( pBuffer != nil );
+	./src/core/CdStreamPosix.cpp:190:	ASSERT( gImgFiles[0] > 0 );
+	./src/core/CdStreamPosix.cpp:207:		ASSERT(0);
+	./src/core/CdStreamPosix.cpp:235:	ASSERT( channel < gNumChannels );
+	./src/core/CdStreamPosix.cpp:236:	ASSERT( buffer != nil );
+	./src/core/CdStreamPosix.cpp:240:	ASSERT( _GET_INDEX(offset) < MAX_CDIMAGES );
+	./src/core/CdStreamPosix.cpp:242:	ASSERT( hImage > 0 );
+	./src/core/CdStreamPosix.cpp:245:	ASSERT( pChannel != nil );
+	./src/core/CdStreamPosix.cpp:280:	ASSERT( channel < gNumChannels );
+	./src/core/CdStreamPosix.cpp:282:	ASSERT( pChannel != nil );
+	./src/core/CdStreamPosix.cpp:319:	ASSERT( channel < gNumChannels );
+	./src/core/CdStreamPosix.cpp:321:	ASSERT( pChannel != nil );
+	./src/core/CdStreamPosix.cpp:361:	ASSERT( queue != nil );
+	./src/core/CdStreamPosix.cpp:362:	ASSERT( queue->items != nil );
+	./src/core/CdStreamPosix.cpp:374:	ASSERT( queue != nil );
+	./src/core/CdStreamPosix.cpp:378:	ASSERT( queue->items != nil );
+	./src/core/CdStreamPosix.cpp:385:	ASSERT( queue != nil );
+	./src/core/CdStreamPosix.cpp:415:		ASSERT( pChannel != nil );
+	./src/core/CdStreamPosix.cpp:438:			ASSERT(pChannel->hFile >= 0);
+	./src/core/CdStreamPosix.cpp:439:			ASSERT(pChannel->pBuffer != nil );
+	./src/core/CdStreamPosix.cpp:492:	ASSERT(path != nil);
+	./src/core/CdStreamPosix.cpp:493:	ASSERT(gNumImages < MAX_CDIMAGES);
+	./src/core/CdStreamPosix.cpp:525:	ASSERT(cd < MAX_CDIMAGES);
+	./src/audio/sampman_null.cpp:134:	ASSERT( nBank < MAX_SFX_BANKS );
+	./src/audio/sampman_null.cpp:141:	ASSERT( nBank < MAX_SFX_BANKS );
+	./src/audio/sampman_null.cpp:147:	ASSERT( nBank < MAX_SFX_BANKS );
+	./src/audio/sampman_null.cpp:155:	ASSERT( nComment < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:170:	ASSERT( nComment < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:183:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:190:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:197:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:204:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_null.cpp:216:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:222:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:229:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:230:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:236:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:237:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:243:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:244:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:250:	ASSERT( nChannel == CHANNEL2D );
+	./src/audio/sampman_null.cpp:251:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:257:	ASSERT(nChannel == CHANNEL2D);
+	./src/audio/sampman_null.cpp:258:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:264:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:270:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:276:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:282:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:290:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:296:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_null.cpp:302:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:308:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:314:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:320:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:328:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:334:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:342:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_null.cpp:348:	ASSERT( nStream < TOTAL_STREAMED_SOUNDS );
+	./src/audio/sampman_null.cpp:356:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/oal/stream.cpp:970:		ASSERT(m_pBuffer!=nil);
+	./src/audio/sampman_oal.cpp:291:		ASSERT(ALDevice != NULL);
+	./src/audio/sampman_oal.cpp:294:		ASSERT(ALContext != NULL);
+	./src/audio/sampman_oal.cpp:299:		ASSERT(strstr(ext,"AL_SOFT_loop_points")!=NULL);
+	./src/audio/sampman_oal.cpp:1009:		ASSERT(nSampleBankMemoryStartAddress[SFX_BANK_0] != 0);
+	./src/audio/sampman_oal.cpp:1018:		ASSERT(nSampleBankMemoryStartAddress[SFX_BANK_PED_COMMENTS] != 0);
+	./src/audio/sampman_oal.cpp:1204:	ASSERT( nBank < MAX_SFX_BANKS);
+	./src/audio/sampman_oal.cpp:1245:	ASSERT( nBank < MAX_SFX_BANKS);
+	./src/audio/sampman_oal.cpp:1253:	ASSERT( nBank < MAX_SFX_BANKS);
+	./src/audio/sampman_oal.cpp:1261:	ASSERT( nComment < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1302:	ASSERT( nComment < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1373:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1380:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1387:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1394:	ASSERT( nSample < TOTAL_AUDIO_SAMPLES );
+	./src/audio/sampman_oal.cpp:1466:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1485:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1526:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1527:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1549:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1550:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1558:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1559:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1566:	ASSERT( nChannel == CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1567:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1591:	ASSERT(nChannel == CHANNEL2D);
+	./src/audio/sampman_oal.cpp:1592:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1603:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1611:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1619:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1627:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1635:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1643:	ASSERT( nChannel < MAXCHANNELS+MAX2DCHANNELS );
+	./src/audio/sampman_oal.cpp:1653:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1666:		ASSERT(stream != NULL);
+	./src/audio/sampman_oal.cpp:1680:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1693:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1712:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1741:							ASSERT(stream != NULL);
+	./src/audio/sampman_oal.cpp:1793:						ASSERT(stream != NULL);
+	./src/audio/sampman_oal.cpp:1846:		ASSERT(stream != NULL);
+	./src/audio/sampman_oal.cpp:1869:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1886:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1915:	ASSERT( nStream < MAX_STREAMS );
+	./src/audio/sampman_oal.cpp:1942:	ASSERT( nStream < TOTAL_STREAMED_SOUNDS );
+	./src/audio/sampman_oal.cpp:1950:	ASSERT( nStream < MAX_STREAMS );
+	./src/render/WaterCannon.cpp:63:	ASSERT(index < NUM_WATERCANNONS);
+	./src/render/WaterCannon.cpp:105:	ASSERT(pos != NULL);
+	./src/render/WaterCannon.cpp:106:	ASSERT(dir != NULL);
+	./src/render/WaterCannon.cpp:257:	ASSERT(pos != NULL);
+	./src/render/WaterCannon.cpp:258:	ASSERT(dir != NULL);
+	./src/render/ParticleMgr.cpp:41:		ASSERT(lineStart != nil);
+	./src/render/ParticleMgr.cpp:42:		ASSERT(lineEnd != nil);
+	./src/render/ParticleMgr.cpp:49:		ASSERT(lineLength < 500);
+	./src/render/ParticleMgr.cpp:66:			ASSERT(value != nil);
+	./src/render/ParticleMgr.cpp:73:						ASSERT(type < MAX_PARTICLES);
+	./src/render/ParticleMgr.cpp:75:						ASSERT(entry != nil);
+	./src/render/Glass.cpp:165:	ASSERT(m_nTriIndex < NUM_GLASSTRIANGLES);
+	./src/render/Glass.cpp:412:	ASSERT(entity!=nil);
+	./src/render/Glass.cpp:428:	ASSERT(col!=nil);
+	./src/render/Glass.cpp:532:	ASSERT(normal!=nil);
+	./src/render/Glass.cpp:608:	ASSERT(entity!=nil);
+	./src/render/Glass.cpp:618:	ASSERT(col!=nil);
+	./src/render/Glass.cpp:661:	ASSERT(entity!=nil);
+	./src/render/Glass.cpp:675:	ASSERT(entity!=nil);
+	./src/render/Glass.cpp:697:	ASSERT(entity!=nil);
+	./src/render/Shadows.cpp:79:	ASSERT(gpShadowCarTex != NULL);
+	./src/render/Shadows.cpp:80:	ASSERT(gpShadowPedTex != NULL);
+	./src/render/Shadows.cpp:81:	ASSERT(gpShadowHeliTex != NULL);
+	./src/render/Shadows.cpp:82:	ASSERT(gpShadowExplosionTex != NULL);
+	./src/render/Shadows.cpp:83:	ASSERT(gpShadowHeadLightsTex != NULL);
+	./src/render/Shadows.cpp:84:	ASSERT(gpOutline1Tex != NULL);
+	./src/render/Shadows.cpp:85:	ASSERT(gpOutline2Tex != NULL);
+	./src/render/Shadows.cpp:86:	ASSERT(gpOutline3Tex != NULL);
+	./src/render/Shadows.cpp:87:	ASSERT(gpBloodPoolTex != NULL);
+	./src/render/Shadows.cpp:88:	ASSERT(gpReflectionTex != NULL);
+	./src/render/Shadows.cpp:89:	ASSERT(gpGoalMarkerTex != NULL);
+	./src/render/Shadows.cpp:90:	ASSERT(gpWalkDontTex != NULL);
+	./src/render/Shadows.cpp:91:	ASSERT(gpCrackedGlassTex != NULL);
+	./src/render/Shadows.cpp:92:	ASSERT(gpPostShadowTex != NULL);
+	./src/render/Shadows.cpp:153:	ASSERT(gpShadowCarTex != NULL);
+	./src/render/Shadows.cpp:154:	ASSERT(gpShadowPedTex != NULL);
+	./src/render/Shadows.cpp:155:	ASSERT(gpShadowHeliTex != NULL);
+	./src/render/Shadows.cpp:156:	ASSERT(gpShadowExplosionTex != NULL);
+	./src/render/Shadows.cpp:157:	ASSERT(gpShadowHeadLightsTex != NULL);
+	./src/render/Shadows.cpp:158:	ASSERT(gpOutline1Tex != NULL);
+	./src/render/Shadows.cpp:159:	ASSERT(gpOutline2Tex != NULL);
+	./src/render/Shadows.cpp:160:	ASSERT(gpOutline3Tex != NULL);
+	./src/render/Shadows.cpp:161:	ASSERT(gpBloodPoolTex != NULL);
+	./src/render/Shadows.cpp:162:	ASSERT(gpReflectionTex != NULL);
+	./src/render/Shadows.cpp:163:	ASSERT(gpGoalMarkerTex != NULL);
+	./src/render/Shadows.cpp:164:	ASSERT(gpWalkDontTex != NULL);
+	./src/render/Shadows.cpp:165:	ASSERT(gpCrackedGlassTex != NULL);
+	./src/render/Shadows.cpp:166:	ASSERT(gpPostShadowTex != NULL);
+	./src/render/Shadows.cpp:190:	ASSERT(pTexture != NULL);
+	./src/render/Shadows.cpp:191:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:224:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:350:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:420:	//ASSERT(false);
+	./src/render/Shadows.cpp:429:	ASSERT(pTexture != NULL);
+	./src/render/Shadows.cpp:430:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:456:	ASSERT(pCar != NULL);
+	./src/render/Shadows.cpp:524:	ASSERT(pCar != NULL);
+	./src/render/Shadows.cpp:525:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:567:	ASSERT(pPed != NULL);
+	./src/render/Shadows.cpp:586:	ASSERT(pPedObject != NULL);
+	./src/render/Shadows.cpp:625:	ASSERT(pTree != NULL);
+	./src/render/Shadows.cpp:632:	ASSERT(pPole != NULL);
+	./src/render/Shadows.cpp:705:			ASSERT(asShadowsStored[i].m_pTexture != NULL);
+	./src/render/Shadows.cpp:737:							ASSERT(pCurSector != NULL);
+	./src/render/Shadows.cpp:825:						ASSERT(pIndexes != NULL);
+	./src/render/Shadows.cpp:826:						ASSERT(pVerts != NULL);
+	./src/render/Shadows.cpp:886:			ASSERT(pCurSector != NULL);
+	./src/render/Shadows.cpp:923:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:935:		ASSERT( pEntity != NULL );
+	./src/render/Shadows.cpp:974:	ASSERT(pEntity != NULL);
+	./src/render/Shadows.cpp:975:	ASSERT(pPosn != NULL);
+	./src/render/Shadows.cpp:982:	ASSERT(pCol != NULL);
+	./src/render/Shadows.cpp:1028:		ASSERT(pColTriPlanes != NULL);
+	./src/render/Shadows.cpp:1035:			ASSERT(pColTri != NULL);
+	./src/render/Shadows.cpp:1440:							ASSERT(pBunch != NULL);
+	./src/render/Shadows.cpp:1465:						ASSERT(pIndexes != NULL);
+	./src/render/Shadows.cpp:1466:						ASSERT(pVerts != NULL);
+	./src/render/Shadows.cpp:1587:	ASSERT(pfFrontX != nil);
+	./src/render/Shadows.cpp:1588:	ASSERT(pfFrontY != nil);
+	./src/render/Shadows.cpp:1589:	ASSERT(pfSideX != nil);
+	./src/render/Shadows.cpp:1590:	ASSERT(pfSideY != nil);
+	./src/render/Shadows.cpp:1591:	ASSERT(pfDisplacementX != nil);
+	./src/render/Shadows.cpp:1592:	ASSERT(pfDisplacementY != nil);
+	./src/render/Shadows.cpp:1772:	ASSERT(pPosn != NULL);
+	./src/render/WaterLevel.cpp:271:		ASSERT(wavyGeometry != nil);
+	./src/render/WaterLevel.cpp:278:		ASSERT(wavyMaterial != nil);
+	./src/render/WaterLevel.cpp:279:		ASSERT(gpWaterTex   != nil);
+	./src/render/WaterLevel.cpp:287:		ASSERT(wavyTriangles != nil);
+	./src/render/WaterLevel.cpp:318:		ASSERT(wavyMorphTarget != nil);
+	./src/render/WaterLevel.cpp:320:		ASSERT(wavyVert != nil);
+	./src/render/WaterLevel.cpp:340:		ASSERT( wavyFrame != nil );
+	./src/render/WaterLevel.cpp:343:		ASSERT( ms_pWavyAtomic != nil );
+	./src/render/WaterLevel.cpp:534:	ASSERT( x >= 0 && x < HUGE_SECTOR_SIZE );
+	./src/render/WaterLevel.cpp:535:	ASSERT( y >= 0 && y < HUGE_SECTOR_SIZE );
+	./src/render/WaterLevel.cpp:542:	ASSERT( pfOutLevel != nil );
+	./src/render/WaterLevel.cpp:573:	ASSERT( x >= 0 && x < HUGE_SECTOR_SIZE );
+	./src/render/WaterLevel.cpp:574:	ASSERT( y >= 0 && y < HUGE_SECTOR_SIZE );
+	./src/render/WaterLevel.cpp:581:	ASSERT( pfOutLevel != nil );
+	./src/render/WaterLevel.cpp:1254:		ASSERT( ms_pWavyAtomic != nil );
+	./src/render/WaterLevel.cpp:1258:		ASSERT( geometry != nil );
+	./src/render/WaterLevel.cpp:1264:		ASSERT( wavyPreLights != nil );
+	./src/render/WaterLevel.cpp:1265:		ASSERT( wavyTexCoords != nil );
+	./src/render/WaterLevel.cpp:1266:		ASSERT( wavyVertices  != nil );
+	./src/render/WaterLevel.cpp:1303:		ASSERT( wavyGeometry != nil );
+	./src/render/WaterLevel.cpp:1304:		ASSERT( geom != nil );
+	./src/render/WaterLevel.cpp:1307:		ASSERT( atomic != nil );
+	./src/render/WaterLevel.cpp:1312:		ASSERT( frame != nil );
+	./src/render/WaterLevel.cpp:1323:		ASSERT( geomTexCoords != nil );
+	./src/render/WaterLevel.cpp:1324:		ASSERT( wavyTexCoord  != nil );
+	./src/render/WaterLevel.cpp:1325:		ASSERT( geomPreLights != nil );
+	./src/render/WaterLevel.cpp:1326:		ASSERT( geomVertices  != nil );
+	./src/render/WaterLevel.cpp:1327:		ASSERT( wavyVertices  != nil );
+	./src/render/WaterLevel.cpp:1393:		ASSERT( ms_pWavyAtomic != nil );
+	./src/render/WaterLevel.cpp:1466:	ASSERT(ms_pWavyAtomic != nil );
+	./src/render/WaterLevel.cpp:1469:	ASSERT(wavyGeometry    != nil );
+	./src/render/WaterLevel.cpp:1473:	ASSERT(wavyMorphTarget != nil );
+	./src/render/WaterLevel.cpp:1474:	ASSERT(wavyMaterial    != nil );
+	./src/render/WaterLevel.cpp:1484:			ASSERT(apGeomArray[geom] != nil);
+	./src/render/WaterLevel.cpp:1488:			ASSERT( geomTriangles != nil );
+	./src/render/WaterLevel.cpp:1522:			ASSERT( geomMorphTarget != nil );
+	./src/render/WaterLevel.cpp:1523:			ASSERT( geomVertices != nil );
+ATOMICEXT
+	./src/rw/VisibilityPlugins.cpp:863:#define ATOMICEXT(o) (RWPLUGINOFFSET(AtomicExt, o, ms_atomicPluginOffset))
+	./src/rw/VisibilityPlugins.cpp:874:	ATOMICEXT(object)->modelInfo = nil;
+	./src/rw/VisibilityPlugins.cpp:887:	*ATOMICEXT(dst) = *ATOMICEXT(src);
+	./src/rw/VisibilityPlugins.cpp:895:	AtomicExt *ext = ATOMICEXT(atomic);
+	./src/rw/VisibilityPlugins.cpp:909:	return ATOMICEXT(atomic)->modelInfo;
+	./src/rw/VisibilityPlugins.cpp:915:	ATOMICEXT(atomic)->flags |= f;
+	./src/rw/VisibilityPlugins.cpp:921:	ATOMICEXT(atomic)->flags &= ~f;
+	./src/rw/VisibilityPlugins.cpp:927:	return ATOMICEXT(atomic)->flags;
+ATTEMPTS_TO_FIND_NEXT_NODE
+	./src/control/CarCtrl.cpp:52:#define ATTEMPTS_TO_FIND_NEXT_NODE 15
+	./src/control/CarCtrl.cpp:1540:	for(attempt = 0; attempt < ATTEMPTS_TO_FIND_NEXT_NODE; attempt++){
+	./src/control/CarCtrl.cpp:1559:	if (attempt >= ATTEMPTS_TO_FIND_NEXT_NODE) {
+	./src/control/CarCtrl.cpp:1561:		for (attempt = 0; attempt < ATTEMPTS_TO_FIND_NEXT_NODE; attempt++) {
+	./src/control/CarCtrl.cpp:1577:	if (attempt >= ATTEMPTS_TO_FIND_NEXT_NODE) {
+AUDIO_CACHE
+	./src/core/config.h:396:#define AUDIO_CACHE
+	./src/audio/sampman_miles.cpp:961:#ifdef AUDIO_CACHE
+	./src/audio/sampman_miles.cpp:1126:#ifdef AUDIO_CACHE
+	./src/audio/sampman_oal.cpp:966:#ifdef AUDIO_CACHE
+	./src/audio/sampman_oal.cpp:989:#ifdef AUDIO_CACHE
+AUDIO_MSS
+	./src/core/Game.cpp:355:#if defined(AUDIO_MSS)
+	./src/core/common.h:19:#define AUDIO_MSS
+	./src/core/main.cpp:1143:#elif defined AUDIO_MSS
+	./src/audio/sampman_miles.cpp:3:#ifdef AUDIO_MSS
+	./src/audio/sampman_null.cpp:2:#if !defined(AUDIO_OAL) &&  !defined(AUDIO_MSS)
+	./src/audio/AudioManager.h:501:#ifdef AUDIO_MSS
+AUDIO_OAL_USE_MPG123
+	./src/core/config.h:399:#define AUDIO_OAL_USE_MPG123 // use mpg123 to support mp3 files
+	./src/audio/oal/stream.cpp:11:#ifdef AUDIO_OAL_USE_MPG123
+	./src/audio/oal/stream.cpp:18:#ifdef AUDIO_OAL_USE_MPG123
+	./src/audio/oal/stream.cpp:466:#ifdef AUDIO_OAL_USE_MPG123
+	./src/audio/oal/stream.cpp:907:#ifdef AUDIO_OAL_USE_MPG123
+	./src/audio/oal/stream.cpp:914:#ifdef AUDIO_OAL_USE_MPG123
+	./src/audio/oal/stream.cpp:954:#ifdef AUDIO_OAL_USE_MPG123
+AUDIO_OAL_USE_OPUS
+	./src/core/config.h:402:#define AUDIO_OAL_USE_OPUS // enable support of opus files
+	./src/core/config.h:403:#define OPUS_AUDIO_PATHS // changes audio paths to opus paths (doesn't work if AUDIO_OAL_USE_OPUS isn't enabled)
+	./src/core/config.h:404:#define OPUS_SFX  // enable if your sfx.raw is encoded with opus (doesn't work if AUDIO_OAL_USE_OPUS isn't enabled)
+	./src/core/config.h:406:#ifndef AUDIO_OAL_USE_OPUS
+	./src/audio/oal/stream.cpp:21:#ifdef AUDIO_OAL_USE_OPUS
+	./src/audio/oal/stream.cpp:809:#ifdef AUDIO_OAL_USE_OPUS
+	./src/audio/oal/stream.cpp:960:#ifdef AUDIO_OAL_USE_OPUS
+	./src/audio/sampman_oal.cpp:43:#ifdef AUDIO_OAL_USE_OPUS
+AUDIO_OAL_USE_SNDFILE
+	./src/core/config.h:398://#define AUDIO_OAL_USE_SNDFILE // use libsndfile to decode WAVs instead of our internal decoder
+	./src/audio/oal/stream.cpp:8:#ifdef AUDIO_OAL_USE_SNDFILE
+	./src/audio/oal/stream.cpp:15:#ifdef AUDIO_OAL_USE_SNDFILE
+	./src/audio/oal/stream.cpp:395:#ifdef AUDIO_OAL_USE_SNDFILE
+	./src/audio/oal/stream.cpp:949:#ifdef AUDIO_OAL_USE_SNDFILE
+awc
+	./src/animation/AnimManager.cpp:550:#define awc(a) ARRAY_SIZE(a), a
+	./src/animation/AnimManager.cpp:552:	{ "man", "ped", MI_COP, awc(aStdAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:553:	{ "player", "ped", MI_COP, awc(aPlayerAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:554:	{ "playerrocket", "ped", MI_COP, awc(aPlayerWithRocketAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:555:	{ "player1armed", "ped", MI_COP, awc(aPlayer1ArmedAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:556:	{ "player2armed", "ped", MI_COP, awc(aPlayer2ArmedAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:557:	{ "playerBBBat", "ped", MI_COP, awc(aPlayerBBBatAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:558:	{ "shuffle", "ped", MI_COP, awc(aShuffleAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:559:	{ "oldman", "ped", MI_COP, awc(aOldAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:560:	{ "gang1", "ped", MI_COP, awc(aGang1Animations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:561:	{ "gang2", "ped", MI_COP, awc(aGang2Animations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:562:	{ "fatman", "ped", MI_COP, awc(aFatAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:563:	{ "oldfatman", "ped", MI_COP, awc(aOldFatAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:564:	{ "woman", "ped", MI_COP, awc(aStdWomanAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:565:	{ "shopping", "ped", MI_COP, awc(aWomanShopAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:566:	{ "busywoman", "ped", MI_COP, awc(aBusyWomanAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:567:	{ "sexywoman", "ped", MI_COP, awc(aSexyWomanAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:568:	{ "oldwoman", "ped", MI_COP, awc(aOldWomanAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:569:	{ "fatwoman", "ped", MI_COP, awc(aFatWomanAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:570:	{ "panicchunky", "ped", MI_COP, awc(aPanicChunkyAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:572:	{ "playerback", "ped", MI_COP, awc(aPlayerStrafeBackAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:573:	{ "playerleft", "ped", MI_COP, awc(aPlayerStrafeLeftAnimations), aStdAnimDescsSide },
+	./src/animation/AnimManager.cpp:574:	{ "playerright", "ped", MI_COP, awc(aPlayerStrafeRightAnimations), aStdAnimDescsSide },
+	./src/animation/AnimManager.cpp:575:	{ "rocketback", "ped", MI_COP, awc(aRocketStrafeBackAnimations), aStdAnimDescs },
+	./src/animation/AnimManager.cpp:576:	{ "rocketleft", "ped", MI_COP, awc(aRocketStrafeLeftAnimations), aStdAnimDescsSide },
+	./src/animation/AnimManager.cpp:577:	{ "rocketright", "ped", MI_COP, awc(aRocketStrafeRightAnimations), aStdAnimDescsSide },
+	./src/animation/AnimManager.cpp:580:#undef awc
+BACKFACE_CULLING_OFF
+	./src/render/Renderer.cpp:87:#define BACKFACE_CULLING_OFF SetCullMode(rwCULLMODECULLNONE)
+	./src/render/Renderer.cpp:90:#define BACKFACE_CULLING_OFF
+	./src/render/Renderer.cpp:163:		BACKFACE_CULLING_OFF;
+	./src/render/Renderer.cpp:229:		BACKFACE_CULLING_OFF;
+	./src/render/Renderer.cpp:233:		BACKFACE_CULLING_OFF;
+	./src/render/Renderer.cpp:241:		BACKFACE_CULLING_OFF;
+BACKFACE_CULLING_ON
+	./src/render/Renderer.cpp:86:#define BACKFACE_CULLING_ON SetCullMode(rwCULLMODECULLBACK)
+	./src/render/Renderer.cpp:89:#define BACKFACE_CULLING_ON
+	./src/render/Renderer.cpp:165:		BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:235:		BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:245:		BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:275:	BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:309:	BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:364:	BACKFACE_CULLING_ON;
+	./src/render/Renderer.cpp:622:	BACKFACE_CULLING_ON;
+BETA_SLIDING_TEXT
+	./src/core/config.h:312:// #define BETA_SLIDING_TEXT
+	./src/render/Hud.cpp:1574:#ifdef BETA_SLIDING_TEXT
+	./src/render/Hud.cpp:1629:#ifdef BETA_SLIDING_TEXT
+BIGBUILDINGFLAGS
+	./src/core/Streaming.cpp:818:#define BIGBUILDINGFLAGS STREAMFLAGS_DONT_REMOVE|STREAMFLAGS_PRIORITY
+	./src/core/Streaming.cpp:838:			RequestModel(b->GetModelIndex(), BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:850:		RequestModel(islandLODcomInd, BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:851:		RequestModel(islandLODsubInd, BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:854:		RequestModel(islandLODindust, BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:855:		RequestModel(islandLODsubCom, BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:858:		RequestModel(islandLODindust, BIGBUILDINGFLAGS);
+	./src/core/Streaming.cpp:859:		RequestModel(islandLODcomSub, BIGBUILDINGFLAGS);
+BIG_IMG
+	./src/core/CdStream.cpp:248:#ifdef BIG_IMG
+	./src/core/config.h:418:#define BIG_IMG // Not complete - allows to read larger img files
+	./src/core/config.h:515:#undef BIG_IMG
+BIGMESSAGE_Y
+	./src/render/Hud.cpp:35:#define BIGMESSAGE_Y 80.0f
+	./src/render/Hud.cpp:47:#define BIGMESSAGE_Y 84.0f
+	./src/render/Hud.cpp:1499:		CFont::PrintString((SCREEN_WIDTH / 2) + SCREEN_SCALE_X_FIX(2.0f), (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(BIGMESSAGE_Y) + SCREEN_SCALE_Y_FIX(2.0f), m_BigMessage[3]);
+	./src/render/Hud.cpp:1501:		CFont::PrintString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(BIGMESSAGE_Y), m_BigMessage[3]);
+	./src/render/Hud.cpp:1513:		CFont::PrintString((SCREEN_WIDTH / 2) - SCREEN_SCALE_X_FIX(2.0f), (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(BIGMESSAGE_Y) - SCREEN_SCALE_Y_FIX(2.0f), m_BigMessage[4]);
+	./src/render/Hud.cpp:1515:		CFont::PrintString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(BIGMESSAGE_Y), m_BigMessage[4]);
+BIGMESSAGE_Y_OFFSET
+	./src/render/Hud.cpp:52:#define BIGMESSAGE_Y_OFFSET 18.0f
+	./src/render/Hud.cpp:55:#define BIGMESSAGE_Y_OFFSET 20.0f
+	./src/render/Hud.cpp:1260:				CFont::PrintString(SCREEN_WIDTH / 2 + SCREEN_SCALE_X_FIX(2.0f), (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(BIGMESSAGE_Y_OFFSET) + SCREEN_SCALE_Y_FIX(2.0f), m_BigMessage[0]);
+BIGTEXT_X_SCALE
+	./src/core/Frontend.h:28:#define BIGTEXT_X_SCALE 0.75f // For FONT_HEADING
+	./src/core/Frontend.cpp:1165:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1214:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1222:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1230:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1239:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1269:				CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+BIGTEXT_Y_SCALE
+	./src/core/Frontend.h:29:#define BIGTEXT_Y_SCALE 0.9f
+	./src/core/Frontend.cpp:1165:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1214:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1222:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1230:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1239:			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+	./src/core/Frontend.cpp:1269:				CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
+BIND_VEHICLE_FIREWEAPON
+	./src/core/re3.cpp:297:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/config.h:306:#define BIND_VEHICLE_FIREWEAPON // Adds ability to rebind fire key for 'in vehicle' controls
+	./src/core/config.h:479:#undef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:134:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:148:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:175:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:189:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:251:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:322:#ifdef BIND_VEHICLE_FIREWEAPON	
+	./src/core/ControllerConfig.cpp:435:#ifdef BIND_VEHICLE_FIREWEAPON	
+	./src/core/ControllerConfig.cpp:488:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:529:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:727:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:876:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:962:#ifndef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1690:#ifndef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1726:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1747:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1796:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1815:#ifndef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1910:#ifndef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1934:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:1957:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.cpp:2430:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/ControllerConfig.h:35:#ifdef BIND_VEHICLE_FIREWEAPON
+	./src/core/Frontend.cpp:2042:#ifdef BIND_VEHICLE_FIREWEAPON
+BIT
+	./src/entities/Entity.cpp:696:	tmp |= (m_type & (BIT(3) - 1));
+	./src/entities/Entity.cpp:697:	tmp |= (m_status & (BIT(5) - 1)) << 3;
+	./src/entities/Entity.cpp:699:	if (bUsesCollision) tmp |= BIT(8);
+	./src/entities/Entity.cpp:700:	if (bCollisionProcessed) tmp |= BIT(9);
+	./src/entities/Entity.cpp:701:	if (bIsStatic)  tmp |= BIT(10);
+	./src/entities/Entity.cpp:702:	if (bHasContacted) tmp |= BIT(11);
+	./src/entities/Entity.cpp:703:	if (bPedPhysics) tmp |= BIT(12);
+	./src/entities/Entity.cpp:704:	if (bIsStuck) tmp |= BIT(13);
+	./src/entities/Entity.cpp:705:	if (bIsInSafePosition) tmp |= BIT(14);
+	./src/entities/Entity.cpp:706:	if (bUseCollisionRecords) tmp |= BIT(15);
+	./src/entities/Entity.cpp:708:	if (bWasPostponed) tmp |= BIT(16);
+	./src/entities/Entity.cpp:709:	if (bExplosionProof) tmp |= BIT(17);
+	./src/entities/Entity.cpp:710:	if (bIsVisible)  tmp |= BIT(18);
+	./src/entities/Entity.cpp:711:	if (bHasCollided) tmp |= BIT(19);
+	./src/entities/Entity.cpp:712:	if (bRenderScorched) tmp |= BIT(20);
+	./src/entities/Entity.cpp:713:	if (bHasBlip) tmp |= BIT(21);
+	./src/entities/Entity.cpp:714:	if (bIsBIGBuilding) tmp |= BIT(22);
+	./src/entities/Entity.cpp:715:	if (bRenderDamaged) tmp |= BIT(23);
+	./src/entities/Entity.cpp:717:	if (bBulletProof) tmp |= BIT(24);
+	./src/entities/Entity.cpp:718:	if (bFireProof) tmp |= BIT(25);
+	./src/entities/Entity.cpp:719:	if (bCollisionProof)  tmp |= BIT(26);
+	./src/entities/Entity.cpp:720:	if (bMeleeProof) tmp |= BIT(27);
+	./src/entities/Entity.cpp:721:	if (bOnlyDamagedByPlayer) tmp |= BIT(28);
+	./src/entities/Entity.cpp:722:	if (bStreamingDontDelete) tmp |= BIT(29);
+	./src/entities/Entity.cpp:723:	if (bZoneCulled) tmp |= BIT(30);
+	./src/entities/Entity.cpp:724:	if (bZoneCulled2) tmp |= BIT(31);
+	./src/entities/Entity.cpp:730:	if (bRemoveFromWorld) tmp |= BIT(0);
+	./src/entities/Entity.cpp:731:	if (bHasHitWall) tmp |= BIT(1);
+	./src/entities/Entity.cpp:732:	if (bImBeingRendered)  tmp |= BIT(2);
+	./src/entities/Entity.cpp:733:	if (bTouchingWater) tmp |= BIT(3);
+	./src/entities/Entity.cpp:734:	if (bIsSubway) tmp |= BIT(4);
+	./src/entities/Entity.cpp:735:	if (bDrawLast) tmp |= BIT(5);
+	./src/entities/Entity.cpp:736:	if (bNoBrightHeadLights) tmp |= BIT(6);
+	./src/entities/Entity.cpp:737:	if (bDoNotRender) tmp |= BIT(7);
+	./src/entities/Entity.cpp:739:	if (bDistanceFade) tmp |= BIT(8);
+	./src/entities/Entity.cpp:740:	if (m_flagE2) tmp |= BIT(9);
+	./src/entities/Entity.cpp:749:	m_type = (tmp & ((BIT(3) - 1)));
+	./src/entities/Entity.cpp:750:	m_status = ((tmp >> 3) & (BIT(5) - 1));
+	./src/entities/Entity.cpp:752:	bUsesCollision = !!(tmp & BIT(8));
+	./src/entities/Entity.cpp:753:	bCollisionProcessed = !!(tmp & BIT(9));
+	./src/entities/Entity.cpp:754:	bIsStatic = !!(tmp & BIT(10));
+	./src/entities/Entity.cpp:755:	bHasContacted = !!(tmp & BIT(11));
+	./src/entities/Entity.cpp:756:	bPedPhysics = !!(tmp & BIT(12));
+	./src/entities/Entity.cpp:757:	bIsStuck = !!(tmp & BIT(13));
+	./src/entities/Entity.cpp:758:	bIsInSafePosition = !!(tmp & BIT(14));
+	./src/entities/Entity.cpp:759:	bUseCollisionRecords = !!(tmp & BIT(15));
+	./src/entities/Entity.cpp:761:	bWasPostponed = !!(tmp & BIT(16));
+	./src/entities/Entity.cpp:762:	bExplosionProof = !!(tmp & BIT(17));
+	./src/entities/Entity.cpp:763:	bIsVisible = !!(tmp & BIT(18));
+	./src/entities/Entity.cpp:764:	bHasCollided = !!(tmp & BIT(19));
+	./src/entities/Entity.cpp:765:	bRenderScorched = !!(tmp & BIT(20));
+	./src/entities/Entity.cpp:766:	bHasBlip = !!(tmp & BIT(21));
+	./src/entities/Entity.cpp:767:	bIsBIGBuilding = !!(tmp & BIT(22));
+	./src/entities/Entity.cpp:768:	bRenderDamaged = !!(tmp & BIT(23));
+	./src/entities/Entity.cpp:770:	bBulletProof = !!(tmp & BIT(24));
+	./src/entities/Entity.cpp:771:	bFireProof = !!(tmp & BIT(25));
+	./src/entities/Entity.cpp:772:	bCollisionProof = !!(tmp & BIT(26));
+	./src/entities/Entity.cpp:773:	bMeleeProof = !!(tmp & BIT(27));
+	./src/entities/Entity.cpp:774:	bOnlyDamagedByPlayer = !!(tmp & BIT(28));
+	./src/entities/Entity.cpp:775:	bStreamingDontDelete = !!(tmp & BIT(29));
+	./src/entities/Entity.cpp:776:	bZoneCulled = !!(tmp & BIT(30));
+	./src/entities/Entity.cpp:777:	bZoneCulled2 = !!(tmp & BIT(31));
+	./src/entities/Entity.cpp:781:	bRemoveFromWorld = !!(tmp & BIT(0));
+	./src/entities/Entity.cpp:782:	bHasHitWall = !!(tmp & BIT(1));
+	./src/entities/Entity.cpp:783:	bImBeingRendered = !!(tmp & BIT(2));
+	./src/entities/Entity.cpp:784:	bTouchingWater = !!(tmp & BIT(3));
+	./src/entities/Entity.cpp:785:	bIsSubway = !!(tmp & BIT(4));
+	./src/entities/Entity.cpp:786:	bDrawLast = !!(tmp & BIT(5));
+	./src/entities/Entity.cpp:787:	bNoBrightHeadLights = !!(tmp & BIT(6));
+	./src/entities/Entity.cpp:788:	bDoNotRender = !!(tmp & BIT(7));
+	./src/entities/Entity.cpp:790:	bDistanceFade = !!(tmp & BIT(8));
+	./src/entities/Entity.cpp:791:	m_flagE2 = !!(tmp & BIT(9));
+	./src/core/common.h:380:#define BIT(num)                         (1<<(num))
+	./src/control/Garages.cpp:1645:	return CarTypesCollected[GetCarsCollectedIndexForGarageType(aGarages[garage].m_eGarageType)] & (BIT(car));
+	./src/control/Garages.cpp:1660:	return aGarages[garage].m_bCollectedCarsState & BIT(id);
+	./src/control/Garages.cpp:1670:			return (CGarages::CarTypesCollected[ct] & BIT(i)) == 0;
+	./src/control/Garages.cpp:1682:			return CGarages::CarTypesCollected[ct] & BIT(i);
+	./src/control/Garages.cpp:1699:	CGarages::CarTypesCollected[ct] |= BIT(index);
+	./src/control/Garages.cpp:1702:		if ((CGarages::CarTypesCollected[ct] & BIT(i)) == 0) {
+	./src/control/Garages.cpp:2458:			return m_bCollectedCarsState & BIT(i);
+	./src/control/Garages.cpp:2467:			m_bCollectedCarsState |= BIT(i);
+	./src/control/Replay.cpp:718:				vp->door_status |= BIT(i);
+	./src/control/AutoPilot.cpp:74:	if (m_bSlowedDownBecauseOfCars) flags |= BIT(0);
+	./src/control/AutoPilot.cpp:75:	if (m_bSlowedDownBecauseOfPeds) flags |= BIT(1);
+	./src/control/AutoPilot.cpp:76:	if (m_bStayInCurrentLevel) flags |= BIT(2);
+	./src/control/AutoPilot.cpp:77:	if (m_bStayInFastLane) flags |= BIT(3);
+	./src/control/AutoPilot.cpp:78:	if (m_bIgnorePathfinding) flags |= BIT(4);
+	./src/control/AutoPilot.cpp:113:	m_bSlowedDownBecauseOfCars = !!(flags & BIT(0));
+	./src/control/AutoPilot.cpp:114:	m_bSlowedDownBecauseOfPeds = !!(flags & BIT(1));
+	./src/control/AutoPilot.cpp:115:	m_bStayInCurrentLevel = !!(flags & BIT(2));
+	./src/control/AutoPilot.cpp:116:	m_bStayInFastLane = !!(flags & BIT(3));
+	./src/control/AutoPilot.cpp:117:	m_bIgnorePathfinding = !!(flags & BIT(4));
+	./src/vehicles/Vehicle.cpp:1300:	if (bIsLawEnforcer) flags |= BIT(0);
+	./src/vehicles/Vehicle.cpp:1301:	if (bIsLocked) flags |= BIT(3);
+	./src/vehicles/Vehicle.cpp:1302:	if (bEngineOn) flags |= BIT(4);
+	./src/vehicles/Vehicle.cpp:1303:	if (bIsHandbrakeOn) flags |= BIT(5);
+	./src/vehicles/Vehicle.cpp:1304:	if (bLightsOn) flags |= BIT(6);
+	./src/vehicles/Vehicle.cpp:1305:	if (bFreebies) flags |= BIT(7);
+	./src/vehicles/Vehicle.cpp:1363:	bIsLawEnforcer = !!(flags & BIT(0));
+	./src/vehicles/Vehicle.cpp:1364:	bIsLocked = !!(flags & BIT(3));
+	./src/vehicles/Vehicle.cpp:1365:	bEngineOn = !!(flags & BIT(4));
+	./src/vehicles/Vehicle.cpp:1366:	bIsHandbrakeOn = !!(flags & BIT(5));
+	./src/vehicles/Vehicle.cpp:1367:	bLightsOn = !!(flags & BIT(6));
+	./src/vehicles/Vehicle.cpp:1368:	bFreebies = !!(flags & BIT(7));
+	./src/render/ParticleMgr.h:9:	ZCHECK_FIRST      = BIT(0),
+	./src/render/ParticleMgr.h:10:	ZCHECK_STEP       = BIT(1),
+	./src/render/ParticleMgr.h:11:	DRAW_OPAQUE       = BIT(2),
+	./src/render/ParticleMgr.h:12:	SCREEN_TRAIL      = BIT(3),
+	./src/render/ParticleMgr.h:13:	SPEED_TRAIL       = BIT(4),
+	./src/render/ParticleMgr.h:14:	RAND_VERT_V       = BIT(5),
+	./src/render/ParticleMgr.h:15:	CYCLE_ANIM        = BIT(6),
+	./src/render/ParticleMgr.h:16:	DRAW_DARK         = BIT(7),
+	./src/render/ParticleMgr.h:17:	VERT_TRAIL        = BIT(8),
+	./src/render/ParticleMgr.h:18:	_FLAG9            = BIT(9),		// unused
+	./src/render/ParticleMgr.h:19:	DRAWTOP2D         = BIT(10),
+	./src/render/ParticleMgr.h:20:	CLIPOUT2D         = BIT(11),
+	./src/render/ParticleMgr.h:21:	ZCHECK_BUMP       = BIT(12),
+	./src/render/ParticleMgr.h:22:	ZCHECK_BUMP_FIRST = BIT(13)
+BLOCK_COUNT
+	./src/save/GenericGameStorage.cpp:41:#define BLOCK_COUNT 20
+BLOOD_PARTICLE_OFFSET
+	./src/weapons/BulletInfo.cpp:33:#define BLOOD_PARTICLE_OFFSET (CVector(0.0f, 0.0f, 0.0f))
+	./src/weapons/BulletInfo.cpp:144:							CParticle::AddParticle(PARTICLE_BLOOD_SMALL, point.point + BLOOD_PARTICLE_OFFSET, vecParticleDirection);
+BOMB_PRICE
+	./src/control/Garages.cpp:42:#define BOMB_PRICE (1000)
+	./src/control/Garages.cpp:497:				if (!CGarages::BombsAreFree && CWorld::Players[CWorld::PlayerInFocus].m_nMoney < BOMB_PRICE) {
+	./src/control/Garages.cpp:527:					CWorld::Players[CWorld::PlayerInFocus].m_nMoney = Max(0, CWorld::Players[CWorld::PlayerInFocus].m_nMoney - BOMB_PRICE);
+BRIEFS_LINE_HEIGHT
+	./src/core/Frontend.h:69:#define BRIEFS_LINE_HEIGHT 60.0f
+	./src/core/Frontend.cpp:4017:			nextY += MENU_Y(BRIEFS_LINE_HEIGHT);
+BRIEFS_LINE_X
+	./src/core/Frontend.h:68:#define BRIEFS_LINE_X 50.0f
+	./src/core/Frontend.cpp:4016:			CFont::PrintString(MENU_X_LEFT_ALIGNED(BRIEFS_LINE_X), nextY, gUString);
+BRIEFS_TOP_MARGIN
+	./src/core/Frontend.h:67:#define BRIEFS_TOP_MARGIN 40.0f
+	./src/core/Frontend.cpp:3988:	float nextY = BRIEFS_TOP_MARGIN;
+BRIGHTLIGHTS_FADE_DIST
+	./src/render/SpecialFX.cpp:654:#define BRIGHTLIGHTS_FADE_DIST (45.0f)	// strongest between these two
+	./src/render/SpecialFX.cpp:769:		if(aBrightLights[i].m_camDist < BRIGHTLIGHTS_FADE_DIST)
+	./src/render/SpecialFX.cpp:772:			a = 255*(1.0f - (aBrightLights[i].m_camDist-BRIGHTLIGHTS_FADE_DIST)/(BRIGHTLIGHTS_MAX_DIST-BRIGHTLIGHTS_FADE_DIST));
+BRIGHTLIGHTS_MAX_DIST
+	./src/render/SpecialFX.cpp:653:#define BRIGHTLIGHTS_MAX_DIST (60.0f)	// invisible beyond this
+	./src/render/SpecialFX.cpp:675:	if(aBrightLights[NumBrightLights].m_camDist > BRIGHTLIGHTS_MAX_DIST)
+	./src/render/SpecialFX.cpp:772:			a = 255*(1.0f - (aBrightLights[i].m_camDist-BRIGHTLIGHTS_FADE_DIST)/(BRIGHTLIGHTS_MAX_DIST-BRIGHTLIGHTS_FADE_DIST));
+BULLET_HIT_FORCE
+	./src/weapons/BulletInfo.cpp:36:#define BULLET_HIT_FORCE (7.5f)
+	./src/weapons/BulletInfo.cpp:193:							pObject->ApplyMoveForce(-BULLET_HIT_FORCE * point.normal);
+BULLET_LIFETIME
+	./src/weapons/BulletInfo.cpp:31:#define BULLET_LIFETIME (1000)
+	./src/weapons/BulletInfo.cpp:79:	gaBulletInfo[i].m_fTimer = CTimer::GetTimeInMilliseconds() + BULLET_LIFETIME;
+BUTTON_ICONS
+	./src/core/config.h:307:#define BUTTON_ICONS // use textures to show controller buttons
+	./src/core/config.h:480:#undef BUTTON_ICONS
+	./src/core/ControllerConfig.cpp:2617:#ifdef BUTTON_ICONS
+	./src/core/ControllerConfig.cpp:2637:#ifdef BUTTON_ICONS
+	./src/core/ControllerConfig.cpp:2658:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:6:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:282:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:286:#endif // BUTTON_ICONS
+	./src/render/Font.cpp:351:#if !defined(GAMEPAD_MENU) && defined(BUTTON_ICONS)
+	./src/render/Font.cpp:357:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:401:#endif // BUTTON_ICONS
+	./src/render/Font.cpp:449:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:482:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:487:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:1040:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:1213:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:1251:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:1369:#ifdef BUTTON_ICONS
+	./src/render/Font.cpp:1420:#ifdef BUTTON_ICONS
+	./src/render/Font.h:68:#ifdef BUTTON_ICONS
+	./src/render/Font.h:90:#endif // BUTTON_ICONS
+	./src/render/Font.h:107:#ifdef BUTTON_ICONS
+	./src/render/Font.h:114:#endif // BUTTON_ICONS
+CALCRATIO
+	./src/audio/sampman_oal.cpp:1415:	#define CALCRATIO(x,y,z,min,max,val) (ZR(y, ZR(x, ZR(z, min, max), min), ZR(x, ZR(z, min, max), ZR(z, min, val))))
+	./src/audio/sampman_oal.cpp:1417:	float fRatio = CALCRATIO(normx, normy, normz, 0.3f, 0.5f, (normy+normx+normz)/3.0f);
+	./src/audio/sampman_oal.cpp:1419:	#undef CALCRATIO
+CAMERA_PICKUP
+	./src/core/config.h:379:#define CAMERA_PICKUP
+	./src/core/config.h:508:#undef CAMERA_PICKUP
+	./src/control/Pickups.cpp:640:#ifdef CAMERA_PICKUP
+CANCELLABLE_CAR_ENTER
+	./src/core/config.h:386:#define CANCELLABLE_CAR_ENTER
+	./src/core/config.h:511:#undef CANCELLABLE_CAR_ENTER
+	./src/peds/Ped.cpp:2694:#ifdef CANCELLABLE_CAR_ENTER
+	./src/peds/PedAI.cpp:2379:#ifdef CANCELLABLE_CAR_ENTER
+	./src/peds/PedAI.cpp:2529:#ifdef CANCELLABLE_CAR_ENTER
+CAN_SEE_ENTITY_ANGLE_THRESHOLD
+	./src/peds/Ped.h:17:#define CAN_SEE_ENTITY_ANGLE_THRESHOLD	DEGTORAD(60.0f)
+	./src/peds/Ped.h:573:	bool CanSeeEntity(CEntity*, float threshold = CAN_SEE_ENTITY_ANGLE_THRESHOLD);
+	./src/peds/Ped.cpp:2791:						&& ((CPed*)m_pPointGunAt)->CanSeeEntity(this, CAN_SEE_ENTITY_ANGLE_THRESHOLD * 2)) {
+	./src/peds/PedFight.cpp:507:				if (neededTurn < CAN_SEE_ENTITY_ANGLE_THRESHOLD) {
+CANTIMECULL
+	./src/render/Renderer.cpp:665:#define CANTIMECULL (!OTHERUNAVAILABLE)
+	./src/render/Renderer.cpp:681:			if(CANTIMECULL)
+	./src/render/Renderer.cpp:685:			if(CANTIMECULL)
+	./src/render/Renderer.cpp:826:		if(CANTIMECULL)
+CAPSVERSION
+	./src/rw/TexRead.cpp:167:#define CAPSVERSION 0
+	./src/rw/TexRead.cpp:180:	caps->version = CAPSVERSION;
+CARLIGHTS_FADE_DIST
+	./src/render/SpecialFX.cpp:656:#define CARLIGHTS_FADE_DIST (15.0f)	// 31 for close lights
+	./src/render/SpecialFX.cpp:775:			if(aBrightLights[i].m_camDist < CARLIGHTS_FADE_DIST)
+	./src/render/SpecialFX.cpp:778:				a = 31 + (255-31)*((aBrightLights[i].m_camDist-CARLIGHTS_FADE_DIST)/(CARLIGHTS_MAX_DIST-CARLIGHTS_FADE_DIST));
+CARLIGHTS_MAX_DIST
+	./src/render/SpecialFX.cpp:655:#define CARLIGHTS_MAX_DIST (30.0f)
+	./src/render/SpecialFX.cpp:777:			else if(aBrightLights[i].m_camDist < CARLIGHTS_MAX_DIST)
+	./src/render/SpecialFX.cpp:778:				a = 31 + (255-31)*((aBrightLights[i].m_camDist-CARLIGHTS_FADE_DIST)/(CARLIGHTS_MAX_DIST-CARLIGHTS_FADE_DIST));
+CAR_MOVING_SPEED_THRESHOLD
+	./src/vehicles/Cranes.cpp:23:#define CAR_MOVING_SPEED_THRESHOLD (0.01f)
+	./src/vehicles/Cranes.cpp:243:					Abs(m_pVehiclePickedUp->GetMoveSpeed().x) > CAR_MOVING_SPEED_THRESHOLD ||
+	./src/vehicles/Cranes.cpp:244:					Abs(m_pVehiclePickedUp->GetMoveSpeed().y) > CAR_MOVING_SPEED_THRESHOLD ||
+	./src/vehicles/Cranes.cpp:245:					Abs(m_pVehiclePickedUp->GetMoveSpeed().z) > CAR_MOVING_SPEED_THRESHOLD ||
+	./src/vehicles/Cranes.cpp:418:		if (Abs(pVehicle->GetMoveSpeed().x) >= CAR_MOVING_SPEED_THRESHOLD ||
+	./src/vehicles/Cranes.cpp:419:			Abs(pVehicle->GetMoveSpeed().y) >= CAR_MOVING_SPEED_THRESHOLD ||
+	./src/vehicles/Cranes.cpp:420:			Abs(pVehicle->GetMoveSpeed().z) >= CAR_MOVING_SPEED_THRESHOLD)
+CAR_REWARD_MILITARY_CRANE
+	./src/vehicles/Cranes.cpp:22:#define CAR_REWARD_MILITARY_CRANE (1500)
+	./src/vehicles/Cranes.cpp:313:								CWorld::Players[CWorld::PlayerInFocus].m_nMoney += CAR_REWARD_MILITARY_CRANE;
+	./src/vehicles/Cranes.cpp:314:								CGarages::TriggerMessage("GA_10", CAR_REWARD_MILITARY_CRANE, MESSAGE_SHOW_DURATION, -1);
+CAR_ROTATION_SPEED
+	./src/vehicles/Cranes.cpp:27:#define CAR_ROTATION_SPEED (0.0035f)
+	./src/vehicles/Cranes.cpp:398:	float fDeltaThisFrame = CAR_ROTATION_SPEED * CTimer::GetTimeStep();
+CDDEBUG
+	./src/core/CdStreamPosix.cpp:21:#define CDDEBUG(f, ...)   debug ("%s: " f "\n", "cdvd_stream", ## __VA_ARGS__)
+	./src/core/CdStreamPosix.cpp:179:	CDDEBUG("read info %p", gpReadInfo);
+CDSTREAM_SECTOR_SIZE
+	./src/rw/TexRead.cpp:344:	uint8 *buf = new uint8[CDSTREAM_SECTOR_SIZE];
+	./src/rw/TexRead.cpp:416:				int32 num = size % CDSTREAM_SECTOR_SIZE;
+	./src/rw/TexRead.cpp:418:				size /= CDSTREAM_SECTOR_SIZE;
+	./src/rw/TexRead.cpp:421:					num = CDSTREAM_SECTOR_SIZE - num;
+	./src/rw/TexRead.cpp:425:				dirInfo.offset = pos / CDSTREAM_SECTOR_SIZE;
+	./src/objects/CutsceneHead.cpp:193:		CStreaming::MakeSpaceFor(size * CDSTREAM_SECTOR_SIZE);
+	./src/objects/CutsceneHead.cpp:215:			CStreaming::MakeSpaceFor(size * CDSTREAM_SECTOR_SIZE);
+	./src/core/CdStream.cpp:113:	if ( BytesPerSector <= CDSTREAM_SECTOR_SIZE )
+	./src/core/CdStream.cpp:126:	void *pBuffer = (void *)RwMallocAlign(CDSTREAM_SECTOR_SIZE, BytesPerSector);
+	./src/core/CdStream.cpp:239:		pChannel->Overlapped.Offset = _GET_OFFSET(offset) * CDSTREAM_SECTOR_SIZE;
+	./src/core/CdStream.cpp:241:		if ( !ReadFile(hImage, buffer, size * CDSTREAM_SECTOR_SIZE, NULL, &pChannel->Overlapped)
+	./src/core/CdStream.cpp:251:	liDistanceToMove.QuadPart *= CDSTREAM_SECTOR_SIZE;
+	./src/core/CdStream.cpp:254:	SetFilePointer(hImage, _GET_OFFSET(offset) * CDSTREAM_SECTOR_SIZE, nil, FILE_BEGIN);
+	./src/core/CdStream.cpp:259:	if ( !ReadFile(hImage, buffer, size * CDSTREAM_SECTOR_SIZE, &NumberOfBytesRead, nil) )
+	./src/core/CdStream.cpp:416:				pChannel->Overlapped.Offset = pChannel->nSectorOffset * CDSTREAM_SECTOR_SIZE;
+	./src/core/CdStream.cpp:425:						pChannel->nSectorsToRead * CDSTREAM_SECTOR_SIZE,
+	./src/core/CdStream.cpp:447:				SetFilePointer(pChannel->hFile, pChannel->nSectorOffset * CDSTREAM_SECTOR_SIZE, nil, FILE_BEGIN);
+	./src/core/CdStream.cpp:452:						pChannel->nSectorsToRead * CDSTREAM_SECTOR_SIZE,
+	./src/core/CdStream.h:3:#define CDSTREAM_SECTOR_SIZE 2048
+	./src/core/Streaming.cpp:206:	ms_pStreamingBuffer[0] = (int8*)RwMallocAlign(ms_streamingBufferSize*CDSTREAM_SECTOR_SIZE, CDSTREAM_SECTOR_SIZE);
+	./src/core/Streaming.cpp:208:	ms_pStreamingBuffer[1] = ms_pStreamingBuffer[0] + ms_streamingBufferSize*CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:210:	ms_pStreamingBuffer[0] = (int8*)RwMallocAlign(ms_streamingBufferSize*2*CDSTREAM_SECTOR_SIZE, CDSTREAM_SECTOR_SIZE);
+	./src/core/Streaming.cpp:212:	ms_pStreamingBuffer[1] = ms_pStreamingBuffer[0] + ms_streamingBufferSize*CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:213:	ms_pStreamingBuffer[2] = ms_pStreamingBuffer[1] + ms_streamingBufferSize*CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:214:	ms_pStreamingBuffer[3] = ms_pStreamingBuffer[2] + ms_streamingBufferSize*CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:398:	ms_imageSize /= CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:508:	mem.length = cdsize * CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:638:		ms_memoryUsed += ms_aInfoForModel[streamId].GetCdSize() * CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:673:	mem.length = ms_aInfoForModel[streamId].GetCdSize() * CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:704:	ms_memoryUsed += ms_aInfoForModel[streamId].GetCdSize() * CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:950:		ms_memoryUsed -= ms_aInfoForModel[id].GetCdSize()*CDSTREAM_SECTOR_SIZE;
+	./src/core/Streaming.cpp:1829:		FinishLoadingLargeFile(&ms_pStreamingBuffer[ch][ms_channel[ch].offsets[0]*CDSTREAM_SECTOR_SIZE],
+	./src/core/Streaming.cpp:1851:				MakeSpaceFor(cdsize * CDSTREAM_SECTOR_SIZE);
+	./src/core/Streaming.cpp:1852:				ConvertBufferToObject(&ms_pStreamingBuffer[ch][ms_channel[ch].offsets[i]*CDSTREAM_SECTOR_SIZE],
+	./src/core/Streaming.cpp:2043:		MakeSpaceFor(streamSizes[nextChannel] * CDSTREAM_SECTOR_SIZE);
+	./src/core/Streaming.cpp:2095:			MakeSpaceFor(size * CDSTREAM_SECTOR_SIZE);
+	./src/core/CdStreamPosix.cpp:162:	if ( fsInfo.f_bsize <= CDSTREAM_SECTOR_SIZE )
+	./src/core/CdStreamPosix.cpp:168:	void *pBuffer = (void *)RwMallocAlign(CDSTREAM_SECTOR_SIZE, (RwUInt32)fsInfo.f_bsize);
+	./src/core/CdStreamPosix.cpp:441:			lseek(pChannel->hFile, (size_t)pChannel->nSectorOffset * (size_t)CDSTREAM_SECTOR_SIZE, SEEK_SET);
+	./src/core/CdStreamPosix.cpp:442:			if (read(pChannel->hFile, pChannel->pBuffer, pChannel->nSectorsToRead * CDSTREAM_SECTOR_SIZE) == -1) {
+	./src/core/Frontend.cpp:3616:	CStreaming::MakeSpaceFor(350 * CDSTREAM_SECTOR_SIZE); // twice of it in mobile
+	./src/render/WaterLevel.cpp:1462:	CStreaming::MakeSpaceFor(14 * CDSTREAM_SECTOR_SIZE); 
+CDTRACE
+	./src/core/CdStreamPosix.cpp:22:#define CDTRACE(f, ...)   printf("%s: " f "\n", "cdvd_stream", ## __VA_ARGS__)
+	./src/core/CdStreamPosix.cpp:83:		CDTRACE("failed to create stream semaphore");
+	./src/core/CdStreamPosix.cpp:98:				CDTRACE("failed to create sync semaphore");
+	./src/core/CdStreamPosix.cpp:109:				CDTRACE("failed to create start semaphore");
+	./src/core/CdStreamPosix.cpp:120:				CDTRACE("failed to create sync thread");
+	./src/core/CdStreamPosix.cpp:135:		CDTRACE("failed to create sync thread");
+	./src/core/CdStreamPosix.cpp:151:		CDTRACE("can't get filesystem info");
+	./src/core/CdStreamPosix.cpp:206:		CDTRACE("can't get size of gta3.img");
+ChangeScreen
+	./src/core/Frontend.cpp:299:#define ChangeScreen(screen, option, updateDelay, clearAlpha) \
+	./src/core/Frontend.cpp:4174:				ChangeScreen(MENUPAGE_DELETE_SUCCESS, 0, true, false);
+	./src/core/Frontend.cpp:4182:				ChangeScreen(MENUPAGE_SAVE_SUCCESSFUL, 0, true, false);
+	./src/core/Frontend.cpp:4298:		ChangeScreen(MENUPAGE_NONE, 0, false, false);
+	./src/core/Frontend.cpp:4729:		ChangeScreen(bbNames[curBottomBarOption].screenId, 0, true, false);
+	./src/core/Frontend.cpp:4748:			ChangeScreen(bbNames[curBottomBarOption].screenId, 0, true, true);
+	./src/core/Frontend.cpp:4756:			ChangeScreen(bbNames[curBottomBarOption].screenId, 0, true, true);
+	./src/core/Frontend.cpp:4868:				ChangeScreen(!m_bGameNotLoaded ? aScreens[m_nCurrScreen].m_PreviousPage[1] : aScreens[m_nCurrScreen].m_PreviousPage[0],
+	./src/core/Frontend.cpp:4953:							ChangeScreen(!m_bGameNotLoaded ? aScreens[m_nCurrScreen].m_PreviousPage[1] : aScreens[m_nCurrScreen].m_PreviousPage[0],
+	./src/core/Frontend.cpp:4960:							ChangeScreen(aScreens[m_nCurrScreen].m_aEntries[m_nCurrOption].m_TargetMenu, 0, true, true);
+	./src/core/Frontend.cpp:4972:							ChangeScreen(aScreens[m_nCurrScreen].m_aEntries[m_nCurrOption].m_TargetMenu, 0, true, true);
+	./src/core/Frontend.cpp:5004:					ChangeScreen(aScreens[m_nCurrScreen].m_aEntries[m_nCurrOption].m_TargetMenu, 0, true, true);
+	./src/core/Frontend.cpp:5016:					ChangeScreen(aScreens[m_nCurrScreen].m_aEntries[m_nCurrOption].m_TargetMenu, 0, true, true);
+	./src/core/Frontend.cpp:5019:					ChangeScreen(MENUPAGE_KEYBOARD_CONTROLS, 0, true, true);
+	./src/core/Frontend.cpp:5045:					ChangeScreen(!m_bGameNotLoaded ? aScreens[m_nCurrScreen].m_PreviousPage[1] : aScreens[m_nCurrScreen].m_PreviousPage[0],
+	./src/core/Frontend.cpp:5086:					ChangeScreen(MENUPAGE_SKIN_SELECT, 0, true, true);
+	./src/core/Frontend.cpp:5185:					ChangeScreen(MENUPAGE_SOUND_SETTINGS, 0, true, true);
+	./src/core/Frontend.cpp:5285:				ChangeScreen(oldScreen, oldOption, true, true);
+	./src/core/Frontend.cpp:5626:			ChangeScreen(MENUPAGE_SAVE_FAILED, 0, true, false);
+	./src/core/Frontend.cpp:5631:			ChangeScreen(MENUPAGE_LOAD_FAILED, 0, true, false);
+	./src/core/Frontend.cpp:5634:			ChangeScreen(MENUPAGE_LOAD_FAILED_2, 0, true, false);
+	./src/core/Frontend.cpp:5639:			ChangeScreen(MENUPAGE_DELETE_FAILED, 0, true, false);
+	./src/core/Frontend.cpp:6789:#undef ChangeScreen
+	./src/extras/frontendoption.h:55:void ChangeScreen(int screen, int option = 0, bool fadeIn = true);
+	./src/extras/frontendoption.cpp:16:void ChangeScreen(int screen, int option, bool fadeIn)
+	./src/extras/frontendoption.cpp:33:	ChangeScreen(screen, option, fadeIn);
+CHANNEL2D
+	./src/audio/sampman_miles.cpp:1660:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1689:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1789:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1817:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1838:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1864:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1890:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1916:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1947:		case CHANNEL2D:
+	./src/audio/sampman_miles.cpp:1973:		case CHANNEL2D:
+	./src/audio/sampman_null.cpp:229:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:236:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:243:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_null.cpp:250:	ASSERT( nChannel == CHANNEL2D );
+	./src/audio/sampman_null.cpp:257:	ASSERT(nChannel == CHANNEL2D);
+	./src/audio/sampman.h:105:#define CHANNEL2D                  MAXCHANNELS
+	./src/audio/sampman_oal.cpp:217:	aChannel[CHANNEL2D].Term();
+	./src/audio/sampman_oal.cpp:373:		aChannel[CHANNEL2D].Init(CHANNEL2D, true);
+	./src/audio/sampman_oal.cpp:1526:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1549:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1558:	ASSERT( nChannel != CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1566:	ASSERT( nChannel == CHANNEL2D );
+	./src/audio/sampman_oal.cpp:1569:	if ( nChannel == CHANNEL2D )
+	./src/audio/sampman_oal.cpp:1591:	ASSERT(nChannel == CHANNEL2D);
+	./src/audio/sampman_oal.cpp:1594:	if ( nChannel == CHANNEL2D )
+CHASE_SCENE_FRAMES_IN_RECORDING
+	./src/control/Record.cpp:192:#define CHASE_SCENE_FRAMES_IN_RECORDING (CHASE_SCENE_LENGTH_IN_SECONDS * CHASE_SCENE_FRAMES_PER_SECOND)
+	./src/control/Record.cpp:193:#define CHASE_SCENE_LENGTH_IN_FRAMES (CHASE_SCENE_FRAMES_IN_RECORDING * 2)
+	./src/control/Record.cpp:226:		for (int i = 0; i < CHASE_SCENE_FRAMES_IN_RECORDING; i++) {
+	./src/control/Record.cpp:306:			if (EndOfFrameTime < CHASE_SCENE_FRAMES_IN_RECORDING - 1) {
+	./src/control/Record.cpp:318:				RestoreInfoForCar(pChaseCars[i], &pBaseMemForCar[i][CHASE_SCENE_FRAMES_IN_RECORDING - 1], true);
+	./src/control/Record.cpp:464:		pBaseMemForCar[i] = new CCarStateEachFrame[CHASE_SCENE_FRAMES_IN_RECORDING];
+	./src/control/Record.cpp:465:		for (int j = 0; j < CHASE_SCENE_FRAMES_IN_RECORDING; j++) {
+CHASE_SCENE_FRAMES_PER_SECOND
+	./src/control/Record.cpp:191:#define CHASE_SCENE_FRAMES_PER_SECOND (15) // skipping every second frame
+	./src/control/Record.cpp:192:#define CHASE_SCENE_FRAMES_IN_RECORDING (CHASE_SCENE_LENGTH_IN_SECONDS * CHASE_SCENE_FRAMES_PER_SECOND)
+	./src/control/Record.cpp:300:		float EndOfFrameTime = CHASE_SCENE_FRAMES_PER_SECOND * Min(CHASE_SCENE_LENGTH_IN_SECONDS, TimeMultiplier);
+CHASE_SCENE_LENGTH_IN_FRAMES
+	./src/control/Record.cpp:193:#define CHASE_SCENE_LENGTH_IN_FRAMES (CHASE_SCENE_FRAMES_IN_RECORDING * 2)
+	./src/control/Record.cpp:214:		if (CTimer::GetFrameCounter() < CHASE_SCENE_LENGTH_IN_FRAMES * 2)
+	./src/control/Record.cpp:219:		uint32 fs = CHASE_SCENE_LENGTH_IN_FRAMES * sizeof(CCarStateEachFrame);
+CHASE_SCENE_LENGTH_IN_SECONDS
+	./src/control/Record.cpp:190:#define CHASE_SCENE_LENGTH_IN_SECONDS (80)
+	./src/control/Record.cpp:192:#define CHASE_SCENE_FRAMES_IN_RECORDING (CHASE_SCENE_LENGTH_IN_SECONDS * CHASE_SCENE_FRAMES_PER_SECOND)
+	./src/control/Record.cpp:300:		float EndOfFrameTime = CHASE_SCENE_FRAMES_PER_SECOND * Min(CHASE_SCENE_LENGTH_IN_SECONDS, TimeMultiplier);
+_CHEATCMP
+	./src/core/Pad.cpp:776:#define _CHEATCMP(str)	strncmp(str, CheatString, sizeof(str)-1)
+	./src/core/Pad.cpp:778:	if ( !_CHEATCMP("URDLURDL4144") )
+	./src/core/Pad.cpp:782:	else if ( !_CHEATCMP("URDLURDL1144") )
+	./src/core/Pad.cpp:786:	else if ( !_CHEATCMP("URDLURDL2144") )
+	./src/core/Pad.cpp:790:	else if ( !_CHEATCMP("URDLURDL3144") )
+	./src/core/Pad.cpp:794:	else if ( !_CHEATCMP("RLRLRL4144") )
+	./src/core/Pad.cpp:798:	else if ( !_CHEATCMP("DUDUDU4144") )
+	./src/core/Pad.cpp:802:	else if ( !_CHEATCMP("T2344321") )
+	./src/core/Pad.cpp:806:	else if ( !_CHEATCMP("S2344321") )
+	./src/core/Pad.cpp:810:	else if ( !_CHEATCMP("C2344321") )
+	./src/core/Pad.cpp:814:	else if ( !_CHEATCMP("X2344321") )
+	./src/core/Pad.cpp:818:	else if ( !_CHEATCMP("TCT123CCCCCC") )
+	./src/core/Pad.cpp:822:	else if ( !_CHEATCMP("TCT1SSSSSCCC") )
+	./src/core/Pad.cpp:826:	else if ( !_CHEATCMP("12TCST423142") )
+	./src/core/Pad.cpp:830:	else if ( !_CHEATCMP("RDLU21ULDR") )
+	./src/core/Pad.cpp:834:	else if ( !_CHEATCMP("1243XULUD") )
+	./src/core/Pad.cpp:838:	else if ( !_CHEATCMP("2143XULUD") )
+	./src/core/Pad.cpp:842:	else if ( !_CHEATCMP("DU12XT34") )
+	./src/core/Pad.cpp:846:	else if ( !_CHEATCMP("21SDRUT") )
+	./src/core/Pad.cpp:850:	else if ( !_CHEATCMP("43SDRUT") )
+	./src/core/Pad.cpp:854:	else if ( !_CHEATCMP("T1T4S11") )
+	./src/core/Pad.cpp:858:	else if ( !_CHEATCMP("31D23C4R") )
+	./src/core/Pad.cpp:862:	else if ( !_CHEATCMP("T33L1413") )
+	./src/core/Pad.cpp:866:	else if ( !_CHEATCMP("X1RT31DC1S") )
+	./src/core/Pad.cpp:871:	else if (!_CHEATCMP("X1DUC3RLS3"))
+	./src/core/Pad.cpp:877:	else if (!_CHEATCMP("31UD13XUD"))
+	./src/core/Pad.cpp:883:	else if (!_CHEATCMP("UCCL3R1TT"))
+	./src/core/Pad.cpp:889:	else if (!_CHEATCMP("DUU31XX13"))
+	./src/core/Pad.cpp:892:#undef _CHEATCMP
+	./src/core/Pad.cpp:903:	#define _CHEATCMP(str) strncmp(str, KeyBoardCheatString, sizeof(str)-1)
+	./src/core/Pad.cpp:906:	if ( !_CHEATCMP("SNUGSNUGSNUG") )
+	./src/core/Pad.cpp:910:	if ( !_CHEATCMP("NAMHCIRAEREWIFI") )
+	./src/core/Pad.cpp:914:	if ( !_CHEATCMP("TIEHDNUSEG") )
+	./src/core/Pad.cpp:918:	if ( !_CHEATCMP("ESAELPECILOPEROM") )
+	./src/core/Pad.cpp:922:	if ( !_CHEATCMP("ESAELPECILOPON") )
+	./src/core/Pad.cpp:926:	if ( !_CHEATCMP("KNATASUEVIG") )
+	./src/core/Pad.cpp:930:	if ( !_CHEATCMP("GNABGNABGNAB") )
+	./src/core/Pad.cpp:934:	if ( !_CHEATCMP("PUGNISSERDEKILI") )
+	./src/core/Pad.cpp:938:	if ( !_CHEATCMP("DAAAMGNIOGLLASTI") )
+	./src/core/Pad.cpp:942:	if ( !_CHEATCMP("EMSEKILYDOBON") )
+	./src/core/Pad.cpp:946:	if ( !_CHEATCMP("LLAROFSNOPAEW") )
+	./src/core/Pad.cpp:950:	if ( !_CHEATCMP("UOYNEHWSEILFEMIT") )
+	./src/core/Pad.cpp:954:	if ( !_CHEATCMP("GNIROOOOOB") )
+	./src/core/Pad.cpp:959:	if ( !_CHEATCMP("ESIOTRUT") )
+	./src/core/Pad.cpp:963:	if ( !_CHEATCMP("ESIOTROT") )
+	./src/core/Pad.cpp:968:	if ( !_CHEATCMP("EMROFRECNACNIKS") )
+	./src/core/Pad.cpp:972:	if ( !_CHEATCMP("DNALTOCSEKILI") )
+	./src/core/Pad.cpp:976:	if ( !_CHEATCMP("DNALTOCSEVOLI") )
+	./src/core/Pad.cpp:980:	if ( !_CHEATCMP("PUOSAEP") )
+	./src/core/Pad.cpp:984:	if ( !_CHEATCMP("REHTAEWDAM") )
+	./src/core/Pad.cpp:988:	if ( !_CHEATCMP("SLEEHWFOTESECINA") )
+	./src/core/Pad.cpp:992:	if ( !_CHEATCMP("BBYTTIHCYTTIHC") )
+	./src/core/Pad.cpp:996:	if ( !_CHEATCMP("DAMEKILSRENROC") )
+	./src/core/Pad.cpp:1000:	if ( !_CHEATCMP("TAEHCSBMILYTSAN") )
+	./src/core/Pad.cpp:1005:	if (!_CHEATCMP("OORAGNAK"))
+	./src/core/Pad.cpp:1011:	if (!_CHEATCMP("GUBEDDEP"))
+	./src/core/Pad.cpp:1017:	if (!_CHEATCMP("ILEHERASRAC"))
+	./src/core/Pad.cpp:1023:	if (!_CHEATCMP("ODODRETSAMOTTNAWI"))
+	./src/core/Pad.cpp:1027:	#undef _CHEATCMP
+CHECK_ACTION
+	./src/core/ControllerConfig.cpp:1787:#define CHECK_ACTION(action) \
+	./src/core/ControllerConfig.cpp:1797:		CHECK_ACTION(VEHICLE_FIREWEAPON);
+	./src/core/ControllerConfig.cpp:1799:		CHECK_ACTION(VEHICLE_LOOKBEHIND);
+	./src/core/ControllerConfig.cpp:1800:		CHECK_ACTION(VEHICLE_LOOKLEFT);
+	./src/core/ControllerConfig.cpp:1801:		CHECK_ACTION(VEHICLE_LOOKRIGHT);
+	./src/core/ControllerConfig.cpp:1802:		CHECK_ACTION(VEHICLE_LOOKBEHIND); // note: duplicate
+	./src/core/ControllerConfig.cpp:1803:		CHECK_ACTION(VEHICLE_HORN);
+	./src/core/ControllerConfig.cpp:1804:		CHECK_ACTION(VEHICLE_HANDBRAKE);
+	./src/core/ControllerConfig.cpp:1805:		CHECK_ACTION(VEHICLE_ACCELERATE);
+	./src/core/ControllerConfig.cpp:1806:		CHECK_ACTION(VEHICLE_BRAKE);
+	./src/core/ControllerConfig.cpp:1807:		CHECK_ACTION(VEHICLE_CHANGE_RADIO_STATION);
+	./src/core/ControllerConfig.cpp:1808:		CHECK_ACTION(TOGGLE_SUBMISSIONS);
+	./src/core/ControllerConfig.cpp:1809:		CHECK_ACTION(VEHICLE_TURRETLEFT);
+	./src/core/ControllerConfig.cpp:1810:		CHECK_ACTION(VEHICLE_TURRETRIGHT);
+	./src/core/ControllerConfig.cpp:1811:		CHECK_ACTION(VEHICLE_TURRETUP);
+	./src/core/ControllerConfig.cpp:1812:		CHECK_ACTION(VEHICLE_TURRETDOWN);
+	./src/core/ControllerConfig.cpp:1813:		CHECK_ACTION(VEHICLE_ENTER_EXIT);
+	./src/core/ControllerConfig.cpp:1814:		CHECK_ACTION(CAMERA_CHANGE_VIEW_ALL_SITUATIONS);
+	./src/core/ControllerConfig.cpp:1816:		CHECK_ACTION(PED_FIREWEAPON);
+	./src/core/ControllerConfig.cpp:1818:		CHECK_ACTION(GO_LEFT);
+	./src/core/ControllerConfig.cpp:1819:		CHECK_ACTION(GO_RIGHT);
+	./src/core/ControllerConfig.cpp:1820:		CHECK_ACTION(NETWORK_TALK);
+	./src/core/ControllerConfig.cpp:1821:		CHECK_ACTION(SWITCH_DEBUG_CAM_ON);
+	./src/core/ControllerConfig.cpp:1822:		CHECK_ACTION(TOGGLE_DPAD);
+	./src/core/ControllerConfig.cpp:1823:		CHECK_ACTION(TAKE_SCREEN_SHOT);
+	./src/core/ControllerConfig.cpp:1824:		CHECK_ACTION(SHOW_MOUSE_POINTER_TOGGLE);
+	./src/core/ControllerConfig.cpp:1829:#undef CHECK_ACTION
+CHECKMEM
+	./src/core/Pools.cpp:28:#define CHECKMEM(msg) CMemCheck::AllocateMemCheckBlock(msg)
+	./src/core/Pools.cpp:30:#define CHECKMEM(msg)
+	./src/core/Pools.cpp:37:	CHECKMEM("before pools");
+	./src/core/Pools.cpp:39:	CHECKMEM("after CPtrNodePool");
+	./src/core/Pools.cpp:41:	CHECKMEM("after CEntryInfoNodePool");
+	./src/core/Pools.cpp:43:	CHECKMEM("after CPedPool");
+	./src/core/Pools.cpp:45:	CHECKMEM("after CVehiclePool");
+	./src/core/Pools.cpp:47:	CHECKMEM("after CBuildingPool");
+	./src/core/Pools.cpp:49:	CHECKMEM("after CTreadablePool");
+	./src/core/Pools.cpp:51:	CHECKMEM("after CObjectPool");
+	./src/core/Pools.cpp:53:	CHECKMEM("after CDummyPool");
+	./src/core/Pools.cpp:55:	CHECKMEM("after pools");
+CHECK_NEARBY_THINGS_MAX_DIST
+	./src/peds/Ped.h:15:#define CHECK_NEARBY_THINGS_MAX_DIST	15.0f
+	./src/peds/PlayerPed.cpp:773:	CWorld::FindObjectsInRange(pos, CHECK_NEARBY_THINGS_MAX_DIST, true, &lastVehicle, 6, vehicles, false, true, false, false, false);
+	./src/peds/Ped.cpp:1251:		CWorld::FindObjectsInRange(pos, CHECK_NEARBY_THINGS_MAX_DIST, true, &lastVehicle, 6, vehicles, false, true, false, false, false);
+	./src/peds/Ped.cpp:1271:		CWorld::FindObjectsInRange(pos, CHECK_NEARBY_THINGS_MAX_DIST, true, &lastVehicle, 6, vehicles, false, true, false, false, false);
+	./src/peds/Ped.cpp:7058:	int minX = CWorld::GetSectorIndexX(GetPosition().x - CHECK_NEARBY_THINGS_MAX_DIST);
+	./src/peds/Ped.cpp:7060:	int minY = CWorld::GetSectorIndexY(GetPosition().y - CHECK_NEARBY_THINGS_MAX_DIST);
+	./src/peds/Ped.cpp:7062:	int maxX = CWorld::GetSectorIndexX(GetPosition().x + CHECK_NEARBY_THINGS_MAX_DIST);
+	./src/peds/Ped.cpp:7069:	int maxY = CWorld::GetSectorIndexY(GetPosition().y + CHECK_NEARBY_THINGS_MAX_DIST);
+	./src/peds/PedAI.cpp:1716:					float closestCarDist = CHECK_NEARBY_THINGS_MAX_DIST;
+	./src/peds/PedAI.cpp:1765:					CWorld::FindObjectsInRange(pos, CHECK_NEARBY_THINGS_MAX_DIST, true, &lastVehicle, 6, vehicles, false, true, false, false, false);
+	./src/peds/PedAI.cpp:4898:		CWorld::FindObjectsInRange(pos, CHECK_NEARBY_THINGS_MAX_DIST, true, &lastVehicle, 6, vehicles, false, true, false, false, false);
+CheckSaveHeader
+	./src/core/Zones.cpp:701:	CheckSaveHeader(buffer, 'Z', 'N', 'S', '\0', size - SAVE_HEADER_SIZE);
+	./src/core/Radar.cpp:1011:	CheckSaveHeader(buf, 'R', 'D', 'R', '\0', size - SAVE_HEADER_SIZE);
+	./src/core/common.h:551:#define CheckSaveHeader(buf,a,b,c,d,size)\
+	./src/control/Restart.cpp:173:	CheckSaveHeader(buf, 'R','S','T','\0', size - SAVE_HEADER_SIZE);
+	./src/control/Script5.cpp:2004:	CheckSaveHeader(buf, 'S', 'C', 'R', '\0', size - SAVE_HEADER_SIZE);
+	./src/peds/PedType.cpp:201:	CheckSaveHeader(buf, 'P', 'T', 'P', '\0', size - SAVE_HEADER_SIZE);
+	./src/peds/Gangs.cpp:72:	CheckSaveHeader(buf, 'G','N','G','\0', size - SAVE_HEADER_SIZE);
+	./src/vehicles/CarGen.cpp:256:	CheckSaveHeader(buffer, 'C','G','N','\0', size - SAVE_HEADER_SIZE);
+	./src/audio/AudioScriptObject.cpp:54:	CheckSaveHeader(buf, 'A', 'U', 'D', '\0', size - SAVE_HEADER_SIZE);
+clamp
+	./src/animation/AnimBlendAssociation.cpp:199:		// Maximally faded in, clamp values
+	./src/weapons/Weapon.cpp:205:					float power = clamp((distToTarget-10.0f)*0.02f, 0.2f, 1.0f);
+	./src/core/PlayerInfo.cpp:124:	m_fRoadDensity = clamp(m_fRoadDensity, 0.4f, 1.45f);
+	./src/core/ZoneCull.cpp:399:		cull->position.x = clamp(v.x, minx, maxx);
+	./src/core/ZoneCull.cpp:400:		cull->position.y = clamp(v.y, miny, maxy);
+	./src/core/ZoneCull.cpp:401:		cull->position.z = clamp(v.z, minz, maxz);
+	./src/core/ZoneCull.cpp:961:	x = clamp(x, 0, ElementsX-1);
+	./src/core/ZoneCull.cpp:963:	y = clamp(y, 0, ElementsY-1);
+	./src/core/ZoneCull.cpp:965:	z = clamp(z, 0, ElementsZ-1);
+	./src/core/General.h:59:		float result = clamp(angle, -25.0f, 25.0f);
+	./src/core/FileLoader.cpp:1465:		effect->attractor.probability = clamp(probability, 0, 255);
+	./src/core/Frontend_PS2.cpp:1391:		m_someAlpha = 255 - clamp(alpha, 0.0f, 1.0f) * 255.0f;
+	./src/core/Frontend_PS2.cpp:1408:		m_someAlpha = clamp(alpha, 0.0f, 1.0f) * 255.0f;
+	./src/core/common.h:287:#define clamp(v, low, high) ((v)<(low) ? (low) : (v)>(high) ? (high) : (v))
+	./src/core/Camera.cpp:664:	shakeStrength = clamp(shakeStrength, 0.0f, 2.0f);
+	./src/core/Camera.cpp:1880:	if(clamp(curForce, 0.0f, 2.0f) < strength){
+	./src/core/Camera.cpp:1891:	if(clamp(curForce, 0.0f, 2.0f) < strength){
+	./src/core/Camera.cpp:3575:	float clampedFrontZ = clamp(Cams[ActiveCam].Front.z, -1.0f, 1.0f);
+	./src/core/Cam.cpp:1860:		// What's this?? wouldn't it make more sense to clamp?
+	./src/core/Cam.cpp:3485:	a = clamp(a, 0.0f, 1.0f);
+	./src/core/Cam.cpp:3523:	a = clamp(a, 0.0f, 1.0f);
+	./src/core/Cam.cpp:4902:		FOV = clamp(FOV, DefaultFOV, DefaultFOV + 30.0f);
+	./src/core/Cam.cpp:5024:	float targetAlpha = Asin(clamp(Front.z, -1.0f, 1.0f)) - zoomModeAlphaOffset;
+	./src/core/Frontend.cpp:902:		m_PrefsBrightness = clamp(m_PrefsBrightness, 0, 511);
+	./src/core/Frontend.cpp:909:		m_PrefsLOD = clamp(m_PrefsLOD, 0.8f, 1.8f);
+	./src/core/Frontend.cpp:914:		m_PrefsMusicVolume = clamp(m_PrefsMusicVolume, 0, 127);
+	./src/core/Frontend.cpp:919:		m_PrefsSfxVolume = clamp(m_PrefsSfxVolume, 0, 127);
+	./src/core/Frontend.cpp:924:		TheCamera.m_fMouseAccelHorzntl = clamp(TheCamera.m_fMouseAccelHorzntl, 1.0f/3200.0f, 1.0f/200.0f);
+	./src/core/Frontend.cpp:4558:				m_PrefsMusicVolume = clamp(m_PrefsMusicVolume, 0, 127);
+	./src/core/Frontend.cpp:4597:				TheCamera.m_fMouseAccelHorzntl = clamp(TheCamera.m_fMouseAccelHorzntl, 1.0f / 3200, 1.0f / 200);
+	./src/core/Frontend.cpp:4607:				TheCamera.m_fMouseAccelHorzntl = clamp(TheCamera.m_fMouseAccelHorzntl, 1.0f / 3200, 1.0f / 200);
+	./src/core/Frontend.cpp:5423:					m_nPrefsAudio3DProviderIndex = clamp(m_nPrefsAudio3DProviderIndex, 0, DMAudio.GetNum3DProvidersAvailable() - 1);
+	./src/core/Frontend.cpp:5430:					m_PrefsSpeakers = clamp(m_PrefsSpeakers, 0, 2);
+	./src/control/Replay.cpp:407:		state->time = 255.0f / 4.0f * clamp(main->currentTime, 0.0f, 4.0f);
+	./src/control/Replay.cpp:408:		state->speed = 255.0f / 3.0f * clamp(main->speed, 0.0f, 3.0f);
+	./src/control/Replay.cpp:416:		state->secTime = 255.0f / 4.0f * clamp(second->currentTime, 0.0f, 4.0f);
+	./src/control/Replay.cpp:417:		state->secSpeed = 255.0f / 3.0f * clamp(second->speed, 0.0f, 3.0f);
+	./src/control/Replay.cpp:418:		state->blendAmount = 255.0f / 2.0f * clamp(blend_amount, 0.0f, 2.0f);
+	./src/control/Replay.cpp:428:		state->partAnimTime = 255.0f / 4.0f * clamp(partial->currentTime, 0.0f, 4.0f);
+	./src/control/Replay.cpp:429:		state->partAnimSpeed = 255.0f / 3.0f * clamp(partial->speed, 0.0f, 3.0f);
+	./src/control/Replay.cpp:430:		state->partBlendAmount = 255.0f / 2.0f * clamp(partial->blendAmount, 0.0f, 2.0f);
+	./src/control/Replay.cpp:445:			state->aCurTime[i] = 255.0f / 4.0f * clamp(assoc->currentTime, 0.0f, 4.0f);
+	./src/control/Replay.cpp:446:			state->aSpeed[i] = 255.0f / 3.0f * clamp(assoc->speed, 0.0f, 3.0f);
+	./src/control/Replay.cpp:447:			state->aBlendAmount[i] = 255.0f / 2.0f * clamp(assoc->blendAmount, 0.0f, 2.0f);
+	./src/control/Replay.cpp:449:			state->aBlendDelta[i] = 127.0f / 32.0f * clamp(assoc->blendDelta, -16.0f, 16.0f);
+	./src/control/Replay.cpp:471:			state->aCurTime2[i] = 255.0f / 4.0f * clamp(assoc->currentTime, 0.0f, 4.0f);
+	./src/control/Replay.cpp:472:			state->aSpeed2[i] = 255.0f / 3.0f * clamp(assoc->speed, 0.0f, 3.0f);
+	./src/control/Replay.cpp:473:			state->aBlendAmount2[i] = 255.0f / 2.0f * clamp(assoc->blendAmount, 0.0f, 2.0f);
+	./src/control/Replay.cpp:475:			state->aBlendDelta2[i] = 127.0f / 16.0f * clamp(assoc->blendDelta, -16.0f, 16.0f);
+	./src/control/Script4.cpp:738:		pPlayerPed->m_fArmour = clamp(pPlayerPed->m_fArmour + ScriptParams[1], 0.0f, 100.0f);
+	./src/control/Script4.cpp:746:		pPed->m_fArmour = clamp(pPed->m_fArmour + ScriptParams[1], 0.0f, 100.0f);
+	./src/peds/Population.cpp:487:	return clamp(vehSpeed - 0.1f + 1.0f, 1.0f, 1.5f);
+	./src/peds/Ped.cpp:2930:								rDriveAssoc->blendAmount = clamp(steerAngle * -100.0f / 61.0f, 0.0f, 1.0f);
+	./src/peds/Ped.cpp:2941:								lDriveAssoc->blendAmount = clamp(steerAngle * 100.0f / 61.0f, 0.0f, 1.0f);
+	./src/peds/PedIK.cpp:197:		limb.yaw = clamp(limb.yaw, moveInfo.minYaw, moveInfo.maxYaw);
+	./src/peds/PedIK.cpp:215:		limb.pitch = clamp(limb.pitch, moveInfo.minPitch, moveInfo.maxPitch);
+	./src/peds/PedIK.cpp:530:	float f = clamp(DotProduct(mat->up, CVector(0.0f, 1.0f, 0.0f)), -1.0f, 1.0f);
+	./src/peds/PedIK.cpp:534:	f = clamp(DotProduct(mat->right, CVector(0.0f, 0.0f, 1.0f)), -1.0f, 1.0f);
+	./src/peds/PedIK.cpp:542:	float f = clamp(DotProduct(mat->at, CVector(0.0f, 0.0f, 1.0f)), -1.0f, 1.0f);
+	./src/peds/PedIK.cpp:546:	f = clamp(DotProduct(mat->right, CVector(1.0f, 0.0f, 0.0f)), -1.0f, 1.0f);
+	./src/extras/screendroplets.cpp:426:	ms_camUpAngle = RADTODEG(Acos(clamp(camUp.z, -1.0f, 1.0f)));
+	./src/extras/shaders/lighting.h:5:	float4 direction;	// and falloff clamp
+	./src/extras/shaders/lighting.h:42:	l *= max(falloff, L.direction.w);	// falloff clamp
+	./src/vehicles/Automobile.cpp:1663:		behindness = clamp(behindness, -1.0f, 1.0f);	// shouldn't be necessary
+	./src/vehicles/Automobile.cpp:2262:	m_fSteerInput = clamp(m_fSteerInput, -1.0f, 1.0f);
+	./src/vehicles/Automobile.cpp:2384:		m_fCarGunUD = clamp(m_fCarGunUD, 0.05f, 0.3f);
+	./src/vehicles/Automobile.cpp:2829:			f = clamp(f, 0.0f, 1.0f);
+	./src/vehicles/Heli.cpp:253:		m_vecMoveSpeed.z = clamp(m_vecMoveSpeed.z, -0.3f, 0.3f);
+	./src/vehicles/Vehicle.cpp:432:			fPitch = clamp(10.0f * DotProduct(m_vecMoveSpeed, GetForward()), -200.0f, 1.3f);
+	./src/vehicles/Vehicle.cpp:433:			fRoll = clamp(10.0f * DotProduct(m_vecMoveSpeed, GetRight()), -200.0f, 1.3f);
+	./src/vehicles/Boat.cpp:125:	r = clamp(r, 0, 255);
+	./src/vehicles/Boat.cpp:126:	g = clamp(g, 0, 255);
+	./src/vehicles/Boat.cpp:127:	b = clamp(b, 0, 255);
+	./src/vehicles/Boat.cpp:136:	r = clamp(r, 0, 255);
+	./src/vehicles/Boat.cpp:137:	g = clamp(g, 0, 255);
+	./src/vehicles/Boat.cpp:138:	b = clamp(b, 0, 255);
+	./src/vehicles/Boat.cpp:544:	m_fBrake = clamp(m_fBrake, 0.0f, 1.0f);
+	./src/vehicles/Boat.cpp:549:		m_fAccelerate = clamp(m_fAccelerate, 0.0f, 1.0f);
+	./src/vehicles/Boat.cpp:554:	m_fSteeringLeftRight = clamp(m_fSteeringLeftRight, -1.0f, 1.0f);
+	./src/vehicles/Door.cpp:55:	fSpeedDiff = clamp(fSpeedDiff, -0.2f, 0.2f);
+	./src/vehicles/Door.cpp:59:	m_fAngVel = clamp(m_fAngVel, -0.3f, 0.3f);
+	./src/audio/sampman_miles.cpp:1627:	fRatio = clamp(fRatio, usingEAX3==1 ? 0.0f : 0.30f, 1.0f);
+	./src/audio/AudioManager.cpp:328:	id = clamp(id, 0, SampleManager.GetNum3DProvidersAvailable() - 1);
+	./src/audio/oal/stream.cpp:137:		StepIndex = clamp(StepIndex, 0, 88);
+	./src/audio/oal/stream.cpp:146:		Sample = clamp(newSample, -32768, 32767);
+	./src/audio/oal/stream.cpp:599:		return short(clamp(a, -32768, 32767));
+	./src/audio/oal/stream.cpp:1089:	m_nPan = clamp((int8)nPan - 63, 0, 63);
+	./src/audio/oal/stream.cpp:1092:	m_nPan = clamp((int8)nPan + 64, 64, 127);
+	./src/audio/sampman_oal.cpp:449:	nProvider = clamp(nProvider, 0, m_nNumberOfProviders - 1);
+	./src/audio/sampman_oal.cpp:1422:	fRatio = clamp(fRatio, usingEAX3==1 ? 0.0f : 0.30f, 1.0f);
+	./src/audio/AudioLogic.cpp:1230:		accelerateState = 255.f * clamp(automobile->m_fGasPedal, 0.0f, 1.0f);
+	./src/audio/AudioLogic.cpp:1239:	accelerationMultipler = clamp(relativeVelocityChange, 0.0f, 1.0f);
+	./src/render/Sprite.cpp:408:	cf[0] = clamp(cf[0], 0.0f, 1.0f);
+	./src/render/Sprite.cpp:410:	cf[1] = clamp(cf[1], 0.0f, 1.0f);
+	./src/render/Sprite.cpp:412:	cf[2] = clamp(cf[2], 0.0f, 1.0f);
+	./src/render/Sprite.cpp:414:	cf[3] = clamp(cf[3], 0.0f, 1.0f);
+	./src/render/Glass.cpp:142:	uint16 time = clamp(CTimer::GetTimeInMilliseconds() > m_nTimer ? CTimer::GetTimeInMilliseconds() - m_nTimer : 0u, 0u, 500u);
+	./src/render/Glass.cpp:144:	uint16 time = clamp(CTimer::GetTimeInMilliseconds() - m_nTimer, 0, 500);
+	./src/render/Coronas.cpp:478:						distanceFade = clamp(distanceFade, 0.0f, 1.0f);
+	./src/render/Particle.cpp:881:			pParticle->m_Color.red   = clamp(pParticle->m_Color.red +
+	./src/render/Particle.cpp:885:			pParticle->m_Color.green = clamp(pParticle->m_Color.green +
+	./src/render/Particle.cpp:889:			pParticle->m_Color.blue  = clamp(pParticle->m_Color.blue +
+	./src/render/Particle.cpp:1084:					particle->m_Color.red = clamp(
+	./src/render/Particle.cpp:1088:					particle->m_Color.green = clamp(
+	./src/render/Particle.cpp:1092:					particle->m_Color.blue = clamp(
+	./src/render/Particle.cpp:1381:					particle->m_nColorIntensity = clamp(particle->m_nColorIntensity - psystem->m_nFadeToBlackAmount,
+	./src/render/Particle.cpp:1394:					particle->m_nAlpha = clamp(particle->m_nAlpha - psystem->m_nFadeAlphaAmount,
+	./src/render/WaterLevel.cpp:129:			l = clamp(l, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:130:			r = clamp(r, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:131:			t = clamp(t, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:132:			b = clamp(b, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:715:	nStartX = clamp(nStartX, 0, MAX_HUGE_SECTORS - 1);
+	./src/render/WaterLevel.cpp:716:	nEndX   = clamp(nEndX,   0, MAX_HUGE_SECTORS - 1);
+	./src/render/WaterLevel.cpp:717:	nStartY = clamp(nStartY, 0, MAX_HUGE_SECTORS - 1);
+	./src/render/WaterLevel.cpp:718:	nEndY   = clamp(nEndY,   0, MAX_HUGE_SECTORS - 1);
+	./src/render/WaterLevel.cpp:1411:	nStartX = clamp(nStartX, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:1412:	nEndX   = clamp(nEndX,   0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:1413:	nStartY = clamp(nStartY, 0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:1414:	nEndY   = clamp(nEndY,   0, MAX_SMALL_SECTORS - 1);
+	./src/render/WaterLevel.cpp:1438:	return clamp(Sqrt(fDistSqr) - 23.0f, 0.0f, fSectorMaxRenderDist);
+	./src/collision/Collision.cpp:783:	if(d < 0.0f) d = 0.0f;		// clamp to zero, i.e. if s1's center is inside s2
+CLAMP_AXIS
+	./src/core/Pad.cpp:1361:						#define CLAMP_AXIS(x) (((x) < 43 && (x) >= -42) ? 0 : (((x) > 0) ? (Max((x)-42, 0)*127/85) : Min((x)+42, 0)*127/85))
+	./src/core/Pad.cpp:1362:						#define FIX_AXIS(x) CLAMP_AXIS((x)-128)
+	./src/core/Pad.cpp:1370:						#undef CLAMP_AXIS
+CLEAR_ACTION_IF_NEEDED
+	./src/core/ControllerConfig.cpp:1681:#define CLEAR_ACTION_IF_NEEDED(action) \
+	./src/core/ControllerConfig.cpp:1689:		CLEAR_ACTION_IF_NEEDED(CAMERA_CHANGE_VIEW_ALL_SITUATIONS);
+	./src/core/ControllerConfig.cpp:1691:		CLEAR_ACTION_IF_NEEDED(PED_FIREWEAPON);
+	./src/core/ControllerConfig.cpp:1693:		CLEAR_ACTION_IF_NEEDED(GO_LEFT);
+	./src/core/ControllerConfig.cpp:1694:		CLEAR_ACTION_IF_NEEDED(GO_RIGHT);
+	./src/core/ControllerConfig.cpp:1695:		CLEAR_ACTION_IF_NEEDED(NETWORK_TALK);
+	./src/core/ControllerConfig.cpp:1696:		CLEAR_ACTION_IF_NEEDED(SWITCH_DEBUG_CAM_ON);
+	./src/core/ControllerConfig.cpp:1697:		CLEAR_ACTION_IF_NEEDED(TOGGLE_DPAD);
+	./src/core/ControllerConfig.cpp:1698:		CLEAR_ACTION_IF_NEEDED(TAKE_SCREEN_SHOT);
+	./src/core/ControllerConfig.cpp:1699:		CLEAR_ACTION_IF_NEEDED(SHOW_MOUSE_POINTER_TOGGLE);
+	./src/core/ControllerConfig.cpp:1707:		CLEAR_ACTION_IF_NEEDED(PED_LOOKBEHIND);
+	./src/core/ControllerConfig.cpp:1708:		CLEAR_ACTION_IF_NEEDED(PED_CYCLE_WEAPON_LEFT);
+	./src/core/ControllerConfig.cpp:1709:		CLEAR_ACTION_IF_NEEDED(PED_CYCLE_WEAPON_RIGHT);
+	./src/core/ControllerConfig.cpp:1710:		CLEAR_ACTION_IF_NEEDED(PED_JUMPING);
+	./src/core/ControllerConfig.cpp:1711:		CLEAR_ACTION_IF_NEEDED(PED_SPRINT);
+	./src/core/ControllerConfig.cpp:1715:			CLEAR_ACTION_IF_NEEDED(PED_CYCLE_TARGET_LEFT);
+	./src/core/ControllerConfig.cpp:1716:			CLEAR_ACTION_IF_NEEDED(PED_CYCLE_TARGET_RIGHT);
+	./src/core/ControllerConfig.cpp:1717:			CLEAR_ACTION_IF_NEEDED(PED_CENTER_CAMERA_BEHIND_PLAYER);
+	./src/core/ControllerConfig.cpp:1727:		CLEAR_ACTION_IF_NEEDED(PED_FIREWEAPON);
+	./src/core/ControllerConfig.cpp:1729:		CLEAR_ACTION_IF_NEEDED(PED_LOCK_TARGET);
+	./src/core/ControllerConfig.cpp:1730:		CLEAR_ACTION_IF_NEEDED(GO_FORWARD);
+	./src/core/ControllerConfig.cpp:1731:		CLEAR_ACTION_IF_NEEDED(GO_BACK);
+	./src/core/ControllerConfig.cpp:1735:			CLEAR_ACTION_IF_NEEDED(PED_1RST_PERSON_LOOK_LEFT);
+	./src/core/ControllerConfig.cpp:1736:			CLEAR_ACTION_IF_NEEDED(PED_1RST_PERSON_LOOK_RIGHT);
+	./src/core/ControllerConfig.cpp:1737:			CLEAR_ACTION_IF_NEEDED(PED_1RST_PERSON_LOOK_DOWN);
+	./src/core/ControllerConfig.cpp:1738:			CLEAR_ACTION_IF_NEEDED(PED_1RST_PERSON_LOOK_UP);
+	./src/core/ControllerConfig.cpp:1748:		CLEAR_ACTION_IF_NEEDED(VEHICLE_FIREWEAPON);
+	./src/core/ControllerConfig.cpp:1750:		CLEAR_ACTION_IF_NEEDED(VEHICLE_LOOKBEHIND);
+	./src/core/ControllerConfig.cpp:1751:		CLEAR_ACTION_IF_NEEDED(VEHICLE_LOOKLEFT);
+	./src/core/ControllerConfig.cpp:1752:		CLEAR_ACTION_IF_NEEDED(VEHICLE_LOOKRIGHT);
+	./src/core/ControllerConfig.cpp:1753:		CLEAR_ACTION_IF_NEEDED(VEHICLE_LOOKBEHIND); // note: duplicate
+	./src/core/ControllerConfig.cpp:1754:		CLEAR_ACTION_IF_NEEDED(VEHICLE_HORN);
+	./src/core/ControllerConfig.cpp:1755:		CLEAR_ACTION_IF_NEEDED(VEHICLE_HANDBRAKE);
+	./src/core/ControllerConfig.cpp:1756:		CLEAR_ACTION_IF_NEEDED(VEHICLE_ACCELERATE);
+	./src/core/ControllerConfig.cpp:1757:		CLEAR_ACTION_IF_NEEDED(VEHICLE_BRAKE);
+	./src/core/ControllerConfig.cpp:1758:		CLEAR_ACTION_IF_NEEDED(VEHICLE_CHANGE_RADIO_STATION);
+	./src/core/ControllerConfig.cpp:1759:		CLEAR_ACTION_IF_NEEDED(TOGGLE_SUBMISSIONS);
+	./src/core/ControllerConfig.cpp:1760:		CLEAR_ACTION_IF_NEEDED(VEHICLE_TURRETLEFT);
+	./src/core/ControllerConfig.cpp:1761:		CLEAR_ACTION_IF_NEEDED(VEHICLE_TURRETRIGHT);
+	./src/core/ControllerConfig.cpp:1762:		CLEAR_ACTION_IF_NEEDED(VEHICLE_TURRETUP);
+	./src/core/ControllerConfig.cpp:1763:		CLEAR_ACTION_IF_NEEDED(VEHICLE_TURRETDOWN);
+	./src/core/ControllerConfig.cpp:1771:		CLEAR_ACTION_IF_NEEDED(VEHICLE_ENTER_EXIT);
+	./src/core/ControllerConfig.cpp:1779:		CLEAR_ACTION_IF_NEEDED(PED_SNIPER_ZOOM_IN);
+	./src/core/ControllerConfig.cpp:1780:		CLEAR_ACTION_IF_NEEDED(PED_SNIPER_ZOOM_OUT);
+	./src/core/ControllerConfig.cpp:1784:#undef CLEAR_ACTION_IF_NEEDED
+CLEARMODE
+	./src/core/main.cpp:137:#define CLEARMODE (rwCAMERACLEARZ | rwCAMERACLEARSTENCIL)
+	./src/core/main.cpp:139:#define CLEARMODE (rwCAMERACLEARZ)
+	./src/core/main.cpp:207:	RwCameraClear(Scene.camera, &TopColor.rwRGBA, CLEARMODE);
+	./src/core/main.cpp:232:	RwCameraClear(Scene.camera, &gColourTop, CLEARMODE);
+	./src/core/main.cpp:1690:		RwCameraClear(Scene.camera, &gColourTop, CLEARMODE);
+	./src/core/main.cpp:1756:	RwCameraClear(Scene.camera, &gColourTop, CLEARMODE);
+	./src/core/main.cpp:2013:				RwCameraClear(Scene.camera, &gColourTop, CLEARMODE);
+CLOCK_X
+	./src/render/Hud.cpp:32:#define CLOCK_X 101.0f
+	./src/render/Hud.cpp:44:#define CLOCK_X 111.0f
+	./src/render/Hud.cpp:881:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(CLOCK_X) + SCREEN_SCALE_X_FIX(2.0f), SCREEN_SCALE_Y(22.0f) + SCREEN_SCALE_Y_FIX(2.0f), sPrint);
+	./src/render/Hud.cpp:883:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(CLOCK_X), SCREEN_SCALE_Y(22.0f), sPrint);
+CLOSE_ON_ERROR
+	./src/audio/oal/stream.cpp:219:#define CLOSE_ON_ERROR(op)\
+	./src/audio/oal/stream.cpp:227:		CLOSE_ON_ERROR(fread(&DataHeader, sizeof(DataHeader), 1, m_pFile) == 0);
+	./src/audio/oal/stream.cpp:228:		CLOSE_ON_ERROR(DataHeader.ID != 'FFIR');
+	./src/audio/oal/stream.cpp:233:		CLOSE_ON_ERROR(fread(&WAVE, 4, 1, m_pFile) == 0);
+	./src/audio/oal/stream.cpp:234:		CLOSE_ON_ERROR(WAVE != 'EVAW')
+	./src/audio/oal/stream.cpp:235:		CLOSE_ON_ERROR(fread(&DataHeader, sizeof(DataHeader), 1, m_pFile) == 0);
+	./src/audio/oal/stream.cpp:236:		CLOSE_ON_ERROR(DataHeader.ID != ' tmf');
+	./src/audio/oal/stream.cpp:238:		CLOSE_ON_ERROR(fread(&m_FormatHeader, Min(DataHeader.Size, sizeof(tFormatHeader)), 1, m_pFile) == 0);
+	./src/audio/oal/stream.cpp:239:		CLOSE_ON_ERROR(DataHeader.Size > sizeof(tFormatHeader));
+	./src/audio/oal/stream.cpp:267:			CLOSE_ON_ERROR(fread(&DataHeader, sizeof(DataHeader), 1, m_pFile) == 0);
+	./src/audio/oal/stream.cpp:279:#undef CLOSE_ON_ERROR
+CLUMPEXT
+	./src/rw/VisibilityPlugins.cpp:865:#define CLUMPEXT(o) (RWPLUGINOFFSET(ClumpExt, o, ms_clumpPluginOffset))
+	./src/rw/VisibilityPlugins.cpp:982:	ClumpExt *ext = CLUMPEXT(object);
+	./src/rw/VisibilityPlugins.cpp:997:	CLUMPEXT(dst)->visibilityCB = CLUMPEXT(src)->visibilityCB;
+	./src/rw/VisibilityPlugins.cpp:1015:			CLUMPEXT(clump)->visibilityCB = VehicleVisibilityCB_BigVehicle;
+	./src/rw/VisibilityPlugins.cpp:1017:			CLUMPEXT(clump)->visibilityCB = VehicleVisibilityCB;
+	./src/rw/VisibilityPlugins.cpp:1026:	CLUMPEXT(clump)->alpha = alpha;
+	./src/rw/VisibilityPlugins.cpp:1032:	return CLUMPEXT(clump)->alpha;
+CMDSTR
+	./src/skel/glfw/glfw.cpp:309:#define CMDSTR	LPWSTR
+	./src/skel/glfw/glfw.cpp:311:#define CMDSTR	LPSTR
+	./src/skel/glfw/glfw.cpp:1470:	CMDSTR cmdLine,
+	./src/skel/win/win.cpp:602:#define CMDSTR	LPWSTR
+	./src/skel/win/win.cpp:604:#define CMDSTR	LPSTR
+	./src/skel/win/win.cpp:2014:		CMDSTR cmdLine, 
+_CMP
+	./src/save/MemoryCard.cpp:256:	#define _CMP(m) strncmp(month, m, sizeof(m)-1)
+	./src/save/MemoryCard.cpp:258:	if ( !_CMP("Jan") ) CompileDateAndTime.m_nMonth = 1;
+	./src/save/MemoryCard.cpp:260:	if ( !_CMP("Feb") ) CompileDateAndTime.m_nMonth = 2;
+	./src/save/MemoryCard.cpp:262:	if ( !_CMP("Mar") ) CompileDateAndTime.m_nMonth = 3;
+	./src/save/MemoryCard.cpp:264:	if ( !_CMP("Apr") ) CompileDateAndTime.m_nMonth = 4;
+	./src/save/MemoryCard.cpp:266:	if ( !_CMP("May") ) CompileDateAndTime.m_nMonth = 5;
+	./src/save/MemoryCard.cpp:268:	if ( !_CMP("Jun") ) CompileDateAndTime.m_nMonth = 6;
+	./src/save/MemoryCard.cpp:270:	if ( !_CMP("Jul") ) CompileDateAndTime.m_nMonth = 7;
+	./src/save/MemoryCard.cpp:272:	if ( !_CMP("Aug") ) CompileDateAndTime.m_nMonth = 8;
+	./src/save/MemoryCard.cpp:274:	if ( !_CMP("Oct") ) CompileDateAndTime.m_nMonth = 9;  // BUG: oct and sep is swapped here
+	./src/save/MemoryCard.cpp:276:	if ( !_CMP("Sep") ) CompileDateAndTime.m_nMonth = 10;
+	./src/save/MemoryCard.cpp:278:	if ( !_CMP("Nov") ) CompileDateAndTime.m_nMonth = 11;
+	./src/save/MemoryCard.cpp:280:	if ( !_CMP("Dec") ) CompileDateAndTime.m_nMonth = 12;
+	./src/save/MemoryCard.cpp:282:	#undef _CMP
+COMMAND_NAME_HEIGHT
+	./src/control/SceneEdit.cpp:59:#define COMMAND_NAME_HEIGHT (16.0f)
+	./src/control/SceneEdit.cpp:330:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT - SHADOW_OFFSET), SCREEN_SCALE_Y(COMMAND_NAME_Y + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:332:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT) + SHADOW_OFFSET, SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT, wstr);
+	./src/control/SceneEdit.cpp:339:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT), SCREEN_SCALE_Y(COMMAND_NAME_Y + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:341:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT), SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + i * COMMAND_NAME_HEIGHT, wstr);
+COMMAND_NAME_X_RIGHT
+	./src/control/SceneEdit.cpp:57:#define COMMAND_NAME_X_RIGHT (60.0f)
+	./src/control/SceneEdit.cpp:330:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT - SHADOW_OFFSET), SCREEN_SCALE_Y(COMMAND_NAME_Y + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:332:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT) + SHADOW_OFFSET, SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT, wstr);
+	./src/control/SceneEdit.cpp:339:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT), SCREEN_SCALE_Y(COMMAND_NAME_Y + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:341:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT), SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + i * COMMAND_NAME_HEIGHT, wstr);
+COMMAND_NAME_Y
+	./src/control/SceneEdit.cpp:58:#define COMMAND_NAME_Y (38.0f)
+	./src/control/SceneEdit.cpp:330:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT - SHADOW_OFFSET), SCREEN_SCALE_Y(COMMAND_NAME_Y + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:332:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT) + SHADOW_OFFSET, SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + SHADOW_OFFSET + i * COMMAND_NAME_HEIGHT, wstr);
+	./src/control/SceneEdit.cpp:339:		CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(COMMAND_NAME_X_RIGHT), SCREEN_SCALE_Y(COMMAND_NAME_Y + i * COMMAND_NAME_HEIGHT), wstr);
+	./src/control/SceneEdit.cpp:341:		CFont::PrintString(SCREEN_SCALE_X(DEFAULT_SCREEN_WIDTH-COMMAND_NAME_X_RIGHT), SCREEN_SCALE_FROM_BOTTOM(DEFAULT_SCREEN_HEIGHT-COMMAND_NAME_Y) + i * COMMAND_NAME_HEIGHT, wstr);
+COMPATIBLE_SAVES
+	./src/save/GenericGameStorage.cpp:178:#ifdef COMPATIBLE_SAVES
+	./src/save/GenericGameStorage.cpp:303:#ifdef COMPATIBLE_SAVES
+	./src/weapons/Weapon.cpp:2306:#ifdef COMPATIBLE_SAVES
+	./src/weapons/Weapon.h:71:#ifdef COMPATIBLE_SAVES
+	./src/entities/Entity.h:102:#ifdef COMPATIBLE_SAVES
+	./src/entities/Entity.cpp:691:#ifdef COMPATIBLE_SAVES
+	./src/core/config.h:241:#define COMPATIBLE_SAVES // this allows changing structs while keeping saves compatible
+	./src/core/config.h:456:#undef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:142:#ifdef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:272:#ifdef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:363:#ifdef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:412:#ifndef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:420:#ifdef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:437:#ifndef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:480:#ifdef COMPATIBLE_SAVES
+	./src/core/Pools.cpp:509:#ifdef COMPATIBLE_SAVES
+	./src/control/AutoPilot.h:116:#ifdef COMPATIBLE_SAVES
+	./src/control/Script.cpp:1323:#ifdef COMPATIBLE_SAVES
+	./src/control/AutoPilot.cpp:49:#ifdef COMPATIBLE_SAVES
+	./src/control/Script5.cpp:2080:#ifdef COMPATIBLE_SAVES
+	./src/control/Script5.cpp:2115:#ifdef COMPATIBLE_SAVES
+	./src/peds/PlayerPed.h:79:#ifdef COMPATIBLE_SAVES
+	./src/peds/Ped.h:950:#ifdef COMPATIBLE_SAVES
+	./src/peds/PlayerPed.cpp:23:#ifdef COMPATIBLE_SAVES
+	./src/peds/PlayerPed.cpp:1487:#ifdef COMPATIBLE_SAVES
+	./src/peds/Ped.cpp:8453:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Automobile.cpp:56:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Automobile.cpp:4706:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Automobile.h:180:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Vehicle.h:227:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Vehicle.cpp:1259:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Boat.h:69:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Boat.cpp:37:#ifdef COMPATIBLE_SAVES
+	./src/vehicles/Boat.cpp:937:#ifdef COMPATIBLE_SAVES
+COMPRESSED_COL_VECTORS
+	./src/core/config.h:194://#define COMPRESSED_COL_VECTORS	// use compressed vectors for collision vertices
+	./src/core/config.h:216:#define COMPRESSED_COL_VECTORS	// currently need compressed vectors in this code
+	./src/collision/CompressedVector.h:5:#ifdef COMPRESSED_COL_VECTORS
+COMPRULE2_COMPN
+	./src/modelinfo/VehicleModelInfo.cpp:575:#define COMPRULE2_COMPN(comps, n) (((comps >> 16) >> 4*(n)) & 0xF)
+COMPRULE2_COMPS
+	./src/modelinfo/VehicleModelInfo.cpp:574:#define COMPRULE2_COMPS(comprule) ((comprule >> 16) & 0xFFF)
+	./src/modelinfo/VehicleModelInfo.cpp:687:			comp = ::ChooseComponent(COMPRULE2_RULE(m_compRules), COMPRULE2_COMPS(m_compRules));
+COMPRULE2_RULE
+	./src/modelinfo/VehicleModelInfo.cpp:573:#define COMPRULE2_RULE(comprule) (((comprule) >> (12+16)) & 0xF)
+	./src/modelinfo/VehicleModelInfo.cpp:686:		if(COMPRULE2_RULE(m_compRules) && IsValidCompRule(COMPRULE2_RULE(m_compRules)))
+	./src/modelinfo/VehicleModelInfo.cpp:687:			comp = ::ChooseComponent(COMPRULE2_RULE(m_compRules), COMPRULE2_COMPS(m_compRules));
+COMPRULE_COMPN
+	./src/modelinfo/VehicleModelInfo.cpp:572:#define COMPRULE_COMPN(comps, n) (((comps) >> 4*(n)) & 0xF)
+	./src/modelinfo/VehicleModelInfo.cpp:604:		return COMPRULE_COMPN(comps, n);
+	./src/modelinfo/VehicleModelInfo.cpp:608:		return COMPRULE_COMPN(comps, n);
+	./src/modelinfo/VehicleModelInfo.cpp:622:			n = COMPRULE_COMPN(comprules, i);
+	./src/modelinfo/VehicleModelInfo.cpp:630:			n = COMPRULE_COMPN(comprules, i);
+COMPRULE_COMPS
+	./src/modelinfo/VehicleModelInfo.cpp:571:#define COMPRULE_COMPS(comprule) ((comprule) & 0xFFF)
+	./src/modelinfo/VehicleModelInfo.cpp:664:			comp = ::ChooseComponent(COMPRULE_RULE(m_compRules), COMPRULE_COMPS(m_compRules));
+COMPRULE_RULE
+	./src/modelinfo/VehicleModelInfo.cpp:570:#define COMPRULE_RULE(comprule) (((comprule) >> 12) & 0xF)
+	./src/modelinfo/VehicleModelInfo.cpp:620:	if(COMPRULE_RULE(comprules) && IsValidCompRule(COMPRULE_RULE(comprules)))
+	./src/modelinfo/VehicleModelInfo.cpp:628:	if(COMPRULE_RULE(comprules) && IsValidCompRule(COMPRULE_RULE(comprules)))
+	./src/modelinfo/VehicleModelInfo.cpp:663:		if(COMPRULE_RULE(m_compRules) && IsValidCompRule(COMPRULE_RULE(m_compRules)))
+	./src/modelinfo/VehicleModelInfo.cpp:664:			comp = ::ChooseComponent(COMPRULE_RULE(m_compRules), COMPRULE_COMPS(m_compRules));
+	./src/modelinfo/VehicleModelInfo.cpp:688:		else if(COMPRULE_RULE(m_compRules) && IsValidCompRule(COMPRULE_RULE(m_compRules)) &&
+CONCAT
+	./src/core/common.h:389:#define CONCAT(x,y) CONCAT_(x,y)
+	./src/core/common.h:395:#define TWEAKFUNC(v)                                static CTweakFunc   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), TWEAKPATH);
+	./src/core/common.h:396:#define TWEAKFUNCN(v, name)                         static CTweakFunc   CONCAT(___tw___tweak, __COUNTER__)(&v, name, TWEAKPATH);
+	./src/core/common.h:397:#define TWEAKBOOL(v)                                static CTweakBool   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), TWEAKPATH);
+	./src/core/common.h:398:#define TWEAKBOOLN(v, name)                         static CTweakBool   CONCAT(___tw___tweak, __COUNTER__)(&v, name, TWEAKPATH);
+	./src/core/common.h:399:#define TWEAKINT32(v, lower, upper, step)           static CTweakInt32  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:400:#define TWEAKINT32N(v, lower, upper, step, name)    static CTweakInt32  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:401:#define TWEAKUINT32(v, lower, upper, step)          static CTweakUInt32 CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:402:#define TWEAKUINT32N(v, lower, upper, step, name)   static CTweakUInt32 CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:403:#define TWEAKINT16(v, lower, upper, step)           static CTweakInt16  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:404:#define TWEAKINT16N(v, lower, upper, step, name)    static CTweakInt16  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:405:#define TWEAKUINT16(v, lower, upper, step)          static CTweakUInt16 CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:406:#define TWEAKUINT16N(v, lower, upper, step, name)   static CTweakUInt16 CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:407:#define TWEAKINT8(v, lower, upper, step)            static CTweakInt8   CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:408:#define TWEAKINT8N(v, lower, upper, step, name)     static CTweakInt8   CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:409:#define TWEAKUINT8(v, lower, upper, step)           static CTweakUInt8  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:410:#define TWEAKUINT8N(v, lower, upper, step, name)    static CTweakUInt8  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:411:#define TWEAKFLOAT(v, lower, upper, step)           static CTweakFloat  CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, step, TWEAKPATH);
+	./src/core/common.h:412:#define TWEAKFLOATN(v, lower, upper, step, name)    static CTweakFloat  CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, step, TWEAKPATH);
+	./src/core/common.h:413:#define TWEAKSWITCH(v, lower, upper, str, f)        static CTweakSwitch CONCAT(___tw___tweak, __COUNTER__)(&v, STR(v), lower, upper, str, f, TWEAKPATH);
+	./src/core/common.h:414:#define TWEAKSWITCHN(v, lower, upper, str, f, name) static CTweakSwitch CONCAT(___tw___tweak, __COUNTER__)(&v, name, lower, upper, str, f, TWEAKPATH);
+CONCAT_
+	./src/core/common.h:388:#define CONCAT_(x,y) x##y
+	./src/core/common.h:389:#define CONCAT(x,y) CONCAT_(x,y)
+CONSOLE_LINE_HEIGHT
+	./src/render/Console.cpp:10:#define CONSOLE_LINE_HEIGHT (12.0f)
+	./src/render/Console.cpp:80:		CFont::PrintString(CONSOLE_X_POS + 1.0f, CONSOLE_Y_POS + 1.0f + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+	./src/render/Console.cpp:82:		CFont::PrintString(CONSOLE_X_POS, CONSOLE_Y_POS + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+CONSOLE_X_POS
+	./src/render/Console.cpp:8:#define CONSOLE_X_POS (30.0f)
+	./src/render/Console.cpp:80:		CFont::PrintString(CONSOLE_X_POS + 1.0f, CONSOLE_Y_POS + 1.0f + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+	./src/render/Console.cpp:82:		CFont::PrintString(CONSOLE_X_POS, CONSOLE_Y_POS + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+CONSOLE_Y_POS
+	./src/render/Console.cpp:9:#define CONSOLE_Y_POS (10.0f)
+	./src/render/Console.cpp:80:		CFont::PrintString(CONSOLE_X_POS + 1.0f, CONSOLE_Y_POS + 1.0f + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+	./src/render/Console.cpp:82:		CFont::PrintString(CONSOLE_X_POS, CONSOLE_Y_POS + i * CONSOLE_LINE_HEIGHT, Buffers[line]);
+Const
+	./src/modelinfo/PedModelInfo.cpp:189:	Const char *name;
+	./src/core/Zones.cpp:365:CTheZones::FindZoneByLabelAndReturnIndex(Const char *name)
+	./src/core/Profile.cpp:10:Const char *CProfile::ms_pProfileString[NUM_PROFILES];
+	./src/core/timebars.h:5:void tbStartTimer(int32, Const char*);
+	./src/core/timebars.h:6:void tbEndTimer(Const char*);
+	./src/core/timebars.cpp:53:void tbStartTimer(int32 unk, Const char *name)
+	./src/core/timebars.cpp:61:void tbEndTimer(Const char* name)
+	./src/core/Streaming.cpp:1881:	Const char *key;
+	./src/core/main.h:38:Const char *GetLevelSplashScreen(int level);
+	./src/core/main.h:39:Const char *GetRandomSplashScreen(void);
+	./src/core/SurfaceTable.cpp:12:CSurfaceTable::Initialise(Const char *filename)
+	./src/core/common.h:85:#define Const const
+	./src/core/Zones.h:89:	static int16 FindZoneByLabelAndReturnIndex(Const char *name);
+	./src/core/Profile.h:22:	static Const char *ms_pProfileString[NUM_PROFILES];
+	./src/core/World.cpp:660:CWorld::FindObjectsInRangeSectorList(CPtrList &list, Const CVector &centre, float radius, bool ignoreZ, int16 *numObjects,
+	./src/core/World.cpp:686:CWorld::FindObjectsInRange(Const CVector &centre, float radius, bool ignoreZ, int16 *numObjects, int16 lastObject,
+	./src/core/main.cpp:603:Const char*
+	./src/core/main.cpp:626:Const char*
+	./src/core/main.cpp:629:	static Const char *splashScreens[4] = {
+	./src/core/main.cpp:1906:	Const char *splash = GetRandomSplashScreen(); // inlined here
+	./src/core/main.cpp:1936:			Const char *splash1 = GetLevelSplashScreen(CGame::currLevel);
+	./src/core/Frontend.h:742:	static void BuildStatLine(Const char *text, void *stat, bool itsFloat, void *stat2);
+	./src/core/World.h:101:	static void FindObjectsInRangeSectorList(CPtrList &list, Const CVector &centre, float radius, bool ignoreZ, int16 *numObjects, int16 lastObject, CEntity **objects);
+	./src/core/World.h:102:	static void FindObjectsInRange(Const CVector &centre, float radius, bool ignoreZ, int16 *numObjects, int16 lastObject, CEntity **objects, bool checkBuildings, bool checkVehicles, bool checkPeds, bool checkObjects, bool checkDummies);
+	./src/core/SurfaceTable.h:76:	static void Initialise(Const char *filename);
+	./src/core/Cam.cpp:903:		static Const char *modes[] = { "None",
+	./src/core/Frontend.cpp:760:CMenuManager::BuildStatLine(Const char *text, void *stat, bool itsFloat, void *stat2)
+	./src/control/Garages.h:235:	static bool IsPointWithinHideOutGarage(Const CVector&);
+	./src/control/Garages.h:236:	static bool IsPointWithinAnyGarage(Const CVector&);
+	./src/control/Garages.cpp:2243:bool CGarages::IsPointWithinHideOutGarage(Const CVector& point)
+	./src/control/Garages.cpp:2260:bool CGarages::IsPointWithinAnyGarage(Const CVector& point)
+	./src/peds/PedPlacement.h:6:	static CEntity* IsPositionClearOfCars(Const CVector*);
+	./src/peds/PedPlacement.cpp:40:CPedPlacement::IsPositionClearOfCars(Const CVector *pos)
+	./src/vehicles/Train.cpp:502:CTrain::ReadAndInterpretTrackFile(Const char *filename, CTrainNode **nodes, int16 *numNodes, int32 numStations, float *stationDists,
+	./src/vehicles/Train.h:81:	static void ReadAndInterpretTrackFile(Const char *filename, CTrainNode **nodes, int16 *numNodes, int32 numStations, float *stationDists,
+	./src/audio/DMAudio.cpp:275:cDMAudio::PreloadMissionAudio(Const char *missionAudio)
+	./src/audio/AudioManager.cpp:486:cAudioManager::TranslateEntity(Const CVector *in, CVector *out) const
+	./src/audio/AudioManager.h:378:	void PreloadMissionAudio(Const char *name);
+	./src/audio/AudioManager.h:486:	void TranslateEntity(Const CVector *v1, CVector *v2) const;
+	./src/audio/AudioLogic.cpp:8451:cAudioManager::PreloadMissionAudio(Const char *name)
+	./src/audio/DMAudio.h:78:	void PreloadMissionAudio(Const char *missionAudio);
+	./src/render/PointLights.h:42:	static float GenerateLightsAffectingObject(Const CVector *objCoors);
+	./src/render/Shadows.cpp:219:CShadows::StoreStaticShadow(uint32 nID, uint8 ShadowType, RwTexture *pTexture, Const CVector *pPosn,
+	./src/render/WaterLevel.h:82:	static void    Initialise(Const char *pWaterDat); // out of class in III PC and later because of SecuROM
+	./src/render/WaterLevel.cpp:58:CWaterLevel::Initialise(Const char *pWaterDat)
+	./src/render/Shadows.h:141:	static void StoreStaticShadow            (uint32 nID, uint8 ShadowType, RwTexture *pTexture, Const CVector *pPosn, float fFrontX, float fFrontY, float fSideX, float fSideY, int16 nIntensity, uint8 nRed, uint8 nGreen, uint8 nBlue, float fZDistance,               float fScale, float fDrawDistance, bool bTempShadow, float fUpDistance);
+	./src/render/PointLights.cpp:61:CPointLights::GenerateLightsAffectingObject(Const CVector *objCoors)
+	./src/collision/Collision.cpp:317:	static Const char *levelNames[4] = {
+CONTROLLER_BUTTONS
+	./src/core/ControllerConfig.cpp:2436:#define CONTROLLER_BUTTONS(T, O, X, Q, L1, L2, L3, R1, R2, R3, SELECT)                                                                                         \
+	./src/core/ControllerConfig.cpp:2615:const char *XboxButtons_noIcons[][MAX_CONTROLLERACTIONS] = CONTROLLER_BUTTONS("Y", "B", "A", "X", "LB", "LT", "LS", "RB", "RT", "RS", "BACK");
+	./src/core/ControllerConfig.cpp:2618:const char *XboxButtons[][MAX_CONTROLLERACTIONS] = CONTROLLER_BUTTONS("~T~", "~O~", "~X~", "~Q~", "~K~", "~M~", "~A~", "~J~", "~V~", "~C~", "BACK");
+	./src/core/ControllerConfig.cpp:2635:    CONTROLLER_BUTTONS(PS2_TRIANGLE, PS2_CIRCLE, PS2_CROSS, PS2_SQUARE, "L1", "L2", "L3", "R1", "R2", "R3", "SELECT");
+	./src/core/ControllerConfig.cpp:2639:    CONTROLLER_BUTTONS("~T~", "~O~", "~X~", "~Q~", "~K~", "~M~", "~A~", "~J~", "~V~", "~C~", "SELECT");
+	./src/core/ControllerConfig.cpp:2647:#undef CONTROLLER_BUTTONS
+CONTSETUP_BACK_BOTTOM
+	./src/core/Frontend.h:84:#define CONTSETUP_BACK_BOTTOM 122.0f
+	./src/core/Frontend.cpp:2488:		&& m_nMousePosX < MENU_X_RIGHT_ALIGNED(CONTSETUP_BACK_RIGHT) && m_nMousePosY > SCREEN_SCALE_FROM_BOTTOM(CONTSETUP_BACK_BOTTOM)
+	./src/core/Frontend.cpp:2489:		&& m_nMousePosY < SCREEN_SCALE_FROM_BOTTOM(CONTSETUP_BACK_BOTTOM - CONTSETUP_BACK_HEIGHT)) || m_nCurrExLayer == HOVEROPTION_BACK) {
+	./src/core/Frontend.cpp:2507:			SCREEN_SCALE_FROM_BOTTOM(CONTSETUP_BACK_BOTTOM - 4.0f - i), TheText.Get("FEDS_TB"));
+CONTSETUP_BACK_HEIGHT
+	./src/core/Frontend.h:85:#define CONTSETUP_BACK_HEIGHT 25.0f
+	./src/core/Frontend.cpp:2489:		&& m_nMousePosY < SCREEN_SCALE_FROM_BOTTOM(CONTSETUP_BACK_BOTTOM - CONTSETUP_BACK_HEIGHT)) || m_nCurrExLayer == HOVEROPTION_BACK) {
+CONTSETUP_BACK_RIGHT
+	./src/core/Frontend.h:83:#define CONTSETUP_BACK_RIGHT 35.0f
+	./src/core/Frontend.cpp:2487:	if ((m_nMousePosX > MENU_X_RIGHT_ALIGNED(CONTSETUP_BACK_RIGHT) - CFont::GetStringWidth(TheText.Get("FEDS_TB"), true)
+	./src/core/Frontend.cpp:2488:		&& m_nMousePosX < MENU_X_RIGHT_ALIGNED(CONTSETUP_BACK_RIGHT) && m_nMousePosY > SCREEN_SCALE_FROM_BOTTOM(CONTSETUP_BACK_BOTTOM)
+	./src/core/Frontend.cpp:2506:		CFont::PrintString(MENU_X_RIGHT_ALIGNED(CONTSETUP_BACK_RIGHT - 2.0f - i),
+CONTSETUP_BOUND_COLUMN_WIDTH
+	./src/core/Frontend.h:74:#define CONTSETUP_BOUND_COLUMN_WIDTH 190.0f
+	./src/core/Frontend.h:82:#define CONTSETUP_COLUMN_3_X (CONTSETUP_COLUMN_2_X + CONTSETUP_BOUND_COLUMN_WIDTH + 10.0f)
+	./src/core/Frontend.cpp:2127:						CSprite2d::DrawRect(CRect(nextX, MENU_Y(bgY), nextX + MENU_X(CONTSETUP_BOUND_COLUMN_WIDTH),
+	./src/core/Frontend.cpp:2130:						CSprite2d::DrawRect(CRect(nextX, MENU_Y(bgY), nextX + MENU_X(CONTSETUP_BOUND_COLUMN_WIDTH),
+	./src/core/Frontend.cpp:2148:						CSprite2d::DrawRect(CRect(nextX, MENU_Y(bgY), nextX + MENU_X(CONTSETUP_BOUND_COLUMN_WIDTH),
+	./src/core/Frontend.cpp:2151:						CSprite2d::DrawRect(CRect(nextX, MENU_Y(bgY), nextX + MENU_X(CONTSETUP_BOUND_COLUMN_WIDTH),
+	./src/core/Frontend.cpp:2426:			m_nMousePosX < MENU_X_LEFT_ALIGNED(CONTSETUP_COLUMN_3_X + CONTSETUP_BOUND_COLUMN_WIDTH)) {
+	./src/core/Frontend.cpp:2439:						if (m_nMousePosX > MENU_X_LEFT_ALIGNED(0.0f) && m_nMousePosX < MENU_X_LEFT_ALIGNED(CONTSETUP_COLUMN_2_X + CONTSETUP_BOUND_COLUMN_WIDTH)) {
+	./src/core/Frontend.cpp:2448:						} else if (m_nMousePosX > MENU_X_LEFT_ALIGNED(CONTSETUP_COLUMN_2_X + CONTSETUP_BOUND_COLUMN_WIDTH) && m_nMousePosX < SCREEN_WIDTH) {
+	./src/core/Frontend.cpp:2492:	} else if (m_nMousePosX > MENU_X_LEFT_ALIGNED(CONTSETUP_LIST_LEFT + 2.0f) && m_nMousePosX < MENU_X_LEFT_ALIGNED(CONTSETUP_COLUMN_3_X + CONTSETUP_BOUND_COLUMN_WIDTH)
+CONTSETUP_BOUND_HIGHLIGHT_HEIGHT
+	./src/core/Frontend.h:73:#define CONTSETUP_BOUND_HIGHLIGHT_HEIGHT 10
+	./src/core/Frontend.cpp:2128:							MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.r, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.g, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.a)));
+	./src/core/Frontend.cpp:2131:							MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_HIGHLIGHTBG_COLOR.r, CONTSETUP_HIGHLIGHTBG_COLOR.g, CONTSETUP_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_HIGHLIGHTBG_COLOR.a)));
+	./src/core/Frontend.cpp:2136:							MENU_X_LEFT_ALIGNED(400.0f), MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.r, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.g, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.a)));
+	./src/core/Frontend.cpp:2139:							MENU_X_LEFT_ALIGNED(400.0f), MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_HIGHLIGHTBG_COLOR.r, CONTSETUP_HIGHLIGHTBG_COLOR.g, CONTSETUP_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_HIGHLIGHTBG_COLOR.a)));
+	./src/core/Frontend.cpp:2149:							MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.r, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.g, CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_DISABLED_HIGHLIGHTBG_COLOR.a)));
+	./src/core/Frontend.cpp:2152:							MENU_Y(bgY + CONTSETUP_BOUND_HIGHLIGHT_HEIGHT)), CRGBA(CONTSETUP_HIGHLIGHTBG_COLOR.r, CONTSETUP_HIGHLIGHTBG_COLOR.g, CONTSETUP_HIGHLIGHTBG_COLOR.b, FadeIn(CONTSETUP_HIGHLIGHTBG_COLOR.a)));
+CONTSETUP_CLASSIC_ROW_HEIGHT
