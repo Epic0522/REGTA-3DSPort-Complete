@@ -17,76 +17,52 @@ REGTA brings three classic Grand Theft Auto games to New Nintendo 3DS:
 - **Grand Theft Auto: Liberty City Stories**, based on
   [reStories/reLCS](https://github.com/knackers4/res) (`stories`)
 
-Each game has its own source tree. They share the 3DS renderer, audio backend
-and platform libraries, so fixes to those components benefit all three ports.
+Trailer：https://youtu.be/fBzzLx0BX5M
 
-The original maps, missions and gameplay are kept intact. Most of the work here
-goes into making them fit the 3DS: a lower-screen map and HUD, touch controls,
-faster loading, lower memory use, and fixes for rendering and mission bugs.
+Build any of the three games from this repository. Each has a full lower-screen
+interface, touch controls, Nintendo button prompts and a cheat-code keyboard.
 
 > [!IMPORTANT]
-> You need to build the ports yourself and supply your own game files: PC data
-> for GTA III and Vice City, or extracted PS2 data for Liberty City Stories.
-> Full game data, compiled builds and the devkitARM toolchain are not included.
-> The repository provides the selected runtime overrides and finished HOME Menu
-> artwork used by this port.
+> Build the ports yourself and provide your own game data: PC GTA III or Vice
+> City, or converted PS2 Liberty City Stories. Full game data, executables and
+> the devkitARM toolchain are not included. Runtime overrides and finished HOME
+> Menu artwork are included.
 
 ## The games today
 
-All three ports have the lower-screen map and HUD, touch controls, Nintendo
-button prompts and the text cheat keyboard. Each can be built as a 3DSX or CIA.
-Their game-specific work is outlined below; the full [changelog](#changelog)
-follows the setup instructions.
-
 ### GTA III
 
-Built on re3 and the community 3DS port, with a dark-blue lower-screen HUD.
-The focus has been smoother loading and streaming, clearer rendering and fixes
-for problems encountered on hardware. Motion-blur trails are removed, vehicle
-windows and decals render correctly, and the original static highlights are
-kept at a lower strength. The tower-clock crash and the audio freeze that left
-the radio playing have also been fixed.
+- Dark-blue lower-screen interface.
+- Faster loading and smoother streaming.
+- Removed motion blur; fixed vehicle materials and several crashes.
+- Final-mission music: 'push it to the limit'.
 
-Most of these changes have been tested on a physical New Nintendo 3DS. Large
-pile-ups and busy scenes can still drop frames. The final mission supports
-'push it to the limit', with an opening section and a repeating loop.
-
-Uses **PC GTA III data**. [GTA III setup, controls and notes →](III/README.md)
+Tested on New Nintendo 3DS. Busy scenes can still drop frames.
+Uses **PC GTA III data**. [Setup and controls →](III/README.md)
 
 ### Vice City
 
-Built on reVC, with Vice City's pink lower-screen HUD. Animation loading no
-longer spends minutes on tiny reads, and the particle fixes restore smoke,
-fire and other transparent effects. Character and vehicle diamond-shaped
-polygons, washed-out car highlights and overlapping plates have been fixed.
-Water keeps its near/middle/far detail levels, with smoother transitions.
+- Pink lower-screen interface.
+- Faster loading; restored particles and vehicle highlights.
+- Fixed character and vehicle polygons, water seams and flight-related crashes.
+- Final-mission music: 'Self Control'.
 
-Most changes have been tested on a physical New Nintendo 3DS, including a full
-flight around the city. Demanding scenes can still cause frame drops or audio
-stutter. The final mission supports 'Self Control', switching to the edited
-climax after Lance's reveal.
-
-Uses **PC Vice City data**. [Vice City setup, controls and notes →](miami/README.md)
+Tested on New Nintendo 3DS. Demanding scenes can still cause frame drops or
+audio stutter. Uses **PC Vice City data**. [Setup and controls →](miami/README.md)
 
 ### Liberty City Stories
 
-Continues the unfinished
-[reStories/reLCS project](https://github.com/knackers4/res), with a red
-lower-screen HUD. Alongside the 3DS adaptation, this port fixes story
-progression, saved world changes, cutscene characters, vehicle occupants,
-water, glass effects and the final boat chase and helicopter battle. Vehicles
-also have lightweight scene-colour reflections.
+- Completed the unfinished [reStories/reLCS](https://github.com/knackers4/res)
+  campaign implementation for New Nintendo 3DS.
+- Red lower-screen interface and lightweight vehicle reflections.
+- Fixed missions, saves, world changes, cutscenes and vehicle bugs.
+- Custom text cheats and final-mission music: 'Chase'.
 
-**The main story has been completed on a physical New Nintendo 3DS.**
-Side missions and other optional activities have not yet been verified.
-Please [open an Issue](#reporting-bugs) if you find a problem, with reproduction
-steps, screenshots or video, and a crash dump if one was generated.
+**Main story completed on a physical New Nintendo 3DS.** Side missions and
+other optional activities are not yet verified. Please [report problems](#reporting-bugs)
+with reproduction steps and any screenshots, video or crash dump.
 
-LCS also includes its own GTA-style text cheats, safehouse and mission
-teleports, and 'Chase' for the final mission. Uses **converted PS2 LCS data**;
-the asset-converter link is in the guide below.
-
-[LCS setup, controls, cheat list and notes →](stories/README.md)
+Uses **converted PS2 LCS data**. [Setup, controls and cheats →](stories/README.md)
 
 ## Supported hardware
 
@@ -117,21 +93,8 @@ REGTA-3DSPort-Complete/
 └── docs/         historical implementation and verification notes
 ```
 
-### The shared layer
-
-`common` contains the platform components used by every game tree:
-
-| Path | Purpose |
-| --- | --- |
-| `common/librw` | RenderWare replacement and the maintained Nintendo 3DS renderer |
-| `common/libctru` | Pinned 3DS system library source |
-| `common/citro3d` | Pinned Citro3D source |
-| `common/openal-soft-ctr` | 3DS gameplay-audio backend |
-| `common/mpg123-ctr` | MP3 decoder used by streamed-audio paths |
-
-Each game's `vendor` directory links to the libraries in `common`. Keep those
-symbolic links intact when cloning or copying the project. Mission logic, model
-tables and game-specific rendering stay in `III`, `miami` and `stories`.
+Keep the repository layout and symbolic links intact, even when building only
+one game. Each game's `vendor` folder links to the shared libraries in `common`.
 
 ### The three game trees
 
@@ -141,14 +104,9 @@ tables and game-specific rendering stay in `III`, `miami` and `stories`.
 | `miami` | Grand Theft Auto: Vice City | PC | `sdmc:/3ds/miami/` | `revc.3dsx` |
 | `stories` | Grand Theft Auto: Liberty City Stories | PS2 | `sdmc:/3ds/relcs/` | `relcs.3dsx` |
 
-The folder names come from the original projects. Vice City still loads data
-from `/3ds/miami`, so existing installations and saves continue to work even
-though the executable is called `revc.3dsx`.
+Vice City uses `/3ds/miami` for data and `revc.3dsx` for the executable.
 Older reLCS builds may have used `/3ds/restories`; move that `userfiles` folder
 to `/3ds/relcs` before removing an old installation.
-
-Keep the full directory layout even when building only one game. The shared
-layout check expects all three source trees to be present.
 
 ## Quick start
 
@@ -194,11 +152,8 @@ leaves out desktop executables and temporary files, then copies selected
 overrides from the root `gamefiles/<game>` folder. Existing saves in the
 destination's `userfiles` folder are preserved.
 
-The root [gamefiles folder](gamefiles/README.md) contains the selected overrides.
-Only these files are published and applied by setup. The older `gamefiles`
-folders inside each source tree remain ignored local references; setup no longer
-reads them. Original model archives, radio stations and other base game data
-still come from your own game.
+See [gamefiles](gamefiles/README.md) for the included overrides. Original models,
+radio stations and other base data must come from your own game.
 
 ### Expected SD data layout
 
@@ -274,7 +229,7 @@ AUDIO/NEWS/*.VB
 AUDIO/CUTSCENE/*.VB
 ```
 
-The converter requires `ffmpeg` and a host C++ compiler. It converts the 19
+REGTA's audio-conversion step requires `ffmpeg` and a host C++ compiler. It converts the 19
 continuous music/radio streams to 24 kHz mono IMA ADPCM WAV, avoiding the
 real-time cost of MP3 radio decoding on 3DS. NEWS and CUTSCENE streams become
 24 kHz mono MP3. The large source VB streams and redundant `SET0` through
@@ -409,20 +364,7 @@ Production CIAs use New 3DS 804 MHz mode, L2 cache, expanded application
 memory, direct SDMC access and the required video service. They contain no
 commercial RomFS data and always load the original game files from the SD card.
 
-### From source to console
-
-For each game:
-
-1. Preserve the repository's symbolic links and run `verify-layout.sh`.
-2. Run `setup-game.sh` with your original
-   game data and the SD card's `/3ds` directory.
-3. Build the matching executable with `build.sh`.
-4. Either copy the 3DSX with `install-3dsx.sh`, or build and install the CIA.
-5. Keep or generate the native `txd.img`/`txd.dir` cache described below.
-6. Launch the game on a New 3DS-family console and check that it loads correctly.
-
-The tested installation uses original data, the included overrides, native
-texture caches and a matching executable.
+CIA and 3DSX builds use the same SD data and saves.
 
 ### Build and setup troubleshooting
 
@@ -468,489 +410,138 @@ prompts for those.
 
 ## Changelog
 
-Changes are grouped by game and system below. Shared fixes are listed once;
-the game-specific sections cover the differences.
-
-Most GTA III and Vice City changes have been tested on a physical New Nintendo
-3DS. LCS has also been played from the beginning to the ending on hardware,
-including all island unlocks, bridge and ferry changes, Fort Staunton's
-destruction, saving and loading. LCS side missions and other optional activities
-have not yet been verified. If you find a problem, please
-[report it](#reporting-bugs) with the details needed to reproduce it.
-
 ### Shared New Nintendo 3DS platform
 
-#### Build, runtime and distribution
+#### Interface and controls
 
-- Brought re3, reVC and reLCS into one project, with separate game code and
-  shared 3DS libraries linked through each game's `vendor` folder.
-- Pinned every production build to devkitARM release 55 / GCC 10.2. The
-  makefiles reject incompatible toolchains which can produce binaries that link
-  successfully but crash on physical hardware.
-- Added root-level setup, layout verification, build and 3DSX installation
-  helpers. The setup route treats original data as read-only and preserves an
-  existing `userfiles` directory.
-- Limited setup to the overrides used by the tested installation. Old
-  controller, generic-material and Neo samples in local folders can no longer
-  overwrite the original PC vehicle textures during setup.
-- Added reproducible 3DSX and CIA packaging for all three games, with separate
-  title IDs, product codes and SD data directories.
-- Configured the CIAs for New 3DS 804 MHz mode, L2 cache, expanded application
-  memory, direct SDMC access and the video-decoder service.
-- Kept commercial game data outside the executables and CIAs. Each game loads
-  its legally supplied data from its own SD directory.
-- Added optional hardware-decoded H.264 startup movies with mono PCM audio.
-  Missing or unsupported movies are skipped; A, B, X or Y skips playback.
+- Full lower-screen map, HUD, loading display and touch controls.
+- Game-specific colours, fonts and icons.
+- Fixed stale maps, loading flashes and HUD visibility during cutscenes.
+- Nintendo button prompts throughout menus, shops and tutorials.
+- A confirms; B returns, including all three games' shops.
+- Adjusted Circle Pad and C-stick dead zones; fixed camera drift after transitions.
+- R for third-person rifle aim; L + R for first-person aim.
+- A/B for sniper zoom in/out.
+- Clearer weapon sights at 3DS resolution.
+- VC/LCS map: Y marker, ZR/R zoom, L legend, B back.
+- L + R + ZL + ZR opens the text cheat keyboard.
+- Full mission names in save lists, including supported older truncated titles.
 
-#### Lower screen and presentation
+#### Rendering and performance
 
-- Added a native 320×240 RenderWare camera for the lower screen in all three
-  games.
-- Replaced the small upper-screen radar with a large rectangular live map on
-  the lower screen, including native rotation, zoom, roads, mission blips and
-  edge-clamped distant markers.
-- Kept the player at `(120,120)` so an 80-pixel status rail can occupy the right
-  side without shifting the useful map area.
-- Added a game-themed right-side HUD using each title's own font, weapon icons,
-  health, armour, ammunition, time and money presentation.
-- Removed duplicated persistent status elements from the upper screen while
-  keeping wanted indicators visible when relevant.
-- Added main-menu map artwork, loading stages, percentages and progress
-  bars, with correct transitions between boot, menu, loading, gameplay, pause
-  and cutscene states.
-- Prevented one-frame streaming updates from flashing a loading screen and
-  prevented cutscenes from exposing a stale lower-screen map or HUD.
-- Added the touch overlay for L3, R3 and camera drag. The first touch reveals
-  the overlay without activating anything, release arms it, and five seconds of
-  inactivity hides it again.
-- Pre-creates the touch textures before world loading so opening the overlay
-  cannot force texture eviction or shrink other game textures.
-- Corrected rotated-framebuffer assumptions, stale lower buffers, unsafe direct
-  framebuffer writes and camera/raster lifecycle problems.
+- Fixed skinning, transparency, texture-state and geometry-rendering errors.
+- Fixed foliage hiding scenery and transparent surfaces turning opaque.
+- Fixed vehicle windows, lights, damage layers, decals and plates.
+- Reduced excessive vehicle-highlight brightness.
+- Faster animation loading and native texture streaming.
+- Spread streaming work across frames to reduce stalls.
+- Improved texture reclamation and low-memory handling.
+- Reduced distant effects, collision debris, lighting and particle costs.
+- Removed unused audio processing and redundant stereo work.
+- Prioritised mission dialogue, weapons and other important sounds.
+- Fixed duplicate sounds, audio-stream restarts and music-loop stutter.
 
-#### Nintendo controls and aiming
+#### Setup and presentation
 
-- Mapped prompts to Nintendo physical button labels instead of Xbox/PlayStation
-  letter positions and replaced unsupported stick glyphs with readable
-  `CIRCLE PAD`, `C-STICK`, `L3` and `R3` text.
-- Added a radial dead zone of 0.14 for the Circle Pad and 0.18 for the C-stick,
-  then rescaled the C-stick response for its shorter physical travel.
-- Clears stale camera input during scene and vehicle transitions to prevent the
-  view from continuing to drift.
-- Made A confirm and B return in all three games. This includes GTA III's
-  Ammu-Nation, Vice City's Ammu-Nation and hardware store, and every LCS shop.
-  Shop scripts, menus and their button prompts now agree.
-- Vice City and LCS pause maps use Y to place/remove a marker, ZR/R to zoom, L
-  to toggle the legend and B to return; the displayed helper now matches the
-  controls.
-- Reversed the inherited sniper zoom mapping so A zooms in and B zooms out in
-  all three games, including the dynamic prompt text.
-- Changed every ordinary rifle to R third-person auto-aim. Holding L+R enters
-  first-person rifle aiming; re3/reVC suppress the Standard-mode L fire alias
-  until L is released so entering first person cannot waste a round. reLCS has
-  no Standard-mode L fire alias and therefore needs no suppression.
-- Replaced fragile texture-sampled Standard-mode sights with code-drawn geometry
-  while retaining the original thin ring, centre dot, size and camera-derived
-  position.
-- Replaced the filtered rocket-launcher sight with solid corner geometry so its
-  thin lines remain complete at 3DS resolution.
-- Added a one-physical-pixel red centre cross to the laser scope in Vice City
-  and LCS. The ordinary bolt-action sniper scope is unchanged.
-- Thickened GTA III's lock-on square without changing its dimensions or colour;
-  Vice City retains its original thicker double-ring design.
-- Added a gameplay-only L+R+ZL+ZR shortcut to the 3DS software keyboard. Text is
-  fed into each game's original cheat parser rather than a separate cheat
-  implementation.
-- Rewrote affected tutorial, contextual, map and save prompts to describe the
-  actual 3DS controls instead of unavailable controller buttons.
-
-#### RenderWare and GPU correctness
-
-- Repaired 3DS skinning, MatFX, texture, alpha test, immediate-mode drawing and
-  raster-state caching shared by the three games.
-- Fixed alpha-test enable caching which could leave transparent foliage texels
-  writing depth and hiding scenery behind leaves or fences.
-- Reapplies texture alpha state even when the raster binding hits the GPU cache,
-  preventing intermittent opaque rectangles and black transparent surfaces.
-- Clears cached raster bindings before native textures are destroyed and avoids
-  sampling cleared loading/camera rasters.
-- Fixed point, line and polyline primitive conversion so vertices are indexed
-  once, with bounds checks around immediate-mode data.
-- Added a bounded per-frame VBO/IBO path for large indexed immediate-mode
-  batches. Buffers are allocated lazily with a linear-memory safety margin and
-  fall back to the old immediate path if memory is tight.
-- Corrected buffered colour attributes to normalized floating point, avoiding
-  the white saturation produced by feeding byte colours to PICA200.
-- Added bounded per-frame skin buffers so several protected or high-detail
-  characters cannot overwrite one shared transformed-vertex buffer.
-- Uses stable texture/material colour paths for affected skinned characters and
-  MatFX vehicles, removing black, white and diamond-shaped polygon corruption.
-- Reworked vehicle MatFX so the authored coefficient remains visible without
-  turning entire panels white. GTA III and Vice City use their inexpensive
-  static environment textures; LCS uses the separately bounded capture path
-  described in its game-specific section.
-- Preserves alpha windows, lamps and damage layers instead of routing them
-  through an opaque reflection pass.
-- Added depth offsets for separate decals, badges, stripes, liveries and
-  plates, matched by texture and mask name. These offsets do not affect shared
-  body textures, where they could pull the whole body apart.
-- Added LRU texture reclamation and a streaming-pressure callback. Whole unused
-  streamed assets are released before destructive mip removal is considered.
-- Protects player and vehicle top mip levels in the games that need it, allowing
-  detail to return normally after streaming pressure.
-
-#### Streaming, memory and audio
-
-- Added native 3DS CD-image streaming and bounded asynchronous read handling.
-- Preloads standalone animation archives through memory streams where thousands
-  of tiny SD reads would otherwise dominate startup time.
-- Limits completed streaming conversion work per frame so walking or driving
-  into a new area cannot monopolise the main thread.
-- Added staged, throttled loading updates and multi-channel read/convert overlap
-  where it provides a measured benefit.
-- Added graceful low-linear-memory fallbacks for textures, skinning and buffered
-  immediate-mode geometry.
-- Removed redundant stereo decoding, copying and synchronisation from the
-  ports' mono audio output.
-- Sets audio channel limits separately for each game. re3/reVC use all 28
-  backend channels, including the reserved channel; LCS keeps its lighter
-  handheld mix and drops
-  PC/PS2-only reflection, reverb and surplus-channel work.
-- Protects mission dialogue, cutscene speech, UI, player actions, weapons,
-  explosions and emergency sounds from low-priority ambience replacement.
-- Keeps one-shot sounds attached to their original source, suppresses
-  duplicate requests and bounds repeated collision reports from pile-ups.
-- Handles streamed-audio format notifications without reopening a valid stream,
-  uses short startup queues and performs at most one bounded refill per frame.
-- Disabled unused 3DS audio-reflection probes and other disproportionately
-  expensive secondary effects.
-- Applies bounded budgets to particles, collision debris/audio, distant vehicle
-  occupants, point lights, fire emissions, explosion side effects, muzzle
-  flashes, smoke, shells and bullet traces while preserving gameplay hits,
-  physics, traffic, wanted dispatch, fire and explosions.
-- Expanded the displayed save-title path in all three games without changing
-  the fixed 48-byte save header or shifting the following save blocks. Long
-  titles store their GXT key in the compatible field and resolve to the complete
-  localized mission name; known ellipsis-truncated saves from older builds are
-  recovered as well.
-- Added an independent mono streamed-music source for each final mission. It
-  keeps native dialogue and sound effects free, switches from an opening `FM`
-  file to a gapless looping file, locks radio selection for the mission and
-  stops on failure, restart or completion.
+- Shared build, data-preparation and installation scripts.
+- devkitARM r55 / GCC 10.2 builds with toolchain checks.
+- Separate CIA title IDs and SD data folders.
+- New 3DS CPU, cache and expanded-memory support.
+- Skippable hardware-decoded startup movies.
+- Custom icons and animated HOME Menu vehicle banners.
+- Smoothed banner logos; fixed the LCS logo edge and HOME Menu freeze.
+- Final-mission music with looping, cutscene volume changes and ending fades.
+- Radio switching disabled while final-mission music is active.
 
 ### Grand Theft Auto III / re3
 
-- Completed the full lower-screen map, dark-blue status rail, loading display,
-  main-menu Liberty City map, touch controls and upper/lower HUD split.
-- Embedded the main-menu map so it does not depend on an optional SD
-  `menu.txd`, and corrected its crop, scale and detached edge fragment.
-- Added a readable opening tutorial explaining that navigation and mission blips
-  are shown on the lower screen.
-- Preserved the fast `USE_TXD_CDIMAGE` native texture-cache route that is
-  essential to smooth streaming on hardware.
-- Preloads standalone animation data and throttles main-thread streaming
-  conversion to reduce long walking/driving stalls.
-- Enforces mono-only audio builds and removed the dual-queue wait which could
-  freeze gameplay while a vehicle radio continued looping.
-- Removed the persistent temporal/dynamic motion-blur trail on 3DS for a clearer
-  picture and lower rendering cost; colour overlays and special camera effects
-  still render through their non-history path.
-- Uses a 0.65 high-detail LOD scale on 3DS while retaining authored draw ranges
-  and the original desktop value outside the 3DS build.
-- Fixed GTA III's white vehicle diamonds and overbright reflections. The
-  original static white MatFX highlight is retained at half strength, while
-  timecycle colour is kept out of the reflection so blue paint cannot become
-  orange at sunset.
-- Fixed transparent vehicle windows, lamps and independently modelled service
-  vehicle decals, including taxi, ambulance, coach, police/LCPD, fire,
-  Mr Whoopee, Mr Wongs, Mule, Panlantic, Securicar, Toyz and Yankee overlays.
-- Fixed the Staunton commercial-district tower-clock crash caused by
-  double-indexed immediate-mode line vertices.
-- Caps active 3DS particles at 256 while retaining the original logical pool and
-  particle types; secondary pile-up, fire, light, explosion and occupant work is
-  budgeted separately.
-- Limits registered point lights to 12, renders traffic occupants only inside
-  28 metres while always preserving the player vehicle's occupants, and spaces
-  persistent fire emissions at 120 ms instead of 80 ms. These cuts target work
-  that is hard to see at a distance or becomes expensive in large pile-ups.
-- Uses the shared R third-person / L+R first-person rifle controls for the AK-47
-  and M16, with Standard-mode empty-shot suppression.
-- Uses A to buy and B to leave Ammu-Nation, B for every frontend return, Y for
-  the enhanced map marker where available, and A/B for sniper zoom in/out.
-- Adds `'push it to the limit'` to the final mission: it begins at the first
-  playable prompt after Claude strikes the guard, automatically hands off from
-  `PUSH_FM.WAV` to the gapless loop, shows the song name in the GTA III radio
-  heading style while driving, and fades promptly when Catalina's helicopter
-  is destroyed. Gameplay volume is 80%, with scripted scenes at 40%.
-- Added a custom icon and an animated HOME Menu Kuruma banner, included as
-  finished packaging inputs.
+- Complete dark-blue lower-screen interface and main-menu map.
+- Faster animation loading and smoother texture streaming.
+- Removed dynamic motion-blur trails.
+- Reduced distant detail and costly effects in busy scenes.
+- Fixed white vehicle polygons, overbright highlights and sunset colour errors.
+- Restored transparent windows, lights and vehicle decals.
+- Fixed the Staunton tower-clock crash.
+- Fixed gameplay freezing while the radio kept playing.
+- Added 'push it to the limit' to the final mission.
+- Added the animated Kuruma HOME Menu banner.
 
 ### Grand Theft Auto: Vice City / reVC
 
-- Completed the full lower-screen map/HUD/loading/touch presentation in Vice
-  City's pink theme, with rectangular edge markers and correctly positioned
-  upper-screen wanted stars.
-- Reads `PED.IFP` once and parses it from memory, eliminating the former
-  multi-minute sequence of tiny animation reads.
-- Added an 8192-slot hashed model-name lookup for collision loading and retains a
-  safe linear fallback for late registrations.
-- Added a two-channel loading pipeline, staged progress and
-  throttled lower-screen updates.
-- Restored all 41 fields in Vice City's `particle.cfg`. Entries are now matched
-  by particle name instead of line number.
-- Combines separate colour and alpha-mask particle textures on 3DS, restoring
-  smoke, fire, rain, dust, debris, blood, shells, heat haze, water effects and
-  other particles that previously appeared as opaque rectangles.
-- Caps active particles at 256 and bounds automatic-weapon visuals without
-  changing weapon damage or hit detection: at most four 300 ms bullet traces
-  remain active, each trace uses one centre submission instead of three, and a
-  frame accepts up to three muzzle flashes, two gun-smoke particles and two
-  shells.
-- Fixed black/diamond-shaped polygons on skinned people and protected important
-  mission characters from transformed-buffer collisions.
-- Fixed black and white diamonds, blown-out panels, wrong body colours,
-  transparent-material failures and reflection errors on cars, motorcycles,
-  tanks, boats and aircraft.
-- Fixed decals and plates on police, service, delivery and racing vehicles;
-  includes a narrowly matched geometry correction for the unusually close
-  Admiral rear-plate surface.
-- Fixed player and vehicle textures becoming permanently degraded after memory
-  pressure.
-- Fixed boat/water corruption by restoring the correct render order and water
-  depth interaction.
-- Fixed ocean and pool sectors appearing in obvious chunks by submitting the
-  large flat-water batches through the buffered 3DS geometry path.
-- Preserved Vice City's near/middle/far water optimisation but replaced the hard
-  three-band boundary with a 96-unit per-vertex alpha transition. Near dynamic
-  water uses the same stable material-colour path, removing the white foreground
-  band.
-- Fixed crashes during helicopter and aircraft flights through areas with heavy
-  streaming. A full circuit around Vice City has been tested on hardware.
-- Prepares mission and telephone dialogue outside the critical start frame and
-  supports complete mono PCM dialogue buffers on dedicated NDSP channels.
-- Restored default pedestrian and traffic multipliers from the temporary 0.6
-  test value to 1.0.
-- Fixed startup on established installations by keeping `/3ds/miami` as the
-  primary data directory, accepting `/3ds/revc` as a fallback, and avoiding
-  pre-RenderWare C++ teardown if neither directory exists.
-- Prevents the cleared grey loading rectangle from retaining a stale splash
-  texture by invalidating the 3DS raster binding when loading/camera rasters are
-  cleared or destroyed.
-- Retains Vice City's original static white MatFX vehicle highlight at the same
-  restrained half strength as GTA III. It adds gloss without a dynamic capture,
-  overexposing dark paint or inheriting the sunset tint.
-- Uses R third-person / L+R first-person aiming for the M4, Ruger and M60, and
-  adds the red centre cross to the laser scope.
-- Uses A to buy and B to leave Ammu-Nation and the hardware store. The pause
-  map uses Y for marker, ZR/R for zoom, L for legend and B for back, with
-  matching help text.
-- Adds `'Self Control'` to `Keep Your Friends Close...`: the opening file starts
-  with gameplay and hands off to a gapless loop. Lance's `FIN_3` reveal fades
-  the current section; the first `FIN_B1` gameplay prompt then starts the edited
-  climax exactly once even if that prompt is refreshed. The ending cutscene
-  fades and stops it. Radio switching is locked, the title is shown briefly at
-  mission start, gameplay volume is 80%, and scripted scenes use 40%.
-- Added a custom icon and an animated HOME Menu Admiral banner, included as
-  finished packaging inputs.
+- Complete pink lower-screen interface.
+- Removed the multi-minute animation-loading delay.
+- Faster collision loading and staged loading progress.
+- Restored particle settings, colours and transparency.
+- Fixed smoke, fire, rain and other effects appearing as opaque rectangles.
+- Reduced automatic-weapon visual effects without changing damage.
+- Fixed broken character polygons and mission-character rendering.
+- Fixed vehicle colours, highlights, windows, decals and plates.
+- Fixed textures staying blurry after memory pressure.
+- Fixed boat rendering and missing water sections.
+- Smoothed near/middle/far water transitions without removing detail levels.
+- Fixed white foreground water.
+- Fixed streaming crashes during flights.
+- Improved mission and telephone dialogue loading.
+- Restored normal pedestrian and traffic defaults.
+- Fixed startup data-path handling and stale loading-screen textures.
+- Added 'Self Control' to the final mission, with the climax after Lance's reveal.
+- Added the animated Admiral HOME Menu banner.
 
 ### Grand Theft Auto: Liberty City Stories / reLCS
 
-#### Core port, data and saves
+#### Campaign and saves
 
-- Completed and fixed the reStories/reLCS code so Liberty City Stories can be
-  played from beginning to end on New Nintendo 3DS, using the PS2 game's models,
-  textures, maps, scripts and audio.
-- Added `TELEPORTH` and `TELEPORTM` text cheats. They stream the destination
-  first, verify an outdoor road landing, then place Toni or his current vehicle
-  away from the safehouse or main-story mission trigger; side activities are
-  excluded.
-- Added memorable LCS-specific aliases for the working keyboard cheats while
-  retaining their short diagnostic names. `TANKYOULIBERTY` remains the Rhino
-  phrase; `TELEPORTH`, `TELEPORTM` and the final-mission `SKIP` checkpoint helper
-  keep their original debug names.
-- Corrected mission-block loading, block-relative branch targets, script
-  function returns, missing compatibility opcodes and startup-cutscene ownership
-  so ambient mission triggers cannot run over the introduction.
-- Added the PS2 LCS vehicle, bike, boat, ferry, pedestrian, weapon, script,
-  garage and world systems needed for the campaign.
-- Added a reproducible PS2 audio-preparation route: continuous MUSIC streams are
-  converted to 24 kHz mono IMA ADPCM WAV, NEWS/CUTSCENE streams to 24 kHz mono
-  MP3, while the merged gameplay `sfx.RAW`/`sfx.sdt` library is retained.
-- Uses `/3ds/relcs` for runtime data and saves, with LCS-specific HOME title,
-  product code, loading image and game-data overlay.
-- Replaced PS2 memory-card and console-removal save wording with SD-card and
-  system-appropriate text, and restored the missing warning shown after cheats
-  have been activated.
-- Uses LCS's first valid mission title as the fallback save name, preventing an
-  inherited Vice City key from appearing when an old or damaged statistics
-  block contains no last-mission name.
-- Added native ARM save blocks for the complete player, ped, vehicle, object,
-  path, script, streaming and world state required by LCS.
-- Restored the script timer on save/load, rejects incompatible early experimental
-  save layouts cleanly, and provides offline conversion for older formats.
-- Preserves hidden-package rewards, safehouse pickups/objects, garage vehicles,
-  mission-heavy vehicle flags, special vehicles and the complete resident-model
-  state.
-- Corrected restart/load ordering so markers, player pools, scripts, streaming
-  and audio cannot observe half-destroyed or half-restored state.
-- Avoids the high-intensity final-exit crash by skipping redundant RenderWare
-  geometry teardown only when the 3DS process is already terminating; in-game
-  restart and normal cleanup remain intact.
+- Completed and repaired reStories so the main story can be finished on New 3DS.
+- Added PS2 game-data support and 3DS audio conversion.
+- Fixed mission scripts, introduction triggers and script loading.
+- Restored saved world changes, buildings and collision.
+- Fixed Callahan Bridge, lift-bridge, ferry and Fort Staunton states after loading.
+- Fixed overlapping intact and destroyed Fort Staunton scenery.
+- Preserved hidden-package rewards, safehouse pickups and special garage vehicles.
+- Fixed saves with mission vehicles crashing on load.
+- Fixed save/load ordering, script timers and shutdown crashes.
+- Updated save prompts and restored the cheat warning.
+- Added custom GTA-style cheat names, safehouse/mission teleports and checkpoint testing.
 
-#### Missions, progression and world state
+#### Missions and characters
 
-- Restores saved building model swaps and invisibility records using pool-safe
-  handles instead of stale raw entity pointers.
-- Restores the Callahan Bridge construction/ramp phase, both visible ramp halves,
-  road collision and mission-removed barriers after loading native or converted
-  saves.
-- Restores lift-bridge state, ferry routes, Fort Staunton intact/destroyed phase,
-  matching collision stores and removed mission blockers after loading.
-- Reapplies bridge and ferry progression flags when loading without restarting
-  the game. Loading a later save and then an earlier one no longer leaves the
-  wrong bridges, barriers or ferry state behind.
-- Fixes the Fort Staunton intact/ruined IPL mixture which caused overlapping
-  geometry, Z-fighting and unnecessary draw cost.
-- Adds safe locate handling for temporary mission actors which have not yet been
-  recreated during a loaded mission frame.
-- Fixes `Friggin' the Riggin'`: flamethrower contact now applies normal object
-  damage to the leaflets and printing presses, so the weapon supplied at mission
-  start can complete the objectives.
-- Restores the visible magnet model on Portland's vehicle crusher and top cranes,
-  including saves made before the hook pointer existed; crane behaviour itself
-  was already functional.
-- Clears leftover script-controlled vehicle braking and radio state after a
-  successful mission.
-- Repairs `The Sicilian Gambit` staging: both scripted boats and their occupants
-  are retained, the departing boat no longer leaves an orphaned component, and
-  the Salvatore chase boat is identified by its real occupant instead of a
-  camera position. That boat is protected only during the lighthouse
-  cleanup transition, avoiding the premature explosion and false mission
-  failure while enemy boats remain damageable.
-- Restores the lighthouse helicopter battle by assigning the attached gunners a
-  real combat objective and preserving mission rockets. Massimo performs the
-  complete door/open/boarding animation; a narrow temporary collision exemption
-  prevents the vertically moving helicopter from knocking him down without an
-  early teleport into the seat.
-- Restores the complete `CRED01` ending-credit table and its section layout.
-- Adds `'Chase'` to the final mission. It starts at the first playable prompt or
-  the native hospital-taxi boat checkpoint, hands `CHASE_FM.WAV` to a gapless
-  loop, displays the title in LCS's radio style while driving and locks radio
-  switching. The Massimo confrontation line fades the current section to
-  silence, the first post-cutscene helicopter objective starts the edited
-  climax once, and the helicopter crash fades the track out. Widescreen scenes
-  duck to 50% without pausing the stream.
+- Fixed flamethrower objectives in 'Friggin’ the Riggin’'.
+- Restored Portland's crusher magnet and crane models.
+- Fixed leftover mission braking and radio restrictions.
+- Fixed missing boats and occupants in 'The Sicilian Gambit'.
+- Fixed the player's boat exploding at the lighthouse transition.
+- Restored final-mission helicopter attacks and rocket damage.
+- Fixed Massimo being knocked down while boarding the helicopter.
+- Restored ending credits.
+- Added 'Chase' to the final mission, including checkpoint restarts and the helicopter climax.
+- Fixed broken high-detail cutscene characters and animation-memory errors.
+- Fixed people disappearing after cutscenes.
+- Fixed Toni standing through vehicles and freezing during arrest.
+- Fixed looping landing animations and restored the landing roll.
+- Fixed drive-by weapon selection after cutscenes.
+- Restored race countdowns; removed broken checkpoint light columns.
+- Kept mission titles visible for at least three seconds.
+- Fixed mission-message fades and reward colours.
+- Removed the oversized controller diagram to avoid pause-menu memory stalls.
 
-#### Player, cutscenes and HUD
+#### World and vehicles
 
-- Fixed native 3DS saves with mission vehicles crashing during load. The
-  vehicle type is now read at the same one-byte width used by the writer,
-  preserving the following model, pool slot and vehicle state fields; existing
-  affected LCS7 saves remain loadable without conversion.
-- Fixed Toni and other pedestrians repeating the landing/collapse animation
-  indefinitely while preserving the intended one-shot hard-landing roll. The
-  airborne fall pose now uses Vice City's partial repeating association and
-  fades cleanly into the non-repeating collapse animation.
-- Fixed the high-detail speaking CG characters whose face, limbs and body
-  polygons jumped or broke apart. The importer attaches HAnim hierarchy frames,
-  matches tagless animation sequences to actual DFF node names and reserves four
-  LCS-only 64 KiB skin buffers for models with more than 24 bones.
-- Corrected compressed-animation allocation sizes and hierarchy-length timing,
-  preventing large cutscene animation loads from exhausting memory or writing
-  through a failed allocation.
-- Removed an unused full pedestrian-shadow fallback from high-detail cutscenes,
-  reducing unnecessary work for each character.
-- Corrected the cutscene hidden-entity restoration loop so unrelated people do
-  not disappear and the loop cannot walk outside its saved list.
-- Fixed the post-cutscene “Toni standing through the vehicle” state. Vehicle
-  occupant ownership, ped state, position and the correct car/bike/boat seat
-  animation are rebuilt after the script pass and validated during player
-  updates.
-- Exempts arrest and exit transitions from that repair, fixing the separate
-  in-vehicle arrest freeze where `BUSTED` appeared only after trying to exit.
-- Skips the optional 2.3 MiB full-controller diagram on 3DS while retaining the
-  small button glyphs and control text. This prevents fragmented-memory stalls
-  or out-of-memory failure when opening the pause controls page.
-- Prevents ZL/ZR drive-by look controls from cycling away from the only weapon a
-  vehicle can fire; the current drive-by SMG remains selected through cutscenes.
-- Restores race countdown updates so 3-2-1 advances instead of remaining on 3.
-- Disabled the race checkpoint light columns, which stayed at old checkpoints
-  instead of moving with the race. The working arrows are kept.
-- Makes mission titles remain fully visible for at least 3 seconds, preserves
-  any script-authored longer hold, and then uses the normal fade. Text and scene
-  fade together, including letterboxed cutscenes.
-- Restores the fade/lifetime of mission-passed and other queued big messages
-  without freezing live countdown replacements.
-- Corrects the odd-job reward colour to the intended LCS mission-title gold.
+- Reduced large-building flicker and repaired distant-island LOD visibility.
+- Restored streamed safehouse and mission interiors.
+- Fixed foliage transparency and reduced its rendering cost.
+- Fixed short-range water tiles and white near water.
+- Fixed ferry colour changes and black polygons.
+- Added lightweight vehicle reflections and smooth entry/exit transitions.
+- Reduced reflection colour bleed and rainbow artefacts.
+- Restored transparent vehicle windows, wheels, lights and reverse audio.
+- Fixed overlapping decals and plates.
+- Fixed glass-shattering crashes while keeping the original shard effect.
+- Reduced excessive tyre smoke, dirt and other particle costs.
+- Aligned default pedestrian and traffic density with the other ports.
+- Added the animated Leone Sentinel HOME Menu banner.
 
-#### Rendering, streaming, water and vehicles
-
-- Uses distance to a large building's surface when deciding whether to load,
-  fade or unload it. This reduces nearby buildings flickering between high
-  detail, half transparency and their low-detail model.
-- Keeps authored complete-island LOD models visible from other islands instead
-  of culling them only because their origin is far from the camera. This still
-  needs more testing at distant viewpoints.
-- Restores streamed safehouse and mission interiors from LCS's full model table
-  without imposing Vice City's stricter area tags.
-- Fixes foliage cut-outs so transparent leaves do not hide background geometry,
-  and uses a cheaper one-pass alpha path while keeping LCS's required vegetation
-  distance.
-- Fixes pools and ocean tiles loading only at very short range or appearing one
-  square at a time by using the buffered flat-water submission path.
-- Fixes near ocean water turning white by matching the dynamic layer's material
-  colour and normalized vertex-colour path to the far sectors.
-- Fixes ferry body colour changes and black triangle/diamond corruption by
-  bypassing the unstable environment texture while retaining a lightweight
-  material-colour reflection.
-- Adds LCS-style scene-colour reflection to vehicles without applying a full
-  extra world render. The player vehicle captures an ultra-low-resolution strip
-  after the static world and before vehicles once every three frames; bright
-  road markings, signs, sky and nearby colour features are stretched into a
-  restrained overlay while broad ground colour and rainbow saturation are
-  filtered out. Nearby traffic receives one frozen capture, vehicles beyond
-  35 metres stay on the base path, and entry/exit crossfades hide the former
-  plastic-grey colour jump.
-- Fixes completely black unbroken windows on Rumpo and other affected LCS
-  vehicles by matching their window nodes and materials; black trim and
-  bumpers are excluded.
-- Restores LCS vehicle wheels, lights, body colour, decals, plates, damage layers
-  and reverse audio through the maintained 3DS vehicle path.
-- Adds precise depth treatment for LCS decals and plates in both ordinary and
-  MatFX render paths without biasing complete body atlases.
-- Embeds the inherited `wincrack_32` texture and retains a nil-safe fallback,
-  fixing the crash when bullets or vehicles shatter world glass while preserving
-  the series' triangular glass-shard effect.
-- Caps active particles at 256 and halves only excessive persistent wheel
-  dirt/sand/smoke creation, with a six-per-frame burst ceiling; mission and impact
-  effects remain available.
-- Sets new-install density defaults to match the other ports: 25 exterior
-  pedestrians, up to 40 in supported interiors, 12 active traffic vehicles and
-  1.0 pedestrian/traffic multipliers. An existing `reLCS.ini` can retain a
-  different personal density setting. Streaming can retain 25 vehicle models
-  while staying inside a 50 MiB streaming-memory ceiling.
-- Uses the shared 0.65 high-detail LOD scale while retaining special authored
-  handling for vegetation, large buildings and island LODs.
-- Uses R third-person / L+R first-person rifle aiming, laser-scope centre cross,
-  A/B scope zoom, A shop confirm/purchase, B shop/menu back, Y map marker,
-  ZR/R map zoom and L legend.
-
-### HOME Menu icons and banners
-
-- Added separate custom SMDH icons and animated vehicle banners: Kuruma for GTA
-  III, Admiral for Vice City and Leone Sentinel for LCS.
-- Uses each game's vehicle models, materials and wheels, with animation and
-  banner audio.
-- Added antialiased alpha-blended title artwork suitable for the 3DS HOME Menu's
-  low resolution.
-- Reduced the LCS logo from 256×256 to 128×128 and removed its unnecessary
-  dedicated vehicle-grime texture reference, bringing the banner below the HOME
-  resource limits and fixing the HOME Menu freeze.
-- Corrected the LCS logo's `g` edge after bilinear filtering and added subtle,
-  correctly positioned door-handle highlights to the Leone Sentinel.
-- Reuses the finished LCS banner unchanged when packaging gameplay updates.
-- Keeps the existing banners and SMDH files reusable for code-only packages;
-  rebuilding game code does not require Blender or another visual export.
+LCS main-story completion is verified on hardware. Side missions, optional
+activities and distant-island viewpoints still need more testing.
 
 ## Texture caches and first launch
 

@@ -18,30 +18,20 @@ See the [main README](../README.md) for shared dependencies and the full
 
 ## What changed
 
-- A large live map, pink status panel, loading progress and touch controls on
-  the lower screen.
-- Reads `PED.IFP` into memory once instead of making thousands of tiny reads,
-  removing the old multi-minute animation-loading delay.
-- Faster collision-model lookup and a two-channel loading pipeline.
-- Restored particle colour and alpha masks, fixing opaque rectangles in smoke,
-  fire, rain and other effects.
-- Fixed black diamond-shaped polygons on people, plus incorrect colours,
-  reflections and transparent materials on vehicles.
-- Fixed overlapping vehicle decals and number plates.
-- Fixed pools and ocean tiles appearing in chunks. Near, middle and far water
-  are kept for performance, with smoother transitions between them.
-- Fixed crashes during long flights and textures staying degraded after memory
-  pressure.
-- Kept inexpensive static vehicle highlights at half strength, and fixed the
-  loading dialog picking up an old splash-screen texture.
-- Added A-to-confirm/B-to-return shop controls, pause-map shortcuts, rifle
-  aiming shortcuts and the text cheat keyboard.
+- Full lower-screen interface in Vice City's pink theme.
+- Much faster animation and collision loading.
+- Restored particles and transparency.
+- Fixed broken character polygons and vehicle materials.
+- Fixed overlapping decals and plates.
+- Smoothed water transitions; fixed missing and white water sections.
+- Fixed flight-related crashes and textures staying blurry.
+- Reduced vehicle-highlight brightness.
+- Fixed stale textures in the loading dialog.
+- Nintendo controls and a text cheat keyboard.
 - Full mission names in the save list.
-- Added 'Self Control' support for the final mission, including a separate
-  climax section after Lance's reveal.
+- Final-mission music: 'Self Control', with a separate Lance climax.
 
-See the [Vice City changelog](../README.md#grand-theft-auto-vice-city--revc)
-for the individual fixes and performance settings.
+[Full changelog →](../README.md#grand-theft-auto-vice-city--revc)
 
 ## Build and install
 
@@ -111,7 +101,7 @@ The keyboard accepts Vice City's text cheats.
 
 ## Final-mission music
 
-Supply the edited tracks locally at:
+Setup installs the edited tracks at:
 
 ```text
 miami/Audio/music/SELF_FM.WAV
@@ -152,8 +142,7 @@ but this guide covers New 3DS.
 
 Based on reVC by aap and the re3/reVC contributors, the community Nintendo 3DS
 port, and the shared libraries listed in the
-[main README](../README.md#credits-and-legal-notice). The original reVC logo
-is retained above.
+[main README](../README.md#credits-and-legal-notice).
 
 This project is not affiliated with Rockstar Games or Take-Two Interactive.
 The upstream code is provided for educational, documentation and modding

@@ -1,14 +1,10 @@
-# Finished HOME Menu artwork
+# HOME Menu artwork
 
-Each game has three packaging inputs:
+Each game provides:
 
-- `.cgfx`: the finished animated banner, with its textures included;
-- `.bcwav`: the existing encoded banner sound, copied without re-encoding;
-- `-icon.png`: the final 48×48 HOME Menu icon.
+- `.cgfx`: animated banner and textures.
+- `.bcwav`: banner audio.
+- `-icon.png`: 48×48 HOME Menu icon.
 
-The packager combines these with the game ELF files. Blender, pycgfx, raw game
-models and the original artwork scenes are not required.
-
-These inputs are published as explicit exceptions to the generated-file
-ignore rules. Generated BNR, SMDH, CIA and 3DSX files stay in the ignored
-`production_cia/output` directory.
+The [packager](../production_cia/README.md) combines these with the game ELFs.
+No artwork export is needed. Generated files go to `production_cia/output/`.

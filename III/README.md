@@ -15,29 +15,18 @@ See the [main README](../README.md) for shared dependencies and the full
 
 ## What changed
 
-- A large live map and dark-blue status panel on the lower screen, with touch
-  buttons for L3/R3 and camera movement.
-- Loading progress and a Liberty City map in the main menu.
-- Faster animation loading and native texture caching, with streaming work
-  spread across frames to reduce pauses while walking or driving.
-- Removed the persistent motion-blur trails for a clearer picture.
-- Fixed white diamond-shaped vehicle polygons, overly bright reflections,
-  transparent windows, lights and overlapping vehicle decals.
-- Kept the original static vehicle highlights at half strength, without
-  tinting the reflection orange at sunset.
-- Fixed the Staunton tower-clock crash and an audio queue deadlock that could
-  freeze gameplay while the radio kept playing.
-- Reduced expensive particles, distant vehicle occupants and secondary effects
-  during pile-ups, while keeping damage and gameplay physics.
-- Added Nintendo-style menu/shop controls, rifle aiming shortcuts and the 3DS
-  cheat keyboard.
-- Full mission names in the save list, including recovery of known truncated
-  names from older builds.
-- Added final-mission music support for 'push it to the limit', with an opening
-  section, a loop and a fade when Catalina's helicopter is destroyed.
+- Full lower-screen interface in GTA III's dark-blue theme.
+- Faster loading and smoother streaming.
+- Removed motion-blur trails.
+- Fixed vehicle polygons, highlights, windows, lights and decals.
+- Fixed sunset colours overpowering vehicle paint.
+- Fixed the tower-clock crash and radio-related gameplay freeze.
+- Reduced costly effects in busy scenes.
+- Nintendo controls and a text cheat keyboard.
+- Full mission names in the save list.
+- Final-mission music: 'push it to the limit'.
 
-The [GTA III changelog](../README.md#grand-theft-auto-iii--re3) covers the
-individual fixes and performance limits in more detail.
+[Full changelog →](../README.md#grand-theft-auto-iii--re3)
 
 ## Build and install
 
@@ -135,7 +124,6 @@ describe the New 3DS build.
 
 Based on re3 by aap and the re3 contributors, the community Nintendo 3DS port,
 and the shared libraries listed in the [main README](../README.md#credits-and-legal-notice).
-The original re3 logo is retained above.
 
 This project is not affiliated with Rockstar Games or Take-Two Interactive.
 The upstream code is provided for educational, documentation and modding

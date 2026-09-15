@@ -2,42 +2,17 @@
 
 # reLCS for New Nintendo 3DS
 
-This is REGTA's Liberty City Stories port, based on
-[reStories by knackers4 and its contributors](https://github.com/knackers4/res).
-REGTA builds on that unfinished reLCS implementation, adding the 3DS renderer,
-audio and controls, and fixing the remaining problems needed to complete the
-story. The main story has been played from beginning to end on a physical
-New Nintendo 3DS. Side missions and other optional activities have not yet
-been verified.
+Based on [reStories by knackers4 and its contributors](https://github.com/knackers4/res).
 
-The port uses data extracted from the **PlayStation 2 version of Grand Theft
-Auto: Liberty City Stories**. The full game data is not included; selected
-runtime overrides and finished HOME Menu artwork are provided.
+**The main story has been completed on a physical New Nintendo 3DS.**
+Side missions and optional activities are not yet verified.
 
-> [!IMPORTANT]
-> You must own the game and provide your own extracted PS2 data. This project
-> is not affiliated with Rockstar Games or Take-Two Interactive.
+Requires a New Nintendo 3DS, New 3DS XL or New 2DS XL and converted **PS2 LCS
+data**. Old 3DS systems are not supported. Build the executable yourself;
+full game data and the compiler are not included.
 
-## About this port
-
-The work here covers story progression, island and bridge changes, saves,
-vehicles, audio and the dual-screen interface. It also fixes mission bugs that
-prevented completion, including the final boat chase and helicopter battle.
-Some unused PSP/PS2 features and debug functions are still incomplete.
-
-The main [changelog](../README.md#changelog) lists the shared changes and
-[LCS fixes](../README.md#grand-theft-auto-liberty-city-stories--relcs).
-This page covers LCS setup, controls and cheats.
-
-## Supported hardware
-
-- New Nintendo 3DS
-- New Nintendo 3DS XL
-- New Nintendo 2DS XL
-- Homebrew Launcher for `relcs.3dsx`, or custom firmware for the CIA package
-
-Old 3DS-family systems are not supported. The game is built for the additional
-CPU speed and memory available on New 3DS hardware.
+[Shared build guide](../README.md#building-from-source) ·
+[Full changelog](../README.md#grand-theft-auto-liberty-city-stories--relcs)
 
 ## Runtime layout
 
@@ -64,10 +39,6 @@ tool for converting the PS2 assets into the layout reLCS expects. Follow the
 [upstream instructions](https://github.com/knackers4/res#how-can-i-try-it)
 for that step; simply extracting the ISO is not the same as converting its
 assets.
-
-The asset converter comes from reStories, not REGTA. Our setup helper takes
-the prepared data folder and handles the additional 3DS installation and audio
-conversion steps below.
 
 Use the repository-level setup helper from the root of
 REGTA-3DSPort-Complete:
@@ -107,10 +78,8 @@ the included VB decoder and uses `ffmpeg` to create formats chosen for New 3DS:
 - CUTSCENE: 24 kHz mono MP3;
 - gameplay effects and speech: merged `sfx.RAW` plus `sfx.sdt`.
 
-IMA ADPCM is used for continuous music and radio because decoding MP3 while
-driving creates avoidable CPU pressure. The original MUSIC MP3 or VB files are
-not required after a successful conversion. The redundant PS2 `SET0` through
-`SET6` split sound banks are also omitted.
+The source VB streams and split sound banks are not needed on the SD card
+after conversion.
 
 Required host tools for data preparation:
 
@@ -133,9 +102,6 @@ export DEVKITARM=/path/to/devkitARM-r55
 ./scripts/build.sh relcs
 ```
 
-The build helper uses those environment variables and enables the 3DS loading
-and lower-screen options. The toolchain is not included in the repository.
-
 Outputs:
 
 ```text
@@ -143,9 +109,7 @@ stories/build/relcs.elf
 stories/build/relcs.3dsx
 ```
 
-Do not build this tree with an arbitrary newer system devkitARM. The code uses
-legacy libctru/newlib-era behaviour, and an executable can link successfully
-while still crashing on physical hardware.
+Use devkitARM r55 / GCC 10.2; newer versions can produce builds that crash.
 
 To install the freshly built 3DSX:
 
@@ -170,8 +134,7 @@ audio and icon are included in `packaging/prebuilt`.
 | Product code | `CTR-P-RLCS` |
 | Data directory | `sdmc:/3ds/relcs/` |
 
-The CIA contains no commercial RomFS data. Its long title is the name displayed
-by HOME Menu system dialogs such as Suspend Software.
+The CIA requires the same SD game data as the 3DSX.
 
 ## Nintendo 3DS controls
 
@@ -216,16 +179,8 @@ B returns or leaves. Weapon and vehicle actions depend on what Toni is doing.
 
 ### Lower-screen touch controls
 
-Touch the lower screen once to reveal the virtual L3, R3 and Camera regions.
-The first touch only reveals the overlay so that opening it cannot accidentally
-sound the horn or move the camera. Release the screen, then:
-
-- tap L3 or R3 for the corresponding missing stick-button input;
-- drag in the Camera region to emulate right-stick camera movement.
-
-The overlay hides after five seconds without touch input. Tutorial prompts use
-wording such as `TOUCH, THEN TAP L3` or `TOUCH, THEN TAP R3` when one of these
-virtual buttons is required.
+Touch to reveal the overlay, then release. Tap L3/R3 or drag the Camera region.
+The overlay hides after five seconds of inactivity.
 
 ### Pause map
 
@@ -238,16 +193,14 @@ virtual buttons is required.
 
 ## 3DS text cheat keyboard
 
-Text cheat entry is an addition made for this New 3DS port. During active
-gameplay, hold all four shoulder buttons together:
+During gameplay, hold:
 
 ```text
 L + R + ZL + ZR
 ```
 
-The 3DS system keyboard opens with the prompt **Enter cheat code**. Codes are
-case-insensitive, but must otherwise match one of the aliases below without
-spaces. The keyboard does not open while the game's frontend menu is active.
+Enter a code without spaces. Codes are case-insensitive. The keyboard is only
+available during gameplay.
 
 > [!WARNING]
 > Cheats can change statistics, world behaviour and save-game state. The game
@@ -280,12 +233,7 @@ aliases still work and trigger the same effects. Enter either one without spaces
 | `TELEPORTM` | — | Teleport near the closest currently available unfinished main-story mission; side activities are excluded |
 | `SKIP` | — | Arm the final mission’s boat checkpoint before starting the mission; unavailable during an active mission |
 
-Both navigation cheats finish scene and collision streaming before moving Toni
-or his current vehicle. Their landing point is an outdoor road node 18 to 65
-metres from the script marker, rather than the marker itself. The loaded scene
-is checked for matching ground height and overhead clearance before Toni is
-moved, so the cheat neither starts the destination script immediately nor puts
-him inside a building shell.
+Teleports place you outdoors, away from the destination's trigger.
 
 ### Weather and time
 
@@ -335,55 +283,23 @@ him inside a building shell.
 This does not affect the normal ending credits. `TELEPORTH`, `TELEPORTM` and
 `SKIP` keep their original names.
 
-## Lower screen and presentation
+## What changed
 
-The lower screen shows:
+- Completed and repaired reStories so the main story can be finished on New 3DS.
+- Full lower-screen interface in LCS's red theme.
+- Fixed progression, saved world changes and special garage vehicles.
+- Fixed the final mission's boats, helicopter combat and boarding sequence.
+- Restored flamethrower damage in 'Friggin’ the Riggin’'.
+- Fixed glass-shattering crashes and restored the crusher magnet.
+- Fixed cutscene characters, vehicle occupants, arrests and landing animations.
+- Restored race countdowns and removed broken checkpoint light columns.
+- Fixed water, ferry materials, foliage and distant-island LODs.
+- Added lightweight vehicle reflections and fixed windows, decals and plates.
+- Faster streaming and lower memory use.
+- Full save titles and a three-second minimum mission-title display.
+- Restored ending credits and added final-mission music.
 
-- loading progress during long startup and streaming phases;
-- a live local map and status display during gameplay;
-- pause/menu/cutscene-aware visibility;
-- touch camera, L3 and R3 regions;
-- LCS-specific health, armour, wanted and mission information.
-
-The upper screen remains dedicated to the 3D scene and essential contextual
-HUD elements. The pause map uses the LCS world-map artwork and the same game
-coordinates as the radar markers.
-
-## LCS-specific work in this port
-
-Some of the main changes:
-
-- completed and fixed reStories/reLCS so the main story can be played to the end;
-- fixed the final mission's missing boats, premature boat explosion,
-  inactive helicopter gunners and Massimo being knocked down while boarding;
-- restored flamethrower damage in `Friggin' the Riggin'`;
-- fixed Toni standing through vehicles after cutscenes and freezing during arrest;
-- fixed broken high-detail cutscene characters and repeating landing animations;
-- restored race countdowns and removed checkpoint light columns that did not move;
-- fixed short-range water tiles, white near water and corrupted ferry materials;
-- added low-cost vehicle reflections, with one capture every three frames for
-  the player vehicle and a frozen capture for nearby traffic;
-- preserved full save titles and a minimum three-second mission-title hold;
-- restored the ending credits and added final-mission music support;
-
-- PS2 LCS model, texture, script and audio-data support;
-- restoration of saved building swaps and invisibility records;
-- restoration of Callahan Bridge construction state, lift-bridge state,
-  ferry operation and Fort Staunton world state after loading;
-- collision restoration for the corresponding saved world variants;
-- preservation of hidden-package rewards and special garage-vehicle flags;
-- 3DS-labelled tutorial and contextual button prompts;
-- a native software keyboard for the textual cheat aliases above;
-- corrected save/load and shutdown cleanup paths used after entering gameplay;
-- native lower-screen radar, status and touch controls;
-- LCS vehicle/material, wheel, light, decal and reversing-audio corrections;
-- denser-world streaming and LOD hand-off repairs;
-- foliage rendering tuned for the required LCS visibility range, with a
-  one-pass alpha cut-out path that reduces fill cost without letting transparent
-  leaf cards hide the scenery behind them;
-- pedestrian and traffic defaults aligned with the other two maintained ports;
-- optional hardware-decoded startup movies from `gamefiles/relcs/movies`;
-- the loading-screen TXD under `gamefiles/relcs/txd`.
+[Full changelog →](../README.md#grand-theft-auto-liberty-city-stories--relcs)
 
 ## Final-mission music
 
@@ -409,14 +325,7 @@ The 3DS renderer uses a native `models/txd.img`/`models/txd.dir` cache. If the
 cache is not present, first launch may spend a long time converting textures. Do not remove
 a known-good cache merely because the original TXD files remain beside it.
 
-LCS vegetation does not always provide a useful lower-detail replacement.
-Reducing its visibility scale too far can therefore make trees disappear even
-at short range. This port keeps the required visibility distance and reduces
-the rendering cost in the alpha path instead.
-
-Performance still depends on camera direction, visible vegetation, traffic,
-effects and the complexity of the current real-time cutscene. A brief drop in a
-particularly dense view does not necessarily indicate a streaming failure.
+Dense vegetation, traffic and complex cutscenes can still reduce frame rate.
 
 ## Save data
 
@@ -426,15 +335,8 @@ Native 3DS saves are stored in:
 sdmc:/3ds/relcs/userfiles/
 ```
 
-Back up the entire directory before experimenting with converted saves. A PS2
-save cannot simply be renamed and copied into this folder; it must be converted
-to the exact save layout expected by the current build. Save converters are
-separate tools and are not part of this source directory.
-
-Converted saves can carry progression, player information, statistics, hidden
-packages, garages and script/world-state records. A converter must preserve the
-whole compatible layout rather than copying only a displayed completion
-percentage.
+Back up this folder before changing scripts or converting saves. PS2 saves need
+conversion; renaming a file is not enough.
 
 ## Known limitations
 
@@ -449,15 +351,15 @@ percentage.
 
 ## Reporting bugs
 
-Please open an Issue in this repository if you encounter a problem, including
-in a side mission. Include the mission or location, steps to reproduce it,
-your build or commit, console model, and whether you use CIA or 3DSX.
+Please open an Issue with:
 
-Attach the crash dump (`crash_dump_*.dmp`) if one was generated, along with
-screenshots, a short video or relevant logs. A save from before the problem
-also helps. Mention whether a restart fixes it, how long you had been playing,
-and any cheats or mods used. No dump is needed to report a freeze or a gameplay
-bug; describe what should happen and what happens instead.
+- Mission/location and steps to reproduce the problem.
+- Build or commit, console model, and CIA or 3DSX.
+- Expected and actual behaviour; whether restarting helps.
+- Any cheats or mods used.
+- Crash dump, screenshots/video and a save before the problem, when available.
+
+Freezes and gameplay bugs can be reported without a crash dump.
 
 ## Source layout
 
@@ -472,9 +374,6 @@ Important paths inside this game tree:
 | `tools/lcs_vb_decode.cpp` | host decoder for PS2 VB streams |
 | `tools/convert_lcs_music_adpcm_3ds.sh` | MUSIC conversion route |
 | `tools/convert_lcs_streams_3ds.sh` | NEWS and CUTSCENE conversion route |
-
-Put fixes shared by all three games in `common`. LCS mission, world, model,
-save and data-format changes belong here.
 
 ## Credits and legal notice
 

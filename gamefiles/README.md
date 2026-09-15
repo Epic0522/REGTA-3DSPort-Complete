@@ -10,13 +10,10 @@ The rest of each game's data must come from your own copy of the game.
 | `relcs/` | `/3ds/relcs/` | Final-mission music, startup movies and the loading-screen TXD |
 
 The original game models, radio stations, world data and other language files
-are not included here. LCS's other text changes are handled by the code; no
-replacement GXT is needed in its overlay.
+are not included here. LCS text changes are handled in code.
 
 The installer copies a fixed list rather than the whole folder. Keep that list
 and the exact file exceptions in the root `.gitignore` in sync when adding
-an override. The old per-game `gamefiles` directories are ignored local
-reference copies and are no longer used by setup.
+an override.
 
-Music files are the full-length versions, not the five-second test edits.
 The original source installation and existing destination saves are preserved.
