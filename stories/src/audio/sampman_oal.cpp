@@ -110,6 +110,13 @@ void *gPlayerTalkData = 0;
 
 CChannel aChannel[NUM_CHANNELS];
 uint8 nChannelVolume[NUM_CHANNELS];
+#ifdef _3DS
+static uint16 gEffectsMixHeadroom3DS = 256;
+static inline uint32 ApplyEffectsMixHeadroom3DS(uint32 volume)
+{
+	return volume * gEffectsMixHeadroom3DS >> 8;
+}
+#endif
 
 uint32 nStreamLength[TOTAL_STREAMED_SOUNDS];
 ALuint ALStreamSources[MAX_STREAMS][2];
@@ -1128,7 +1135,9 @@ cSampleManager::Initialise(void)
 		
 		_pMP3List = NULL;
 		
+#ifndef _3DS
 		_FindMP3s();
+#endif
 		
 		if ( nNumMP3s != 0 )
 		{
@@ -1294,7 +1303,13 @@ cSampleManager::UpdateEffectsVolume(void)
 			if ( GetChannelUsedFlag(i) )
 			{
 				if ( nChannelVolume[i] != 0 )
-					aChannel[i].SetVolume(m_nEffectsFadeVolume*nChannelVolume[i]*m_nEffectsVolume >> 14);
+					aChannel[i].SetVolume(m_nEffectsFadeVolume*
+#ifdef _3DS
+						(i < NUM_CHANNELS_GENERIC ? ApplyEffectsMixHeadroom3DS(nChannelVolume[i]) : nChannelVolume[i])*
+#else
+						nChannelVolume[i]*
+#endif
+						m_nEffectsVolume >> 14);
 			}
 		}
 	}
@@ -1749,7 +1764,13 @@ cSampleManager::SetChannelEmittingVolume(uint32 nChannel, uint32 nVolume)
 	}
 
 	// no idea, does this one looks like a bug or it's SetChannelVolume ?
-	aChannel[nChannel].SetVolume(m_nEffectsFadeVolume*nChannelVolume[nChannel]*m_nEffectsVolume >> 14);
+	aChannel[nChannel].SetVolume(m_nEffectsFadeVolume*
+#ifdef _3DS
+		ApplyEffectsMixHeadroom3DS(nChannelVolume[nChannel])*
+#else
+		nChannelVolume[nChannel]*
+#endif
+		m_nEffectsVolume >> 14);
 }
 
 void
@@ -2207,6 +2228,20 @@ cSampleManager::HasMissionMusicStreamFinished(void)
 void
 cSampleManager::Service(void)
 {
+#ifdef _3DS
+	uint32 activeEffects = 0;
+	for (int32 i = 0; i < NUM_CHANNELS_GENERIC; ++i)
+		if (aChannel[i].IsUsed())
+			++activeEffects;
+	uint16 targetHeadroom = activeEffects > 6 ? Max(192, 256 - (int32)(activeEffects - 6) * 4) : 256;
+	uint16 oldHeadroom = gEffectsMixHeadroom3DS;
+	if (gEffectsMixHeadroom3DS > targetHeadroom)
+		gEffectsMixHeadroom3DS -= Min((uint16)8, (uint16)(gEffectsMixHeadroom3DS - targetHeadroom));
+	else if (gEffectsMixHeadroom3DS < targetHeadroom)
+		gEffectsMixHeadroom3DS += Min((uint16)2, (uint16)(targetHeadroom - gEffectsMixHeadroom3DS));
+	if (oldHeadroom != gEffectsMixHeadroom3DS)
+		UpdateEffectsVolume();
+#endif
 	for ( int32 i = 0; i < MAX_STREAMS; i++ )
 	{
 		CStream *stream = aStream[i];

@@ -165,6 +165,10 @@ Play3DSMovie(const char *videoPath, const char *audioPath)
 	if(R_FAILED(APT_CheckNew3DS(&isNew3DS)) || !isNew3DS)
 		return false;
 
+	bool hasMvd = false;
+	if(R_FAILED(srvIsServiceRegistered(&hasMvd, "mvd:STD")) || !hasMvd)
+		return false;
+
 	FILE *video = fopen(videoPath, "rb");
 	if(video == NULL)
 		return false;

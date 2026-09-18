@@ -33,7 +33,9 @@ See the [main README](../README.md) for shared dependencies and the full
 Run these commands from the **repository root**, not from `III`.
 Install the dependencies listed in the
 [build guide](../README.md#building-from-source) first. The compiler must be
-devkitARM r55 / GCC 10.2; download it separately and set its path:
+devkitARM r55 / GCC 10.2. On Linux and macOS, build the SDK using the
+[r55 source-build guide](../README.md#linux-and-macos-build-r55-from-official-sources);
+the old downloader cannot supply the required files. Then set your SDK paths:
 
 ```sh
 export DEVKITPRO=/opt/devkitpro

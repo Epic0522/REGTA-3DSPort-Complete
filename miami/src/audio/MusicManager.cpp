@@ -1267,13 +1267,22 @@ cMusicManager::SetStripClubTrackPos(uint8 scriptObject)
 void
 cMusicManager::DisplayRadioStationName()
 {
+	static bool wasFinaleRadio = false;
 	if (FinalMissionMusic::IsRadioLocked()) {
+		wasFinaleRadio = true;
 		FinalMissionMusic::DisplayTrackName();
 		return;
 	}
 	uint8 gStreamedSound;
 	static wchar *pCurrentStation = nil;
 	static uint8 cDisplay = 0;
+	if (wasFinaleRadio) {
+		// OFF (or mission end) restores the normal station title, even if
+		// the car is still tuned to the same station as before the finale.
+		pCurrentStation = nil;
+		cDisplay = 0;
+		wasFinaleRadio = false;
+	}
 
 	if(!CTimer::GetIsPaused() && !TheCamera.m_WideScreenOn && PlayerInCar() &&
 	   !CReplay::IsPlayingBack()) {

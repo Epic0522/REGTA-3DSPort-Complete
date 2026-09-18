@@ -4,13 +4,8 @@ endif
 
 include $(DEVKITARM)/3ds_rules
 
-# This bootstrap port shares the proven 2021 libctru/newlib ABI with reVC.
-# Require the workspace-local r55 toolchain so a newer system devkitARM cannot
-# produce a valid-looking 3DSX that fails before the first frame.
-RELCS_DEVKITARM_R55 := $(abspath ../../toolchains/devkitARM)
-ifneq ($(realpath $(DEVKITARM)),$(realpath $(RELCS_DEVKITARM_R55)))
-$(error reLCS 3DS requires bundled devkitARM r55: $(RELCS_DEVKITARM_R55))
-endif
+include ../../common/devkitarm-r55.mk
+
 
 TARGET	:=relcs
 LIBRW	:=librw

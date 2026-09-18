@@ -123,6 +123,52 @@ uint8 gameProcessPirateCheck = 0;
 
 bool DoRWStuffStartOfFrame(int16 TopRed, int16 TopGreen, int16 TopBlue, int16 BottomRed, int16 BottomGreen, int16 BottomBlue, int16 Alpha);
 void DoRWStuffEndOfFrame(void);
+#ifdef _3DS
+#include <3ds.h>
+static void
+Initialise3DSRenderState(void)
+{
+	if(rw::c3d::initialiseMaterialState()) return;
+	wchar message[32];
+	AsciiToUnicode("Device not supported", message);
+	gfxSetScreenFormat(GFX_BOTTOM, GSP_BGR8_OES);
+	for(unsigned i = 0; i < 2; i++) {
+		u16 width, height;
+		u8 *buffer = gfxGetFramebuffer(GFX_BOTTOM, GFX_LEFT, &width, &height);
+		const unsigned bytes = unsigned(width) * height * 3;
+		memset(buffer, 0, bytes);
+		GSPGPU_FlushDataCache(buffer, bytes);
+		gfxScreenSwapBuffers(GFX_BOTTOM, false);
+	}
+	while(aptMainLoop()) {
+		hidScanInput();
+		if(hidKeysDown() & KEY_B) break;
+		if(DoRWStuffStartOfFrame(0, 0, 0, 0, 0, 0, 255)) {
+			CSprite2d::SetRecipNearClip();
+			CSprite2d::InitPerFrame();
+			CFont::InitPerFrame();
+			DefinedState();
+			CFont::SetAlphaFade(255.0f);
+			CFont::SetCentreOff();
+			CFont::SetRightJustifyOff();
+			CFont::SetJustifyOff();
+			CFont::SetPropOn();
+			CFont::SetBackgroundOff();
+			CFont::SetDropShadowPosition(0);
+			CFont::SetScale(SCREEN_SCALE_X(0.52f), SCREEN_SCALE_Y(1.1f));
+			CFont::SetWrapx(SCREEN_WIDTH - SCREEN_SCALE_X(26.0f));
+			CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
+			CFont::SetColor(CRGBA(175, 175, 175, 255));
+			CFont::PrintString(SCREEN_SCALE_X(26.0f), SCREEN_SCALE_Y(28.0f), message);
+			CFont::DrawFonts();
+			RwCameraEndUpdate(Scene.camera);
+			RsCameraShowRaster(Scene.camera);
+		}
+		gspWaitForVBlank();
+	}
+	exit(EXIT_FAILURE);
+}
+#endif
 #ifdef PS2_MENU
 void MessageScreen(char *msg)
 {
@@ -541,6 +587,9 @@ bool CGame::Initialise(const char* datFile)
 	SetLoadingScreenProgress(0.82f);
 #endif
 	LoadingScreen("Loading the Game", "Find big buildings", nil);
+#ifdef _3DS
+	Initialise3DSRenderState();
+#endif
 	CRenderer::Init();
 
 #ifdef ENABLE_3DS_LOADING_PROGRESS

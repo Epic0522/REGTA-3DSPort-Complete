@@ -3089,7 +3089,7 @@ int8 CRunningScript::ProcessCommands0To99(int32 command)
 		/* Check COMMAND_GOTO note. */
 		return 0;
 	case COMMAND_TERMINATE_THIS_SCRIPT:
-		if (m_bMissionFlag && FinalMissionMusic::IsRadioLocked())
+		if (m_bMissionFlag && FinalMissionMusic::IsFinaleActive())
 			FinalMissionMusic::EndVCFinale();
 		if (m_bMissionFlag)
 			CTheScripts::bAlreadyRunningAMissionScript = false;
@@ -4131,7 +4131,7 @@ int8 CRunningScript::ProcessCommands100To199(int32 command)
 	case COMMAND_PRINT_BIG:
 	{
 		const char *textKey = (char*)&CTheScripts::ScriptSpace[m_nIp];
-		if (FinalMissionMusic::IsRadioLocked() && strcmp(textKey, "M_FAIL") == 0)
+		if (FinalMissionMusic::IsFinaleActive() && strcmp(textKey, "M_FAIL") == 0)
 			FinalMissionMusic::EndVCFinale();
 		wchar* key = CTheScripts::GetTextByKeyFromScript(&m_nIp);
 #ifdef MISSION_REPLAY
@@ -4154,7 +4154,7 @@ int8 CRunningScript::ProcessCommands100To199(int32 command)
 	case COMMAND_PRINT_NOW:
 	{
 		const char *textKey = (char*)&CTheScripts::ScriptSpace[m_nIp];
-		if (!FinalMissionMusic::IsRadioLocked() && strcmp(textKey, "FIN_B3") == 0)
+		if (!FinalMissionMusic::IsFinaleActive() && strcmp(textKey, "FIN_B3") == 0)
 			FinalMissionMusic::BeginVCFinale();
 		FinalMissionMusic::ObserveVCTextKey(textKey);
 		wchar* key = CTheScripts::GetTextByKeyFromScript(&m_nIp);

@@ -1,9 +1,14 @@
 #pragma once
 
 class CEntity;
+class CSimpleModelInfo;
 
 #ifdef FIX_BUGS
+#ifdef _3DS
+#define LOD_DISTANCE (360.0f*TheCamera.LODDistMultiplier)
+#else
 #define LOD_DISTANCE (300.0f*TheCamera.LODDistMultiplier)
+#endif
 #else
 #define LOD_DISTANCE 300.0f
 #endif
@@ -58,6 +63,10 @@ class CRenderer
 	static BlockedRange *pFullBlockedRanges;
 	static BlockedRange *pEmptyBlockedRanges;
 public:
+#ifdef _3DS
+	static float GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId);
+	static float GetNew3DSWorldDistance(CEntity *ent, float originDistance, const CVector &cameraPosition = ms_vecCameraPosition);
+#endif
 	static float ms_lodDistScale;
 	static bool m_loadingPriority;
 

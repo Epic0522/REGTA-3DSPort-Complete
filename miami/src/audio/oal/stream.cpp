@@ -199,6 +199,9 @@ class CWavFile : public IDecoder
 		delete[] m_pAdpcmBuffer;
 		delete[] m_ppPcmBuffers;
 		delete[] m_pAdpcmDecoders;
+		m_pAdpcmBuffer = nil;
+		m_ppPcmBuffers = nil;
+		m_pAdpcmDecoders = nil;
 	}
 
 	uint32 GetCurrentSample() const
@@ -596,20 +599,22 @@ class CADFFile : public CMP3File
 {
 	static ssize_t r_read(void* fh, void* buf, size_t size)
 	{
+		if (!fh) return -1;
 		size_t bytesRead = fread(buf, 1, size, (FILE*)fh);
 		uint8* _buf = (uint8*)buf;
-		for (size_t i = 0; i < size; i++)
+		for (size_t i = 0; i < bytesRead; i++)
 			_buf[i] ^= 0x22;
 		return bytesRead;
 	}
 	static off_t r_seek(void* fh, off_t pos, int seekType)
 	{
+		if (!fh) return -1;
 		fseek((FILE*)fh, pos, seekType);
 		return ftell((FILE*)fh);
 	}
 	static void r_close(void* fh)
 	{
-		fclose((FILE*)fh);
+		if (fh) fclose((FILE*)fh);
 	}
 public:
 	CADFFile(const char* path, bool forceMono)
@@ -632,6 +637,8 @@ public:
 			int encoding = 0;
 
 			FILE* f = fopen(path, "rb");
+			if (!f)
+				return;
 
 			m_bOpened = mpg123_replace_reader_handle(m_pMH, r_read, r_seek, r_close) == MPG123_OK
 				&& mpg123_open_handle(m_pMH, f) == MPG123_OK &&  mpg123_getformat(m_pMH, &rate, &channels, &encoding) == MPG123_OK;
@@ -995,8 +1002,7 @@ void CStream::Terminate()
 #endif
 }
 
-CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS], uint32 overrideSampleRate,
-	bool fullInitialBuffer, bool forceMonoDecode, uint8 directChannel) :
+CStream::CStream(ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS]) :
 	m_pAlSources(sources),
 	m_alBuffers(buffers),
 	m_pBuffer(nil),
@@ -1010,26 +1016,62 @@ CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBU
 	m_nLoopCount(1),
 	m_bSeamlessLoop(false),
 	m_bMissionMusic(false),
-	m_bFullInitialBuffer(fullInitialBuffer),
+	m_bFullInitialBuffer(false),
 	m_bFullInitialQueue(false),
 #ifdef _3DS
-	m_bSingleSource(fullInitialBuffer),
+	m_bSingleSource(true),
 #else
 	m_bSingleSource(false),
 #endif
 	m_bWholeFileBuffer(false),
 	m_nWholeBufferStartMs(0)
 #ifdef _3DS
-	,m_nDirectChannel(fullInitialBuffer ? directChannel : 0),
+	,m_nDirectChannel(0),
 	m_pDirectBuffer(nil),
 	m_nDirectBytes(0),
 	m_PrepareThread(nil),
-	m_nPrepareState(0)
+	m_nPrepareState(0),
+	m_RadioStartThread(nil),
+	m_nRadioStartState(0)
 #endif
 	
 {
 #ifdef _3DS
 	memset(&m_DirectWaveBuf, 0, sizeof(m_DirectWaveBuf));
+#endif
+}
+
+CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS], uint32 overrideSampleRate,
+	bool fullInitialBuffer, bool forceMonoDecode, uint8 directChannel) :
+	CStream(sources, buffers)
+{
+	Open(filename, overrideSampleRate, fullInitialBuffer, forceMonoDecode, directChannel);
+}
+
+bool
+CStream::Open(const char *filename, uint32 overrideSampleRate, bool fullInitialBuffer,
+	bool forceMonoDecode, uint8 directChannel)
+{
+	if (IsOpened())
+		return false;
+
+	m_bPaused = false;
+	m_bActive = false;
+	m_bReset = false;
+	m_nVolume = 0;
+	m_nPan = 0;
+	m_nPosBeforeReset = 0;
+	m_nLoopCount = 1;
+	m_bSeamlessLoop = false;
+	m_bMissionMusic = false;
+	m_bFullInitialBuffer = fullInitialBuffer;
+	m_bFullInitialQueue = false;
+	m_bWholeFileBuffer = false;
+	m_nWholeBufferStartMs = 0;
+#ifdef _3DS
+	m_nDirectChannel = fullInitialBuffer ? directChannel : 0;
+	m_nDirectBytes = 0;
+	m_nPrepareState = 0;
 #else
 	(void)directChannel;
 #endif
@@ -1048,7 +1090,29 @@ CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBU
 		
 	DEV("Stream %s\n", m_aFilename);
 
-	if (!strcasecmp(&m_aFilename[strlen(m_aFilename) - strlen(".wav")], ".wav"))
+#ifdef _3DS
+	// Prefer the same low-cost radio format used by LCS. Keep ADF as a
+	// fallback for installations which have not run the audio converter yet.
+	const size_t filenameLength = strlen(m_aFilename);
+	if (filenameLength >= 4 && !strcasecmp(m_aFilename + filenameLength - 4, ".adf")) {
+		char wavPath[sizeof(m_aFilename)];
+		strcpy(wavPath, m_aFilename);
+		strcpy(wavPath + filenameLength - 4, ".WAV");
+		char *real = casepath(wavPath);
+		const char *radioPath = real ? real : wavPath;
+		CWavFile *radio = new CWavFile(radioPath);
+		if (radio->IsOpened()) {
+			m_pSoundFile = radio;
+			strcpy(m_aFilename, radioPath);
+		} else
+			delete radio;
+		free(real);
+	}
+#endif
+
+	if (m_pSoundFile != nil) {
+		// Converted radio opened above.
+	} else if (!strcasecmp(&m_aFilename[strlen(m_aFilename) - strlen(".wav")], ".wav"))
 #ifdef AUDIO_OAL_USE_SNDFILE
 		m_pSoundFile = new CSndFile(m_aFilename);
 #else
@@ -1082,8 +1146,9 @@ CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBU
 		DEV("Buffer sec: %f\n",       (float(m_pSoundFile->GetBufferSamples()) / float(m_pSoundFile->GetChannels())/ float(m_pSoundFile->GetSampleRate())));
 		DEV("Length MS: %02d:%02d\n", (m_pSoundFile->GetLength() / 1000) / 60, (m_pSoundFile->GetLength() / 1000) % 60);
 		
-		return;
+		return true;
 	}
+	return false;
 }
 
 CStream::~CStream()
@@ -1095,6 +1160,7 @@ void CStream::Delete()
 {
 #ifdef _3DS
 	JoinPrepareThread();
+	JoinRadioStartThread();
 #endif
 	Stop();
 	ClearBuffers();
@@ -1110,6 +1176,27 @@ void CStream::Delete()
 		free(m_pBuffer);
 		m_pBuffer = nil;
 	}
+}
+
+void CStream::Close()
+{
+	Delete();
+	m_bPaused = false;
+	m_bActive = false;
+	m_bReset = false;
+	m_nLoopCount = 1;
+	m_bSeamlessLoop = false;
+	m_bMissionMusic = false;
+	m_bFullInitialBuffer = false;
+	m_bFullInitialQueue = false;
+	m_bWholeFileBuffer = false;
+	m_nWholeBufferStartMs = 0;
+#ifdef _3DS
+	m_nDirectChannel = 0;
+	m_nDirectBytes = 0;
+	m_nPrepareState = 0;
+	m_nRadioStartState = 0;
+#endif
 }
 
 #ifdef _3DS
@@ -1233,6 +1320,38 @@ int8 CStream::GetPrepareStatus() const
 	if(state == PREPARE_FAILED)
 		return -1;
 	return 0;
+}
+
+void CStream::RadioStartThreadMain(void *arg)
+{
+	CStream *stream = (CStream*)arg;
+	stream->Start();
+	__atomic_store_n(&stream->m_nRadioStartState, PREPARE_READY, __ATOMIC_RELEASE);
+}
+
+void CStream::JoinRadioStartThread()
+{
+	if(m_RadioStartThread != nil){
+		threadJoin(m_RadioStartThread, U64_MAX);
+		threadFree(m_RadioStartThread);
+		m_RadioStartThread = nil;
+	}
+}
+
+bool CStream::BeginRadioStart()
+{
+	if(!IsOpened() || UsesDirectNDSP())
+		return false;
+	JoinRadioStartThread();
+	__atomic_store_n(&m_nRadioStartState, PREPARE_RUNNING, __ATOMIC_RELEASE);
+	/* LCS fills streamed buffers on its audio worker.  Do the same for VC's
+	 * radio without moving mission/cutscene streams onto a new code path. */
+	m_RadioStartThread = threadCreate(RadioStartThreadMain, this, 64*1024, 0x31, 2, false);
+	if(m_RadioStartThread == nil){
+		__atomic_store_n(&m_nRadioStartState, PREPARE_IDLE, __ATOMIC_RELEASE);
+		return false;
+	}
+	return true;
 }
 #endif
 
@@ -1444,6 +1563,15 @@ bool CStream::FillBuffer(ALuint *alBuffer)
 	
 	uint32 channelSize = size / m_pSoundFile->GetChannels();
 
+#ifdef _3DS
+	// WAV/VB inputs can still be stereo even when mpg123 is forced to mono.
+	if (m_pSoundFile->GetChannels() == 2) {
+		int16 *left = (int16*)m_pBuffer;
+		const int16 *right = (const int16*)((uint8*)m_pBuffer + channelSize);
+		for (uint32 i = 0; i < channelSize / sizeof(int16); i++)
+			left[i] = (int16)(((int32)left[i] + (int32)right[i]) / 2);
+	}
+#endif
 	alBufferData(alBuffer[0], AL_FORMAT_MONO16, m_pBuffer, channelSize, m_pSoundFile->GetSampleRate());
 	if(!m_bSingleSource){
 		if (m_pSoundFile->GetChannels() == 1)
@@ -1709,6 +1837,10 @@ void CStream::Update()
 		return;
 
 #ifdef _3DS
+	if(__atomic_load_n(&m_nRadioStartState, __ATOMIC_ACQUIRE) == PREPARE_RUNNING)
+		return;
+	if(m_RadioStartThread != nil)
+		JoinRadioStartThread();
 	/* Direct mission dialogue is a complete hardware wave buffer.  Its playback
 	 * does not require per-frame OpenAL queue servicing. */
 	if(UsesDirectNDSP())

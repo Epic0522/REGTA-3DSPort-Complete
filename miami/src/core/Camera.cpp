@@ -630,9 +630,7 @@ CCamera::Process(void)
 		LODDistMultiplier = 1.0f;
 	GenerationDistMultiplier = LODDistMultiplier;
 #ifdef _3DS
-	// Keep traffic generation at the full distance captured above, but trim only
-	// the last slice of distant world rendering on the handheld GPU.
-	LODDistMultiplier *= Min(CRenderer::ms_lodDistScale, 1.1f);
+	// Apply model-specific world budgets in Renderer; keep the camera baseline.
 #else
 	LODDistMultiplier *= CRenderer::ms_lodDistScale;
 #endif

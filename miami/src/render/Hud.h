@@ -52,6 +52,9 @@ class CHud
 public:
 	static CSprite2d Sprites[NUM_HUD_SPRITES];
 	static wchar m_HelpMessage[HELP_MSG_LENGTH];
+#ifdef _3DS
+	static bool m_b3DSPhoneAnswerPrompt;
+#endif
 	static wchar m_LastHelpMessage[HELP_MSG_LENGTH];
 	static uint32 m_HelpMessageState;
 	static uint32 m_HelpMessageTimer;

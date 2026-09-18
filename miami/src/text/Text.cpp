@@ -109,6 +109,12 @@ wchar*
 CText::Get(const char *key)
 {
 #ifdef _3DS
+	if (strcmp(key, "F3BGM") == 0) {
+		static wchar label[] = { 'F','i','n','a','l',' ','m','i','s','s','i','o','n',' ','B','G','M',0 };
+		return label;
+	}
+#endif
+#ifdef _3DS
 	if(FrontEndMenuManager.m_PrefsLanguage == CMenuManager::LANGUAGE_AMERICAN) {
 		static const char *keys[] = { "FEC_RS3", "FEC_HO3", "FEC_LB4", "FEC_CR3", "FEC_SM3", "FEC_R3" };
 		static const char *texts[] = {
@@ -148,6 +154,40 @@ CText::Get(const char *key)
 		outstr = mission_keyArray.Search(key, mission_data.chars, &result);
 #else
 		outstr = mission_keyArray.Search(key, &result);
+#endif
+#ifdef _3DS
+	if (!result) {
+		struct MissingFrontendText { const char *key, *text; };
+		static const MissingFrontendText fallback[] = {
+			{ "FEC_FRC", "FREE CAM" },
+			{ "FEC_GSL", "SHOW HEAD BOB" },
+			{ "FEC_SLC", "SLOT IS CORRUPTED" },
+			{ "FED_LFL", "LOADING SAVE GAME HAS FAILED. THE GAME WILL RESTART NOW." },
+			{ "FED_LWR", "UNABLE TO SAVE GAME DATA." },
+			{ "FEM_AUT", "AUTO" },
+			{ "FEM_CSB", "CUTSCENE BORDERS" },
+			{ "FEM_MOB", "MOBILE" },
+			{ "FEM_NON", "NONE" },
+			{ "FEM_NRM", "NORMAL" },
+			{ "FEM_SIM", "SIMPLE" },
+			{ "FET_GFX", "GRAPHICS SETUP" },
+		};
+		static wchar translated[ARRAY_SIZE(fallback)][64];
+		static bool initialized;
+		if (!initialized) {
+			for (uint32 i = 0; i < ARRAY_SIZE(fallback); ++i) {
+				const unsigned char *src = (const unsigned char *)fallback[i].text;
+				wchar *dst = translated[i];
+				while (*src && dst < translated[i] + ARRAY_SIZE(translated[i]) - 1)
+					*dst++ = *src++;
+				*dst = 0;
+			}
+			initialized = true;
+		}
+		for (uint32 i = 0; i < ARRAY_SIZE(fallback); ++i)
+			if (strcmp(key, fallback[i].key) == 0)
+				return translated[i];
+	}
 #endif
 	return outstr;
 }

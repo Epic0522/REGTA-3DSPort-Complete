@@ -1,6 +1,7 @@
 #include <csignal>
 #define WITHWINDOWS
 #include "common.h"
+#include "FinalMissionMusic.h"
 #if defined DETECT_JOYSTICK_MENU && defined XINPUT
 #include <xinput.h>
 #if !defined(PSAPI_VERSION) || (PSAPI_VERSION > 1)
@@ -129,11 +130,17 @@ void LangJapSelect(int8 action)
 void
 CustomFrontendOptionsPopulate(void)
 {
+#ifdef _3DS
+	static const char *finaleChoices[] = { "FEM_OFF", "FEM_ON" };
+	FrontendOptionSetCursor(MENUPAGE_SOUND_SETTINGS, 2, false);
+	FrontendOptionAddSelect("F3BGM", 0, 0, MENUALIGN_LEFT, finaleChoices, 2,
+	    &FinalMissionMusic::Enabled, false, nil, "Audio", "FinalMissionBGM");
+#endif
 	// Most of custom options are done statically in MenuScreensCustom.cpp, we add them here only if they're dependent to extra files
 
 	int fd;
 	// These work only if we have neo folder, so they're dynamically added
-#ifdef EXTENDED_PIPELINES
+#if defined(EXTENDED_PIPELINES) && !defined(_3DS)
 	const char *pipelineNames[] = { "FED_PSP", "FED_PS2","FED_MOB" };
 	const char *off_on[] = { "FEM_OFF", "FEM_ON" };
 	fd = CFileMgr::OpenFile("neo/neo.txd","r");

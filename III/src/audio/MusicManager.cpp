@@ -76,7 +76,9 @@ cMusicManager::PlayerInCar()
 void
 cMusicManager::DisplayRadioStationName()
 {
+	static bool wasFinaleRadio = false;
 	if (FinalMissionMusic::IsRadioLocked()) {
+		wasFinaleRadio = true;
 		FinalMissionMusic::DisplayTrackName();
 		return;
 	}
@@ -85,6 +87,13 @@ cMusicManager::DisplayRadioStationName()
 	int8 gRetuneCounter;
 	static wchar *pCurrentStation = nil;
 	static uint8 cDisplay = 0;
+	if (wasFinaleRadio) {
+		// OFF (or mission end) restores the normal station title, even if
+		// the car is still tuned to the same station as before the finale.
+		pCurrentStation = nil;
+		cDisplay = 0;
+		wasFinaleRadio = false;
+	}
 
 	if(!CTimer::GetIsPaused() && !TheCamera.m_WideScreenOn && PlayerInCar() &&
 	   !CReplay::IsPlayingBack()) {
@@ -490,6 +499,7 @@ cMusicManager::ServiceGameMode()
 		SampleManager.StopStreamedFile(0);
 		m_nPlayingTrack = NO_TRACK;
 		m_nNextTrack = NO_TRACK;
+		m_bPlayerInCar = false; // Reacquire the car's station when the lock is released.
 		m_bSetNextStation = false;
 		gNumRetunePresses = 0;
 		gRetuneCounter = 0;

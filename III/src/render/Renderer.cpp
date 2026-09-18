@@ -101,9 +101,45 @@ BlockedRange CRenderer::aBlockedRanges[16];
 BlockedRange *CRenderer::pFullBlockedRanges;
 BlockedRange *CRenderer::pEmptyBlockedRanges;
 
+#ifdef _3DS
+#include "../../../../common/3ds/WorldDrawDistance.h"
+static float gWorldLodScales[MODELINFOSIZE];
+
+float
+CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId)
+{
+	if(modelId < 0 || modelId >= MODELINFOSIZE) return 1.0f;
+	float &scale = gWorldLodScales[modelId];
+	if(scale == 0.0f) {
+		const bool streetProp = IsStreetLight(modelId) || modelId == MI_TRAFFICLIGHTS ||
+			modelId == MI_WASTEBIN || modelId == MI_BIN || modelId == MI_DUMP1 ||
+			modelId == MI_POSTBOX1 || modelId == MI_NEWSSTAND ||
+			modelId == MI_BUSSIGN1 || modelId == MI_NOPARKINGSIGN1 ||
+			modelId == MI_PHONESIGN || modelId == MI_PHONEBOOTH1;
+		scale = WorldDrawDistance3DS::Scale(mi->GetModelName(), IsTreeModel(modelId), streetProp);
+	}
+	return scale;
+}
+
+float
+CRenderer::GetNew3DSWorldDistance(CEntity *ent, float originDistance, const CVector &cameraPosition)
+{
+	// Island LOD spheres cover whole islands: retain their authored origins.
+	CSimpleModelInfo *mi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(ent->GetModelIndex());
+	const bool island = GetNew3DSWorldLodScale(mi, ent->GetModelIndex()) == 1.0f;
+	if(!ent->IsBuilding() || island || ent->GetBoundRadius() < 16.0f)
+		return originDistance;
+	return WorldDrawDistance3DS::SurfaceDistance(originDistance,
+		(ent->GetBoundCentre() - cameraPosition).Magnitude(), ent->GetBoundRadius(), true, false);
+}
+#endif
+
 void
 CRenderer::Init(void)
 {
+#ifdef _3DS
+	memset(gWorldLodScales, 0, sizeof(gWorldLodScales));
+#endif
 	gSortedVehiclesAndPeds.Init(40);
 	SortBIGBuildings();
 }
@@ -450,15 +486,19 @@ CRenderer::RenderOneBuilding(CEntity *ent, float camdist)
 		pass = PASS_NOZ;
 
 	if(ent->bDistanceFade){
+#ifdef _3DS
+		camdist = GetNew3DSWorldDistance(ent, camdist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+#endif
 		RpAtomic *lodatm;
 		float fadefactor;
 		uint32 alpha;
 
 		lodatm = mi->GetAtomicFromDistance(camdist - FADE_DISTANCE);
+		if(lodatm == nil) lodatm = atomic;
 		fadefactor = (mi->GetLargestLodDistance() - (camdist - FADE_DISTANCE))/FADE_DISTANCE;
 		if(fadefactor > 1.0f)
 			fadefactor = 1.0f;
-		alpha = mi->m_alpha * fadefactor;
+		alpha = mi->m_alpha * Max(0.0f, Min(fadefactor, 1.0f));
 
 		if(alpha == 255)
 			WorldRender::AtomicFirstPass(atomic, pass);
@@ -743,16 +783,23 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 	// Simple ModelInfo
 
 	dist = (ent->GetPosition() - ms_vecCameraPosition).Magnitude();
+#ifdef _3DS
+	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+#else
+	float lodDist = dist;
+#endif
 
 	// This can only happen with multi-atomic models (e.g. railtracks)
 	// but why do we bump up the distance? can only be fading...
-	if(LOD_DISTANCE + STREAM_DISTANCE < dist && dist < mi->GetLargestLodDistance())
-		dist = mi->GetLargestLodDistance();
+#ifndef _3DS
+	if(LOD_DISTANCE + STREAM_DISTANCE < lodDist && lodDist < mi->GetLargestLodDistance())
+		lodDist = mi->GetLargestLodDistance();
+#endif
 
 	if(ent->IsObject() && ent->bRenderDamaged)
 		mi->m_isDamaged = true;
 
-	RpAtomic *a = mi->GetAtomicFromDistance(dist);
+	RpAtomic *a = mi->GetAtomicFromDistance(lodDist);
 	if(a){
 		mi->m_isDamaged = false;
 		if(ent->m_rwObject == nil)
@@ -791,18 +838,18 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 	if(mi->m_noFade){
 		mi->m_isDamaged = false;
 		// request model
-		if(dist - STREAM_DISTANCE < mi->GetLargestLodDistance() && request)
+		if(lodDist - STREAM_DISTANCE < mi->GetLargestLodDistance() && request)
 			return VIS_STREAMME;
 		return VIS_INVISIBLE;
 	}
 
 	// We might be fading
 
-	a = mi->GetAtomicFromDistance(dist - FADE_DISTANCE);
+	a = mi->GetAtomicFromDistance(lodDist - FADE_DISTANCE);
 	mi->m_isDamaged = false;
 	if(a == nil){
 		// request model
-		if(dist - FADE_DISTANCE - STREAM_DISTANCE < mi->GetLargestLodDistance() && request)
+		if(lodDist - FADE_DISTANCE - STREAM_DISTANCE < mi->GetLargestLodDistance() && request)
 			return VIS_STREAMME;
 		return VIS_INVISIBLE;
 	}
@@ -846,12 +893,17 @@ CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 		return ent->IsVisible() ? VIS_VISIBLE : VIS_INVISIBLE;
 
 	float dist = (ms_vecCameraPosition-ent->GetPosition()).Magnitude();
+#ifdef _3DS
+	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+#else
+	float lodDist = dist;
+#endif
 	CSimpleModelInfo *nonLOD = mi->GetRelatedModel();
 
 	// Find out whether to draw below near distance.
 	// This is only the case if there is a non-LOD which is either not
 	// loaded or not completely faded in yet.
-	if(dist < mi->GetNearDistance() && dist < LOD_DISTANCE + STREAM_DISTANCE){
+	if(lodDist < mi->GetNearDistance() && lodDist < LOD_DISTANCE + STREAM_DISTANCE){
 		// No non-LOD or non-LOD is completely visible.
 		if(nonLOD == nil ||
 		   nonLOD->GetRwObject() && nonLOD->m_alpha == 255)
@@ -867,7 +919,7 @@ CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 		}
 	}
 
-	RpAtomic *a = mi->GetAtomicFromDistance(dist);
+	RpAtomic *a = mi->GetAtomicFromDistance(lodDist);
 	if(a){
 		if(ent->m_rwObject == nil)
 			ent->CreateRwObject();
@@ -895,7 +947,7 @@ CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 
 
 	// get faded atomic
-	a = mi->GetAtomicFromDistance(dist - FADE_DISTANCE);
+	a = mi->GetAtomicFromDistance(lodDist - FADE_DISTANCE);
 	if(a == nil){
 		ent->DeleteRwObject();
 		return VIS_INVISIBLE;
@@ -1694,6 +1746,9 @@ CRenderer::ShouldModelBeStreamed(CEntity *ent)
 {
 	CSimpleModelInfo *mi = (CSimpleModelInfo *)CModelInfo::GetModelInfo(ent->GetModelIndex());
 	float dist = (ent->GetPosition() - ms_vecCameraPosition).Magnitude();
+#ifdef _3DS
+	dist = GetNew3DSWorldDistance(ent, dist, ms_vecCameraPosition) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+#endif
 	if(mi->m_noFade)
 		return dist - STREAM_DISTANCE < mi->GetLargestLodDistance();
 	else

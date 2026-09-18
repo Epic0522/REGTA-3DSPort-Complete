@@ -7,6 +7,7 @@
 #include "platform.h"
 #include "Frontend.h"
 #include "Font.h"
+#include "FinalMissionMusic.h"
 #include "Pad.h"
 #include "Text.h"
 #include "main.h"
@@ -34,6 +35,11 @@
 #include "Messages.h"
 #include "FileLoader.h"
 #include "frontendoption.h"
+
+#ifdef _3DS
+static bool gPauseBackgroundResident3DS;
+static uint8 gPauseInputDelayFrames3DS;
+#endif
 
 // Game has colors inlined in code.
 // For easier modification we collect them here:
@@ -156,7 +162,11 @@ int8 CMenuManager::m_PrefsVsyncDisp = 1;
 int8 CMenuManager::m_PrefsFrameLimiter = 1;
 int8 CMenuManager::m_PrefsShowSubtitles = 1;
 int8 CMenuManager::m_PrefsSpeakers;
+#ifdef _3DS
+int32 CMenuManager::m_ControlMethod = CONTROL_CLASSIC;
+#else
 int32 CMenuManager::m_ControlMethod;
+#endif
 int8 CMenuManager::m_PrefsDMA = 1;
 int32 CMenuManager::m_PrefsLanguage;
 uint8 CMenuManager::m_PrefsStereoMono; // unused except restore settings
@@ -166,7 +176,7 @@ bool CMenuManager::m_bStartUpFrontEndRequested;
 bool CMenuManager::m_bShutDownFrontEndRequested;
 
 #ifdef ASPECT_RATIO_SCALE
-int8 CMenuManager::m_PrefsUseWideScreen = AR_AUTO;
+int8 CMenuManager::m_PrefsUseWideScreen = AR_5_4;
 #else
 int8 CMenuManager::m_PrefsUseWideScreen;
 #endif
@@ -2841,6 +2851,17 @@ CMenuManager::DrawFrontEndNormal()
 	CFont::InitPerFrame();
 	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERLINEAR);
 
+#ifdef _3DS
+	if (!m_bSpritesLoaded && !m_bGameNotLoaded && m_nCurrScreen == MENUPAGE_PAUSE_MENU && gPauseBackgroundResident3DS) {
+		RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
+		RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
+		m_aMenuSprites[MENUSPRITE_MAINMENU].Draw(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(255, 255, 255, 255));
+		Draw();
+		CFont::DrawFonts();
+		return;
+	}
+#endif
+
 	LoadSplash(nil);
 	
 	eMenuSprites previousSprite;
@@ -3592,11 +3613,21 @@ CMenuManager::InitialiseChangedLanguageSettings()
 	}
 }
 
+#ifdef _3DS
+#include "../../../../common/3ds/MenuTextureCache.h"
+#endif
+
 void
 CMenuManager::LoadAllTextures()
 {
 	if (m_bSpritesLoaded)
 		return;
+
+#if defined(_3DS) && defined(BUTTON_ICONS)
+	// Button glyphs are separate from the unused full controller diagram.
+	if (CFont::ButtonsSlot == -1)
+		CFont::LoadButtons("MODELS/X360BTNS.TXD");
+#endif
 
 	CentreMousePointer();
 	DMAudio.ChangeMusicMode(MUSICMODE_FRONTEND);
@@ -3631,7 +3662,12 @@ CMenuManager::LoadAllTextures()
 		frontendTxdSlot = CTxdStore::AddTxdSlot("frontend");
 
 	printf("LOAD frontend\n");
+
+#ifdef _3DS
+	bool frontendTxdSlotNeedsCache = LoadMenuTextureCache3DS(frontendTxdSlot, "MODELS/FRONTEND.TXD");
+#else
 	CTxdStore::LoadTxd(frontendTxdSlot, "MODELS/FRONTEND.TXD");
+#endif
 	CTxdStore::AddRef(frontendTxdSlot);
 	CTxdStore::SetCurrentTxd(frontendTxdSlot);
 #if GTA_VERSION < GTA3_PC_11
@@ -3640,11 +3676,14 @@ CMenuManager::LoadAllTextures()
 #endif
 
 	for (int i = 0; i < ARRAY_SIZE(FrontendFilenames); i++) {
+#if defined(_3DS) && defined(GAMEPAD_MENU)
+		if (i >= FE_CONTROLLER && i <= FE_ARROWS4) continue;
+#endif
 		m_aFrontEndSprites[i].SetTexture(FrontendFilenames[i][0], FrontendFilenames[i][1]);
 		m_aFrontEndSprites[i].SetAddressing(rwTEXTUREADDRESSBORDER);
 	}
 
-#ifdef GAMEPAD_MENU
+#if defined(GAMEPAD_MENU) && !defined(_3DS)
 	LoadController(m_PrefsControllerType);
 #endif
 
@@ -3654,11 +3693,22 @@ CMenuManager::LoadAllTextures()
 		menuTxdSlot = CTxdStore::AddTxdSlot("menu");
 
 	printf("LOAD sprite\n");
+
+#ifdef _3DS
+	bool menuTxdSlotNeedsCache = LoadMenuTextureCache3DS(menuTxdSlot, "MODELS/MENU.TXD");
+#else
 	CTxdStore::LoadTxd(menuTxdSlot, "MODELS/MENU.TXD");
+#endif
 	CTxdStore::AddRef(menuTxdSlot);
 	CTxdStore::SetCurrentTxd(menuTxdSlot);
 
 	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); i++) {
+#ifdef _3DS
+		if (i == MENUSPRITE_MP3LOGO)
+			continue;
+		if (i == MENUSPRITE_MAINMENU && gPauseBackgroundResident3DS)
+			continue;
+#endif
 		m_aMenuSprites[i].SetTexture(MenuFilenames[i][0], MenuFilenames[i][1]);
 		m_aMenuSprites[i].SetAddressing(rwTEXTUREADDRESSBORDER);
 	}
@@ -3681,6 +3731,10 @@ CMenuManager::LoadAllTextures()
 	CStreaming::IHaveUsedStreamingMemory();
 	CTimer::Update();
 #endif
+#ifdef _3DS
+	FinishMenuTextureCache3DS(frontendTxdSlot, "MODELS/FRONTEND.TXD", frontendTxdSlotNeedsCache);
+	FinishMenuTextureCache3DS(menuTxdSlot, "MODELS/MENU.TXD", menuTxdSlotNeedsCache);
+#endif
 	m_bSpritesLoaded = true;
 	CTxdStore::PopCurrentTxd();
 }
@@ -3697,6 +3751,9 @@ const char* controllerTypesPaths[] = {
 void
 CMenuManager::LoadController(int8 type)
 {
+#ifdef _3DS
+	return;
+#else
 	switch (type)
 	{
 	case CONTROLLER_DUALSHOCK2:
@@ -3747,6 +3804,7 @@ CMenuManager::LoadController(int8 type)
 		m_aFrontEndSprites[i].SetTexture(FrontendFilenames[i][0], FrontendFilenames[i][1]);
 		m_aFrontEndSprites[i].SetAddressing(rwTEXTUREADDRESSBORDER);
 	}
+#endif
 }
 #endif // GAMEPAD_MENU
 
@@ -4161,13 +4219,22 @@ CMenuManager::Process(void)
 	if (CPad::GetPad(0)->GetEscapeJustDown())
 		RequestFrontEndStartUp();
 
+	const bool menuWasActive = m_bMenuActive;
 	SwitchMenuOnAndOff();
+#ifdef _3DS
+	if (!menuWasActive && m_bMenuActive && !m_bGameNotLoaded && !m_bSaveMenuActive)
+		gPauseInputDelayFrames3DS = 2;
+#endif
 
 	// Be able to re-open menu correctly.
 	if (m_bMenuActive) {
 
-		// Load frontend textures.
-		LoadAllTextures();
+		// The unchanged pause home page is already visible from its resident
+		// background and the game font. Prepare the other pages before input.
+#ifdef _3DS
+		if (menuWasActive || m_bGameNotLoaded || m_bSaveMenuActive)
+#endif
+			LoadAllTextures();
 
 		// Set save/delete game pages.
 		if (m_nCurrScreen == MENUPAGE_DELETING) {
@@ -4220,7 +4287,12 @@ CMenuManager::Process(void)
 				SaveLoadFileError_SetUpErrorScreen();
 		}
 
-		ProcessButtonPresses();
+#ifdef _3DS
+		if (gPauseInputDelayFrames3DS != 0)
+			--gPauseInputDelayFrames3DS;
+		else
+#endif
+			ProcessButtonPresses();
 
 		// Set binding keys.
 		if (pEditString && CPad::EditString(pEditString, 0) == nil) {
@@ -5050,6 +5122,9 @@ CMenuManager::ProcessButtonPresses(void)
 					break;
 				case MENUACTION_CANCELGAME:
 					DMAudio.Service();
+#ifdef _3DS
+					ReleasePauseHomeTextures();
+#endif
 					RsEventHandler(rsQUITAPP, nil);
 					break;
 				case MENUACTION_RESUME:
@@ -5113,6 +5188,9 @@ CMenuManager::ProcessButtonPresses(void)
 						m_PrefsSfxVolume = 102;
 						m_PrefsSpeakers = 0;
 						m_PrefsMusicVolume = 102;
+#ifdef _3DS
+					FinalMissionMusic::Enabled = 1;
+#endif
 						m_PrefsStereoMono = 0;
 						m_PrefsRadioStation = HEAD_RADIO;
 						DMAudio.SetMusicMasterVolume(102);
@@ -5128,7 +5206,7 @@ CMenuManager::ProcessButtonPresses(void)
 						m_PrefsVsync = true;
 						CRenderer::ms_lodDistScale = 1.2f;
 #ifdef ASPECT_RATIO_SCALE
-						m_PrefsUseWideScreen = AR_AUTO;
+						m_PrefsUseWideScreen = AR_5_4;
 #else
 						m_PrefsUseWideScreen = false;
 #endif
@@ -5171,7 +5249,12 @@ CMenuManager::ProcessButtonPresses(void)
 							ControlsManager.InitDefaultControlConfigJoyPad(count);
 						}
 #endif
+#ifdef _3DS
+						m_ControlMethod = CONTROL_CLASSIC;
+						TheCamera.m_bUseMouse3rdPerson = false;
+#else
 						m_ControlMethod = CONTROL_STANDARD;
+#endif
 #ifdef FIX_BUGS
 						MousePointerStateHelper.bInvertVertically = true;
 						TheCamera.m_fMouseAccelVertical = 0.003f;
@@ -5809,8 +5892,15 @@ CMenuManager::UnloadTextures()
 #endif
 
 	printf("REMOVE menu textures\n");
-	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); ++i)
+	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); ++i) {
+#ifdef _3DS
+		if (i == MENUSPRITE_MAINMENU) {
+			gPauseBackgroundResident3DS = true;
+			continue;
+		}
+#endif
 		m_aMenuSprites[i].Delete();
+	}
 #ifdef MENU_MAP
 	for (int i = 0; i < ARRAY_SIZE(MapFilenames); ++i)
 		m_aMapSprites[i].Delete();
@@ -5820,6 +5910,18 @@ CMenuManager::UnloadTextures()
 
 	m_bSpritesLoaded = false;
 }
+
+#ifdef _3DS
+void
+CMenuManager::ReleasePauseHomeTextures()
+{
+	UnloadTextures();
+	if (gPauseBackgroundResident3DS) {
+		m_aMenuSprites[MENUSPRITE_MAINMENU].Delete();
+		gPauseBackgroundResident3DS = false;
+	}
+}
+#endif
 
 void
 CMenuManager::WaitForUserCD()

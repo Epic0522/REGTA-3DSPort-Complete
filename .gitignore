@@ -119,3 +119,7 @@ crash_dump_*.dmp
 !/stories/build/
 !/stories/build/GNUmakefile
 !/stories/build/shlist.sh
+
+# Generated native menu texture caches (contain game artwork).
+*.menu3ds-v1
+*.menu3ds-v1.tmp

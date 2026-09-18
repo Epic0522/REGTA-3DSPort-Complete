@@ -18,6 +18,7 @@
 
 namespace FinalMissionMusic
 {
+int8 Enabled = 1;
 namespace
 {
 	enum eTrackState
@@ -106,7 +107,7 @@ namespace
 	StartTrack(const char *path, bool loop)
 	{
 		SampleManager.StopMissionMusicStream();
-		gStreamStarted = SampleManager.StartMissionMusicStream(path, loop);
+		gStreamStarted = Enabled && SampleManager.StartMissionMusicStream(path, loop);
 		return gStreamStarted;
 	}
 
@@ -313,6 +314,19 @@ Update()
 
 	/* A manual pause behaves like the radio. Scripted camera/cutscene pauses do
 	 * not stop the finale track; they use the 50% volume duck below. */
+	// Music is optional; LCS mission repairs above must continue to run.
+	static bool wasEnabled = true;
+	if (!Enabled) {
+		if (gStreamStarted) SampleManager.StopMissionMusicStream();
+		gStreamStarted = false;
+		wasEnabled = false;
+		return;
+	}
+	if (!wasEnabled) {
+		wasEnabled = true;
+		if (!gStreamStarted && gTrackState == TRACK_FM) StartTrack(LCS_FM_PATH, false);
+		else if (!gStreamStarted && gTrackState == TRACK_LOOP) StartTrack(LCS_LOOP_PATH, true);
+	}
 	const bool manuallyPaused = CTimer::GetIsUserPaused();
 	SampleManager.PauseMissionMusicStream(manuallyPaused);
 
@@ -347,14 +361,21 @@ Update()
 }
 
 bool
-IsRadioLocked()
+IsFinaleActive()
 {
 	return gLCSFinaleActive;
+}
+
+bool
+IsRadioLocked()
+{
+	return Enabled && gLCSFinaleActive;
 }
 
 void
 DisplayTrackName()
 {
+	if (!Enabled) return;
 	if (!gLCSFinaleActive)
 		return;
 

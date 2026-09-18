@@ -110,6 +110,12 @@ CText::Unload(void)
 wchar*
 CText::Get(const char *key)
 {
+#ifdef _3DS
+	if (strcmp(key, "F3BGM") == 0) {
+		static wchar label[] = { 'F','i','n','a','l',' ','m','i','s','s','i','o','n',' ','B','G','M',0 };
+		return label;
+	}
+#endif
 	uint8 result = false;
 #if defined (FIX_BUGS) || defined(FIX_BUGS_64)
 	wchar *outstr = keyArray.Search(key, data.chars, &result);
@@ -122,6 +128,36 @@ CText::Get(const char *key)
 		outstr = mission_keyArray.Search(key, mission_data.chars, &result);
 #else
 		outstr = mission_keyArray.Search(key, &result);
+#endif
+#ifdef _3DS
+	if (!result) {
+		struct MissingFrontendText { const char *key, *text; };
+		static const MissingFrontendText fallback[] = {
+			{ "FEC_CR3", "CROUCH (L3 BUTTON)" },
+			{ "FEC_GSL", "SHOW HEAD BOB" },
+			{ "FEC_LB3", "LOOK BEHIND" },
+			{ "FEC_NSW", "NINTENDO SWITCH" },
+			{ "FEC_R3", "(R3 BUTTON)" },
+			{ "FEC_SLC", "SLOT IS CORRUPTED" },
+			{ "FED_LFL", "LOADING SAVE GAME HAS FAILED. THE GAME WILL RESTART NOW." },
+			{ "FED_LWR", "UNABLE TO SAVE GAME DATA." },
+		};
+		static wchar translated[ARRAY_SIZE(fallback)][64];
+		static bool initialized;
+		if (!initialized) {
+			for (uint32 i = 0; i < ARRAY_SIZE(fallback); ++i) {
+				const unsigned char *src = (const unsigned char *)fallback[i].text;
+				wchar *dst = translated[i];
+				while (*src && dst < translated[i] + ARRAY_SIZE(translated[i]) - 1)
+					*dst++ = *src++;
+				*dst = 0;
+			}
+			initialized = true;
+		}
+		for (uint32 i = 0; i < ARRAY_SIZE(fallback); ++i)
+			if (strcmp(key, fallback[i].key) == 0)
+				return translated[i];
+	}
 #endif
 	return outstr;
 }

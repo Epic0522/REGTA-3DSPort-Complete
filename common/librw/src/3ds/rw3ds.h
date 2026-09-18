@@ -104,6 +104,7 @@ struct EngineOpenParams
 namespace c3d {
 
 void registerPlatformPlugins(void);
+bool initialiseMaterialState(void);
 
 extern Device renderdevice;
   

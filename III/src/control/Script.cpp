@@ -2648,7 +2648,7 @@ int8 CRunningScript::ProcessCommands0To99(int32 command)
 		/* Check COMMAND_GOTO note. */
 		return 0;
 	case COMMAND_TERMINATE_THIS_SCRIPT:
-		if (m_bMissionFlag && FinalMissionMusic::IsRadioLocked())
+		if (m_bMissionFlag && FinalMissionMusic::IsFinaleActive())
 			FinalMissionMusic::EndGTA3Finale();
 		if (m_bMissionFlag)
 			CTheScripts::bAlreadyRunningAMissionScript = false;
@@ -3670,7 +3670,7 @@ int8 CRunningScript::ProcessCommands100To199(int32 command)
 	{
 		char *textKey = (char*)&CTheScripts::ScriptSpace[m_nIp];
 		wchar* key = TheText.Get(textKey);
-		if (FinalMissionMusic::IsRadioLocked() && strcmp(textKey, "M_FAIL") == 0)
+		if (FinalMissionMusic::IsFinaleActive() && strcmp(textKey, "M_FAIL") == 0)
 			FinalMissionMusic::EndGTA3Finale();
 #ifdef MISSION_REPLAY
 		if (strcmp((char*)&CTheScripts::ScriptSpace[m_nIp], "M_FAIL") == 0 && CanAllowMissionReplay())
@@ -3693,7 +3693,7 @@ int8 CRunningScript::ProcessCommands100To199(int32 command)
 	{
 		char *textKey = (char*)&CTheScripts::ScriptSpace[m_nIp];
 		wchar* key = TheText.Get(textKey);
-		if (!FinalMissionMusic::IsRadioLocked() && strcmp(textKey, "CATINF1") == 0)
+		if (!FinalMissionMusic::IsFinaleActive() && strcmp(textKey, "CATINF1") == 0)
 			FinalMissionMusic::BeginGTA3Finale();
 		m_nIp += KEY_LENGTH_IN_SCRIPT;
 		CollectParameters(&m_nIp, 2);

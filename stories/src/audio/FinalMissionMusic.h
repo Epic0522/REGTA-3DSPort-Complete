@@ -4,6 +4,8 @@ class CVehicle;
 
 namespace FinalMissionMusic
 {
+	extern int8 Enabled; // [Audio] FinalMissionBGM, default ON.
+	bool IsFinaleActive(); // Mission lifecycle, independent of the audio setting.
 void ArmLCSFinaleBoatCheckpoint();
 void CancelLCSFinaleBoatCheckpoint();
 bool ConsumeLCSFinaleBoatCheckpointRequest();

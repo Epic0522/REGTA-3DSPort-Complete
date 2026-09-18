@@ -74,6 +74,17 @@ Uses **converted PS2 LCS data**. [Setup, controls and cheats →](stories/README
 Old Nintendo 3DS, Old Nintendo 3DS XL and Nintendo 2DS systems are not
 supported. These ports use the New 3DS's faster CPU, L2 cache and extra memory.
 
+Before gameplay, the renderer requires the New 3DS MVD service to prepare its
+neutral material texture. The check runs late in game loading, after TXD index
+preparation and animation/model loading (around the 80% stage in VC). Startup
+and menu rendering use a temporary neutral texture so existing game fonts are
+available for the failure message. Skipping movies or using cached TXDs does
+not bypass the check. Without working conversion, both screens turn black and
+the upper screen displays "Device not supported" in the normal help-text font.
+B exits, and HOME remains handled by the normal APT loop.
+This new renderer path is experimental and still needs physical-console
+validation, including both CIA and 3DSX service access.
+
 ## Project layout
 
 All three games and their shared dependencies live in this repository.
@@ -244,23 +255,24 @@ setup, controls, features and cheat-code reference.
 ### Host prerequisites
 
 Production builds require devkitARM release 55 / GCC 10.2, which is not
-distributed in this repository. Download and install that toolchain separately.
+distributed in this repository. On both Linux and macOS, build the toolchain
+and devkitPro host tools from source as described below. The old binary
+downloader returns 403 for the required historical files; a current devkitPro
+installation is not a replacement for r55.
 A newer system compiler can produce an executable that links cleanly but fails
 on hardware because these ports use legacy libctru/newlib-era code.
 
 Keep symbolic links intact when cloning or extracting the source. You will need:
 
 - a POSIX shell, GNU Make, `rsync`, `md5sum` and normal Unix build tools;
-- devkitPro host tools and 3DS port libraries, normally installed below
-  `/opt/devkitpro/tools` and `/opt/devkitpro/portlibs`;
-- a separately downloaded devkitARM release 55 / GCC 10.2 compiler tree;
-- `ffmpeg` and a host C++ compiler only when preparing LCS audio from PS2 data.
+- devkitPro host tools (bin2s, Picasso, 3dsxtool and smdhtool);
+- a source-built devkitARM release 55 / GCC 10.2 compiler tree;
+- `ffmpeg` for VC/LCS audio preparation, Python 3 for VC, and a host C++ compiler for LCS.
 
-On macOS, a normal devkitPro installation plus Command Line Tools and Homebrew
-`coreutils` (for `md5sum`) supplies the host dependencies; install Homebrew
-`ffmpeg` as well when preparing LCS. Point `DEVKITARM` at the separately
-installed r55 compiler and `DEVKITPRO` at the directory containing the host
-tools and port libraries. For example:
+Command Line Tools and Homebrew on macOS, or the system packages on Linux,
+provide the host build dependencies, not the required r55 SDK. After building
+the SDK, point `DEVKITARM` at its compiler tree and `DEVKITPRO` at its root.
+For example:
 
 ```sh
 export DEVKITPRO=/opt/devkitpro
@@ -271,7 +283,180 @@ export PATH="$DEVKITARM/bin:$DEVKITPRO/tools/bin:$PATH"
 The build helper honors these variables and defaults to the conventional
 `/opt/devkitpro` layout when they are not set.
 
-### Verify and compile
+### Linux and macOS: build r55 from official sources
+
+Use this source-build route on both Linux and macOS.
+Cloning the latest buildscripts is not enough: it builds a different compiler,
+and historical scripts still try to download archives from the old server.
+We pin the r55 scripts and prefetch their sources from GNU and Sourceware.
+The versions, source scripts and URLs below were checked, but the full SDK
+bootstrap has not yet been tested end-to-end here on either OS. Building the
+games with an existing r55 SDK is not the same as testing an SDK bootstrap.
+Allow several GB of disk space and use paths that contain no spaces.
+
+#### 1. Host dependencies and working directories
+
+**Linux (Ubuntu/Debian, x86-64):**
+
+```sh
+sudo apt-get update
+sudo apt-get install build-essential git curl ca-certificates autoconf automake \
+  libtool bison flex texinfo pkg-config libgmp-dev libmpfr-dev libmpc-dev \
+  zlib1g-dev libncurses-dev libreadline-dev libexpat1-dev \
+  xz-utils bzip2 rsync python3 ffmpeg
+```
+
+Other Linux distributions need the equivalent development packages.
+
+**macOS:** install Xcode Command Line Tools and Homebrew first. The pinned
+r55 scripts use Intel-era `/usr/local` include/library paths. The commands
+below therefore target an Intel Mac, or an x86-64 shell under Rosetta with a
+separate Intel Homebrew on Apple Silicon. Native arm64 SDK bootstrapping is
+not covered; do not mix `/opt/homebrew` arm64 libraries into this build.
+
+```sh
+xcode-select --install
+```
+
+Wait for installation to finish (skip it if Command Line Tools are already
+installed). On Apple Silicon, start a Rosetta shell with `arch -x86_64 /bin/bash`
+after installing Rosetta and Intel Homebrew. In that shell, or on an Intel Mac:
+
+```sh
+test -x /usr/local/bin/brew
+eval "$(/usr/local/bin/brew shellenv)"
+brew install autoconf automake libtool bison flex texinfo pkg-config \
+  gmp mpfr libmpc xz coreutils rsync python ffmpeg
+export PATH="$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$(brew --prefix texinfo)/bin:$PATH"
+export OSXSDKPATH="$(xcrun --show-sdk-path)"
+```
+
+Modern macOS SDKs/Clang may need further compatibility patches for these old
+sources. This is an unverified bootstrap route, not a claim that r55 builds
+unchanged on every macOS release. A Linux x86-64 VM is an alternative for
+building both the SDK and games; its compiler binaries will not run on macOS.
+
+**Both systems:** use the same shell for the remaining steps.
+
+```sh
+export REGTA_SDK="$HOME/devkitpro-r55"
+export REGTA_SDK_SRC="$HOME/regta-sdk-source"
+mkdir -p "$REGTA_SDK" "$REGTA_SDK_SRC/archives"
+cd "$REGTA_SDK_SRC"
+```
+
+#### 2. Compiler, Binutils and Newlib
+
+This commit identifies itself as r55 and selects GCC 10.2.0, Binutils 2.34
+and Newlib 3.3.0. Do not substitute the `v20201105` tag: that is r54.
+
+```sh
+git clone https://github.com/devkitPro/buildscripts.git
+git -C buildscripts checkout ef789eddb72421c1b3774767c02ee519cb38fc9e
+cd "$REGTA_SDK_SRC/archives"
+curl -fL --retry 3 -O https://ftp.gnu.org/gnu/gcc/gcc-10.2.0/gcc-10.2.0.tar.xz
+curl -fL --retry 3 -O https://ftp.gnu.org/gnu/binutils/binutils-2.34.tar.xz
+curl -fL --retry 3 -O https://sourceware.org/pub/newlib/newlib-3.3.0.tar.gz
+xz -t gcc-10.2.0.tar.xz binutils-2.34.tar.xz
+gzip -t newlib-3.3.0.tar.gz
+
+cd "$REGTA_SDK_SRC/buildscripts"
+cat > config.sh <<EOF
+BUILD_DKPRO_PACKAGE=1
+BUILD_DKPRO_INSTALLDIR="$REGTA_SDK"
+BUILD_DKPRO_SRCDIR="$REGTA_SDK_SRC/archives"
+BUILD_DKPRO_SKIP_CRTLS=1
+BUILD_DKPRO_AUTOMATED=0
+export MAKEFLAGS="-j2"
+EOF
+bash ./build-devkit.sh
+```
+
+The scripts apply devkitARM's own patches; generic ARM GCC is not a substitute.
+They reuse the three downloaded archives. Rules and startup objects are skipped
+in this step and installed from Git below, avoiding the remaining old-server
+downloads. Accept the displayed installation directory; answer **n** to the
+final cleanup question if you want to keep the intermediate files. Do not build
+as root. Keep `-j2` on a small VM; higher parallelism needs more RAM.
+
+#### 3. Matching rules and startup objects
+
+These old Makefiles use `/opt/devkitpro` inside `DESTDIR`. Stage their output
+and copy it into the private SDK rather than overwriting a system installation.
+
+```sh
+export DEVKITPRO="$REGTA_SDK"
+export DEVKITARM="$DEVKITPRO/devkitARM"
+export PATH="$DEVKITARM/bin:$DEVKITPRO/tools/bin:$PATH"
+cd "$REGTA_SDK_SRC"
+git clone --branch v1.2.0 --depth 1 https://github.com/devkitPro/devkitarm-rules.git
+make -C devkitarm-rules install DESTDIR="$REGTA_SDK_SRC/rules-stage"
+cp -a "$REGTA_SDK_SRC/rules-stage/opt/devkitpro/devkitARM/." "$DEVKITARM/"
+git clone --branch v1.0.0 --depth 1 https://github.com/devkitPro/devkitarm-crtls.git
+make -C devkitarm-crtls -j2
+make -C devkitarm-crtls install DESTDIR="$REGTA_SDK_SRC/crtls-stage"
+cp -a "$REGTA_SDK_SRC/crtls-stage/opt/devkitpro/devkitARM/." "$DEVKITARM/"
+```
+
+#### 4. Host tools and checks
+
+Build `bin2s`, `3dsxtool`, `smdhtool` and the Picasso shader assembler for your host OS:
+
+```sh
+cd "$REGTA_SDK_SRC"
+for tool in general-tools 3dstools picasso; do
+  git clone "https://github.com/devkitPro/$tool.git" || break
+  (
+    set -e
+    cd "$tool"
+    ./autogen.sh
+    ./configure --prefix="$DEVKITPRO/tools"
+    make -j2
+    make install
+  ) || break
+done
+arm-none-eabi-gcc --version
+arm-none-eabi-gcc -dumpfullversion
+test -f "$DEVKITARM/3ds_rules"
+test -f "$DEVKITARM/arm-none-eabi/lib/armv6k/fpu/3dsx_crt0.o"
+command -v bin2s picasso 3dsxtool smdhtool
+```
+
+Expect **devkitARM release 55** and **10.2.0**. Keep the DEVKITPRO, DEVKITARM
+and PATH exports in your shell startup file, or repeat them in each terminal.
+The game compiles its bundled libctru, Citro3D, librw and audio libraries; do
+not replace them with current prebuilt 3DS libraries.
+
+#### 5. Clone and build the games
+
+```sh
+cd "$HOME"
+git clone https://github.com/Epic0522/REGTA-3DSPort-Complete.git
+cd REGTA-3DSPort-Complete
+./scripts/verify-layout.sh
+./scripts/build.sh all
+```
+
+The build checks the compiler version, not a private developer directory;
+your SDK does not need to live inside this repository. Git preserves the shared
+dependency symlinks. ZIP extraction or copying through a filesystem without
+symlink support may break them, so run the layout check before compiling.
+
+If bootstrap fails, report the OS version, CPU architecture, host compiler,
+buildscripts commit and **first
+actual error**, not just the last `make` line. A 403 during download and a C/C++
+compiler error after extraction are different problems. Newer host compilers
+and macOS SDKs may need additional compatibility work for these historical sources;
+do not silently replace the r55 target toolchain with current GCC.
+
+Official references: [r55 scripts and patches](https://github.com/devkitPro/buildscripts/tree/ef789eddb72421c1b3774767c02ee519cb38fc9e),
+[rules 1.2.0](https://github.com/devkitPro/devkitarm-rules/tree/v1.2.0),
+[startup objects 1.0.0](https://github.com/devkitPro/devkitarm-crtls/tree/v1.0.0),
+[general-tools](https://github.com/devkitPro/general-tools),
+[3dstools](https://github.com/devkitPro/3dstools),
+[Picasso](https://github.com/devkitPro/picasso).
+
+### Verify and compile (existing SDK)
 
 Start from the repository root and verify the shared dependency links before
 building:
@@ -426,6 +611,7 @@ prompts for those.
 - VC/LCS map: Y marker, ZR/R zoom, L legend, B back.
 - L + R + ZL + ZR opens the text cheat keyboard.
 - Full mission names in save lists, including supported older truncated titles.
+- Removed desktop-only and ineffective settings from the 3DS menus.
 
 #### Rendering and performance
 
@@ -452,6 +638,13 @@ prompts for those.
 - Smoothed banner logos; fixed the LCS logo edge and HOME Menu freeze.
 - Final-mission music with looping, cutscene volume changes and ending fades.
 - Radio switching disabled while final-mission music is active.
+- Audio settings include **Final mission BGM**, ON by default. OFF stops the
+  custom music and restores normal vehicle radio, station switching and station
+  names. The setting is saved as `[Audio] FinalMissionBGM=0/1` in the game's INI.
+  Re-enabling it mid-mission starts the current FM/LOOP section from its beginning.
+  LCS mission fixes remain active with either setting.
+- Classic controls are the default for fresh 3DS settings and restored controller
+  defaults. Existing saved control choices are kept.
 
 ### Grand Theft Auto III / re3
 
@@ -459,6 +652,7 @@ prompts for those.
 - Faster animation loading and smoother texture streaming.
 - Removed dynamic motion-blur trails.
 - Reduced distant detail and costly effects in busy scenes.
+- Matched LCS's per-model draw distances and fixed premature fading on large buildings.
 - Fixed white vehicle polygons, overbright highlights and sunset colour errors.
 - Restored transparent windows, lights and vehicle decals.
 - Fixed the Staunton tower-clock crash.
@@ -477,11 +671,14 @@ prompts for those.
 - Fixed broken character polygons and mission-character rendering.
 - Fixed vehicle colours, highlights, windows, decals and plates.
 - Fixed textures staying blurry after memory pressure.
+- Matched LCS's per-model draw distances and fixed premature fading on large buildings.
 - Fixed boat rendering and missing water sections.
 - Smoothed near/middle/far water transitions without removing detail levels.
 - Fixed white foreground water.
 - Fixed streaming crashes during flights.
 - Improved mission and telephone dialogue loading.
+- Added LCS-style mono ADPCM radio playback (run setup to convert the stations).
+- Fixed answering phone calls with L in Standard controls.
 - Restored normal pedestrian and traffic defaults.
 - Fixed startup data-path handling and stale loading-screen textures.
 - Added 'Self Control' to the final mission, with the climax after Lance's reveal.
@@ -545,6 +742,13 @@ activities and distant-island viewpoints still need more testing.
 
 ## Texture caches and first launch
 
+The pause menu also caches its textures in 3DS-native format, beside the original
+menu TXDs as `*.menu3ds-v1`. The first load creates these files; later loads reuse
+them without converting the PC textures again. Closing the menu releases its
+textures from memory. Controller diagrams are excluded; button prompts remain.
+Replacing a source TXD (changed size or modification time) invalidates its cache.
+Delete these generated files to force a rebuild. They are not release assets.
+
 `models/txd.img` and `models/txd.dir` are generated native texture caches, not
 original source assets. When they are absent, a build with `USE_TXD_CDIMAGE`
 can create them from the installed game data. First-time conversion on the
@@ -580,7 +784,9 @@ not.
 - Initial native texture conversion can be slow.
 - Very busy scenes and demanding cutscenes can still cause frame drops or
   audio stutter.
-- Emulator performance and behaviour can differ from a physical console.
+- Environments without working MVD color conversion cannot start the renderer,
+  including emulators that only stub out that service. This is a hardware
+  dependency, not a guarantee against modified builds or future emulation.
 - ASI plugins, CLEO scripts, binary desktop patches and desktop limit adjusters
   do not work. Their functionality must be integrated into source and rebuilt.
 - reLCS required more reconstruction than re3 or reVC. The main story is

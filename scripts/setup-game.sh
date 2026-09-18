@@ -91,6 +91,8 @@ case "$game" in
 			echo "This does not look like GTA Vice City (data/gta_vc.dat missing)." >&2
 			exit 6
 		}
+		command -v python3 >/dev/null 2>&1 || { echo "python3 is required to prepare VC radio." >&2; exit 7; }
+		command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg is required to prepare VC radio." >&2; exit 7; }
 		;;
 	relcs)
 		[ -f "$original/DATA/gta_lcs.DAT" ] || [ -f "$original/data/gta_lcs.dat" ] || {
@@ -150,6 +152,12 @@ else
 		--exclude='*.dmp' --exclude='*.log' \
 		--exclude='userfiles/' --exclude='userfiles_*/' \
 		"$original/" "$target/"
+fi
+
+if [ "$game" = revc ]; then
+	vc_audio=$(find "$original" -maxdepth 1 -type d -iname audio -print -quit)
+	[ -n "$vc_audio" ] || { echo "Vice City Audio directory is missing." >&2; exit 7; }
+	python3 "$source_tree/tools/convert_vc_radio_3ds.py" "$vc_audio" "$target/Audio" --overwrite
 fi
 
 copy_runtime_override()

@@ -1,6 +1,7 @@
 #include <csignal>
 #define WITHWINDOWS
 #include "common.h"
+#include "FinalMissionMusic.h"
 #if defined DETECT_JOYSTICK_MENU && defined XINPUT
 #include <xinput.h>
 #if !defined(PSAPI_VERSION) || (PSAPI_VERSION > 1)
@@ -93,10 +94,16 @@ mysrand(unsigned int seed)
 void
 CustomFrontendOptionsPopulate(void)
 {
+#ifdef _3DS
+	static const char *finaleChoices[] = { "FEM_OFF", "FEM_ON" };
+	FrontendOptionSetCursor(MENUPAGE_SOUND_SETTINGS, 2, false);
+	FrontendOptionAddSelect("F3BGM", 0, 0, MENUALIGN_LEFT, finaleChoices, 2,
+	    &FinalMissionMusic::Enabled, false, nil, "Audio", "FinalMissionBGM");
+#endif
 	// Moved to an array in MenuScreensCustom.cpp, but APIs are still available. see frontendoption.h
 
 	// These work only if we have neo folder, so they're dynamically added
-#ifdef EXTENDED_PIPELINES
+#if defined(EXTENDED_PIPELINES) && !defined(_3DS)
 	const char *vehPipelineNames[] = { "FED_MFX", "FED_NEO" };
 	const char *off_on[] = { "FEM_OFF", "FEM_ON" };
 	int fd = CFileMgr::OpenFile("neo/neo.txd","r");

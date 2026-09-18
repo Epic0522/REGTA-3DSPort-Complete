@@ -98,6 +98,9 @@ float CHud::OddJob2XOffset;
 uint16 CHud::CounterFlashTimer[NUMONSCREENCOUNTERS];
 uint16 CHud::OddJob2Timer;
 bool CHud::TimerOnLastFrame;
+#ifdef _3DS
+bool CHud::m_b3DSPhoneAnswerPrompt;
+#endif
 int16 CHud::OddJob2On;
 uint16 CHud::TimerFlashTimer;
 int16 CHud::PagerSoundPlayed;
@@ -1739,6 +1742,9 @@ void CHud::DrawAfterFade()
 
 void CHud::GetRidOfAllHudMessages()
 {
+#ifdef _3DS
+	m_b3DSPhoneAnswerPrompt = false;
+#endif
 	m_ZoneNameTimer = 0;
 	m_pZoneName = nil;
 	m_ZoneState = 0;
@@ -1970,6 +1976,11 @@ void CHud::SetBigMessage(wchar *message, uint16 style)
 void CHud::SetHelpMessage(wchar *message, bool quick, bool displayForever)
 {
 	if (!CReplay::IsPlayingBack()) {
+#ifdef _3DS
+		// CELL's persistent ANSWER prompt spans the ringing gaps as well as
+		// MOBRING playback. Clear/replacement also covers cancellation and death.
+		m_b3DSPhoneAnswerPrompt = message != nil && message == TheText.Get("ANSWER");
+#endif
 		for (int i = 0; i < HELP_MSG_LENGTH; i++) {
 			m_HelpMessage[i] = 0;
 		}

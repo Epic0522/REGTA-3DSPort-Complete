@@ -727,10 +727,8 @@ CCamera::Process(void)
 		LODDistMultiplier = 1.0f;
 #if GTA_VERSION > GTA3_PS2_160
 	GenerationDistMultiplier = LODDistMultiplier;
-	// Generation distance is deliberately captured above: keep GTA3's dense
-	// traffic while trimming only the last slice of distant rendering on 3DS.
 #ifdef _3DS
-	LODDistMultiplier *= Min(CRenderer::ms_lodDistScale, 1.1f);
+	// Apply model-specific world budgets in Renderer; keep the camera baseline.
 #else
 	LODDistMultiplier *= CRenderer::ms_lodDistScale;
 #endif

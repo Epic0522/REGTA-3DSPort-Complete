@@ -12,6 +12,7 @@
 
 namespace FinalMissionMusic
 {
+int8 Enabled = 1;
 namespace
 {
 	enum eTrackState
@@ -37,7 +38,7 @@ namespace
 	StartTrack(const char *path, bool loop)
 	{
 		SampleManager.StopMissionMusicStream();
-		gStreamStarted = SampleManager.StartMissionMusicStream(path, loop);
+		gStreamStarted = Enabled && SampleManager.StartMissionMusicStream(path, loop);
 		return gStreamStarted;
 	}
 
@@ -101,6 +102,19 @@ Update()
 	if (!gGTA3FinaleActive)
 		return;
 
+	// Music is optional; LCS mission repairs above must continue to run.
+	static bool wasEnabled = true;
+	if (!Enabled) {
+		if (gStreamStarted) SampleManager.StopMissionMusicStream();
+		gStreamStarted = false;
+		wasEnabled = false;
+		return;
+	}
+	if (!wasEnabled) {
+		wasEnabled = true;
+		if (!gStreamStarted && gTrackState == TRACK_FM) StartTrack(GTA3_FM_PATH, false);
+		else if (!gStreamStarted && gTrackState == TRACK_LOOP) StartTrack(GTA3_LOOP_PATH, true);
+	}
 	const bool manuallyPaused = CTimer::GetIsUserPaused();
 	SampleManager.PauseMissionMusicStream(manuallyPaused);
 	if (!manuallyPaused && gTrackState == TRACK_FM && gStreamStarted &&
@@ -123,14 +137,21 @@ Update()
 }
 
 bool
-IsRadioLocked()
+IsFinaleActive()
 {
 	return gGTA3FinaleActive;
+}
+
+bool
+IsRadioLocked()
+{
+	return Enabled && gGTA3FinaleActive;
 }
 
 void
 DisplayTrackName()
 {
+	if (!Enabled) return;
 	if (!gGTA3FinaleActive)
 		return;
 

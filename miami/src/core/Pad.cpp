@@ -93,6 +93,7 @@ static u64 g3DSTouchLastActivityMs;
 static int g3DSTouchCameraDX;
 static int g3DSTouchCameraDY;
 static bool g3DSCheatKeyboardLatched;
+static bool g3DSPhoneLConsumed;
 
 static e3DSTouchZone
 Get3DSTouchZone(const touchPosition &touch)
@@ -1810,15 +1811,21 @@ void CPad::AffectFrom3DS()
 	 * the generated help text identical: A/B and X/Y therefore map directly. */
 	const bool standardAimOnFoot = FrontEndMenuManager.m_ControlMethod == CONTROL_STANDARD &&
 		!FrontEndMenuManager.m_bMenuActive && FindPlayerPed() != nil && FindPlayerVehicle() == nil;
+	const bool answeringPhone = CHud::m_b3DSPhoneAnswerPrompt;
+	if (!(held & KEY_L))
+		g3DSPhoneLConsumed = false;
+	else if (standardAimOnFoot && answeringPhone)
+		g3DSPhoneLConsumed = true;
+	const bool lFire = standardAimOnFoot && !answeringPhone && !g3DSPhoneLConsumed;
 	PCTempJoyState.Cross		= (held & KEY_A)      ? 255 : 0;
-	PCTempJoyState.Circle		= ((held & KEY_X) || (standardAimOnFoot && (held & KEY_L))) ? 255 : 0;
+	PCTempJoyState.Circle		= ((held & KEY_X) || (lFire && (held & KEY_L))) ? 255 : 0;
 	PCTempJoyState.Square		= (held & KEY_B)      ? 255 : 0;
 	PCTempJoyState.Triangle		= (held & KEY_Y)      ? 255 : 0;
 	PCTempJoyState.DPadDown		= (held & KEY_DDOWN)  ? 255 : 0;
 	PCTempJoyState.DPadLeft		= (held & KEY_DLEFT)  ? 255 : 0;
 	PCTempJoyState.DPadRight	= (held & KEY_DRIGHT) ? 255 : 0;
 	PCTempJoyState.DPadUp		= (held & KEY_DUP)    ? 255 : 0;
-	PCTempJoyState.LeftShoulder1	= (!standardAimOnFoot && (held & KEY_L)) ? 255 : 0;
+	PCTempJoyState.LeftShoulder1	= ((!standardAimOnFoot || answeringPhone) && (held & KEY_L)) ? 255 : 0;
 	PCTempJoyState.LeftShoulder2	= (held & KEY_ZL)     ? 255 : 0;
 	PCTempJoyState.RightShoulder1	= (held & KEY_R)      ? 255 : 0;
 	PCTempJoyState.RightShoulder2	= (held & KEY_ZR)     ? 255 : 0;
@@ -1858,7 +1865,7 @@ bool
 CPad::Get3DSRifleFirstPersonAim()
 {
 	const u32 shoulderChord = KEY_L | KEY_R;
-	return !ArePlayerControlsDisabled() &&
+	return !ArePlayerControlsDisabled() && !CHud::m_b3DSPhoneAnswerPrompt && !g3DSPhoneLConsumed &&
 		(hidKeysHeld() & shoulderChord) == shoulderChord;
 }
 #endif

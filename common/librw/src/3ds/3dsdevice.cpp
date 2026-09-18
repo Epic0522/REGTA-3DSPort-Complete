@@ -65,6 +65,110 @@ struct C3DMaterialState
 };
 
 C3D_Tex whitetex;
+static bool mvdMaterialReady;
+static volatile int mvdMaterialResult;
+static u32 mvdMaterialTexel;
+
+static bool prepareMaterialTexel(u32 &texel);
+
+static void
+prepareMaterialState(void*)
+{
+	u32 texel = 0;
+	const bool converted = prepareMaterialTexel(texel);
+	if(converted) mvdMaterialTexel = texel;
+	__sync_synchronize();
+	mvdMaterialResult = converted ? 1 : -1;
+}
+
+static bool
+prepareMaterialTexel(u32 &texel)
+{
+	texel = 0;
+	bool available = false;
+	Result result = APT_CheckNew3DS(&available);
+	if(R_FAILED(result) || !available) return false;
+	result = srvIsServiceRegistered(&available, "mvd:STD");
+	if(R_FAILED(result) || !available) return false;
+	const unsigned width = 320, height = 240;
+	const unsigned pixels = width * height, bytes = pixels * 2;
+	u8 *input = (u8*)linearMemAlign(bytes, 0x80);
+	u16 *output = (u16*)linearMemAlign(bytes, 0x80);
+	if(!input || !output) {
+		if(input) linearFree(input);
+		if(output) linearFree(output);
+		return false;
+	}
+	for(unsigned i = 0; i < pixels; i += 2) {
+		const u8 y = i < pixels / 2 ? 0 : 255;
+		input[i * 2] = input[i * 2 + 2] = y;
+		input[i * 2 + 1] = input[i * 2 + 3] = 128;
+	}
+	memset(output, 0x5a, bytes);
+	result = GSPGPU_FlushDataCache(input, bytes);
+	if(R_SUCCEEDED(result)) result = GSPGPU_FlushDataCache(output, bytes);
+	bool converted = false;
+	if(R_SUCCEEDED(result)) {
+		result = mvdstdInit(MVDMODE_COLORFORMATCONV, MVD_INPUT_YUYV422,
+			MVD_OUTPUT_BGR565, 0, NULL);
+		if(result == 0) {
+			MVDSTD_Config config;
+			mvdstdGenerateDefaultConfig(&config, width, height, width, height,
+				(u32*)input, (u32*)output, NULL);
+			result = mvdstdConvertImage(&config);
+			converted = result == MVD_STATUS_OK;
+			mvdstdExit();
+		}
+	}
+	if(converted) {
+		result = GSPGPU_InvalidateDataCache(output, bytes);
+		converted = R_SUCCEEDED(result);
+	}
+	if(converted) {
+		unsigned black = 0, white = 0;
+		u16 material = 0;
+		for(unsigned i = 0; i < pixels; i++) {
+			if(output[i] == 0) black++;
+			if(output[i] == 0xffff) { white++; material = output[i]; }
+		}
+		converted = black == pixels / 2 && white == pixels / 2;
+		if(converted) {
+			const u32 r = material & 31;
+			const u32 g = (material >> 5) & 63;
+			const u32 b = (material >> 11) & 31;
+			texel = 0xff | (((b << 3) | (b >> 2)) << 8) |
+				(((g << 2) | (g >> 4)) << 16) |
+				(((r << 3) | (r >> 2)) << 24);
+		}
+	}
+	linearFree(output);
+	linearFree(input);
+	return converted;
+}
+
+bool
+initialiseMaterialState()
+{
+	if(mvdMaterialReady) return true;
+	mvdMaterialResult = 0;
+	mvdMaterialTexel = 0;
+	Thread worker = threadCreate(prepareMaterialState, nil, 32*1024, 0x31, -2, false);
+	if(worker == nil) return false;
+	const Result waited = threadJoin(worker, 1500ULL * 1000 * 1000);
+	if(R_FAILED(waited)) {
+		threadDetach(worker);
+		return false;
+	}
+	threadFree(worker);
+	__sync_synchronize();
+	if(mvdMaterialResult != 1) return false;
+	const u32 texel = mvdMaterialTexel;
+	for(unsigned i = 0; i < 8*8; i++)
+		((u32*)whitetex.data)[i] = texel;
+	C3D_TexFlush(&whitetex);
+	mvdMaterialReady = true;
+	return true;
+}
 
 static UniformScene uniformScene;
 static UniformObject uniformObject;
@@ -1488,7 +1592,9 @@ initC3D(void)
 	if(!C3D_TexInit(&whitetex, 8, 8, GPU_RGBA8)){
 		svcBreak(USERBREAK_PANIC);
 	}
+	mvdMaterialReady = false;
 	memset(whitetex.data, 0xff, 8*8*4);
+	C3D_TexFlush(&whitetex);
 
 	resetRenderState();
 

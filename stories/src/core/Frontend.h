@@ -840,6 +840,9 @@ public:
 	float StretchY(float);
 	void SwitchMenuOnAndOff();
 	void UnloadTextures();
+#ifdef _3DS
+	void ReleasePauseHomeTextures();
+#endif
 	void WaitForUserCD();
 	int GetNumOptionsCntrlConfigScreens();
 	void SwitchToNewScreen(int8);

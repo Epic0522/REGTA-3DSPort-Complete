@@ -4,13 +4,8 @@ endif
 
 include $(DEVKITARM)/3ds_rules
 
-# This port and its bundled 2021 libctru/newlib ABI are locked to devkitARM r55.
-# Refuse a newer system toolchain instead of silently mixing incompatible
-# incremental objects into a 3DSX that can crash before reaching the menu.
-REVC_DEVKITARM_R55 := $(abspath ../../toolchains/devkitARM)
-ifneq ($(realpath $(DEVKITARM)),$(realpath $(REVC_DEVKITARM_R55)))
-$(error reVC requires bundled devkitARM r55: $(REVC_DEVKITARM_R55))
-endif
+include ../../common/devkitarm-r55.mk
+
 
 ifdef STEREO
 	TARGET	:=miami-stereo

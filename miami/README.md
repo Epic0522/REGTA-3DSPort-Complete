@@ -37,7 +37,10 @@ See the [main README](../README.md) for shared dependencies and the full
 
 Run these commands from the **repository root**, not from `miami`.
 Install the [build dependencies](../README.md#building-from-source), including
-a separately downloaded devkitARM r55 / GCC 10.2:
+devkitARM r55 / GCC 10.2. The
+[Linux and macOS source-build guide](../README.md#linux-and-macos-build-r55-from-official-sources)
+builds the required SDK from official sources on either OS, without the old
+downloader. Set your SDK paths:
 
 ```sh
 export DEVKITPRO=/opt/devkitpro
@@ -98,6 +101,19 @@ entering first-person rifle aim suppresses L's fire action until release.
 Touch the lower screen once to reveal the L3, R3 and Camera regions. Release,
 then tap or drag. The overlay hides after five seconds without touch input.
 The keyboard accepts Vice City's text cheats.
+
+## Radio audio
+
+Setup converts the nine radio stations to 24 kHz mono IMA ADPCM, as in LCS.
+This requires Python 3 and FFmpeg. To update an existing installation, run:
+
+```sh
+python3 miami/tools/convert_vc_radio_3ds.py "/path/to/Vice City/Audio" "/path/to/radio-output"
+```
+
+Copy the nine WAV files into `sdmc:/3ds/miami/Audio/` and use the updated
+executable. Original ADF files can stay; they are used when a converted WAV is
+missing. The converter does not change the source files or final-mission music.
 
 ## Final-mission music
 

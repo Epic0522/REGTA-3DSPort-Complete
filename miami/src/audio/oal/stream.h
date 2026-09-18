@@ -87,6 +87,8 @@ class CStream
 	ndspWaveBuf m_DirectWaveBuf;
 	Thread  m_PrepareThread;
 	volatile int32 m_nPrepareState;
+	Thread  m_RadioStartThread;
+	volatile int32 m_nRadioStartState;
 #endif
 	
 	IDecoder *m_pSoundFile;
@@ -109,15 +111,21 @@ class CStream
 	bool   DecodeDirectNDSPBuffer();
 	void   JoinPrepareThread();
 	static void PrepareThreadMain(void *arg);
+	void   JoinRadioStartThread();
+	static void RadioStartThreadMain(void *arg);
 #endif
 public:
 	static void Initialise();
 	static void Terminate();
 	
+	CStream(ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS]);
 	CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS], uint32 overrideSampleRate = 32000,
 		bool fullInitialBuffer = false, bool forceMonoDecode = true, uint8 directChannel = 0);
 	~CStream();
 	void   Delete();
+	bool   Open(const char *filename, uint32 overrideSampleRate = 32000,
+		bool fullInitialBuffer = false, bool forceMonoDecode = true, uint8 directChannel = 0);
+	void   Close();
 	
 	bool   IsOpened();
 	bool   IsPlaying();
@@ -140,6 +148,7 @@ public:
 #ifdef _3DS
 	int8 BeginPrepare();
 	int8 GetPrepareStatus() const;
+	bool BeginRadioStart();
 #endif
 
 	

@@ -12,6 +12,7 @@
 
 namespace FinalMissionMusic
 {
+int8 Enabled = 1;
 namespace
 {
 	enum eTrackState
@@ -44,7 +45,7 @@ namespace
 	StartTrack(const char *path, bool loop)
 	{
 		SampleManager.StopMissionMusicStream();
-		gStreamStarted = SampleManager.StartMissionMusicStream(path, loop);
+		gStreamStarted = Enabled && SampleManager.StartMissionMusicStream(path, loop);
 		return gStreamStarted;
 	}
 
@@ -183,6 +184,19 @@ Update()
 	if (!gVCFinaleActive)
 		return;
 
+	// Music is optional; LCS mission repairs above must continue to run.
+	static bool wasEnabled = true;
+	if (!Enabled) {
+		if (gStreamStarted) SampleManager.StopMissionMusicStream();
+		gStreamStarted = false;
+		wasEnabled = false;
+		return;
+	}
+	if (!wasEnabled) {
+		wasEnabled = true;
+		if (!gStreamStarted && gTrackState == TRACK_FM) StartTrack(VC_FM_PATH, false);
+		else if (!gStreamStarted && gTrackState == TRACK_LOOP) StartTrack(VC_LOOP_PATH, true);
+	}
 	const bool manuallyPaused = CTimer::GetIsUserPaused();
 	SampleManager.PauseMissionMusicStream(manuallyPaused);
 	if (!manuallyPaused && gTrackState == TRACK_FM && gStreamStarted &&
@@ -224,14 +238,21 @@ Update()
 }
 
 bool
-IsRadioLocked()
+IsFinaleActive()
 {
 	return gVCFinaleActive;
+}
+
+bool
+IsRadioLocked()
+{
+	return Enabled && gVCFinaleActive;
 }
 
 void
 DisplayTrackName()
 {
+	if (!Enabled) return;
 	if (!gVCFinaleActive || gTrackNameFrames == 0 || CTimer::GetIsPaused() ||
 	    TheCamera.m_WideScreenOn || CReplay::IsPlayingBack())
 		return;

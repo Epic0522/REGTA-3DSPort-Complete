@@ -91,7 +91,10 @@ Required host tools for data preparation:
 ## Building reLCS
 
 Install the [shared build dependencies](../README.md#building-from-source)
-first, including a separately downloaded devkitARM r55 / GCC 10.2. Then run
+first, including devkitARM r55 / GCC 10.2. Both Linux and macOS require building
+the SDK: follow the [source-build guide](../README.md#linux-and-macos-build-r55-from-official-sources)
+instead of the old downloader.
+Then run
 these commands from the repository root:
 
 ```sh

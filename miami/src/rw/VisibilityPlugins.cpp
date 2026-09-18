@@ -233,7 +233,13 @@ CVisibilityPlugins::RenderFadingEntities(CLinkList<AlphaObjectInfo> &list)
 			DeActivateDirectional();
 			SetAmbientColours();
 			e->bImBeingRendered = true;
+			#ifdef _3DS
+			RenderFadingAtomic((RpAtomic*)e->m_rwObject,
+				CRenderer::GetNew3DSWorldDistance(e, node->item.sort) /
+				CRenderer::GetNew3DSWorldLodScale(mi, e->GetModelIndex()));
+#else
 			RenderFadingAtomic((RpAtomic*)e->m_rwObject, node->item.sort);
+#endif
 			e->bImBeingRendered = false;
 		}else
 			CRenderer::RenderOneNonRoad(e);
@@ -334,13 +340,14 @@ CVisibilityPlugins::RenderFadingAtomic(RpAtomic *atomic, float camdist)
 
 	mi = GetAtomicModelInfo(atomic);
 	lodatm = mi->GetAtomicFromDistance(camdist - FADE_DISTANCE);
+	if(lodatm == nil) lodatm = atomic;
 	if(mi->m_additive)
 		RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void*)rwBLENDONE);
 
 	fadefactor = (mi->GetLargestLodDistance() - (camdist - FADE_DISTANCE))/FADE_DISTANCE;
 	if(fadefactor > 1.0f)
 		fadefactor = 1.0f;
-	alpha = mi->m_alpha * fadefactor;
+	alpha = mi->m_alpha * Max(0.0f, Min(fadefactor, 1.0f));
 	if(alpha == 255)
 		RENDERCALLBACK(atomic);
 	else{

@@ -2,13 +2,8 @@ ifeq ($(strip $(DEVKITARM)),)
 $(error "DEVKITARM not in your environment.")
 endif
 
-# This 3DS port is tied to the bundled devkitARM r55 ABI/toolchain. Newer
-# system devkitARM releases can produce a valid-looking 3DSX that crashes on
-# hardware, so fail early instead of silently creating an unusable build.
-RE3_DEVKITARM_R55 := $(abspath ../../toolchains/devkitARM)
-ifneq ($(realpath $(DEVKITARM)),$(realpath $(RE3_DEVKITARM_R55)))
-$(error "re3 requires bundled devkitARM r55: $(RE3_DEVKITARM_R55)")
-endif
+include ../../common/devkitarm-r55.mk
+
 
 include $(DEVKITARM)/3ds_rules
 

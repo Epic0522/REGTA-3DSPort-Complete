@@ -783,6 +783,9 @@ public:
 	float StretchY(float);
 	void SwitchMenuOnAndOff();
 	void UnloadTextures();
+#ifdef _3DS
+	void ReleasePauseHomeTextures();
+#endif
 	void WaitForUserCD();
 	void PrintController();
 	int GetNumOptionsCntrlConfigScreens();

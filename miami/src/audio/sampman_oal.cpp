@@ -98,6 +98,13 @@ uint8 nCurrentPedSlot;
 
 CChannel aChannel[MAXCHANNELS+MAX2DCHANNELS];
 uint8 nChannelVolume[MAXCHANNELS+MAX2DCHANNELS];
+#ifdef _3DS
+static uint16 gEffectsMixHeadroom3DS = 256;
+static inline uint32 ApplyEffectsMixHeadroom3DS(uint32 volume)
+{
+	return volume * gEffectsMixHeadroom3DS >> 8;
+}
+#endif
 
 uint32 nStreamLength[TOTAL_STREAMED_SOUNDS];
 ALuint ALStreamSources[MAX_STREAMS][2];
@@ -1067,6 +1074,12 @@ cSampleManager::Initialise(void)
 		if ( defaultProvider >= 0 && defaultProvider < m_nNumberOfProviders )
 		{
 			set_new_provider(defaultProvider);
+		#ifdef _3DS
+			// Keep the radio stream object alive, as LCS does.  Reopening the
+			// decoder is substantially cheaper than tearing down and rebuilding
+			// the OpenAL stream every time a vehicle or station changes.
+			aStream[0] = new CStream(ALStreamSources[0], ALStreamBuffers[0]);
+		#endif
 		}
 		else
 		{
@@ -1080,7 +1093,9 @@ cSampleManager::Initialise(void)
 		
 		_pMP3List = NULL;
 		
+#ifndef _3DS
 		_FindMP3s();
+#endif
 		
 		if ( nNumMP3s != 0 )
 		{
@@ -1192,7 +1207,13 @@ cSampleManager::UpdateEffectsVolume(void)
 			if ( GetChannelUsedFlag(i) )
 			{
 				if ( nChannelVolume[i] != 0 )
-					aChannel[i].SetVolume(m_nEffectsFadeVolume*nChannelVolume[i]*m_nEffectsVolume >> 14);
+					aChannel[i].SetVolume(m_nEffectsFadeVolume*
+#ifdef _3DS
+						(i < MAXCHANNELS ? ApplyEffectsMixHeadroom3DS(nChannelVolume[i]) : nChannelVolume[i])*
+#else
+						nChannelVolume[i]*
+#endif
+						m_nEffectsVolume >> 14);
 			}
 		}
 	}
@@ -1571,7 +1592,13 @@ cSampleManager::SetChannelEmittingVolume(uint32 nChannel, uint32 nVolume)
 	}
 
 	// no idea, does this one looks like a bug or it's SetChannelVolume ?
-	aChannel[nChannel].SetVolume(m_nEffectsFadeVolume*nChannelVolume[nChannel]*m_nEffectsVolume >> 14);
+	aChannel[nChannel].SetVolume(m_nEffectsFadeVolume*
+#ifdef _3DS
+		ApplyEffectsMixHeadroom3DS(nChannelVolume[nChannel])*
+#else
+		nChannelVolume[nChannel]*
+#endif
+		m_nEffectsVolume >> 14);
 }
 
 void
@@ -1763,6 +1790,28 @@ cSampleManager::StartStreamedFile(uint32 nFile, uint32 nPos, uint8 nStream)
 	
 	if ( nFile < TOTAL_STREAMED_SOUNDS )
 	{
+#ifdef _3DS
+		if (nStream == 0 && nFile != STREAMED_SOUND_RADIO_MP3_PLAYER) {
+			CStream *stream = aStream[0];
+			if (stream == NULL) {
+				stream = new CStream(ALStreamSources[0], ALStreamBuffers[0]);
+				aStream[0] = stream;
+			}
+			stream->Close();
+			strcpy(filename, StreamedNameTable[nFile]);
+			if (stream->Open(filename, IsThisTrackAt16KHz(nFile) ? 16000 : 32000) && stream->Setup()) {
+				stream->SetLoopCount(nStreamLoopedFlag[0] ? 0 : 1);
+				nStreamLoopedFlag[0] = true;
+				if (position != 0)
+					stream->SetPosMS(position);
+				if (!stream->BeginRadioStart())
+					stream->Start();
+				return true;
+			}
+			stream->Close();
+			return false;
+		}
+#endif
 		if ( aStream[nStream] )
 		{
 			delete aStream[nStream];
@@ -1928,8 +1977,16 @@ cSampleManager::StopStreamedFile(uint8 nStream)
 	
 	if ( stream )
 	{
+#ifdef _3DS
+		if (nStream == 0)
+			stream->Close();
+		else {
+#endif
 		delete stream;
 		aStream[nStream] = NULL;
+#ifdef _3DS
+		}
+#endif
 
 		if ( nStream == 0 )
 			_bIsMp3Active = false;
@@ -2086,6 +2143,20 @@ cSampleManager::HasMissionMusicStreamFinished(void)
 void
 cSampleManager::Service(void)
 {
+#ifdef _3DS
+	uint32 activeEffects = 0;
+	for (int32 i = 0; i < MAXCHANNELS; ++i)
+		if (aChannel[i].IsUsed())
+			++activeEffects;
+	uint16 targetHeadroom = activeEffects > 6 ? Max(192, 256 - (int32)(activeEffects - 6) * 4) : 256;
+	uint16 oldHeadroom = gEffectsMixHeadroom3DS;
+	if (gEffectsMixHeadroom3DS > targetHeadroom)
+		gEffectsMixHeadroom3DS -= Min((uint16)8, (uint16)(gEffectsMixHeadroom3DS - targetHeadroom));
+	else if (gEffectsMixHeadroom3DS < targetHeadroom)
+		gEffectsMixHeadroom3DS += Min((uint16)2, (uint16)(targetHeadroom - gEffectsMixHeadroom3DS));
+	if (oldHeadroom != gEffectsMixHeadroom3DS)
+		UpdateEffectsVolume();
+#endif
 	for ( int32 i = 0; i < MAX_STREAMS; i++ )
 	{
 		CStream *stream = aStream[i];
