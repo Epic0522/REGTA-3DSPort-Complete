@@ -115,6 +115,14 @@ Copy the nine WAV files into `sdmc:/3ds/miami/Audio/` and use the updated
 executable. Original ADF files can stay; they are used when a converted WAV is
 missing. The converter does not change the source files or final-mission music.
 
+FFmpeg may print `Error submitting packet to decoder: Invalid data found when
+processing input` once for each original ADF stream. The stock Vice City ADF
+files contain a packet FFmpeg rejects, then conversion continues normally. If
+setup reaches `Prepared revc data` and the generated WAV files play normally,
+the warning is harmless. `The original game directory was not changed` only
+confirms that setup wrote the prepared files to the SD directory without
+modifying the source installation.
+
 ## Final-mission music
 
 Setup installs the edited tracks at:

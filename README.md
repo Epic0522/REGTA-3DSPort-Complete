@@ -565,6 +565,11 @@ CIA and 3DSX builds use the same SD data and saves.
 - LCS setup errors about `.VB`, `sfx.RAW` or `gta_lcs.DAT` mean the selected
   directory is not the expected extracted PS2 data root. Select the directory
   that directly contains `AUDIO`, `DATA` and `models`.
+- During Vice City radio conversion, FFmpeg may report `Error submitting packet
+  to decoder: Invalid data found when processing input` once per original ADF.
+  The stock streams contain a rejected packet, but conversion continues. If
+  setup reaches `Prepared revc data` and the WAV files in `3ds/miami/Audio`
+  play normally, no action is required.
 - If CIA packaging cannot find bannertool, `makerom` or `3dsxtool`, check
   that the tool is installed and its path is set.
 - A package that reaches HOME Menu but cannot find data usually has the wrong
