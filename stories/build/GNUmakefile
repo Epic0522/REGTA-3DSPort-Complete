@@ -192,7 +192,9 @@ SOURCE_DIRS	:=	$(LIBCTRU_SRC) $(CITRO3D_SRC) $(LIBRW_SRC) $(RE3_SRC)
 
 # Source files / Object files
 
+GIT_SHA1_CPP	:=	../src/extras/GitSHA1.cpp
 CPPFILES	:=	$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.cpp))
+CPPFILES	:=	$(filter-out $(GIT_SHA1_CPP),$(CPPFILES)) $(GIT_SHA1_CPP)
 # The generic Windows/POSIX backends are separate implementations of the same
 # streaming API. New3DS must compile only its native backend.
 CPPFILES	:=	$(filter-out ../src/core/CdStream.cpp ../src/core/CdStreamPosix.cpp,$(CPPFILES))
@@ -243,6 +245,12 @@ DEPS		:=	$(foreach obj,$(OBJECTS),$(obj).d)  \
 
 # rules
 default: $(TARGET).3dsx
+
+.PHONY: force-git-sha1
+force-git-sha1:
+
+$(GIT_SHA1_CPP): force-git-sha1
+	@bash ../printHash.sh $@
 
 
 # binary files

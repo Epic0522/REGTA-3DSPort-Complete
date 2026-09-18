@@ -43,6 +43,15 @@ class BuildGuide(unittest.TestCase):
                                         env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 self.assertEqual(result.returncode == 0, success, result.stderr)
 
+    def test_clean_checkout_generates_git_sha1_source(self):
+        for game in ('III', 'miami', 'stories'):
+            makefile = (ROOT / game / 'build' / 'GNUmakefile').read_text()
+            self.assertIn('GIT_SHA1_CPP\t:=\t../src/extras/GitSHA1.cpp', makefile)
+            self.assertIn('$(filter-out $(GIT_SHA1_CPP),$(CPPFILES)) $(GIT_SHA1_CPP)',
+                          makefile)
+            self.assertIn('$(GIT_SHA1_CPP): force-git-sha1', makefile)
+            self.assertIn('@bash ../printHash.sh $@', makefile)
+
 
 if __name__ == '__main__':
     unittest.main()
