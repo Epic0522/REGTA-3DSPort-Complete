@@ -112,7 +112,7 @@ GetPlatformFrontendText(const char *key)
 	 * releases omit FES_CHE altogether.  Keep the external GXT untouched and
 	 * replace only the save-flow copy on Nintendo 3DS. */
 	static t3DSSaveText saveText[] = {
-		{ "3DS_MPH", "C-PAD: MOVE  ZR/R: ZOOM  L: LEGEND  Y: MARKER  B: BACK", {}, false },
+		{ "3DS_MPH", "C-PAD: MOVE  ZR/R: ZOOM  L: LEGEND  X: MARKER  Y: BACK", {}, false },
 		{ "FES_CHE", "Warning: one or more cheats have been activated. Saving may affect your progress. Select OK to continue.", {}, false },
 		{ "FESZ_QZ", "Save your current progress to this slot?", {}, false },
 		{ "FESZ_QO", "This slot already contains save data. Overwrite it?", {}, false },

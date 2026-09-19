@@ -571,7 +571,6 @@ Get3DSControlTokenString(const wchar *in, wchar *out)
 	static const tTokenAction actionTokens[] = {
 		{ "ANS", PED_ANSWER_PHONE, -1 },
 		{ "CVEIW", CAMERA_CHANGE_VIEW_ALL_SITUATIONS, -1 },
-		{ "FREE1", PED_DUCK, -1 },
 		{ "PDCTL", PED_CYCLE_TARGET_LEFT, PED_CYCLE_TARGET_RIGHT },
 		{ "PDCWE", PED_CYCLE_WEAPON_LEFT, PED_CYCLE_WEAPON_RIGHT },
 		{ "PDFW", PED_FIREWEAPON, -1 },
@@ -600,12 +599,13 @@ Get3DSControlTokenString(const wchar *in, wchar *out)
 		const char *label;
 	};
 	static const tFixedToken fixedTokens[] = {
-		{ "AMBUY", "A" },
-		{ "AMEXI", "B" },
+		{ "AMBUY", "B" },
+		{ "AMEXI", "Y" },
 		{ "AMMOV", "CIRCLE PAD / D-PAD" },
+		{ "FREE1", "L + R" },
 		{ "FREE2", "CIRCLE PAD" },
 		{ "PDLOO", "C-STICK" },
-		{ "TRSK", "A" },
+		{ "TRSK", "B" },
 		{ "VESTR", "CIRCLE PAD" },
 		{ "VEWEA", "C-STICK" },
 		{ "VEWEI", "CIRCLE PAD UP / DOWN" },

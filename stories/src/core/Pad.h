@@ -301,7 +301,7 @@ public:
 
 #ifdef _3DS
 	void AffectFrom3DS();
-	bool Get3DSRifleFirstPersonAim();
+	bool Get3DSFreeAim();
 	static bool Is3DSTouchOverlayVisible();
 #endif
 

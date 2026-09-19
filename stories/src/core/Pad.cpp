@@ -2169,10 +2169,10 @@ CPad::AffectFrom3DS()
 	hidCircleRead(&left);
 	hidCstickRead(&right);
 
-	PCTempJoyState.Cross = (held & KEY_A) ? 255 : 0;
-	PCTempJoyState.Circle = (held & KEY_X) ? 255 : 0;
-	PCTempJoyState.Square = (held & KEY_B) ? 255 : 0;
-	PCTempJoyState.Triangle = (held & KEY_Y) ? 255 : 0;
+	PCTempJoyState.Cross = (held & KEY_B) ? 255 : 0;
+	PCTempJoyState.Circle = (held & KEY_A) ? 255 : 0;
+	PCTempJoyState.Square = (held & KEY_Y) ? 255 : 0;
+	PCTempJoyState.Triangle = (held & KEY_X) ? 255 : 0;
 	PCTempJoyState.DPadDown = (held & KEY_DDOWN) ? 255 : 0;
 	PCTempJoyState.DPadLeft = (held & KEY_DLEFT) ? 255 : 0;
 	PCTempJoyState.DPadRight = (held & KEY_DRIGHT) ? 255 : 0;
@@ -2213,7 +2213,7 @@ CPad::AffectFrom3DS()
 }
 
 bool
-CPad::Get3DSRifleFirstPersonAim()
+CPad::Get3DSFreeAim()
 {
 	const u32 shoulderChord = KEY_L | KEY_R;
 	return !ArePlayerControlsDisabled() && (hidKeysHeld() & shoulderChord) == shoulderChord;

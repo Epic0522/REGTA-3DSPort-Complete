@@ -2656,7 +2656,7 @@ const char *XboxButtons_noIcons[][MAX_CONTROLLERACTIONS] = CONTROLLER_BUTTONS("Y
 #define LEFT "CIRCLE PAD LEFT"
 #define RIGHT "CIRCLE PAD RIGHT"
 const char *Nintendo3DSButtons[][MAX_CONTROLLERACTIONS] =
-	CONTROLLER_BUTTONS("Y", "X", "A", "B", "L", "ZL", "TOUCH, THEN TAP L3", "R", "ZR", "TOUCH, THEN TAP R3", "SELECT",
+	CONTROLLER_BUTTONS("X", "A", "B", "Y", "L", "ZL", "TOUCH, THEN TAP L3", "R", "ZR", "TOUCH, THEN TAP R3", "SELECT",
 		"C-STICK UP", "C-STICK DOWN", "C-STICK LEFT", "C-STICK RIGHT");
 #undef UP
 #undef DOWN
@@ -2725,9 +2725,9 @@ void CControllerConfigManager::GetWideStringOfCommandKeys(uint16 action, wchar *
 {
 #ifdef _3DS
 	wchar wstr[24];
-	const char *button = action == PED_SNIPER_ZOOM_IN ? "A" :
-		action == PED_SNIPER_ZOOM_OUT ? "B" :
-		action == VEHICLE_ENTER_EXIT && CPad::GetPad(0)->ArePlayerControlsDisabled() ? "B" :
+	const char *button = action == PED_SNIPER_ZOOM_IN ? "B" :
+		action == PED_SNIPER_ZOOM_OUT ? "Y" :
+		action == VEHICLE_ENTER_EXIT && CPad::GetPad(0)->ArePlayerControlsDisabled() ? "Y" :
 		Nintendo3DSButtons[CPad::GetPad(0)->Mode][action];
 	if (button == nil) {
 		text[0] = '\0';
