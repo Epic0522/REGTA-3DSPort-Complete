@@ -372,6 +372,16 @@ EOF
 bash ./build-devkit.sh
 ```
 
+`build-devkit.sh` fetches rules/crtls archives from `downloads.devkitpro.org`
+with a plain `curl -f -L -O` and no User-Agent override. That host sits behind
+Cloudflare and 403s curl's default User-Agent, which is the 403 referenced in
+the troubleshooting note below. If you hit it, give curl a browser-like UA
+before running the script:
+
+```sh
+echo 'user-agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"' > "$HOME/.curlrc"
+```
+
 The scripts apply devkitARM's own patches; generic ARM GCC is not a substitute.
 They reuse the three downloaded archives. Rules and startup objects are skipped
 in this step and installed from Git below, avoiding the remaining old-server
