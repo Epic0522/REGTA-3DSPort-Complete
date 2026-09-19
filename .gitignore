@@ -12,6 +12,11 @@
 /toolchains/
 /tools/cia-tools/
 
+# Agent working state (implementation plans and scratch notes)
+/docs/superpowers/plans/
+PROGRESS.md
+DECISIONS.md
+
 # Build products and diagnostics
 **/[Bb]uild/*
 **/[Oo]bj/

@@ -198,13 +198,36 @@ psGrabScreen(RwCamera *pCamera)
 	return image;
 }
 
+/* The ARM11 VFP cannot convert 64-bit integers to floating point; a direct
+ * cast emits a libgcc softfloat call.  Split it the way libctru does
+ * internally (common/libctru/source/os.c:13). */
+static inline double
+TicksToDouble(u64 value)
+{
+	return ((double)(u32)(value >> 32))*0x100000000ULL + (u32)value;
+}
+
 /*
  *****************************************************************************
  */
 double
 psTimer(void)
 {
-	return osGetTime();
+	/* osGetTime() derives from svcGetSystemTick() but truncates to whole
+	 * milliseconds.  At 30 fps that quantises CTimer's timestep by +-1.5%,
+	 * and CCam::Process divides the smoothed player position by that
+	 * timestep (Cam.cpp:159), turning the quantisation into visible camera
+	 * shimmer.  Read the tick counter directly and keep the fraction.
+	 *
+	 * The tick counter runs at sysclock_hz (~268 MHz) and is NOT the ARM11
+	 * core clock, so osSetSpeedupEnable(true) does not affect it.
+	 * sysclock_hz is PTM's RTC-calibrated measurement of the real
+	 * frequency; sample it once so a later PTM republish cannot step the
+	 * clock mid-session. */
+	static double ticksPerMs = 0.0;
+	if(ticksPerMs == 0.0)
+		ticksPerMs = (double)osGetTimeRef().sysclock_hz / 1000.0;
+	return TicksToDouble(svcGetSystemTick()) / ticksPerMs;
 }
 
 /*
