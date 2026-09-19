@@ -98,9 +98,9 @@ bool CHud::m_HideRadar;
 int32 CHud::m_ClockState;
 
 // These aren't really in CHud
-float BigMessageInUse[8];
-float CHud::BigMessageAlpha[8];
-float CHud::BigMessageX[8];
+float BigMessageInUse[6];
+float CHud::BigMessageAlpha[6];
+float CHud::BigMessageX[6];
 uint32 CHud::BigMessageDuration[8];
 float CHud::OddJob2OffTimer;
 bool CHud::CounterOnLastFrame[NUMONSCREENCOUNTERS];
@@ -2020,7 +2020,7 @@ void CHud::GetRidOfAllHudMessages()
 	for (int i = 0; i < ARRAY_SIZE(m_Message); i++)
 		m_Message[i] = 0;
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 6; i++) {
 		BigMessageInUse[i] = 0.0f;
 
 		for (int j = 0; j < 128; j++)
