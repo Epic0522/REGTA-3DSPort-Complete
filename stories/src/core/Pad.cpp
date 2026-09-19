@@ -104,15 +104,13 @@ enum e3DSTouchZone {
 	TOUCH_ZONE_NONE,
 	TOUCH_ZONE_L3,
 	TOUCH_ZONE_R3,
-	TOUCH_ZONE_CAMERA
+	TOUCH_ZONE_CLOSE
 };
 
 static bool g3DSTouchOverlayVisible;
 static bool g3DSTouchOverlayArmed;
 static e3DSTouchZone g3DSTouchActiveZone = TOUCH_ZONE_NONE;
 static u64 g3DSTouchLastActivityMs;
-static int g3DSTouchCameraDX;
-static int g3DSTouchCameraDY;
 
 static e3DSTouchZone
 Get3DSTouchZone(const touchPosition &touch)
@@ -122,7 +120,7 @@ Get3DSTouchZone(const touchPosition &touch)
 	if(touch.px >= 173 && touch.px < 299 && touch.py >= 26 && touch.py < 105)
 		return TOUCH_ZONE_R3;
 	if(touch.px >= 28 && touch.px < 293 && touch.py >= 119 && touch.py < 222)
-		return TOUCH_ZONE_CAMERA;
+		return TOUCH_ZONE_CLOSE;
 	return TOUCH_ZONE_NONE;
 }
 }
@@ -2126,20 +2124,24 @@ CPad::AffectFrom3DS()
 	u32 up = hidKeysUp();
 	touchPosition touch;
 	u64 now = osGetTime();
-	g3DSTouchCameraDX = 0;
-	g3DSTouchCameraDY = 0;
 	if(down & KEY_TOUCH) {
 		hidTouchRead(&touch);
-		PSGLOBAL(origin) = touch;
 		g3DSTouchLastActivityMs = now;
 		if(!g3DSTouchOverlayVisible) {
 			/* The first touch only reveals the controls.  Requiring a release
-			 * before arming them prevents accidental horn or camera input. */
+			 * before arming them prevents accidental horn input. */
 			g3DSTouchOverlayVisible = true;
 			g3DSTouchOverlayArmed = false;
 			g3DSTouchActiveZone = TOUCH_ZONE_NONE;
 		} else if(g3DSTouchOverlayArmed) {
 			g3DSTouchActiveZone = Get3DSTouchZone(touch);
+			if(g3DSTouchActiveZone == TOUCH_ZONE_CLOSE) {
+				/* Closing manually must also stop/reset the autoclose timer,
+				 * not just hide the overlay for one frame. */
+				g3DSTouchOverlayVisible = false;
+				g3DSTouchOverlayArmed = false;
+				g3DSTouchActiveZone = TOUCH_ZONE_NONE;
+			}
 		}
 	} else if(up & KEY_TOUCH) {
 		if(g3DSTouchOverlayVisible)
@@ -2147,12 +2149,6 @@ CPad::AffectFrom3DS()
 		g3DSTouchActiveZone = TOUCH_ZONE_NONE;
 	} else if(held & KEY_TOUCH) {
 		g3DSTouchLastActivityMs = now;
-		if(g3DSTouchOverlayArmed && g3DSTouchActiveZone == TOUCH_ZONE_CAMERA) {
-			hidTouchRead(&touch);
-			g3DSTouchCameraDX = touch.px - PSGLOBAL(origin).px;
-			g3DSTouchCameraDY = touch.py - PSGLOBAL(origin).py;
-			PSGLOBAL(origin) = touch;
-		}
 	} else if(g3DSTouchOverlayVisible && now - g3DSTouchLastActivityMs >= 5000) {
 		g3DSTouchOverlayVisible = false;
 		g3DSTouchOverlayArmed = false;
@@ -2208,11 +2204,6 @@ CPad::AffectFrom3DS()
 	PCTempJoyState.LeftStickY = (int32)(-ly * 128.0f);
 	PCTempJoyState.RightStickX = (int32)(rx * 128.0f);
 	PCTempJoyState.RightStickY = (int32)(-ry * 128.0f);
-	if(held & KEY_TOUCH && g3DSTouchOverlayArmed &&
-		g3DSTouchActiveZone == TOUCH_ZONE_CAMERA) {
-		PCTempJoyState.RightStickX = Clamp(g3DSTouchCameraDX * 12, -128, 128);
-		PCTempJoyState.RightStickY = Clamp(g3DSTouchCameraDY * 12, -128, 128);
-	}
 }
 
 bool

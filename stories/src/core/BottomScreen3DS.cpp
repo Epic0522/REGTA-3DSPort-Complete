@@ -126,6 +126,22 @@ DrawBottomTouchOverlay(void)
 			0.0f, maxV, maxU, maxV);
 		overlay.m_pTexture = nil;
 	}
+
+	wchar text[32];
+	AsciiToUnicode("CLOSE", text);
+	CFont::SetBackgroundOff();
+	CFont::SetJustifyOff();
+	CFont::SetRightJustifyOff();
+	CFont::SetCentreOn();
+	CFont::SetCentreSize(256.0f);
+	CFont::SetPropOn();
+	CFont::SetFontStyle(FONT_STANDARD);
+	CFont::SetDropShadowPosition(2);
+	CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+	CFont::SetScale(0.5f, 0.8f);
+	CFont::SetColor(CRGBA(255, 255, 255, 255));
+	CFont::PrintString(160.0f, 163.0f, text);
+	CFont::DrawFonts();
 }
 
 static RwTexture *
