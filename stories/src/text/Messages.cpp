@@ -611,13 +611,6 @@ Get3DSControlTokenString(const wchar *in, wchar *out)
 		{ "VEWEI", "CIRCLE PAD UP / DOWN" },
 	};
 
-	/* Mounted script prompts (the time-trial kiosk) use the vanilla PS2
-	 * slots, so their labels must name the vanilla buttons. */
-	if (CPad::ScriptPromptIsMounted()) {
-		if (strcmp(token, "AMBUY") == 0) { AsciiToUnicode("B", out); return tokenOffset + tokenSize; }
-		if (strcmp(token, "AMEXI") == 0) { AsciiToUnicode("X", out); return tokenOffset + tokenSize; }
-	}
-
 	for (uint32 i = 0; i < ARRAY_SIZE(fixedTokens); i++) {
 		if (strcmp(token, fixedTokens[i].token) == 0) {
 			AsciiToUnicode(fixedTokens[i].label, out);

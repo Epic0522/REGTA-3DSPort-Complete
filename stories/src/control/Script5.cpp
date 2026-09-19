@@ -1430,23 +1430,21 @@ int16 CRunningScript::GetPadState(uint16 pad, uint16 button)
 	case 14: return pPad->NewState.Square;
 	case 15:
 #ifdef _3DS
-		/* Keep legacy shop scripts consistent with the 3DS GUI back action.
-		 * Mounted prompts (e.g. the time-trial kiosk) keep the vanilla PS2
-		 * slot instead, since Cross also doubles as the throttle. */
-		if (pPad->ArePlayerControlsDisabled() && !CPad::ScriptPromptIsMounted())
+		/* Keep legacy shop scripts consistent with the 3DS GUI back action. */
+		if (pPad->ArePlayerControlsDisabled())
 			return pPad->NewState.Cross;
 #endif
 		return pPad->NewState.Triangle;
 	case 16:
 #ifdef _3DS
 		/* Keep legacy shop scripts consistent with the 3DS GUI accept action. */
-		if (pPad->ArePlayerControlsDisabled() && !CPad::ScriptPromptIsMounted())
+		if (pPad->ArePlayerControlsDisabled())
 			return pPad->NewState.Circle;
 #endif
 		return pPad->NewState.Cross;
 	case 17:
 #ifdef _3DS
-		if (pPad->ArePlayerControlsDisabled() && !CPad::ScriptPromptIsMounted())
+		if (pPad->ArePlayerControlsDisabled())
 			return pPad->NewState.Triangle;
 #endif
 		return pPad->NewState.Circle;
