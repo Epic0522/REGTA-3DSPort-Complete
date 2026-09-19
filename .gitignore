@@ -37,6 +37,7 @@ crash_dump_*.dmp
 
 # Proprietary game installations and derived media
 /common/txdcnv/gta3.new/
+/sdstage/
 *.img
 *.dir
 *.txd
