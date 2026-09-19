@@ -112,6 +112,13 @@ RestorePlayerVehicleInvariant(CPlayerPed *player)
 	 * disabled vehicle appears to freeze until the player presses exit. */
 	if (player->m_nPedState == PED_ARRESTED || player->m_pArrestingCop)
 		return;
+	/* Drowning in a vehicle leaves the player registered as its occupant while
+	 * switching to PED_DIE (PedFight.cpp: InflictDamage / WEAPONTYPE_DROWNING).
+	 * Restamping PED_DRIVING here stops CPed::ProcessControl from ever reaching
+	 * SetDead, so CGameLogic never observes the death and the player is stuck at
+	 * 0 health.  CGameLogic unseats him on WBSTATE_WASTED. */
+	if (player->DyingOrDead())
+		return;
 	if (player->EnteringCar() || player->m_nPedState == PED_EXIT_CAR ||
 		player->m_nPedState == PED_DRAG_FROM_CAR ||
 		player->m_objective == OBJECTIVE_LEAVE_CAR ||
