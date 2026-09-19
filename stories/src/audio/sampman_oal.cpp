@@ -2054,6 +2054,16 @@ cSampleManager::StartStreamedFile(uint32 nFile, uint32 nPos, uint8 nStream)
 		if (position != 0)
 			stream->SetPosMS(position);	
 
+		/* These one-shot tunes start during the heaviest SD-card contention of
+		 * the game (mission cleanup, stats save, streaming restart).  The
+		 * reduced 3DS startup budget underruns there, and cMusicManager reads
+		 * an underrun as end-of-track and drops the tune for good.  Give them
+		 * the same full prefill StartMissionMusicStream already asks for.
+		 * Inert on platforms that always prefill fully; Close() above clears
+		 * the flag, so it never leaks into the next track. */
+		if (nFile == STREAMED_SOUND_MISSION_COMPLETED || nFile == STREAMED_SOUND_CUTSCENE_FINALE)
+			stream->SetFullInitialQueue(TRUE);
+
 		stream->Start();
 		
 		return TRUE;

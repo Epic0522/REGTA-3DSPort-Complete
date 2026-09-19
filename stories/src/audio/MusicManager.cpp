@@ -492,9 +492,18 @@ cMusicManager::ServiceFrontEndMode()
 				if (m_nNextTrack != NO_TRACK) {
 					SampleManager.SetStreamedFileLoopFlag(m_nNextLoopFlag);
 					SampleManager.StartStreamedFile(m_nNextTrack, trackStartPos);
-					m_nVolumeLatency = 3;
-					m_nCurrentVolume = 0;
-					m_nMaxVolume = 100;
+					if (m_nNextTrack == STREAMED_SOUND_MISSION_COMPLETED) {
+						/* The stock ramp costs 3 latency services plus 17 steps
+						 * of +6, and this runs only every 4th frame.  On the
+						 * 3DS frame rate that is most of the 5.4s jingle spent
+						 * inaudible, so start it at full volume instead. */
+						m_nVolumeLatency = 0;
+						m_nCurrentVolume = m_nMaxVolume = 100;
+					} else {
+						m_nVolumeLatency = 3;
+						m_nCurrentVolume = 0;
+						m_nMaxVolume = 100;
+					}
 					SampleManager.SetStreamedVolumeAndPan(m_nCurrentVolume, 63, FALSE);
 					if (m_nNextTrack < STREAMED_SOUND_CITY_AMBIENT)
 						m_nLastTrackServiceTime = CTimer::GetTimeInMillisecondsPauseMode();
