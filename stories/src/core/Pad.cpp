@@ -1199,6 +1199,9 @@ void CPad::Clear(bool bResetPlayerControls)
 		DisablePlayerControls = PLAYERCONTROL_ENABLED;
 
 	JustOutOfFrontend = 0;
+#ifdef _3DS
+	bSuppressWeaponUntilRelease = false;
+#endif
 	bApplyBrakes = false;
 
 	for ( int32 i = 0; i < HORNHISTORY_SIZE; i++ )
@@ -2573,6 +2576,9 @@ void CPad::Update(int16 pad)
 
 	if ( JustOutOfFrontend != 0 )
 		--JustOutOfFrontend;
+#ifdef _3DS
+	UpdateWeaponSuppression();
+#endif
 }
 
 void CPad::DoCheats(void)
@@ -3209,11 +3215,8 @@ bool CPad::ExitVehicleJustDown(void)
 	return false;
 }
 
-int32 CPad::GetWeapon(void)
+int32 CPad::GetWeaponButtonRaw(void)
 {
-	if ( ArePlayerControlsDisabled() )
-		return false;
-
 	switch (CURMODE)
 	{
 		case 0:
@@ -3242,10 +3245,40 @@ int32 CPad::GetWeapon(void)
 	return false;
 }
 
+int32 CPad::GetWeapon(void)
+{
+	if ( ArePlayerControlsDisabled() )
+		return false;
+
+#ifdef _3DS
+	if ( bSuppressWeaponUntilRelease )
+		return false;
+#endif
+
+	return GetWeaponButtonRaw();
+}
+
+#ifdef _3DS
+void CPad::UpdateWeaponSuppression(void)
+{
+	/* The 3DS menu accept button shares the weapon slot.  A press consumed by a
+	 * shop or frontend menu must not fire the weapon when control returns. */
+	if ( ArePlayerControlsDisabled() )
+		bSuppressWeaponUntilRelease = !!GetWeaponButtonRaw();
+	else if ( !GetWeaponButtonRaw() )
+		bSuppressWeaponUntilRelease = false;
+}
+#endif
+
 bool CPad::WeaponJustDown(void)
 {
 	if ( ArePlayerControlsDisabled() )
 		return false;
+
+#ifdef _3DS
+	if ( bSuppressWeaponUntilRelease )
+		return false;
+#endif
 
 	switch (CURMODE)
 	{

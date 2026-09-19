@@ -159,6 +159,9 @@ public:
 	bool bHornHistory[HORNHISTORY_SIZE];
 	uint8 iCurrHornHistory;
 	int8 JustOutOfFrontend;
+#ifdef _3DS
+	bool bSuppressWeaponUntilRelease;
+#endif
 	int8 bApplyBrakes;
 	char CheatString[12];
 	int32 LastTimeTouched;
@@ -240,6 +243,10 @@ public:
 	bool ExitVehicleJustDown(void);
 	int32 GetWeapon(void);
 	bool WeaponJustDown(void);
+	int32 GetWeaponButtonRaw(void);
+#ifdef _3DS
+	void UpdateWeaponSuppression(void);
+#endif
 	int16 GetAccelerate(void);
 	bool CycleCameraModeJustDown(void);
 	bool CycleCameraModeUpJustDown(void);
