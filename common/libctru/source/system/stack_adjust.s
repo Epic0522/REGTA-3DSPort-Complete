@@ -26,7 +26,12 @@ BEGIN_ASM_FUNC initSystem, weak
 END_ASM_FUNC
 
 BEGIN_ASM_FUNC __ctru_exit, weak
-	bl	__libc_fini_array
+	@ The games explicitly tear down their active subsystems before returning.
+	@ Running C++ global destructors afterwards deletes frontend RenderWare
+	@ resources a second time, and a power-off request can reach that path while
+	@ those globals still retain stale texture pointers. The process is exiting
+	@ and the kernel will reclaim its address space, so skip the duplicate global
+	@ destructor sweep and proceed directly to service shutdown.
 	bl	__appExit
 
 	ldr	r2, =saved_stack

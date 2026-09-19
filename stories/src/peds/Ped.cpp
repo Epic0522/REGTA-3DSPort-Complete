@@ -5367,14 +5367,7 @@ CPed::InTheAir(void)
 	if (m_vecMoveSpeed.z < 0.0f && !bIsPedDieAnimPlaying) {
 		if (!DyingOrDead()) {
 			if (CWorld::ProcessLineOfSight(ourPos, bitBelow, foundCol, foundEnt, true, true, false, true, false, false, false)) {
-				/* FALL_collapse is the heavy-landing roll, not an airborne
-				 * anticipation pose.  Starting it from the inherited 1.3-unit
-				 * proximity test can finish the roll before the collision pass
-				 * has actually grounded the ped; CheckIfInTheAir then starts a
-				 * second fall pose and produces roll -> fall -> land.  Wait for
-				 * the ground collision to set bIsStanding so the sequence is
-				 * fall -> contact/damage -> collapse roll -> standing. */
-				if (bIsStanding)
+				if (GetPosition().z - foundCol.point.z < 1.3f || bIsStanding)
 					SetLanding();
 			} else if (m_nPedState != PED_ABSEIL && !RpAnimBlendClumpGetAssociation(GetClump(), ANIM_STD_FALL)) {
 				if (m_vecMoveSpeed.z < -0.1f)

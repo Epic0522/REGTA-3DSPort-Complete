@@ -9,12 +9,13 @@
 #define MAX_PARALLEL_CMDS 3
 
 static gxCmdQueue_s* curQueue;
-static bool isActive, isRunning, shouldStop;
+static gxCmdQueue_s* callbackQueue;
+static bool isActive, isRunning, shouldStop, callbackRunning;
 static LightLock queueLock = 1;
 
 static void gxCmdQueueDoCommands(void)
 {
-	if (shouldStop)
+	if (shouldStop || !curQueue)
 		return;
 	int batchSize = curQueue->lastEntry+MAX_PARALLEL_CMDS-curQueue->curEntry;
 	while (curQueue->curEntry < curQueue->numEntries && batchSize--)
@@ -26,10 +27,16 @@ static void gxCmdQueueDoCommands(void)
 
 void gxCmdQueueInterrupt(GSPGPU_Event irq)
 {
-	if (!isRunning || irq==GSPGPU_EVENT_PSC1 || irq==GSPGPU_EVENT_VBlank0 || irq==GSPGPU_EVENT_VBlank1)
+	if (irq==GSPGPU_EVENT_PSC1 || irq==GSPGPU_EVENT_VBlank0 || irq==GSPGPU_EVENT_VBlank1)
 		return;
 	gxCmdQueue_s* runCb = NULL;
+	void (*runCallback)(gxCmdQueue_s*) = NULL;
 	LightLock_Lock(&queueLock);
+	if (!isRunning || !curQueue)
+	{
+		LightLock_Unlock(&queueLock);
+		return;
+	}
 	curQueue->lastEntry++;
 	if (shouldStop)
 	{
@@ -43,11 +50,23 @@ void gxCmdQueueInterrupt(GSPGPU_Event irq)
 	else
 	{
 		runCb = curQueue;
+		runCallback = runCb->callback;
 		isRunning = false;
+		callbackQueue = runCallback ? runCb : NULL;
+		callbackRunning = runCallback != NULL;
 	}
 	LightLock_Unlock(&queueLock);
-	if (runCb && runCb->callback)
-		runCb->callback(runCb);
+	if (runCallback)
+	{
+		runCallback(runCb);
+		LightLock_Lock(&queueLock);
+		if (callbackQueue == runCb)
+		{
+			callbackQueue = NULL;
+			callbackRunning = false;
+		}
+		LightLock_Unlock(&queueLock);
+	}
 }
 
 void gxCmdQueueClear(gxCmdQueue_s* queue)
@@ -76,29 +95,37 @@ void gxCmdQueueAdd(gxCmdQueue_s* queue, const gxCmdEntry_s* entry)
 
 void gxCmdQueueRun(gxCmdQueue_s* queue)
 {
-	if (isRunning)
+	LightLock_Lock(&queueLock);
+	if (isRunning || callbackRunning)
+	{
+		LightLock_Unlock(&queueLock);
 		return;
+	}
 	curQueue = queue;
 	isActive = true;
+	shouldStop = false;
 	if (queue->lastEntry < queue->numEntries)
 	{
 		isRunning = true;
-		LightLock_Lock(&queueLock);
 		gxCmdQueueDoCommands();
-		LightLock_Unlock(&queueLock);
 	} else
 		isRunning = false;
+	LightLock_Unlock(&queueLock);
 }
 
 void gxCmdQueueStop(gxCmdQueue_s* queue)
 {
-	if (!curQueue)
-		return;
 	LightLock_Lock(&queueLock);
+	if (queue != curQueue)
+	{
+		LightLock_Unlock(&queueLock);
+		return;
+	}
 	if (!isRunning)
 	{
 		curQueue = NULL;
 		isActive = false;
+		shouldStop = false;
 	} else
 		shouldStop = true;
 	LightLock_Unlock(&queueLock);
@@ -109,11 +136,16 @@ bool gxCmdQueueWait(gxCmdQueue_s* queue, s64 timeout)
 	u64 deadline = U64_MAX;
 	if (timeout >= 0)
 		deadline = svcGetSystemTick() + timeout;
-	while (isRunning)
+	while (true)
 	{
+		LightLock_Lock(&queueLock);
+		bool busy = (queue == curQueue && isRunning) ||
+		            (queue == callbackQueue && callbackRunning);
+		LightLock_Unlock(&queueLock);
+		if (!busy)
+			return true;
 		if (timeout >= 0 && (s64)(u64)(svcGetSystemTick()-deadline) >= 0)
 			return false;
 		gspWaitForAnyEvent();
 	}
-	return true;
 }

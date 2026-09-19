@@ -1580,6 +1580,7 @@ stopC3D(void)
 {
 	closeIm3D();
 	closeIm2D();
+	C3D_Fini();
 	gfxExit();
 	return 1;
 }

@@ -766,8 +766,11 @@ callTheMaid()
 	/* This is the final process-exit path, not the in-game restart path.  A
 	 * long session can leave the linear allocator's address tree too fragile
 	 * for the thousands of render-resource frees in CGame::ShutDown; the OS is
-	 * about to reclaim the complete process address space anyway.  Returning
-	 * directly avoids touching damaged allocator bookkeeping during exit. */
+	 * about to reclaim the complete process address space anyway.  Only drain
+	 * and detach the GPU queue here so its event thread cannot race process
+	 * shutdown; avoid the full game/resource teardown. */
+	C3D_Fini();
+	gfxExit();
 	return;
 #else
 	if(gGameState == GS_PLAYING_GAME){

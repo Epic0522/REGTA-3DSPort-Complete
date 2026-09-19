@@ -532,10 +532,13 @@ char const *aStdAnimations[] = {
 	"JUMP_launch",
 	"JUMP_glide",
 	"JUMP_land",
-	"FALL_fall",
+	/* LCS PED.IFP stores the airborne flail and landing roll under the
+	 * opposite names from III/VC.  Keep the engine-facing animation IDs in
+	 * the VC order while binding them to the actual LCS motions. */
+	"FALL_collapse",
 	"FALL_glide",
 	"FALL_land",
-	"FALL_collapse",
+	"FALL_fall",
 	"FALL_back",
 	"FALL_front",
 	"EV_step",
