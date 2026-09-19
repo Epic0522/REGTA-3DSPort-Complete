@@ -3259,6 +3259,11 @@ void CPad::UpdateWeaponSuppression(void)
 	else if ( !GetWeaponButtonRaw() )
 		bSuppressWeaponUntilRelease = false;
 }
+
+bool CPad::ScriptPromptIsMounted(void)
+{
+	return FindPlayerVehicle() != nil;
+}
 #endif
 
 bool CPad::WeaponJustDown(void)

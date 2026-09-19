@@ -246,6 +246,10 @@ public:
 	int32 GetWeaponButtonRaw(void);
 #ifdef _3DS
 	void UpdateWeaponSuppression(void);
+	/* The 3DS menu remap puts cancel on Cross, which is also the throttle.
+	 * Script prompts read while mounted keep the vanilla PS2 slots instead,
+	 * and the ~AMBUY~/~AMEXI~ labels must follow the same rule. */
+	static bool ScriptPromptIsMounted(void);
 #endif
 	int16 GetAccelerate(void);
 	bool CycleCameraModeJustDown(void);
