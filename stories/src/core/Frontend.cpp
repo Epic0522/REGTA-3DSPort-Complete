@@ -166,15 +166,23 @@ int GetOptionCount(int screen)
 #endif
 
 #ifdef _3DS
-#define GetBackJustUp GetSquareJustUp
-#define GetBackJustDown GetSquareJustDown
+#define GetAcceptJustUp GetCircleJustUp
+#define GetAcceptJustDown GetCircleJustDown
+#define GetBackJustUp GetCrossJustUp
+#define GetBackJustDown GetCrossJustDown
 #elif defined(TRIANGLE_BACK_BUTTON)
+#define GetAcceptJustUp GetCrossJustUp
+#define GetAcceptJustDown GetCrossJustDown
 #define GetBackJustUp GetTriangleJustUp
 #define GetBackJustDown GetTriangleJustDown
 #elif defined(CIRCLE_BACK_BUTTON)
+#define GetAcceptJustUp GetCrossJustUp
+#define GetAcceptJustDown GetCrossJustDown
 #define GetBackJustUp GetCircleJustUp
 #define GetBackJustDown GetCircleJustDown
 #else
+#define GetAcceptJustUp GetCrossJustUp
+#define GetAcceptJustDown GetCrossJustDown
 #define GetBackJustUp GetSquareJustUp
 #define GetBackJustDown GetSquareJustDown
 #endif
@@ -4263,7 +4271,7 @@ CMenuManager::ProcessList(bool &optionSelected, bool &goBack)
 			m_nSelectedListRow = m_nTotalListRow - 1;
 	}
 
-	if (CPad::GetPad(0)->GetEnterJustDown() || CPad::GetPad(0)->GetCrossJustDown()) {
+	if (CPad::GetPad(0)->GetEnterJustDown() || CPad::GetPad(0)->GetAcceptJustDown()) {
 		m_bShowMouse = 0;
 		optionSelected = true;
 	}
@@ -4576,12 +4584,12 @@ CMenuManager::UserInput(void)
 		}
 
 		if ((m_nCurrOption == 0) && (m_nCurrScreen == MENUPAGE_PAUSE_MENU)) {
-			if (CPad::GetPad(0)->GetEnterJustUp() || CPad::GetPad(0)->GetCrossJustUp()) {
+			if (CPad::GetPad(0)->GetEnterJustUp() || CPad::GetPad(0)->GetAcceptJustUp()) {
 				m_bShowMouse = false;
 				optionSelected = true;
 			}
 		} else {
-			if (CPad::GetPad(0)->GetEnterJustDown() || CPad::GetPad(0)->GetCrossJustDown()) {
+			if (CPad::GetPad(0)->GetEnterJustDown() || CPad::GetPad(0)->GetAcceptJustDown()) {
 				m_bShowMouse = false;
 				optionSelected = true;
 			}
@@ -7012,5 +7020,7 @@ CMenuManager::LoadController(int8 type)
 }
 #endif // GAMEPAD_MENU
 
+#undef GetAcceptJustUp
+#undef GetAcceptJustDown
 #undef GetBackJustUp
 #undef GetBackJustDown

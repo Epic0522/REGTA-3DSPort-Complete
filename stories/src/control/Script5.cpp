@@ -1432,11 +1432,22 @@ int16 CRunningScript::GetPadState(uint16 pad, uint16 button)
 #ifdef _3DS
 		/* Keep legacy shop scripts consistent with the 3DS GUI back action. */
 		if (pPad->ArePlayerControlsDisabled())
-			return pPad->NewState.Square;
+			return pPad->NewState.Cross;
 #endif
 		return pPad->NewState.Triangle;
-	case 16: return pPad->NewState.Cross;
-	case 17: return pPad->NewState.Circle;
+	case 16:
+#ifdef _3DS
+		/* Keep legacy shop scripts consistent with the 3DS GUI accept action. */
+		if (pPad->ArePlayerControlsDisabled())
+			return pPad->NewState.Circle;
+#endif
+		return pPad->NewState.Cross;
+	case 17:
+#ifdef _3DS
+		if (pPad->ArePlayerControlsDisabled())
+			return pPad->NewState.Triangle;
+#endif
+		return pPad->NewState.Circle;
 	case 18: return pPad->NewState.LeftShock;
 	case 19: return pPad->NewState.RightShock;
 	default: break;

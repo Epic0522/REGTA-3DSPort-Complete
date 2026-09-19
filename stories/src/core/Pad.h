@@ -283,15 +283,27 @@ public:
 	int16 GuiRight() { return GetAnaloguePadRight() || GetDPadRightJustDown(); }
 	int16 GuiUp() { return GetAnaloguePadUp() || GetDPadUpJustDown(); }
 	int16 GuiDown() { return GetAnaloguePadDown() || GetDPadDownJustDown(); }
-	int16 GuiSelect() { return GetCrossJustDown(); }
+	int16 GuiSelect() {
+#ifdef _3DS
+		return GetCircleJustDown();
+#else
+		return GetCrossJustDown();
+#endif
+	}
 	int16 GuiBack() {
 #ifdef _3DS
-		return GetSquareJustDown();
+		return GetCrossJustDown();
 #else
 		return GetTriangleJustDown();
 #endif
 	}
-	int16 GetSkipCutscene() { return GetCrossJustDown(); }
+	int16 GetSkipCutscene() {
+#ifdef _3DS
+		return GetCircleJustDown();
+#else
+		return GetCrossJustDown();
+#endif
+	}
 
 #ifdef XINPUT
 	static int XInputJoy1;
