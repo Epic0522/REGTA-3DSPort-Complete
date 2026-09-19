@@ -1762,6 +1762,20 @@ CWeapon::FireShotgun(CEntity *shooter, CVector *fireSource)
 			CWorld::bIncludeDeadPeds = false;
 			CWorld::bIncludeCarTyres = false;
 		}
+		else if ( shooter == FindPlayerPed() && TheCamera.Using1stPersonWeaponMode() )
+		{
+			CCam *cam = &TheCamera.Cams[TheCamera.ActiveCam];
+			CVector Left = CrossProduct(cam->Front, cam->Up);
+			float f = (i - (shootsAtOnce / 2)) * angleBetweenTwoShot;
+			source = cam->Source;
+			target = source + (cam->Front + f * Left) * info->m_fRange;
+			CWorld::bIncludeCarTyres = true;
+			CWorld::bIncludeBikers = true;
+			CWorld::bIncludeDeadPeds = true;
+			ProcessLineOfSight(source, target, point, victim, m_eWeaponType, shooter, true, true, true, true, true, false, false);
+			CWorld::bIncludeDeadPeds = false;
+			CWorld::bIncludeCarTyres = false;
+		}
 		else
 		{
 			target = *fireSource;
