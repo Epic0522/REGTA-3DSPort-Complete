@@ -172,6 +172,11 @@ initialiseMaterialState()
 
 static UniformScene uniformScene;
 static UniformObject uniformObject;
+/* Camera world position, folded into u_world's translation so the vertex
+ * shader never materializes an absolute world coordinate. PICA200 VS math
+ * is float24 (16-bit mantissa) -> ~16mm quantization at LCS world coords,
+ * which is the cause of ped polygon jitter. */
+static V3d cameraPosition;
 static C3DMaterialState materialState;
 static C3D_FogLut       fogState;
 
@@ -1138,11 +1143,11 @@ setWorldMatrix(Matrix *mat)
 	uniformObject.world.r[0].z = raw.at.x;
 	uniformObject.world.r[1].z = raw.at.y;
 	uniformObject.world.r[2].z = raw.at.z;
-	uniformObject.world.r[3].z = raw.upw;
+	uniformObject.world.r[3].z = raw.atw;
 
-	uniformObject.world.r[0].w = raw.pos.x;
-	uniformObject.world.r[1].w = raw.pos.y;
-	uniformObject.world.r[2].w = raw.pos.z;
+	uniformObject.world.r[0].w = raw.pos.x - cameraPosition.x;
+	uniformObject.world.r[1].w = raw.pos.y - cameraPosition.y;
+	uniformObject.world.r[2].w = raw.pos.z - cameraPosition.z;
 	uniformObject.world.r[3].w = raw.posw;
 
 	objectDirty = 1;
@@ -1328,6 +1333,7 @@ beginUpdate(Camera *cam)
 	// View Matrix
 	Matrix inv;
 	Matrix::invert(&inv, cam->getFrame()->getLTM());
+	cameraPosition = cam->getFrame()->getLTM()->pos;
 	// Since we're looking into positive Z,
 	// flip X to ge a left handed view space.
 	view.r[0].x = -inv.right.x;
@@ -1345,10 +1351,10 @@ beginUpdate(Camera *cam)
 	view.r[2].z =  inv.at.z;
 	view.r[3].z =  0.0f;
 
-	view.r[0].w = -inv.pos.x;
-	view.r[1].w =  inv.pos.y;
-	view.r[2].w =  inv.pos.z;
-	view.r[3].w =  1.0f;
+	view.r[0].w = 0.0f;
+	view.r[1].w = 0.0f;
+	view.r[2].w = 0.0f;
+	view.r[3].w = 1.0f;
 
 	// Projection Matrix
 	float32 far   = cam->farPlane;

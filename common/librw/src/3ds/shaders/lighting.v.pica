@@ -24,6 +24,9 @@ do_direction:
 	;jmpc	!cmp.y, join			; always true
 
 do_local:
+	; r8 (world-space position) is now camera-relative (see setWorldMatrix /
+	; beginUpdate in 3dsdevice.cpp): re-enabling point/spot lights requires
+	; offsetting u_lightPosition by the same camera position before this dp3.
 	;add	r1.xyz, r8, -r13		; dir(r1) = V - u_lightPosition[i].xyz;
 	;dp3	r2.x, r1.xyz, r1.xyz		; inv_dist(r2.x) = 1 / length(dir)
 	;rsq	r2.x, r2.x			;
