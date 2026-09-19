@@ -1517,39 +1517,6 @@ void CHud::Draw()
 			BigMessageInUse[0] = 0.0f;
 		}
 
-		if (m_BigMessage[7][0]) {
-			if (BigMessageInUse[7] != 0.0f) {
-				CFont::SetJustifyOff();
-				CFont::SetBackgroundOff();
-				CFont::SetScale(SCREEN_SCALE_X(1.0f), SCREEN_SCALE_Y(1.2f));
-				CFont::SetPropOn();
-				CFont::SetCentreOn();
-				CFont::SetCentreSize(SCREEN_SCALE_X(590.0f));
-				CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
-				BigMessageInUse[7] += CTimer::GetTimeStepInMilliseconds();
-				if (BigMessageInUse[7] >= (float)BigMessageDuration[7]) {
-					BigMessageInUse[7] = (float)BigMessageDuration[7];
-					BigMessageAlpha[7] -= CTimer::GetTimeStepInMilliseconds() * 0.3f;
-				} else if (BigMessageAlpha[7] < 255.0f) {
-					BigMessageAlpha[7] += CTimer::GetTimeStepInMilliseconds() * 0.3f;
-					if (BigMessageAlpha[7] > 255.0f) BigMessageAlpha[7] = 255.0f;
-				}
-				if (BigMessageAlpha[7] <= 0.0f) {
-					m_BigMessage[7][0] = 0;
-					BigMessageAlpha[7] = 0.0f;
-				}
-				CFont::SetDropShadowPosition(2);
-				CFont::SetDropColor(CRGBA(0, 0, 0, BigMessageAlpha[7]));
-				CFont::SetColor(CRGBA(255, 255, 255, BigMessageAlpha[7]));
-				CFont::PrintString(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + SCREEN_SCALE_Y(18.0f), m_BigMessage[7]);
-			} else {
-				BigMessageAlpha[7] = 255.0f;
-				BigMessageInUse[7] = 1.0f;
-			}
-		} else {
-			BigMessageInUse[7] = 0.0f;
-		}
-
 		// WastedBustedText
 		if (m_BigMessage[2][0]) {
 			if (BigMessageInUse[2] != 0.0f) {
