@@ -1517,6 +1517,23 @@ void CHud::Draw()
 			BigMessageInUse[0] = 0.0f;
 		}
 
+		/* LCS print_big style 8 (slot 7) is the mission fail-reason line.  It
+		 * has no fade state of its own; CMessages::Display blanks the buffer
+		 * when the message expires. */
+		if (m_BigMessage[7][0]) {
+			CFont::SetJustifyOff();
+			CFont::SetBackgroundOff();
+			CFont::SetScale(SCREEN_SCALE_X(0.85f), SCREEN_SCALE_Y(0.9f));
+			CFont::SetCentreOn();
+			CFont::SetPropOn();
+			CFont::SetCentreSize(SCREEN_SCALE_X(590.0f));
+			CFont::SetFontStyle(FONT_BANK);
+			CFont::SetDropShadowPosition(2);
+			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+			CFont::SetColor(CRGBA(174, 0, 0, 255));
+			CFont::PrintString(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + SCREEN_SCALE_Y(18.0f), m_BigMessage[7]);
+		}
+
 		// WastedBustedText
 		if (m_BigMessage[2][0]) {
 			if (BigMessageInUse[2] != 0.0f) {
