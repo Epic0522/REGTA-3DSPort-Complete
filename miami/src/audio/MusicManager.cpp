@@ -311,7 +311,16 @@ cMusicManager::ChangeMusicMode(uint8 mode)
 
 	switch (mode)
 	{
-	case MUSICMODE_FRONTEND: m_nUpcomingMusicMode = MUSICMODE_FRONTEND; break;
+	case MUSICMODE_FRONTEND:
+		/* Snapshot the active station synchronously.  On 3DS the pause home
+		 * page now appears before menu resource preparation, so relying on a
+		 * later service tick can lose the cursor and restart the station. */
+		if (SampleManager.IsStreamPlaying(0) && m_nPlayingTrack < NUM_RADIOS) {
+			m_aTracks[m_nPlayingTrack].m_nPosition = SampleManager.GetStreamedFilePosition(0);
+			m_aTracks[m_nPlayingTrack].m_nLastPosCheckTimer = CTimer::GetTimeInMillisecondsPauseMode();
+		}
+		m_nUpcomingMusicMode = MUSICMODE_FRONTEND;
+		break;
 	case MUSICMODE_GAME: m_nUpcomingMusicMode = MUSICMODE_GAME; break;
 	case MUSICMODE_CUTSCENE:
 		m_nUpcomingMusicMode = MUSICMODE_CUTSCENE;

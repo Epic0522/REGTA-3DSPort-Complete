@@ -169,6 +169,11 @@ CVisibilityPlugins::InsertAtomicIntoBoatSortedList(RpAtomic *a, float dist)
 // probably have to fix fading for this so material alpha isn't overwritten
 // LCS: VIS_DISTANCE_ALPHA will probably take care of this
 #define VEHICLE_LODDIST_MULTIPLIER (TheCamera.GenerationDistMultiplier)
+#ifdef _3DS
+#define VEHICLE_HIDETAIL_DIST_MULTIPLIER 0.60f
+#else
+#define VEHICLE_HIDETAIL_DIST_MULTIPLIER 1.0f
+#endif
 
 void
 CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
@@ -182,10 +187,10 @@ CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
 	else
 		ms_cullCompsDist = sq(TheCamera.LODDistMultiplier * 20.0f);
 
-	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
 	ms_vehicleLod1Dist = sq(90.0f * VEHICLE_LODDIST_MULTIPLIER);
 	ms_vehicleFadeDist = sq(100.0f * VEHICLE_LODDIST_MULTIPLIER);
-	ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
 	ms_bigVehicleLod1Dist = sq(150.0f * VEHICLE_LODDIST_MULTIPLIER);
 	ms_pedLodDist = sq(60.0f * TheCamera.LODDistMultiplier);
 	ms_pedFadeDist = sq(70.0f * TheCamera.LODDistMultiplier);
@@ -928,6 +933,14 @@ CVisibilityPlugins::PluginAttach(void)
 #define ATOMICEXT(o) (RWPLUGINOFFSET(CVisibilityPlugins::AtomicExt, o, CVisibilityPlugins::ms_atomicPluginOffset))
 #define FRAMEEXT(o) (RWPLUGINOFFSET(CVisibilityPlugins::FrameExt, o, CVisibilityPlugins::ms_framePluginOffset))
 #define CLUMPEXT(o) (RWPLUGINOFFSET(CVisibilityPlugins::ClumpExt, o, CVisibilityPlugins::ms_clumpPluginOffset))
+
+bool
+CVisibilityPlugins::IsVehicleHighDetail(RpClump *vehicle, bool bigVehicle)
+{
+	float distance = GetDistanceSquaredFromCamera(RpClumpGetFrame(vehicle));
+	float limit = bigVehicle ? ms_bigVehicleLod0Dist : ms_vehicleLod0Dist;
+	return distance < limit;
+}
 
 //
 // Atomic

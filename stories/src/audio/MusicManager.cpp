@@ -32,6 +32,9 @@ int32 gRetuneCounter;
 bool8 g_bAnnouncementReadPosAlready;
 uint8 RadioStaticCounter = 5;
 uint32 RadioStaticTimer;
+#ifdef _3DS
+static bool8 gGameStreamPausedForMenu3DS;
+#endif
 
 CVector vecRiotPosition(300.7f, -322.0f, 12.0f);
 
@@ -193,6 +196,9 @@ bool8
 cMusicManager::Initialise()
 {
 	if (!IsInitialised()) {
+#ifdef _3DS
+		gGameStreamPausedForMenu3DS = FALSE;
+#endif
 		m_bIsInitialised = TRUE;
 		SetStartingTrackPositions(FALSE);
 		m_bResetTimers = FALSE;
@@ -225,6 +231,18 @@ cMusicManager::Initialise()
 	}
 	return m_bIsInitialised;
 }
+
+#ifdef _3DS
+void
+Set3DSGameStreamPausedForMenu(bool8 paused)
+{
+	/* This flag is owned by the music manager rather than the frontend so every
+	 * service pass sees the pause before it can interpret the stopped OpenAL
+	 * source as EOF and rebuild the radio from the beginning. */
+	gGameStreamPausedForMenu3DS = paused;
+	SampleManager.PauseStream(paused);
+}
+#endif
 
 void
 cMusicManager::Terminate()
@@ -326,11 +344,21 @@ cMusicManager::ChangeMusicMode(uint8 mode)
 	switch (mode)
 	{
 	case MUSICMODE_FRONTEND:
+		/* Preserve the live radio cursor before the frontend transition can
+		 * clear its bookkeeping.  The 3DS pause menu is visible immediately,
+		 * so there is no longer a long texture-loading interval in which the
+		 * normal mode-change service is guaranteed to save this position. */
+		if (SampleManager.IsStreamPlaying() && m_nPlayingTrack < NUM_RADIOS) {
+			m_aTracks[m_nPlayingTrack].m_nPosition = SampleManager.GetStreamedFilePosition();
+			m_aTracks[m_nPlayingTrack].m_nLastPosCheckTimer = CTimer::GetTimeInMillisecondsPauseMode();
+		}
 		m_nUpcomingMusicMode = MUSICMODE_FRONTEND;
 
 #ifdef PAUSE_RADIO_IN_FRONTEND
 		// rewind those streams we weren't listening right now
 		for( uint32 i = STREAMED_SOUND_RADIO_HEAD; i < STREAMED_SOUND_CUTSCENE_BIKER; i++ ) {
+			if (i == m_nPlayingTrack)
+				continue;
 			m_aTracks[i].m_nPosition = GetTrackStartPos(i);
 			m_aTracks[i].m_nLastPosCheckTimer = CTimer::GetTimeInMillisecondsPauseMode();
 		}
@@ -385,6 +413,16 @@ cMusicManager::Service()
 	static bool8 bRadioStatsRecorded = FALSE;
 
 	if (!m_bIsInitialised || m_bDisabled) return;
+
+#ifdef _3DS
+	/* Reassert the transport pause on every service pass.  Initialise() services
+	 * audio once before CTimer's user-pause flag is set, so checking only the
+	 * timer leaves a window in which ServiceGameMode restarts the station. */
+	if (gGameStreamPausedForMenu3DS) {
+		SampleManager.PauseStream(TRUE);
+		return;
+	}
+#endif
 
 	if (!m_bMusicModeChangeStarted)
 		m_nMusicModeToBeSet = m_nUpcomingMusicMode;
@@ -492,9 +530,17 @@ cMusicManager::ServiceFrontEndMode()
 				if (m_nNextTrack != NO_TRACK) {
 					SampleManager.SetStreamedFileLoopFlag(m_nNextLoopFlag);
 					SampleManager.StartStreamedFile(m_nNextTrack, trackStartPos);
-					m_nVolumeLatency = 3;
-					m_nCurrentVolume = 0;
-					m_nMaxVolume = 100;
+					if (m_nNextTrack == STREAMED_SOUND_MISSION_COMPLETED) {
+						/* This short confirmation sting was spending most of its
+						 * duration inside the normal slow frontend fade. */
+						m_nVolumeLatency = 0;
+						m_nCurrentVolume = MAX_VOLUME;
+						m_nMaxVolume = MAX_VOLUME;
+					} else {
+						m_nVolumeLatency = 3;
+						m_nCurrentVolume = 0;
+						m_nMaxVolume = 100;
+					}
 					SampleManager.SetStreamedVolumeAndPan(m_nCurrentVolume, 63, FALSE);
 					if (m_nNextTrack < STREAMED_SOUND_CITY_AMBIENT)
 						m_nLastTrackServiceTime = CTimer::GetTimeInMillisecondsPauseMode();

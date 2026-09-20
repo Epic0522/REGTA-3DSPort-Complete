@@ -1,4 +1,5 @@
 #include "common.h"
+#include <rpmatfx.h>
 
 #include "RwHelper.h"
 #include "General.h"
@@ -54,6 +55,19 @@ RwObjectNameIdAssocation CPedModelInfo::m_pPedIds[PED_NODE_MAX] = {
 	{ "Slowerlegr",	PED_LOWERLEGR, 0, },
 	{ nil,	0, 0, },
 };
+
+#ifdef _3DS
+static RpAtomic*
+Enable3DSPedMaterialPipelineCB(RpAtomic *atomic, void*)
+{
+	/* GTA III peds are assembled from rigid limb atomics and therefore do not
+	 * use librw's skin pipeline.  The default 3DS lighting path gives adjacent
+	 * triangles visibly different colours.  The MatFX pipeline's null-effect
+	 * path preserves texture/material colour and alpha without that lighting. */
+	RpMatFXAtomicEnableEffects(atomic);
+	return atomic;
+}
+#endif
 
 #ifdef PED_SKIN
 struct LimbCBarg
@@ -121,6 +135,9 @@ CPedModelInfo::SetClump(RpClump *clump)
 	if(strcmp(GetModelName(), "player") == 0)
 		RpClumpForAllAtomics(m_clump, SetAtomicRendererCB, (void*)CVisibilityPlugins::RenderPlayerCB);
 #endif
+#ifdef _3DS
+	RpClumpForAllAtomics(m_clump, Enable3DSPedMaterialPipelineCB, nil);
+#endif
 }
 
 RpAtomic*
@@ -160,6 +177,10 @@ CPedModelInfo::SetLowDetailClump(RpClump *lodclump)
 	int32 numAtm, numLodAtm;
 	int i;
 	RwObjectNameAssociation assoc;
+
+#ifdef _3DS
+	RpClumpForAllAtomics(lodclump, Enable3DSPedMaterialPipelineCB, nil);
+#endif
 
 	numAtm = 0;
 	numLodAtm = 0;

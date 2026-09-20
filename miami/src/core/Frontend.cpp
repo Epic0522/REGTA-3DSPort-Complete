@@ -41,6 +41,51 @@
 static bool gPauseBackgroundResident3DS;
 static bool gPauseWaitForStartRelease3DS;
 static uint8 gPauseInputDelayFrames3DS;
+
+static wchar *
+FitScrollingSaveName3DS(wchar *text, float maxWidth, int screen, int option, bool selected)
+{
+	static wchar visible[128];
+	static int lastScreen = -1;
+	static int lastOption = -1;
+	static uint32 selectionTime = 0;
+	static const wchar dots[] = { '.', '.', '.', '\0' };
+	if (text == nil || CFont::GetStringWidth(text, true) <= maxWidth)
+		return text;
+	uint32 now = CTimer::GetTimeInMillisecondsPauseMode();
+	if (screen != lastScreen || option != lastOption) {
+		lastScreen = screen;
+		lastOption = option;
+		selectionTime = now;
+	}
+	int length = Min(UnicodeStrlen(text), (int)ARRAY_SIZE(visible) - 1);
+	int lastStart = 0;
+	while (lastStart < length - 1 && CFont::GetStringWidth(text + lastStart, true) > maxWidth)
+		++lastStart;
+	int start = 0;
+	if (selected && lastStart > 0) {
+		const uint32 initialHold = 900, stepTime = 170, endHold = 1100;
+		uint32 phase = (now - selectionTime) % (initialHold + lastStart * stepTime + endHold);
+		if (phase >= initialHold)
+			start = Min(lastStart, (int)((phase - initialHold) / stepTime));
+	}
+	int out = 0;
+	for (int i = start; i < length && out < (int)ARRAY_SIZE(visible) - 1; ++i)
+		visible[out++] = text[i];
+	visible[out] = '\0';
+	if (CFont::GetStringWidth(visible, true) > maxWidth) {
+		float dotsWidth = CFont::GetStringWidth((wchar *)dots, true);
+		while (out > 0) {
+			visible[--out] = '\0';
+			if (CFont::GetStringWidth(visible, true) + dotsWidth <= maxWidth)
+				break;
+		}
+		for (int i = 0; i < 3 && out < (int)ARRAY_SIZE(visible) - 1; ++i)
+			visible[out++] = '.';
+		visible[out] = '\0';
+	}
+	return visible;
+}
 #endif
 
 // Similar story to Hud.cpp:
@@ -1510,7 +1555,23 @@ CMenuManager::DrawStandardMenus(bool activeScreen)
 
 				if (section == 1) {
 					if (leftText) {
-						CFont::PrintString(MENU_X_LEFT_ALIGNED(aScreens[m_nCurrScreen].m_aEntries[i].m_X), MENU_Y(aScreens[m_nCurrScreen].m_aEntries[i].m_Y MINUS_SCROLL_OFFSET), leftText);
+						wchar *visibleLeftText = leftText;
+#ifdef _3DS
+						if (rightText && aScreens[m_nCurrScreen].m_aEntries[i].m_SaveSlot >= SAVESLOT_1 &&
+							aScreens[m_nCurrScreen].m_aEntries[i].m_SaveSlot <= SAVESLOT_8) {
+							CFontDetails nameDetails = CFont::Details;
+							CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
+							CFont::SetScale(MENU_X(MEDIUMTEXT_X_SCALE), MENU_Y(MEDIUMTEXT_Y_SCALE));
+							float dateWidth = CFont::GetStringWidth(rightText, true);
+							CFont::Details = nameDetails;
+							float nameX = MENU_X_LEFT_ALIGNED(aScreens[m_nCurrScreen].m_aEntries[i].m_X);
+							float dateRight = MENU_X_LEFT_ALIGNED(DEFAULT_SCREEN_WIDTH - RIGHT_ALIGNED_TEXT_RIGHT_MARGIN(xMargin));
+							visibleLeftText = FitScrollingSaveName3DS(leftText,
+								dateRight - dateWidth - nameX - MENU_X(10.0f),
+								m_nCurrScreen, m_nCurrOption, i == m_nCurrOption);
+						}
+#endif
+						CFont::PrintString(MENU_X_LEFT_ALIGNED(aScreens[m_nCurrScreen].m_aEntries[i].m_X), MENU_Y(aScreens[m_nCurrScreen].m_aEntries[i].m_Y MINUS_SCROLL_OFFSET), visibleLeftText);
 					}
 
 					if (rightText) {

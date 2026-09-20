@@ -8,6 +8,12 @@
 *.swo
 *~
 
+# Local regression and asset-inspection helpers used during hardware testing
+/scripts/tests/test_3ds_poweroff_shutdown.py
+/scripts/tests/test_lcs_fall_sequence.py
+/scripts/tests/test_pause_radio_and_vehicle_lod.py
+/scripts/tools/
+
 # Local toolchains
 /toolchains/
 /tools/cia-tools/

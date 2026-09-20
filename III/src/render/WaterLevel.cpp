@@ -20,7 +20,9 @@
 #include "CdStream.h"
 #include "Pad.h"
 #include "RenderBuffer.h"
+#include <rwcore.h>
 #include <rpworld.h>
+#include <rpmatfx.h>
 #include "WaterLevel.h"
 #include "MemoryHeap.h"
 
@@ -344,6 +346,12 @@ CWaterLevel::CreateWavyAtomic()
 		
 		RpAtomicSetGeometry(ms_pWavyAtomic, wavyGeometry, 0);
 		RpAtomicSetFrame(ms_pWavyAtomic, wavyFrame);
+#ifdef _3DS
+		/* LCS's 3DS path avoids the byte-prelight combiner for dynamic water.
+		 * The same path prevents GTA III's near-water tiles from showing their
+		 * individual blocks and colour seams on PICA200. */
+		RpMatFXAtomicEnableEffects(ms_pWavyAtomic);
+#endif
 		RpMaterialDestroy(wavyMaterial);
 		RpGeometryDestroy(wavyGeometry);
 	}
@@ -1275,7 +1283,12 @@ CWaterLevel::RenderOneWavySector(float fX, float fY, float fZ, RwRGBA const &col
 			{
 				wavyTexCoords[9*i+j].u = float(i) / 8 + TEXTURE_ADDV;
 				wavyTexCoords[9*i+j].v = float(j) / 8 + TEXTURE_ADDU;
+#ifdef _3DS
+				const RwRGBA white = { 255, 255, 255, 255 };
+				RwRGBAAssign(&wavyPreLights[9*i+j], &white);
+#else
 				RwRGBAAssign(&wavyPreLights[9*i+j], &color);
+#endif
 
 				wavyVertices[9*i+j].z = ( CWeather::Wind * 0.7f + 0.3f )
 										* ( Sin(float(i + j) * DEGTORAD(45.0f) + fAngle) )
@@ -1284,6 +1297,11 @@ CWaterLevel::RenderOneWavySector(float fX, float fY, float fZ, RwRGBA const &col
 		}
 		
 		RpGeometryUnlock(geometry);
+#ifdef _3DS
+		/* Carry the timecycle tint in the material, matching the proven LCS
+		 * route while leaving the water geometry and detail levels untouched. */
+		RpMaterialSetColor(RpGeometryGetMaterial(geometry, 0), &color);
+#endif
 	}
 	
 	static CBoat *apBoatList[4] = { nil };
@@ -1445,11 +1463,17 @@ CWaterLevel::RenderAndEmptyRenderBuffer()
 	{
 		LittleTest();
 
+#ifdef _3DS
+		rw::c3d::setIm3DBuffered(true);
+#endif
 		if ( RwIm3DTransform(TempBufferRenderVertices, TempBufferVerticesStored, nil, rwIM3D_VERTEXUV) )
 		{
 			RwIm3DRenderIndexedPrimitive(rwPRIMTYPETRILIST, TempBufferRenderIndexList, TempBufferIndicesStored);
 			RwIm3DEnd();
 		}
+#ifdef _3DS
+		rw::c3d::setIm3DBuffered(false);
+#endif
 	}
 	
 	TempBufferIndicesStored = 0;
