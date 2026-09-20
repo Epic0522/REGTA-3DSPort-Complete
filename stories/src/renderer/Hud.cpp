@@ -1541,8 +1541,8 @@ void CHud::Draw()
 			CFont::SetCentreOn();
 			CFont::SetCentreSize(PSP_SCREEN_SCALE_X(370.0f));
 			CFont::SetWrapx(SCREEN_WIDTH);
-			CFont::SetDropShadowPosition(1);
-			CFont::SetFontStyle(FONT_BANK);
+			CFont::SetDropShadowPosition(0);
+			CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 			CFont::SetColor(CRGBA(174, 0, 0, 255));
 			CFont::PrintString(SCREEN_WIDTH / 2, PSP_SCREEN_SCALE_Y(160.0f), m_BigMessage[7]);
@@ -1884,8 +1884,8 @@ void CHud::DrawAfterFade()
 		CFont::SetCentreOn();
 		CFont::SetPropOn();
 		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(600.0f));
-		CFont::SetFontStyle(FONT_BANK);
-		CFont::SetDropShadowPosition(1);
+		CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
+		CFont::SetDropShadowPosition(0);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 		CFont::SetColor(CRGBA(0, 106, 164, 255));
 		CFont::PrintString((SCREEN_WIDTH / 2), PSP_SCREEN_SCALE_Y(196.0f), m_BigMessage[3]);
@@ -1901,8 +1901,8 @@ void CHud::DrawAfterFade()
 		CFont::SetCentreOn();
 		CFont::SetPropOn();
 		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(580.0f));
-		CFont::SetFontStyle(FONT_BANK);
-		CFont::SetDropShadowPosition(1);
+		CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
+		CFont::SetDropShadowPosition(0);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 		CFont::SetColor(CRGBA(8, 143, 59, 255));
 		CFont::PrintString((SCREEN_WIDTH / 2), PSP_SCREEN_SCALE_Y(196.0f), m_BigMessage[4]);
@@ -1920,8 +1920,8 @@ void CHud::DrawAfterFade()
 		CFont::SetCentreOn();
 		CFont::SetPropOn();
 		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(560.0f));
-		CFont::SetFontStyle(FONT_BANK);
-		CFont::SetDropShadowPosition(1);
+		CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
+		CFont::SetDropShadowPosition(0);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
 		CFont::SetColor(CRGBA(255, 255, 255, 255));
 		CFont::PrintString(SCREEN_WIDTH / 2, PSP_SCREEN_SCALE_Y(172.0f), m_BigMessage[5]);
@@ -1944,7 +1944,7 @@ void CHud::DrawAfterFade()
 			CFont::SetPropOn();
 			CFont::SetRightJustifyWrap(SCALE_AND_CENTER_X(0.0f));
 			CFont::SetRightJustifyOn();
-			CFont::SetFontStyle(FONT_HEADING);
+			CFont::SetFontStyle(FONT_BANK);
 			if (FrontEndMenuManager.m_PrefsUseWideScreen)
 				CFont::SetScale(PSP_SCREEN_SCALE_X(0.42768f), PSP_SCREEN_SCALE_Y(0.88f));
 			else
@@ -1978,7 +1978,7 @@ void CHud::DrawAfterFade()
 			 * viewport and can leave the part over the letterbox border looking cut. */
 			const float screenFade = (255.0f - CDraw::FadeValue) / 255.0f;
 			const uint8 titleAlpha = (uint8)Clamp(BigMessageAlpha[1] * screenFade, 0.0f, 255.0f);
-			CFont::SetDropShadowPosition(0);
+			CFont::SetDropShadowPosition(2);
 			CFont::SetDropColor(CRGBA(0, 0, 0, titleAlpha));
 			CFont::SetColor(CRGBA(MISSIONTITLE_COLOR.r, MISSIONTITLE_COLOR.g, MISSIONTITLE_COLOR.b, titleAlpha));
 			CFont::PrintString(PSP_SCREEN_SCALE_FROM_RIGHT(24.0f), PSP_SCREEN_SCALE_FROM_BOTTOM(16.0f), m_BigMessage[1]);
