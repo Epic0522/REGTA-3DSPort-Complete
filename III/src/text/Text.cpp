@@ -121,7 +121,7 @@ CText::Get(const char *key)
 {
 #ifdef _3DS
 	if (strcmp(key, "F3BGM") == 0) {
-		static wchar label[] = { 'F','i','n','a','l',' ','m','i','s','s','i','o','n',' ','B','G','M',0 };
+		static wchar label[] = { 'F','I','N','A','L',' ','M','I','S','S','I','O','N',' ','B','G','M',0 };
 		return label;
 	}
 #endif

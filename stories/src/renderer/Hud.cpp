@@ -102,6 +102,7 @@ float BigMessageInUse[6];
 float CHud::BigMessageAlpha[6];
 float CHud::BigMessageX[6];
 uint32 CHud::BigMessageDuration[8];
+bool CHud::BigMessageUsesExactTiming[8];
 float CHud::OddJob2OffTimer;
 bool CHud::CounterOnLastFrame[NUMONSCREENCOUNTERS];
 float CHud::OddJob2XOffset;
@@ -1482,9 +1483,11 @@ void CHud::Draw()
 				// Appearently sliding text in here was abandoned very early, since this text is centered now.
 
 				if (BigMessageX[0] >= SCALE_AND_CENTER_X(620.0f)) {
-					BigMessageInUse[0] += CTimer::GetTimeStep();
+					BigMessageInUse[0] += BigMessageUsesExactTiming[0]
+						? CTimer::GetTimeStepInMilliseconds()
+						: CTimer::GetTimeStep();
 
-					if (BigMessageInUse[0] >= 120.0f) {
+					if (!BigMessageUsesExactTiming[0] && BigMessageInUse[0] >= 120.0f) {
 						BigMessageInUse[0] = 120.0f;
 						BigMessageAlpha[0] -= (CTimer::GetTimeStepInMilliseconds() * 0.3f);
 					}
@@ -1967,9 +1970,6 @@ void CHud::DrawAfterFade()
 			if (BigMessageX[1] >= SCREEN_SCALE_FROM_RIGHT(20.0f)) {
 				BigMessageInUse[1] += CTimer::GetTimeStepInMilliseconds();
 
-				/* Mission scripts use different title durations.  Preserve longer
-				 * requests, but guarantee at least 3 seconds at the fully-entered
-				 * position before beginning the common fade. */
 				if (BigMessageInUse[1] >= BigMessageDuration[1]) {
 					BigMessageInUse[1] = BigMessageDuration[1];
 					BigMessageAlpha[1] -= CTimer::GetTimeStepInMilliseconds() * 0.3f;
@@ -2212,12 +2212,38 @@ wchar LastBigMessage[8][128];
 void CHud::SetBigMessage(wchar *message, uint16 style)
 {
 	int i = 0;
+	bool changed = false;
+	for (i = 0; i < 128; i++) {
+		if (m_BigMessage[style][i] != message[i]) {
+			changed = true;
+			break;
+		}
+		if (message[i] == 0)
+			break;
+	}
+
+	if (style == 0 && BigMessageUsesExactTiming[0]) {
+		if (message[0] == 0) {
+			m_BigMessage[0][0] = 0;
+			BigMessageInUse[0] = 0.0f;
+			BigMessageAlpha[0] = 0.0f;
+			BigMessageUsesExactTiming[0] = false;
+			return;
+		}
+		if (changed) {
+			BigMessageX[0] = SCALE_AND_CENTER_X(620.0f);
+			BigMessageInUse[0] = 1.0f;
+			BigMessageAlpha[0] = 255.0f;
+		}
+	}
+	i = 0;
 
 	// Mission result and mission title own their hold/fade lifetime in the HUD,
 	// so an expired CMessages entry must not erase them before that fade ends.
 	// Non-empty replacements must still pass through: LCS race scripts can use
 	// either of these slots for the live "3", "2", "1", "GO" sequence.
-	if ((style == 0 || style == 1) && BigMessageInUse[style] != 0.0f && message[0] == 0)
+	if ((style == 0 || style == 1) && !BigMessageUsesExactTiming[style] &&
+	    BigMessageInUse[style] != 0.0f && message[0] == 0)
 		return;
 
 	if (style == 5) {

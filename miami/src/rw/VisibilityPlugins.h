@@ -48,6 +48,7 @@ public:
 
 	static void SetRenderWareCamera(RwCamera *camera);
 	static void SetupVehicleVariables(RpClump *vehicle);
+	static bool IsVehicleHighDetail(RpClump *vehicle);
 
 	static RpAtomic *RenderWheelAtomicCB(RpAtomic *atomic);
 	static RpAtomic *RenderObjNormalAtomic(RpAtomic *atomic);

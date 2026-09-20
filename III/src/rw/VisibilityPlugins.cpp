@@ -230,6 +230,13 @@ CVisibilityPlugins::InsertAtomicIntoSortedList(RpAtomic *a, float dist)
 // can't increase this yet unfortunately...
 // probably have to fix fading for this so material alpha isn't overwritten
 #define VEHICLE_LODDIST_MULTIPLIER (TheCamera.GenerationDistMultiplier)
+#ifdef _3DS
+#define VEHICLE_HIDETAIL_DIST_MULTIPLIER 0.60f
+#define PED_HIDETAIL_DIST_MULTIPLIER 0.60f
+#else
+#define VEHICLE_HIDETAIL_DIST_MULTIPLIER 1.0f
+#define PED_HIDETAIL_DIST_MULTIPLIER 1.0f
+#endif
 
 void
 CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
@@ -243,12 +250,12 @@ CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
 	else
 		ms_cullCompsDist = sq(TheCamera.LODDistMultiplier * 20.0f);
 
-        ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
         ms_vehicleLod1Dist = sq(90.0f * VEHICLE_LODDIST_MULTIPLIER);
         ms_vehicleFadeDist = sq(100.0f * VEHICLE_LODDIST_MULTIPLIER);
-        ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
         ms_bigVehicleLod1Dist = sq(150.0f * VEHICLE_LODDIST_MULTIPLIER);
-        ms_pedLod0Dist = sq(25.0f * TheCamera.LODDistMultiplier);
+	ms_pedLod0Dist = sq(25.0f * TheCamera.LODDistMultiplier * PED_HIDETAIL_DIST_MULTIPLIER);
         ms_pedLod1Dist = sq(60.0f * TheCamera.LODDistMultiplier);
         ms_pedFadeDist = sq(70.0f * TheCamera.LODDistMultiplier);
 }
@@ -909,6 +916,15 @@ CVisibilityPlugins::PluginAttach(void)
 #define ATOMICEXT(o) (RWPLUGINOFFSET(AtomicExt, o, ms_atomicPluginOffset))
 #define FRAMEEXT(o) (RWPLUGINOFFSET(FrameExt, o, ms_framePluginOffset))
 #define CLUMPEXT(o) (RWPLUGINOFFSET(ClumpExt, o, ms_clumpPluginOffset))
+
+bool
+CVisibilityPlugins::IsVehicleHighDetail(RpClump *vehicle)
+{
+	float distance = GetDistanceSquaredFromCamera(RpClumpGetFrame(vehicle));
+	float limit = CLUMPEXT(vehicle)->visibilityCB == VehicleVisibilityCB_BigVehicle ?
+		ms_bigVehicleLod0Dist : ms_vehicleLod0Dist;
+	return distance < limit;
+}
 
 //
 // Atomic

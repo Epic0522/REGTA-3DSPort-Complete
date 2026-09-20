@@ -110,7 +110,8 @@ RestorePlayerVehicleInvariant(CPlayerPed *player)
 	 * temporary mismatch for the post-cutscene standing-in-car bug: restoring
 	 * PED_DRIVING here prevents CGameLogic from ever observing the arrest, so the
 	 * disabled vehicle appears to freeze until the player presses exit. */
-	if (player->m_nPedState == PED_ARRESTED || player->m_pArrestingCop)
+	if (player->m_nPedState == PED_ARRESTED || player->m_pArrestingCop ||
+		player->DyingOrDead() || player->m_fHealth <= 0.0f)
 		return;
 	/* Drowning in a vehicle leaves the player registered as its occupant while
 	 * switching to PED_DIE (PedFight.cpp: InflictDamage / WEAPONTYPE_DROWNING).
@@ -1867,6 +1868,14 @@ CPlayerPed::ProcessControl(void)
 	CPad *padUsed = GetPadFromPlayer(this);
 	m_pWanted->Update();
 	PruneReferences();
+
+	/* Keep drowning death authoritative if an old in-car callback restores the
+	 * driving state after health has already reached zero. */
+	if (m_fHealth <= 0.0f && bInVehicle && m_nPedState == PED_DRIVING) {
+		if (m_pMyVehicle)
+			m_pMyVehicle->SetStatus(STATUS_PLAYER_DISABLED);
+		SetPedState(PED_DIE);
+	}
 
 	if (GetWeapon()->m_eWeaponType == WEAPONTYPE_MINIGUN) {
 		CWeaponInfo *weaponInfo = CWeaponInfo::GetWeaponInfo(GetWeapon()->m_eWeaponType);

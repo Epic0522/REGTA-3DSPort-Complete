@@ -292,17 +292,26 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 	resetLights = e->SetupLighting();
 
 	if(e->IsVehicle()){
-		// unfortunately can't use GetClump here
-		CVisibilityPlugins::SetupVehicleVariables((RpClump*)e->m_rwObject);
 		CVisibilityPlugins::InitAlphaAtomicList();
+		if(e->m_rwObject && RwObjectGetType(e->m_rwObject) == rpCLUMP)
+			CVisibilityPlugins::SetupVehicleVariables((RpClump*)e->m_rwObject);
 	}
 
 	// Render Peds in vehicle before vehicle itself
 	if(e->IsVehicle()){
 		veh = (CVehicle*)e;
+		bool renderOccupants = true;
+#ifdef _3DS
+		RpClump *vehicleClump = e->m_rwObject && RwObjectGetType(e->m_rwObject) == rpCLUMP ?
+			(RpClump*)e->m_rwObject : nil;
+		const bool bigVehicle = veh->IsTrain() || veh->IsHeli() || veh->IsPlane();
+		renderOccupants = vehicleClump &&
+			CVisibilityPlugins::IsVehicleHighDetail(vehicleClump, bigVehicle);
+#endif
 #ifdef VIS_DISTANCE_ALPHA
 		int vehalpha = CVisibilityPlugins::GetObjectDistanceAlpha(veh->m_rwObject);
 #endif
+		if(renderOccupants){
 		if(veh->pDriver && veh->pDriver->m_nPedState == PED_DRIVING){
 #ifdef VIS_DISTANCE_ALPHA
 			int alpha = CVisibilityPlugins::GetObjectDistanceAlpha(veh->pDriver->m_rwObject);
@@ -323,7 +332,8 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 #else
 				veh->pPassengers[i]->Render();
 #endif
-	}
+		}
+		}
 	SetCullMode(rwCULLMODECULLNONE);
 	}
 

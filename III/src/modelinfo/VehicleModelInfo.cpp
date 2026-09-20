@@ -528,6 +528,12 @@ CVehicleModelInfo::PreprocessHierarchy(void)
 				RwFrameDestroy(RpAtomicGetFrame(atomic));
 				RpAtomicSetFrame(atomic, assoc.frame);
 				RpClumpAddAtomic(m_clump, atomic);
+#ifdef _3DS
+				// The stock wheel atomic otherwise uses the broken normal-lighting
+				// path that produces triangle-shaped dark facets on 3DS.  Reuse the
+				// verified texture/material-only MatFX path used by vehicle bodies.
+				RpMatFXAtomicEnableEffects(atomic);
+#endif
 				CVisibilityPlugins::SetAtomicRenderCallback(atomic,
 					CVisibilityPlugins::RenderWheelAtomicCB);
 				scale.x = m_wheelScale;

@@ -1091,27 +1091,29 @@ CStream::Open(const char *filename, uint32 overrideSampleRate, bool fullInitialB
 	DEV("Stream %s\n", m_aFilename);
 
 #ifdef _3DS
-	// Prefer the same low-cost radio format used by LCS. Keep ADF as a
-	// fallback for installations which have not run the audio converter yet.
+	// Prefer the same low-cost continuous-stream format used by LCS. Keep the
+	// original ADF/MP3 as a fallback when setup has not generated a matching WAV.
 	const size_t filenameLength = strlen(m_aFilename);
-	if (filenameLength >= 4 && !strcasecmp(m_aFilename + filenameLength - 4, ".adf")) {
+	if (filenameLength >= 4 &&
+	    (!strcasecmp(m_aFilename + filenameLength - 4, ".adf") ||
+	     !strcasecmp(m_aFilename + filenameLength - 4, ".mp3"))) {
 		char wavPath[sizeof(m_aFilename)];
 		strcpy(wavPath, m_aFilename);
 		strcpy(wavPath + filenameLength - 4, ".WAV");
 		char *real = casepath(wavPath);
-		const char *radioPath = real ? real : wavPath;
-		CWavFile *radio = new CWavFile(radioPath);
-		if (radio->IsOpened()) {
-			m_pSoundFile = radio;
-			strcpy(m_aFilename, radioPath);
+		const char *streamPath = real ? real : wavPath;
+		CWavFile *converted = new CWavFile(streamPath);
+		if (converted->IsOpened()) {
+			m_pSoundFile = converted;
+			strcpy(m_aFilename, streamPath);
 		} else
-			delete radio;
+			delete converted;
 		free(real);
 	}
 #endif
 
 	if (m_pSoundFile != nil) {
-		// Converted radio opened above.
+		// Converted radio or ambience stream opened above.
 	} else if (!strcasecmp(&m_aFilename[strlen(m_aFilename) - strlen(".wav")], ".wav"))
 #ifdef AUDIO_OAL_USE_SNDFILE
 		m_pSoundFile = new CSndFile(m_aFilename);

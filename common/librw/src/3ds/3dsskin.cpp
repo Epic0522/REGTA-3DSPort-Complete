@@ -283,9 +283,9 @@ skinRenderCB(Atomic *atomic, InstanceDataHeader *header)
 	size_t bufferSize = header->totalNumVertex * header->stride;
 	uint8 *sharedBuffer = header->vertexBuffer;
 #ifdef RE3_3DS_BUILD
-	/* Per-draw frame buffers fix VC missions containing several instances of
-	 * one ped model, but retain up to 3 MiB of linear memory.  re3's original
-	 * path submits the shared geometry buffer before another actor can reuse it. */
+	/* GTA III's ordinary peds are rigid limb atomics rather than skinned
+	 * geometry.  Keep the original low-memory path for the few skin atomics
+	 * which can occur in re3; the visible ped fix belongs in PedModelInfo. */
 	uint8 *frameBuffer = sharedBuffer;
 #else
 	uint8 *frameBuffer = nil;

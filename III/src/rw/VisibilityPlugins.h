@@ -45,6 +45,7 @@ public:
 	static bool InsertAtomicIntoSortedList(RpAtomic *a, float dist);
 
 	static void SetRenderWareCamera(RwCamera *camera);
+	static bool IsVehicleHighDetail(RpClump *vehicle);
 
 	static RpAtomic *RenderWheelAtomicCB(RpAtomic *atomic);
 	static RpAtomic *RenderObjNormalAtomic(RpAtomic *atomic);

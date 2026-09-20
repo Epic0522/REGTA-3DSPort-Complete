@@ -70,6 +70,7 @@ CBike::CBike(int32 id, uint8 CreatedBy)
 	CVehicleModelInfo *mi = (CVehicleModelInfo*)CModelInfo::GetModelInfo(id);
 	switch(id){
 	case MI_ANGEL:
+	case MI_ANGEL2:
 	case MI_FREEWAY:
 		m_bikeAnimType = ASSOCGRP_BIKE_HARLEY;
 		break;

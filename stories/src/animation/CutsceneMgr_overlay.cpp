@@ -287,6 +287,19 @@ CCutsceneMgr::SetupCutsceneToStart(void)
 		TheCamera.TakeControlWithSpline(JUMP_CUT);
 		TheCamera.SetWideScreenOn();
 		CHud::SetHelpMessage(nil, true);
+
+#ifdef _3DS
+		/* The wider 3DS world range can still be streaming and cross-fading its
+		 * near models when a new-game intro hands control to the cutscene camera.
+		 * Complete that camera's scene load while the screen is black and before
+		 * any cutscene association starts running. LoadScene's synchronous path
+		 * also promotes loaded simple-model alpha to 255, so the coach and the
+		 * surrounding world begin on the same first frame. */
+		if (CGeneral::faststricmp(ms_cutsceneName, "intro") == 0) {
+			TheCamera.Process();
+			CStreaming::LoadScene(TheCamera.GetPosition());
+		}
+#endif
 	}
 
 	ms_cutsceneOffset.z += 1.0f;
@@ -825,6 +838,15 @@ CCutsceneMgr::LoadCutsceneData_preload(void)
 		else
 		{
 			delete[]cutsBuf;
+
+#ifdef _3DS
+			/* cscoach starts with a DummyRoot translation above +32 units.  The
+			 * compact int16/1024 representation wraps that coordinate and places
+			 * the coach on the wrong side of the cutscene until the turn brings it
+			 * back into range.  Keep only this intro animation at source precision. */
+			if (CGeneral::faststricmp(ms_cutsceneName, "intro") == 0)
+				LoadAnimationUncompressed("cscoach");
+#endif
 
 			// add manually inserted objects
 			for (int i = 0; i < ms_numAppendObjectNames; i++) {

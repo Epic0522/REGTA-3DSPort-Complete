@@ -39,6 +39,65 @@
 #ifdef _3DS
 static bool gPauseBackgroundResident3DS;
 static uint8 gPauseInputDelayFrames3DS;
+static bool gDeferredMenuTextureUnload3DS;
+static uint8 gDeferredMenuTextureUnloadDelay3DS;
+
+static void BeginDeferredMenuTextureUnload3DS(CMenuManager *menu);
+static void ServiceDeferredMenuTextureUnload3DS(void);
+static void FinishDeferredMenuTextureUnload3DS(void);
+
+static wchar *
+FitScrollingSaveName3DS(wchar *text, float maxWidth, int screen, int option, bool selected)
+{
+	static wchar visible[128];
+	static int lastScreen = -1;
+	static int lastOption = -1;
+	static uint32 selectionTime = 0;
+	static const wchar dots[] = { '.', '.', '.', '\0' };
+
+	if (text == nil || CFont::GetStringWidth(text, true) <= maxWidth)
+		return text;
+
+	uint32 now = CTimer::GetTimeInMillisecondsPauseMode();
+	if (screen != lastScreen || option != lastOption) {
+		lastScreen = screen;
+		lastOption = option;
+		selectionTime = now;
+	}
+
+	int length = Min(UnicodeStrlen(text), (int)ARRAY_SIZE(visible) - 1);
+	int lastStart = 0;
+	while (lastStart < length - 1 && CFont::GetStringWidth(text + lastStart, true) > maxWidth)
+		++lastStart;
+
+	int start = 0;
+	if (selected && lastStart > 0) {
+		const uint32 initialHold = 900;
+		const uint32 stepTime = 170;
+		const uint32 endHold = 1100;
+		uint32 cycle = initialHold + lastStart * stepTime + endHold;
+		uint32 phase = (now - selectionTime) % cycle;
+		if (phase >= initialHold)
+			start = Min(lastStart, (int)((phase - initialHold) / stepTime));
+	}
+
+	int out = 0;
+	for (int i = start; i < length && out < (int)ARRAY_SIZE(visible) - 1; ++i)
+		visible[out++] = text[i];
+	visible[out] = '\0';
+	if (CFont::GetStringWidth(visible, true) > maxWidth) {
+		float dotsWidth = CFont::GetStringWidth((wchar *)dots, true);
+		while (out > 0) {
+			visible[--out] = '\0';
+			if (CFont::GetStringWidth(visible, true) + dotsWidth <= maxWidth)
+				break;
+		}
+		for (int i = 0; i < 3 && out < (int)ARRAY_SIZE(visible) - 1; ++i)
+			visible[out++] = '.';
+		visible[out] = '\0';
+	}
+	return visible;
+}
 #endif
 
 // Game has colors inlined in code.
@@ -1228,7 +1287,11 @@ CMenuManager::Draw()
 			break;
 		case MENUPAGE_START_MENU:
 			columnWidth = 320;
+		#ifdef _3DS
+			headerHeight = 152;
+		#else
 			headerHeight = 140;
+		#endif
 			lineHeight = 24;
 			CFont::SetFontStyle(FONT_LOCALE(FONT_HEADING));
 			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
@@ -1236,7 +1299,11 @@ CMenuManager::Draw()
 			break;
 		case MENUPAGE_PAUSE_MENU:
 			columnWidth = 320;
+		#ifdef _3DS
+			headerHeight = 129;
+		#else
 			headerHeight = 117;
+		#endif
 			lineHeight = 24;
 			CFont::SetFontStyle(FONT_LOCALE(FONT_HEADING));
 			CFont::SetScale(MENU_X(MENU_TEXT_SIZE_X = BIGTEXT_X_SCALE), MENU_Y(MENU_TEXT_SIZE_Y = BIGTEXT_Y_SCALE));
@@ -1732,7 +1799,17 @@ CMenuManager::Draw()
 
 				float itemY = MENU_Y(textLayer + nextItemY);
 				float itemX = MENU_X_LEFT_ALIGNED(textLayer + columnWidth);
-				CFont::PrintString(itemX, itemY, leftText);
+				wchar *visibleLeftText = leftText;
+#ifdef _3DS
+				if (rightText && aScreens[m_nCurrScreen].m_aEntries[i].m_SaveSlot >= SAVESLOT_1 &&
+					aScreens[m_nCurrScreen].m_aEntries[i].m_SaveSlot <= SAVESLOT_8) {
+					float rightEdge = MENU_X_RIGHT_ALIGNED(columnWidth - textLayer);
+					float available = rightEdge - CFont::GetStringWidth(rightText, true) - itemX - MENU_X(10.0f);
+					visibleLeftText = FitScrollingSaveName3DS(leftText, available,
+						m_nCurrScreen, m_nCurrOption, i == m_nCurrOption);
+				}
+#endif
+				CFont::PrintString(itemX, itemY, visibleLeftText);
 				if (rightText) {
 					if (!CFont::Details.centre)
 						CFont::SetRightJustifyOn();
@@ -3623,6 +3700,12 @@ CMenuManager::LoadAllTextures()
 	if (m_bSpritesLoaded)
 		return;
 
+#ifdef _3DS
+	// A very quick second pause can arrive while the previous menu textures are
+	// still being retired. Finish that cleanup before rebuilding the dictionaries.
+	FinishDeferredMenuTextureUnload3DS();
+#endif
+
 #if defined(_3DS) && defined(BUTTON_ICONS)
 	// Button glyphs are separate from the unused full controller diagram.
 	if (CFont::ButtonsSlot == -1)
@@ -4372,7 +4455,12 @@ CMenuManager::Process(void)
 		}
 
 	} else {
+#ifdef _3DS
+		BeginDeferredMenuTextureUnload3DS(this);
+		ServiceDeferredMenuTextureUnload3DS();
+#else
 		UnloadTextures();
+#endif
 		m_bRenderGameInMenu = false;
 		// byte_5F33E4 = 1;	// unused
 		ChangeScreen(MENUPAGE_NONE, 0, false, false);
@@ -5875,6 +5963,12 @@ CMenuManager::SwitchMenuOnAndOff()
 void
 CMenuManager::UnloadTextures()
 {
+#ifdef _3DS
+	if (gDeferredMenuTextureUnload3DS) {
+		FinishDeferredMenuTextureUnload3DS();
+		return;
+	}
+#endif
 	if (!m_bSpritesLoaded)
 		return;
 
@@ -5912,6 +6006,99 @@ CMenuManager::UnloadTextures()
 }
 
 #ifdef _3DS
+struct DeferredMenuTextureDestroyContext3DS
+{
+	RwTexDictionary *dictionary;
+	bool removed;
+};
+
+static RwTexture *
+DestroyOneDeferredMenuTexture3DS(RwTexture *texture, void *data)
+{
+	DeferredMenuTextureDestroyContext3DS *context =
+		static_cast<DeferredMenuTextureDestroyContext3DS *>(data);
+	context->dictionary->remove(texture);
+	RwTextureDestroy(texture);
+	context->removed = true;
+	return nil;
+}
+
+static bool
+DestroyOneTextureFromMenuTxd3DS(const char *name)
+{
+	int slot = CTxdStore::FindTxdSlot(name);
+	if (slot == -1)
+		return false;
+
+	RwTexDictionary *dictionary = CTxdStore::GetSlot(slot)->texDict;
+	if (dictionary == nil)
+		return false;
+
+	DeferredMenuTextureDestroyContext3DS context = { dictionary, false };
+	RwTexDictionaryForAllTextures(dictionary, DestroyOneDeferredMenuTexture3DS, &context);
+	if (dictionary->count() == 0)
+		CTxdStore::RemoveTxd(slot);
+	return context.removed;
+}
+
+static void
+BeginDeferredMenuTextureUnload3DS(CMenuManager *menu)
+{
+	if (!menu->m_bSpritesLoaded || gDeferredMenuTextureUnload3DS)
+		return;
+
+	// Release sprite references immediately. Raster destruction is spread over
+	// later gameplay frames; the pause background itself remains resident.
+	for (int i = 0; i < ARRAY_SIZE(FrontendFilenames); ++i)
+		menu->m_aFrontEndSprites[i].Delete();
+	for (int i = 0; i < ARRAY_SIZE(MenuFilenames); ++i) {
+		if (i != MENUSPRITE_MAINMENU)
+			menu->m_aMenuSprites[i].Delete();
+	}
+#ifdef MENU_MAP
+	for (int i = 0; i < ARRAY_SIZE(MapFilenames); ++i)
+		CMenuManager::m_aMapSprites[i].Delete();
+#endif
+
+#ifdef GAMEPAD_MENU
+	int controller = CTxdStore::FindTxdSlot("frontend_controller");
+	if (controller != -1)
+		CTxdStore::RemoveTxd(controller);
+#endif
+
+	menu->m_bSpritesLoaded = false;
+	gDeferredMenuTextureUnload3DS = true;
+	// Never destroy a raster in the frame that resumes gameplay.
+	gDeferredMenuTextureUnloadDelay3DS = 1;
+}
+
+static void
+ServiceDeferredMenuTextureUnload3DS(void)
+{
+	if (!gDeferredMenuTextureUnload3DS)
+		return;
+	if (gDeferredMenuTextureUnloadDelay3DS != 0) {
+		--gDeferredMenuTextureUnloadDelay3DS;
+		return;
+	}
+
+	// One raster per frame avoids a visible or audible cleanup spike.
+	if (DestroyOneTextureFromMenuTxd3DS("frontend"))
+		return;
+	if (DestroyOneTextureFromMenuTxd3DS("menu"))
+		return;
+
+	gDeferredMenuTextureUnload3DS = false;
+}
+
+static void
+FinishDeferredMenuTextureUnload3DS(void)
+{
+	gDeferredMenuTextureUnloadDelay3DS = 0;
+	while (gDeferredMenuTextureUnload3DS)
+		ServiceDeferredMenuTextureUnload3DS();
+}
+
 void
 CMenuManager::ReleasePauseHomeTextures()
 {

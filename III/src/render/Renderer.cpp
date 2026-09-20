@@ -263,12 +263,12 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 	// Render Peds in vehicle before vehicle itself
 	if(e->IsVehicle()){
 		veh = (CVehicle*)e;
-		bool renderOccupants = true;
 #ifdef _3DS
-		// Occupant skinning is expensive and unreadable at this distance. Keep
-		// the player's car intact and cull only occupants in distant traffic.
-		renderOccupants = veh == FindPlayerVehicle() ||
-			(veh->GetPosition() - ms_vecCameraPosition).MagnitudeSqr() < SQR(28.0f);
+		// Occupants use the same range as the vehicle's highest-detail geometry.
+		// Once the body switches LOD, do not keep skinning invisible passengers.
+		bool renderOccupants = CVisibilityPlugins::IsVehicleHighDetail((RpClump*)e->m_rwObject);
+#else
+		bool renderOccupants = true;
 #endif
 		if(renderOccupants){
 		if(veh->pDriver && veh->pDriver->m_nPedState == PED_DRIVING)

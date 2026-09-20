@@ -111,4 +111,7 @@ VALIDATE_SIZE(cMusicManager, 0x95C);
 
 extern cMusicManager MusicManager;
 extern bool8 g_bAnnouncementReadPosAlready; // we have a symbol of this so it was declared in .h
+#ifdef _3DS
+void Set3DSGameStreamPausedForMenu(bool8 paused);
+#endif
 float GetHeightScale();

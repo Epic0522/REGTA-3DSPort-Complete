@@ -102,18 +102,21 @@ Touch the lower screen once to reveal the L3, R3 and Camera regions. Release,
 then tap or drag. The overlay hides after five seconds without touch input.
 The keyboard accepts Vice City's text cheats.
 
-## Radio audio
+## Continuous audio
 
-Setup converts the nine radio stations to 24 kHz mono IMA ADPCM, as in LCS.
-This requires Python 3 and FFmpeg. To update an existing installation, run:
+Setup converts the radio stations and long ambience tracks to 24 kHz mono IMA
+ADPCM, as in LCS. This reduces the MP3 startup load when entering the hotel,
+changing ambience or tuning the radio. Python 3 and FFmpeg are required. To
+update an existing installation, run:
 
 ```sh
 python3 miami/tools/convert_vc_radio_3ds.py "/path/to/Vice City/Audio" "/path/to/radio-output"
 ```
 
-Copy the nine WAV files into `sdmc:/3ds/miami/Audio/` and use the updated
-executable. Original ADF files can stay; they are used when a converted WAV is
-missing. The converter does not change the source files or final-mission music.
+Copy the generated WAV files into `sdmc:/3ds/miami/Audio/` and use the updated
+executable. Original ADF and MP3 files can stay; they are used when a converted
+WAV is missing. The converter does not change the source files, mission dialogue
+or final-mission music.
 
 FFmpeg may print `Error submitting packet to decoder: Invalid data found when
 processing input` once for each original ADF stream. The stock Vice City ADF

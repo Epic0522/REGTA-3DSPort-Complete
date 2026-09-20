@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare the nine VC radio stations as LCS-style 24 kHz mono IMA ADPCM."""
+"""Prepare VC's continuous music streams as 24 kHz mono IMA ADPCM."""
 
 import argparse
 import os
@@ -10,6 +10,10 @@ import tempfile
 
 STATIONS = ("WILD", "FLASH", "KCHAT", "FEVER", "VROCK", "VCPR",
             "ESPANT", "EMOTION", "WAVE")
+AMBIENCE = ("MISCOM", "CITY", "WATER", "BEACHAMB", "HCITY", "HWATER",
+            "HBEACH", "MALLAMB", "STRIP", "MALIBU", "HOTEL", "DIRTRING",
+            "LAW4RIOT", "AMBSIL", "POLICE", "TAXI", "BCLOSED", "BOPEN")
+TRACKS = STATIONS + AMBIENCE
 ADF_XOR = bytes(value ^ 0x22 for value in range(256))
 
 
@@ -21,13 +25,13 @@ def convert(source, destination, overwrite=False):
         raise ValueError("ffmpeg is required")
     files = {p.name.casefold(): p for p in source.iterdir() if p.is_file()}
     inputs = []
-    for station in STATIONS:
-        original = next((files[(station + ext).casefold()]
+    for track in TRACKS:
+        original = next((files[(track + ext).casefold()]
                          for ext in (".adf", ".mp3", ".wav")
-                         if (station + ext).casefold() in files), None)
+                         if (track + ext).casefold() in files), None)
         if original is None:
-            raise ValueError("Missing station: " + station)
-        output = destination / (station + ".WAV")
+            raise ValueError("Missing continuous stream: " + track)
+        output = destination / (track + ".WAV")
         if output.exists() and not overwrite:
             raise ValueError(f"Output already exists: {output}; use --overwrite")
         inputs.append((original, output))
@@ -35,7 +39,7 @@ def convert(source, destination, overwrite=False):
     destination.mkdir(parents=True, exist_ok=True)
     for original, output in inputs:
         print(f"24 kHz mono IMA ADPCM: {original.name} -> {output.name}", flush=True)
-        fd, temporary = tempfile.mkstemp(prefix=".vc-radio-", suffix=".wav",
+        fd, temporary = tempfile.mkstemp(prefix=".vc-stream-", suffix=".wav",
                                          dir=destination)
         os.close(fd)
         try:
@@ -72,9 +76,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source_audio", help="Original VC Audio directory (read-only)")
     parser.add_argument("destination_audio", help="Separate output Audio directory")
-    parser.add_argument("--overwrite", action="store_true", help="Replace the nine output WAVs")
+    parser.add_argument("--overwrite", action="store_true", help="Replace existing output WAVs")
     args = parser.parse_args()
     try:
         convert(args.source_audio, args.destination_audio, args.overwrite)
     except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError) as error:
-        parser.exit(1, f"VC radio conversion failed: {error}\n")
+        parser.exit(1, f"VC continuous-audio conversion failed: {error}\n")
