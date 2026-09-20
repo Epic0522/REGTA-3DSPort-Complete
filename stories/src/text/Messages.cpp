@@ -116,7 +116,7 @@ GetBigMessageTime(wchar *text, uint32 time, uint16 style)
 void
 CMessages::Process()
 {
-	for (int32 style = 0; style < 6; style++) {
+	for (int32 style = 0; style < NUMBIGMESSAGES; style++) {
 		if (BIGMessages[style].m_Stack[0].m_pText != nil && CTimer::GetTimeInMilliseconds() > BIGMessages[style].m_Stack[0].m_nTime + BIGMessages[style].m_Stack[0].m_nStartTime) {
 			BIGMessages[style].m_Stack[0].m_pText = nil;
 
