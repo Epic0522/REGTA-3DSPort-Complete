@@ -595,7 +595,17 @@ void CRadar::Draw3dMarkers()
 				if (ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_BOTH || ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_MARKER_ONLY) {
 					CVector pos = entity->GetPosition();
 					pos.z += 1.2f * CModelInfo::GetColModel(entity->GetModelIndex())->boundingBox.max.z + 2.5f;
-					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 2.5f, CARBLIP_MARKER_COLOR_R, CARBLIP_MARKER_COLOR_G, CARBLIP_MARKER_COLOR_B, CARBLIP_MARKER_COLOR_A, 1024, 0.2f, 5);
+					int r, g, b;
+					if (ms_RadarTrace[i].m_nColor != 0) {
+						r = MARKER_COLOR_BLUE_R;
+						g = MARKER_COLOR_BLUE_G;
+						b = MARKER_COLOR_BLUE_B;
+					} else {
+						r = MARKER_COLOR_RED_R;
+						g = MARKER_COLOR_RED_G;
+						b = MARKER_COLOR_RED_B;
+					}
+					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 2.5f, r, g, b, MARKER_COLOR_A, 1024, 0.2f, 5);
 				}
 				break;
 			}
@@ -609,7 +619,17 @@ void CRadar::Draw3dMarkers()
 				if (ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_BOTH || ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_MARKER_ONLY) {
 					CVector pos = entity->GetPosition();
 					pos.z += 3.0f;
-					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 1.5f, CHARBLIP_MARKER_COLOR_R, CHARBLIP_MARKER_COLOR_G, CHARBLIP_MARKER_COLOR_B, CHARBLIP_MARKER_COLOR_A, 1024, 0.2f, 5);
+					int r, g, b;
+					if (ms_RadarTrace[i].m_nColor != 0) {
+						r = MARKER_COLOR_BLUE_R;
+						g = MARKER_COLOR_BLUE_G;
+						b = MARKER_COLOR_BLUE_B;
+					} else {
+						r = MARKER_COLOR_RED_R;
+						g = MARKER_COLOR_RED_G;
+						b = MARKER_COLOR_RED_B;
+					}
+					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 1.5f, r, g, b, MARKER_COLOR_A, 1024, 0.2f, 5);
 				}
 				break;
 			}
@@ -619,7 +639,21 @@ void CRadar::Draw3dMarkers()
 				if (ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_BOTH || ms_RadarTrace[i].m_eBlipDisplay == BLIP_DISPLAY_MARKER_ONLY) {
 					CVector pos = entity->GetPosition();
 					pos.z += CModelInfo::GetColModel(entity->GetModelIndex())->boundingBox.max.z + 1.0f + 1.0f;
-					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 1.0f, OBJECTBLIP_MARKER_COLOR_R, OBJECTBLIP_MARKER_COLOR_G, OBJECTBLIP_MARKER_COLOR_B, OBJECTBLIP_MARKER_COLOR_A, 1024, 0.2f, 5);
+					int r, g, b;
+					if (ms_RadarTrace[i].m_nColor == 0) {
+						r = MARKER_COLOR_RED_R;
+						g = MARKER_COLOR_RED_G;
+						b = MARKER_COLOR_RED_B;
+					} else if (ms_RadarTrace[i].m_nColor == 2) {
+						r = MARKER_COLOR_BLUE_R;
+						g = MARKER_COLOR_BLUE_G;
+						b = MARKER_COLOR_BLUE_B;
+					} else {
+						r = MARKER_COLOR_GREEN_R;
+						g = MARKER_COLOR_GREEN_G;
+						b = MARKER_COLOR_GREEN_B;
+					}
+					C3dMarkers::PlaceMarker(i | (ms_RadarTrace[i].m_BlipIndex << 16), MARKERTYPE_ARROW, pos, 1.0f, r, g, b, MARKER_COLOR_A, 1024, 0.2f, 5);
 				}
 				break;
 			}
@@ -1007,7 +1041,7 @@ uint32 CRadar::GetRadarTraceColour(uint32 color, bool bright)
 	switch (color) {
 	case RADAR_TRACE_RED:
 		if (bright)
-			c = 0x712B49FF;
+			c = 0xFF484DFF;
 		else
 			c = 0x7F0000FF;
 		break;
@@ -1019,7 +1053,7 @@ uint32 CRadar::GetRadarTraceColour(uint32 color, bool bright)
 		break;
 	case RADAR_TRACE_LIGHT_BLUE:
 		if (bright)
-			c = 0x80A7F3FF;
+			c = 0x484DFFFF;
 		else
 			c = 0x00007FFF;
 		break;
@@ -1336,7 +1370,7 @@ int32 CRadar::SetEntityBlip(eBlipType type, int32 handle, uint32 color, eBlipDis
 		return -1;
 #endif
 	ms_RadarTrace[nextBlip].m_eBlipType = type;
-	ms_RadarTrace[nextBlip].m_nColor = RADAR_TRACE_YELLOW;
+	ms_RadarTrace[nextBlip].m_nColor = color;
 	ms_RadarTrace[nextBlip].m_bDim = true;
 	ms_RadarTrace[nextBlip].m_bInUse = true;
 	ms_RadarTrace[nextBlip].m_bShortRange = false;

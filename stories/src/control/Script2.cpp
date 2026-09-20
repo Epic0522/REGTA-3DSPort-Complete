@@ -673,7 +673,7 @@ int8 CRunningScript::ProcessCommands300To399(int32 command)
 		CPed* pPed = CPools::GetPedPool()->GetAt(GET_INTEGER_PARAM(0));
 		script_assert(pPed);
 		CRadar::GetActualBlipArrayIndex(CollectNextParameterWithoutIncreasingPC(m_nIp));
-		int handle = CRadar::SetEntityBlip(BLIP_CHAR, GET_INTEGER_PARAM(0), 1, BLIP_DISPLAY_BOTH);
+		int handle = CRadar::SetEntityBlip(BLIP_CHAR, GET_INTEGER_PARAM(0), 0, BLIP_DISPLAY_BOTH);
 		CRadar::ChangeBlipScale(handle, 3);
 		SET_INTEGER_PARAM(0, handle);
 		StoreParameters(&m_nIp, 1);
@@ -685,7 +685,7 @@ int8 CRunningScript::ProcessCommands300To399(int32 command)
 		CObject* pObject = CPools::GetObjectPool()->GetAt(GET_INTEGER_PARAM(0));
 		script_assert(pObject);
 		CRadar::GetActualBlipArrayIndex(CollectNextParameterWithoutIncreasingPC(m_nIp));
-		int handle = CRadar::SetEntityBlip(BLIP_OBJECT, GET_INTEGER_PARAM(0), 6, BLIP_DISPLAY_BOTH);
+		int handle = CRadar::SetEntityBlip(BLIP_OBJECT, GET_INTEGER_PARAM(0), 1, BLIP_DISPLAY_BOTH);
 		CRadar::ChangeBlipScale(handle, 3);
 		SET_INTEGER_PARAM(0, handle);
 		StoreParameters(&m_nIp, 1);
