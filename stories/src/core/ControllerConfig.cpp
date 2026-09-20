@@ -2725,8 +2725,8 @@ void CControllerConfigManager::GetWideStringOfCommandKeys(uint16 action, wchar *
 {
 #ifdef _3DS
 	wchar wstr[24];
-	const char *button = action == PED_SNIPER_ZOOM_IN ? "B" :
-		action == PED_SNIPER_ZOOM_OUT ? "Y" :
+	const char *button = action == PED_SNIPER_ZOOM_IN ? "Y" :
+		action == PED_SNIPER_ZOOM_OUT ? "B" :
 		action == VEHICLE_ENTER_EXIT && CPad::GetPad(0)->ArePlayerControlsDisabled() ? "B" :
 		Nintendo3DSButtons[CPad::GetPad(0)->Mode][action];
 	if (button == nil) {

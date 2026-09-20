@@ -3783,7 +3783,7 @@ bool CPad::SniperZoomIn(void)
 		return false;
 
 #ifdef _3DS
-	return !!NewState.Cross;
+	return !!NewState.Square;
 #endif
 
 	switch (CURMODE)
@@ -3814,7 +3814,7 @@ bool CPad::SniperZoomOut(void)
 		return false;
 
 #ifdef _3DS
-	return !!NewState.Square;
+	return !!NewState.Cross;
 #endif
 
 	switch (CURMODE)
