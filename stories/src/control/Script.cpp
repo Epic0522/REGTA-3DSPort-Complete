@@ -2615,6 +2615,11 @@ int8 CRunningScript::ProcessCommands100To199(int32 command)
 		CollectParameters(&m_nIp, 4);
 		CVehicle* car = CPools::GetVehiclePool()->GetAt(GET_INTEGER_PARAM(0));
 		script_assert(car);
+		/* A script can hold a handle that no longer resolves - TR1 reaches
+		 * here with $3761 unset.  Sibling commands like IS_CAR_DEAD already
+		 * tolerate that; do nothing rather than dereference nil. */
+		if (car == nil)
+			return 0;
 		CVector pos = GET_VECTOR_PARAM(1);
 		if (pos.z <= MAP_Z_LOW_LIMIT)
 			pos.z = CWorld::FindGroundZForCoord(pos.x, pos.y);
