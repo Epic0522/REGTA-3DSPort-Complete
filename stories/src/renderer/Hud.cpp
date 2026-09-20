@@ -1521,7 +1521,7 @@ void CHud::Draw()
 		}
 
 		/* LCS print_big style 8 (slot 7) is the mission fail-reason line.  It
-		 * has no fade state of its own; CMessages::Display blanks the buffer
+		 * has no fade state of its own; CMessages::Process blanks the buffer
 		 * when the message expires. */
 		if (m_BigMessage[7][0]) {
 			CFont::SetJustifyOff();
@@ -1533,7 +1533,7 @@ void CHud::Draw()
 			CFont::SetFontStyle(FONT_BANK);
 			CFont::SetDropShadowPosition(2);
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(174, 0, 0, 255));
+			CFont::SetColor(CRGBA(255, 255, 255, 255));
 			CFont::PrintString(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + SCREEN_SCALE_Y(18.0f), m_BigMessage[7]);
 		}
 
@@ -2037,8 +2037,9 @@ void CHud::GetRidOfAllHudMessages()
 	for (int i = 0; i < ARRAY_SIZE(m_Message); i++)
 		m_Message[i] = 0;
 
-	for (int i = 0; i < 6; i++) {
-		BigMessageInUse[i] = 0.0f;
+	for (int i = 0; i < NUMBIGMESSAGES; i++) {
+		if (i < 6)
+			BigMessageInUse[i] = 0.0f;
 
 		for (int j = 0; j < 128; j++)
 			m_BigMessage[i][j] = 0;
