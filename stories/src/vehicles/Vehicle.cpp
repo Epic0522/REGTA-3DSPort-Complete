@@ -1697,6 +1697,13 @@ CVehicle::CanBeDeleted(void)
 {
 	int i;
 
+	// The player's current vehicle is never a deletion candidate.  Every ped
+	// call site guards !IsPlayer(); no vehicle call site guarded the rider,
+	// so RemoveCarsIfThePoolGetsFull could delete the bike out from under
+	// the player and leave scripts holding a stale handle.
+	if(GetStatus() == STATUS_PLAYER)
+		return false;
+
 	if(m_nNumGettingIn || m_nGettingOutFlags)
 		return false;
 
