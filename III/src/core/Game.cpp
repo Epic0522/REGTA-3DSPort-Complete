@@ -603,9 +603,11 @@ bool CGame::Initialise(const char* datFile)
 #ifdef SCREEN_DROPLETS
 	ScreenDroplets::Initialise();
 #endif
-	LoadingScreen("Loading the Game", "Find big buildings", nil);
 #ifdef _3DS
+	LoadingScreen("Loading", nil, nil);
 	Initialise3DSRenderState();
+#else
+	LoadingScreen("Loading the Game", "Find big buildings", nil);
 #endif
 	CRenderer::Init();
 

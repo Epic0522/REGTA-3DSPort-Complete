@@ -964,6 +964,7 @@ void
 LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 {
 	CSprite2d *splash;
+	bool loadingOnly = str1 != nil && str2 == nil && !strcmp(str1, "Loading");
 
 #ifdef DISABLE_LOADING_SCREEN
 	if (str1 && str2)
@@ -990,8 +991,6 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 		splash->Draw(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(255, 255, 255, 255));
 
 		if(str1){
-			NumberOfChunksLoaded += 1;
-
 #ifndef RANDOMSPLASH
 			// this looks nice
 			float hpos = SCREEN_SCALE_X(40);
@@ -1006,12 +1005,15 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 			float bottom = top + SCREEN_STRETCH_Y(8);
 #endif
 
-			CSprite2d::DrawRect(CRect(hpos, top, hpos+length, bottom), CRGBA(0, 0, 0, 255));
+			if(!loadingOnly){
+				NumberOfChunksLoaded += 1;
+				CSprite2d::DrawRect(CRect(hpos, top, hpos+length, bottom), CRGBA(0, 0, 0, 255));
 
-			CSprite2d::DrawRect(CRect(hpos+1.0f, top+1.0f, hpos+length-1.0f, bottom-1.0f), CRGBA(99, 99, 99, 255));
+				CSprite2d::DrawRect(CRect(hpos+1.0f, top+1.0f, hpos+length-1.0f, bottom-1.0f), CRGBA(99, 99, 99, 255));
 
-			length *= NumberOfChunksLoaded/TOTALNUMCHUNKS;
-			CSprite2d::DrawRect(CRect(hpos+1.0f, top+1.0f, hpos+length-1.0f, bottom-1.0f), CRGBA(126, 15, 0, 255));
+				length *= NumberOfChunksLoaded/TOTALNUMCHUNKS;
+				CSprite2d::DrawRect(CRect(hpos+1.0f, top+1.0f, hpos+length-1.0f, bottom-1.0f), CRGBA(126, 15, 0, 255));
+			}
 
 			// this is done by the game but is unused
 			CFont::SetBackgroundOff();

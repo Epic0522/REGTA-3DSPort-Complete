@@ -586,9 +586,11 @@ bool CGame::Initialise(const char* datFile)
 #ifdef ENABLE_3DS_LOADING_PROGRESS
 	SetLoadingScreenProgress(0.82f);
 #endif
-	LoadingScreen("Loading the Game", "Find big buildings", nil);
 #ifdef _3DS
+	LoadingScreen("Loading", nil, nil);
 	Initialise3DSRenderState();
+#else
+	LoadingScreen("Loading the Game", "Find big buildings", nil);
 #endif
 	CRenderer::Init();
 

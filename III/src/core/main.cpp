@@ -176,16 +176,20 @@ DrawBottomLoadingScreen(const char *detail, float progress)
 {
 	uint8 *fb = gfxGetFramebuffer(GFX_BOTTOM, GFX_LEFT, nil, nil);
 	if(fb == nil) return;
+	bool drawProgress = progress >= 0.0f;
 	progress = clamp(progress, 0.0f, 1.0f);
 	BottomFillRect(fb, 0, 0, BOTTOM_WIDTH, BOTTOM_HEIGHT, 0, 0, 0);
 	BottomFillRect(fb, 0, 0, 320, 3, 55, 110, 210);
 	BottomFillRect(fb, 0, 237, 320, 240, 16, 36, 78);
 	// GTA3 already owns the upper-screen progress bar.  Keep the lower screen
 	// to the same stage/percentage composition as reVC, centred as one block.
-	BottomDrawText(fb, 101, detail ? detail : "Please wait", 205, 220, 245);
-	char percent[16];
-	sprintf(percent, "%3d%%", (int)(progress * 100.0f + 0.5f));
-	BottomDrawText(fb, 125, percent, 130, 180, 255);
+	BottomDrawText(fb, drawProgress ? 101 : 113,
+		detail ? detail : "Please wait", 205, 220, 245);
+	if(drawProgress){
+		char percent[16];
+		sprintf(percent, "%3d%%", (int)(progress * 100.0f + 0.5f));
+		BottomDrawText(fb, 125, percent, 130, 180, 255);
+	}
 	GSPGPU_FlushDataCache(fb, BOTTOM_WIDTH * BOTTOM_HEIGHT * BOTTOM_BPP);
 	// Direct framebuffer writes target the hidden lower backbuffer.  Present it
 	// explicitly; the top RenderWare camera only owns the upper LCD swap here.
@@ -1062,6 +1066,7 @@ void
 LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 {
 	CSprite2d *splash;
+	bool loadingOnly = str1 != nil && str2 == nil && !strcmp(str1, "Loading");
 
 #ifdef DISABLE_LOADING_SCREEN
 	if (str1 && str2)
@@ -1079,7 +1084,8 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 
 #if defined(_3DS) && defined(ENABLE_3DS_BOTTOM_LOADING)
 	if(BottomLoadingActive)
-		DrawBottomLoadingScreen(str2, NumberOfChunksLoaded / TOTALNUMCHUNKS);
+		DrawBottomLoadingScreen(loadingOnly ? str1 : str2,
+			loadingOnly ? -1.0f : NumberOfChunksLoaded / TOTALNUMCHUNKS);
 #endif
 
 #ifndef GTA_PS2
@@ -1101,16 +1107,17 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 		splash->Draw(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(255, 255, 255, 255));
 
 		if(str1){
-			NumberOfChunksLoaded += 1;
-
 			float hpos = SCREEN_SCALE_X(40);
 			float length = SCREEN_WIDTH - SCREEN_SCALE_X(100);
 			float vpos = SCREEN_HEIGHT - SCREEN_SCALE_Y(13);
 			float height = SCREEN_SCALE_Y(7);
-			CSprite2d::DrawRect(CRect(hpos, vpos, hpos + length, vpos + height), CRGBA(40, 53, 68, 255));
+			if(!loadingOnly){
+				NumberOfChunksLoaded += 1;
+				CSprite2d::DrawRect(CRect(hpos, vpos, hpos + length, vpos + height), CRGBA(40, 53, 68, 255));
 
-			length *= NumberOfChunksLoaded/TOTALNUMCHUNKS;
-			CSprite2d::DrawRect(CRect(hpos, vpos, hpos + length, vpos + height), CRGBA(81, 106, 137, 255));
+				length *= NumberOfChunksLoaded/TOTALNUMCHUNKS;
+				CSprite2d::DrawRect(CRect(hpos, vpos, hpos + length, vpos + height), CRGBA(81, 106, 137, 255));
+			}
 
 			// this is done by the game but is unused
 			CFont::SetScale(SCREEN_SCALE_X(2), SCREEN_SCALE_Y(2));

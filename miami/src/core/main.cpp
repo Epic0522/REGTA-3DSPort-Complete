@@ -196,9 +196,9 @@ BottomLoadingDrawText(uint8 *frameBuffer, int y, const char *text,
 }
 
 static void
-DrawBottomLoadingScreen(const char *title, const char *detail, float progress)
+DrawBottomLoadingScreen(const char *title, const char *detail, float progress,
+	bool drawProgress)
 {
-	(void)title;
 	uint8 *frameBuffer = gfxGetFramebuffer(GFX_BOTTOM, GFX_LEFT, nil, nil);
 	if(frameBuffer == nil)
 		return;
@@ -211,23 +211,26 @@ DrawBottomLoadingScreen(const char *title, const char *detail, float progress)
 	BottomLoadingFillRect(frameBuffer, 0, 0, 320, 3, 255, 110, 210);
 	BottomLoadingFillRect(frameBuffer, 0, 237, 320, 240, 100, 40, 105);
 
-	BottomLoadingDrawText(frameBuffer, 72,
-		detail ? detail : "Please wait", 220, 220, 230);
+	BottomLoadingDrawText(frameBuffer, drawProgress ? 72 : 108,
+		drawProgress ? (detail ? detail : "Please wait") : title,
+		220, 220, 230);
 
-	char percent[16];
-	sprintf(percent, "%3d%%", (int)(progress * 100.0f + 0.5f));
-	BottomLoadingDrawText(frameBuffer, 108, percent, 255, 150, 225);
+	if(drawProgress){
+		char percent[16];
+		sprintf(percent, "%3d%%", (int)(progress * 100.0f + 0.5f));
+		BottomLoadingDrawText(frameBuffer, 108, percent, 255, 150, 225);
 
-	const int barLeft = 12;
-	const int barRight = 308;
-	const int barTop = 145;
-	const int barBottom = 161;
-	BottomLoadingFillRect(frameBuffer, barLeft, barTop, barRight, barBottom, 40, 36, 52);
-	BottomLoadingFillRect(frameBuffer, barLeft + 2, barTop + 2,
-		barRight - 2, barBottom - 2, 92, 52, 92);
-	int fillRight = barLeft + 2 + (int)((barRight - barLeft - 4) * progress + 0.5f);
-	BottomLoadingFillRect(frameBuffer, barLeft + 2, barTop + 2,
-		fillRight, barBottom - 2, 255, 110, 210);
+		const int barLeft = 12;
+		const int barRight = 308;
+		const int barTop = 145;
+		const int barBottom = 161;
+		BottomLoadingFillRect(frameBuffer, barLeft, barTop, barRight, barBottom, 40, 36, 52);
+		BottomLoadingFillRect(frameBuffer, barLeft + 2, barTop + 2,
+			barRight - 2, barBottom - 2, 92, 52, 92);
+		int fillRight = barLeft + 2 + (int)((barRight - barLeft - 4) * progress + 0.5f);
+		BottomLoadingFillRect(frameBuffer, barLeft + 2, barTop + 2,
+			fillRight, barBottom - 2, 255, 110, 210);
+	}
 
 	GSPGPU_FlushDataCache(frameBuffer,
 		BOTTOM_SCREEN_WIDTH * BOTTOM_SCREEN_HEIGHT * BOTTOM_SCREEN_BPP);
@@ -1274,7 +1277,8 @@ void
 LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 {
 	CSprite2d *splash;
-	bool drawProgress = str1 != nil;
+	bool loadingOnly = str1 != nil && str2 == nil && !strcmp(str1, "Loading");
+	bool drawProgress = str1 != nil && !loadingOnly;
 
 #if defined(_3DS) && defined(ENABLE_3DS_BOTTOM_LOADING)
 	// Once gameplay is live, streaming stalls are normally only one frame.
@@ -1286,9 +1290,13 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 #endif
 
 #if defined(_3DS) && defined(ENABLE_3DS_LOADING_PROGRESS)
-	drawProgress = true;
+	drawProgress = !loadingOnly;
 	bool stageChanged = false;
-	if(str1){
+	if(loadingOnly){
+		stageChanged = true;
+		LastLoadingScreenTitle = str1;
+		LastLoadingScreenDetail = nil;
+	}else if(str1){
 		stageChanged = str1 != LastLoadingScreenTitle ||
 			(LastLoadingScreenTitle && strcmp(str1, LastLoadingScreenTitle) != 0);
 		LastLoadingScreenTitle = str1;
@@ -1328,7 +1336,7 @@ LoadingScreen(const char *str1, const char *str2, const char *splashscreen)
 #if defined(_3DS) && defined(ENABLE_3DS_BOTTOM_LOADING)
 	if(BottomLoadingActive)
 		DrawBottomLoadingScreen(str1, str2,
-			clamp(NumberOfChunksLoaded/TOTALNUMCHUNKS, 0.0f, 1.0f));
+			clamp(NumberOfChunksLoaded/TOTALNUMCHUNKS, 0.0f, 1.0f), !loadingOnly);
 	drawProgress = false;
 #endif
 
