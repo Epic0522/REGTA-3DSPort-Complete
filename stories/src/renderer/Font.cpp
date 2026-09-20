@@ -595,6 +595,7 @@ CFont::PrintString(float x, float y, uint32, wchar *start, wchar *end, float spw
 	pRenderState->proportional = Details.proportional;
 	pRenderState->style = Details.style;
 	pRenderState->bIsShadow = Details.bIsShadow;
+	pRenderState->bOutlineOn = Details.bOutlineOn;
 	FontRenderStatePointer.pRenderState++;
 
 	for(s = start; s < end;){
