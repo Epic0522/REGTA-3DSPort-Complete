@@ -103,6 +103,7 @@ float CHud::BigMessageAlpha[6];
 float CHud::BigMessageX[6];
 uint32 CHud::BigMessageDuration[8];
 bool CHud::BigMessageUsesExactTiming[8];
+bool CHud::m_MissionFailedIsRed;
 float CHud::OddJob2OffTimer;
 bool CHud::CounterOnLastFrame[NUMONSCREENCOUNTERS];
 float CHud::OddJob2XOffset;
@@ -1507,7 +1508,12 @@ void CHud::Draw()
 				CFont::DrawFonts();
 				CFont::SetDropShadowPosition(2);
 				CFont::SetDropColor(CRGBA(0, 0, 0, BigMessageAlpha[0]));
-				CFont::SetColor(CRGBA(BIGMESSAGE_COLOR.r, BIGMESSAGE_COLOR.g, BIGMESSAGE_COLOR.b, BigMessageAlpha[0]));
+				/* PS2 LCS colours M_FAIL/M_OVER/RAMP_F red and everything
+				 * else in this slot the ~Y~ gold (SLUS_214.23, 0x242fa8). */
+				if (m_MissionFailedIsRed)
+					CFont::SetColor(CRGBA(174, 0, 0, BigMessageAlpha[0]));
+				else
+					CFont::SetColor(CRGBA(255, 227, 79, BigMessageAlpha[0]));
 				CFont::PrintString(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) - SCREEN_SCALE_Y(18.0f), m_BigMessage[0]);
 			}
 			else {
@@ -1522,19 +1528,24 @@ void CHud::Draw()
 
 		/* LCS print_big style 8 (slot 7) is the mission fail-reason line.  It
 		 * has no fade state of its own; CMessages::Process blanks the buffer
-		 * when the message expires. */
+		 * when the message expires.  Parameters match PS2 LCS's, read from
+		 * SLUS_214.23's CHud::Draw at 0x243018, in the PSP's 480x272 space. */
 		if (m_BigMessage[7][0]) {
-			CFont::SetJustifyOff();
 			CFont::SetBackgroundOff();
-			CFont::SetScale(SCREEN_SCALE_X(0.85f), SCREEN_SCALE_Y(0.9f));
-			CFont::SetCentreOn();
+			if (FrontEndMenuManager.m_PrefsUseWideScreen)
+				CFont::SetScale(PSP_SCREEN_SCALE_X(0.34505f), PSP_SCREEN_SCALE_Y(0.71f));
+			else
+				CFont::SetScale(PSP_SCREEN_SCALE_X(0.38439f), PSP_SCREEN_SCALE_Y(0.71f));
 			CFont::SetPropOn();
-			CFont::SetCentreSize(SCREEN_SCALE_X(590.0f));
+			CFont::SetJustifyOff();
+			CFont::SetCentreOn();
+			CFont::SetCentreSize(PSP_SCREEN_SCALE_X(370.0f));
+			CFont::SetWrapx(SCREEN_WIDTH);
+			CFont::SetDropShadowPosition(1);
 			CFont::SetFontStyle(FONT_BANK);
-			CFont::SetDropShadowPosition(2);
 			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(CRGBA(255, 255, 255, 255));
-			CFont::PrintString(SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + SCREEN_SCALE_Y(18.0f), m_BigMessage[7]);
+			CFont::SetColor(CRGBA(174, 0, 0, 255));
+			CFont::PrintString(SCREEN_WIDTH / 2, PSP_SCREEN_SCALE_Y(160.0f), m_BigMessage[7]);
 		}
 
 		// WastedBustedText
@@ -1866,85 +1877,54 @@ void CHud::DrawAfterFade()
 	if (m_BigMessage[3][0]) {
 		CFont::SetJustifyOff();
 		CFont::SetBackgroundOff();
-		CFont::SetScale(SCREEN_SCALE_X(1.2f), SCREEN_SCALE_Y(1.5f));
+		if (FrontEndMenuManager.m_PrefsUseWideScreen)
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.42768f), PSP_SCREEN_SCALE_Y(0.88f));
+		else
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.4752f), PSP_SCREEN_SCALE_Y(0.88f));
 		CFont::SetCentreOn();
 		CFont::SetPropOn();
-		CFont::SetCentreSize(SCREEN_SCALE_X(600.0f));
-		CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
-		CFont::SetDropShadowPosition(2);
+		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(600.0f));
+		CFont::SetFontStyle(FONT_BANK);
+		CFont::SetDropShadowPosition(1);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(ODDJOB_COLOR);
-		CFont::PrintString((SCREEN_WIDTH / 2), SCREEN_SCALE_Y(140.0f) - SCREEN_SCALE_Y(16.0f), m_BigMessage[3]);
+		CFont::SetColor(CRGBA(0, 106, 164, 255));
+		CFont::PrintString((SCREEN_WIDTH / 2), PSP_SCREEN_SCALE_Y(196.0f), m_BigMessage[3]);
 	}
 
 	if (!m_BigMessage[1][0] && m_BigMessage[4][0]) {
 		CFont::SetJustifyOff();
 		CFont::SetBackgroundOff();
-		CFont::SetScale(SCREEN_SCALE_X(1.2f), SCREEN_SCALE_Y(1.5f));
+		if (FrontEndMenuManager.m_PrefsUseWideScreen)
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.42768f), PSP_SCREEN_SCALE_Y(0.88f));
+		else
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.4752f), PSP_SCREEN_SCALE_Y(0.88f));
 		CFont::SetCentreOn();
 		CFont::SetPropOn();
-		CFont::SetCentreSize(SCREEN_SCALE_X(580.0f));
-		CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
-		CFont::SetDropShadowPosition(2);
+		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(580.0f));
+		CFont::SetFontStyle(FONT_BANK);
+		CFont::SetDropShadowPosition(1);
 		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-		CFont::SetColor(ODDJOB_COLOR);
-		CFont::PrintString((SCREEN_WIDTH / 2), SCREEN_SCALE_Y(140.0f), m_BigMessage[4]);
+		CFont::SetColor(CRGBA(8, 143, 59, 255));
+		CFont::PrintString((SCREEN_WIDTH / 2), PSP_SCREEN_SCALE_Y(196.0f), m_BigMessage[4]);
 	}
 
-	// Oddjob result
-	if (OddJob2OffTimer > 0)
-		OddJob2OffTimer -= CTimer::GetTimeStepInMilliseconds();
-
-	float fStep;
-	if (m_BigMessage[5][0] && OddJob2OffTimer <= 0.0f) {
-		switch (OddJob2On) {
-			case 0:
-				OddJob2On = 1;
-				OddJob2XOffset = 380.0f;
-				break;
-			case 1:
-				if (OddJob2XOffset <= 2.0f) {
-					OddJob2Timer = 0;
-					OddJob2On = 2;
-				}
-				else {
-					fStep = Min(40.0f, OddJob2XOffset / 6.0f);
-					OddJob2XOffset = OddJob2XOffset - fStep;
-				}
-				break;
-			case 2:
-				OddJob2Timer += CTimer::GetTimeStepInMilliseconds();
-				if (OddJob2Timer > 1500) {
-					OddJob2On = 3;
-				}
-				break;
-			case 3:
-				fStep = Max(30.0f, OddJob2XOffset / 5.0f);
-
-				OddJob2XOffset = OddJob2XOffset - fStep;
-
-				if (OddJob2XOffset < -380.0f) {
-					OddJob2OffTimer = 5000.0f;
-					OddJob2On = 0;
-				}
-				break;
-			default:
-				break;
-		}
-
-		if (!m_BigMessage[1][0]) {
-			CFont::SetJustifyOff();
-			CFont::SetBackgroundOff();
-			CFont::SetScale(SCREEN_SCALE_X(1.0f), SCREEN_SCALE_Y(1.2f));
-			CFont::SetCentreOn();
-			CFont::SetPropOn();
-			CFont::SetCentreSize(SCREEN_SCALE_X(560.0f));
-			CFont::SetFontStyle(FONT_LOCALE(FONT_STANDARD));
-			CFont::SetDropShadowPosition(2);
-			CFont::SetDropColor(CRGBA(0, 0, 0, 255));
-			CFont::SetColor(ODDJOB2_COLOR);
-			CFont::PrintString(SCREEN_WIDTH / 2, SCREEN_SCALE_Y(217.0f), m_BigMessage[5]);
-		}
+	// Oddjob result.  PS2 LCS draws this unconditionally while the slot is
+	// non-empty, with no slide-in animation (SLUS_214.23, 0x244450).
+	if (m_BigMessage[5][0] && !m_BigMessage[1][0]) {
+		CFont::SetJustifyOff();
+		CFont::SetBackgroundOff();
+		if (FrontEndMenuManager.m_PrefsUseWideScreen)
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.42768f), PSP_SCREEN_SCALE_Y(0.88f));
+		else
+			CFont::SetScale(PSP_SCREEN_SCALE_X(0.4752f), PSP_SCREEN_SCALE_Y(0.88f));
+		CFont::SetCentreOn();
+		CFont::SetPropOn();
+		CFont::SetCentreSize(PSP_SCREEN_SCALE_X(560.0f));
+		CFont::SetFontStyle(FONT_BANK);
+		CFont::SetDropShadowPosition(1);
+		CFont::SetDropColor(CRGBA(0, 0, 0, 255));
+		CFont::SetColor(CRGBA(255, 255, 255, 255));
+		CFont::PrintString(SCREEN_WIDTH / 2, PSP_SCREEN_SCALE_Y(172.0f), m_BigMessage[5]);
 	}
 
 	/*
@@ -1964,8 +1944,11 @@ void CHud::DrawAfterFade()
 			CFont::SetPropOn();
 			CFont::SetRightJustifyWrap(SCALE_AND_CENTER_X(0.0f));
 			CFont::SetRightJustifyOn();
-			CFont::SetFontStyle(FONT_BANK);
-			CFont::SetScale(FrontEndMenuManager.m_PrefsLanguage == CMenuManager::LANGUAGE_AMERICAN ? SCREEN_SCALE_X(1.7f) : SCREEN_SCALE_X(1.5f), SCREEN_SCALE_Y(1.8f));
+			CFont::SetFontStyle(FONT_HEADING);
+			if (FrontEndMenuManager.m_PrefsUseWideScreen)
+				CFont::SetScale(PSP_SCREEN_SCALE_X(0.42768f), PSP_SCREEN_SCALE_Y(0.88f));
+			else
+				CFont::SetScale(PSP_SCREEN_SCALE_X(0.4752f), PSP_SCREEN_SCALE_Y(0.88f));
 
 			if (BigMessageX[1] >= SCREEN_SCALE_FROM_RIGHT(20.0f)) {
 				BigMessageInUse[1] += CTimer::GetTimeStepInMilliseconds();
@@ -1995,10 +1978,10 @@ void CHud::DrawAfterFade()
 			 * viewport and can leave the part over the letterbox border looking cut. */
 			const float screenFade = (255.0f - CDraw::FadeValue) / 255.0f;
 			const uint8 titleAlpha = (uint8)Clamp(BigMessageAlpha[1] * screenFade, 0.0f, 255.0f);
-			CFont::SetDropShadowPosition(2);
+			CFont::SetDropShadowPosition(0);
 			CFont::SetDropColor(CRGBA(0, 0, 0, titleAlpha));
 			CFont::SetColor(CRGBA(MISSIONTITLE_COLOR.r, MISSIONTITLE_COLOR.g, MISSIONTITLE_COLOR.b, titleAlpha));
-			CFont::PrintString(SCREEN_SCALE_FROM_RIGHT(20.0f), SCREEN_SCALE_FROM_BOTTOM(140.0f), m_BigMessage[1]);
+			CFont::PrintString(PSP_SCREEN_SCALE_FROM_RIGHT(24.0f), PSP_SCREEN_SCALE_FROM_BOTTOM(16.0f), m_BigMessage[1]);
 		} else {
 			m_ZoneFadeTimer = 0;
 			BigMessageX[1] = SCREEN_SCALE_FROM_RIGHT(DEFAULT_SCREEN_WIDTH + 60.0f);

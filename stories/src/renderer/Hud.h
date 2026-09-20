@@ -94,6 +94,7 @@ public:
 	static float BigMessageX[6];
 	static uint32 BigMessageDuration[8];
 	static bool BigMessageUsesExactTiming[8];
+	static bool m_MissionFailedIsRed;
 	static float OddJob2OffTimer;
 	static bool CounterOnLastFrame[NUMONSCREENCOUNTERS];
 	static float OddJob2XOffset;

@@ -96,6 +96,23 @@ CMessages::IsRaceBigMessage(wchar *text)
 	return false;
 }
 
+// PS2 LCS colours the "MISSION FAILED!" heading red for these three keys and
+// the usual gold otherwise (SLUS_214.23, CHud::Draw at 0x242fa8).
+bool
+CMessages::IsFailBigMessage(wchar *text)
+{
+	if (text == nil)
+		return false;
+
+	static const char *failKeys[] = {
+		"M_FAIL", "M_OVER", "RAMP_F",
+	};
+	for (uint32 i = 0; i < ARRAY_SIZE(failKeys); i++)
+		if (text == TheText.Get(failKeys[i]))
+			return true;
+	return false;
+}
+
 bool
 CMessages::ConsumeMissionTitleScriptWait(void)
 {
@@ -179,6 +196,8 @@ CMessages::Display()
 				CHud::BigMessageAlpha[i] = 0.0f;
 			}
 			CHud::BigMessageUsesExactTiming[i] = useExactTiming;
+			if (i == 0)
+				CHud::m_MissionFailedIsRed = IsFailBigMessage(BIGMessages[i].m_Stack[0].m_pText);
 		}
 		CHud::BigMessageDuration[i] = CHud::BigMessageUsesExactTiming[i]
 			? BIGMessages[i].m_Stack[0].m_nTime

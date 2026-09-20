@@ -40,6 +40,7 @@ public:
 	static void WideStringCopy(wchar *dst, wchar *src, uint16 size);
 	static bool WideStringCompare(wchar *str1, wchar *str2, uint16 size);
 	static bool IsRaceBigMessage(wchar *text);
+	static bool IsFailBigMessage(wchar *text);
 	static bool ConsumeMissionTitleScriptWait(void);
 	static void Process(void);
 	static void Display(void);
