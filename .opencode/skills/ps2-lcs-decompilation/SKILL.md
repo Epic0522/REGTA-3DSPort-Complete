@@ -158,3 +158,57 @@ Objective arrows rendered Vice-City pink in `stories/` because
 Full technical derivation (palette VAs, function VAs, per-case logic,
 mapped source line numbers) is in this repo's git history — see the commit
 `stories: fix 3D-marker arrow colours to match PS2 LCS`.
+
+## Pitfall: generic one-argument setters are easy to swap
+
+Small setter functions (`SetFoo(int16)`, one argument, one store, `jr $ra`)
+are extremely common in PS2 GTA's `CFont`/`CHud`/`CFontDetails`-style classes,
+and at a `jal` call site they are *indistinguishable from each other* — same
+calling convention, same tiny size, same "load an immediate into `$a0`, `jal`"
+shape. Do not identify one by call-site pattern alone (e.g. "the block that
+sets colours also calls a function with argument 2, so that must be
+`SetFontStyle`"). Two real setters can look identical from the caller's side
+while writing to completely different struct fields.
+
+**Case study: `CFont::SetFontStyle` vs `CFont::SetDropShadowPosition` (LCS
+big-message HUD slots).** While reversing PS2's per-slot text styling for
+`CHud::Draw`/`DrawAfterFade`, two VAs were initially assigned by guesswork
+from call order and got swapped: `0x166e50` was assumed to be
+`SetFontStyle` and `0x166ca8` was assumed to be `SetDropShadowPosition`.
+Both are one-argument setters called via `jal` with a small integer
+immediate (0, 1, or 2) in the delay slot, so nothing about the call site
+distinguished them. The swap silently transposed the decoded font-style and
+drop-shadow values for every HUD slot, and a fix built on that wrong mapping
+(commit `1773063`) shipped a real regression (mission title rendered in the
+wrong typeface, `all-caps` where PS2 renders mixed case) before the mistake
+was caught from a side-by-side screenshot comparison.
+
+The reliable disambiguation method, once the ambiguity is suspected:
+1. **Disassemble the callee itself**, not just the call site. `0x166ca8`'s
+   body does `sra $a0,$a0,0x10; bne $a0,$v0,...` (a comparison against a
+   constant, branching to one of two stores) — structurally identical to
+   reLCS's own `CFont::SetFontStyle` (`Font.cpp:1518-1529`, which branches on
+   `style == FONT_HEADING` to also set `bFontHalfTexture`). `0x166e50` is a
+   single unconditional `sh $a0, OFFSET($v0)` with no branch — a plain field
+   write, matching `SetDropShadowPosition`'s one-line body
+   (`Font.cpp:1582-1586`).
+2. **Match the store offset against the known struct layout.** Once
+   `CFontDetails`'s base VA is found (from any confirmed field access), each
+   setter's write offset can be checked against the reLCS field order in
+   `Font.h` (`style` and `bFontHalfTexture` sit together; `dropShadowPosition`
+   is a separate field further down the struct). A setter that writes two
+   fields conditionally is not a single-field setter like
+   `SetDropShadowPosition`.
+3. **Cross-check against a call site with a visually verifiable result.** A
+   font-style guess can be confirmed or falsified by comparing an in-game
+   screenshot against the PS2 original for one text string whose typeface is
+   unambiguous (e.g. a zone name known to render in one specific reLCS font).
+   Do this *before* trusting a style-index decode enough to change several
+   call sites based on it — one confirmed mapping generalizes to every other
+   call of the same VA in the binary.
+
+General rule: when a struct has multiple `int16`/`bool`/enum-typed fields
+set by separate one-line setters, resolve their VAs by *behavior* (branch
+structure, store offset) before generalizing a guessed identity across many
+call sites — a single swapped identity corrupts every decode that depends on
+it.
