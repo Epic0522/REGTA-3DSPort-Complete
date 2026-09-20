@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Host regressions for VC phone input and LCS-style radio preparation."""
+"""Host regressions for VC phone input and LCS-style stream preparation."""
 
 import hashlib
 import importlib.util
@@ -77,22 +77,25 @@ int main() {
             adf = mp3.translate(radio.ADF_XOR)
             for station in radio.STATIONS:
                 (original / (station.lower() + ".adf")).write_bytes(adf)
+            for track in radio.AMBIENCE:
+                (original / (track.lower() + ".mp3")).write_bytes(mp3)
             before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in original.iterdir()}
             radio.convert(original, output)
             self.assertEqual(before, {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in original.iterdir()})
-            self.assertEqual(len(list(output.glob("*.WAV"))), 9)
+            self.assertEqual(len(list(output.glob("*.WAV"))), len(radio.TRACKS))
             with self.assertRaises(ValueError):
                 radio.convert(original, output)  # no accidental overwrite
             with self.assertRaises(ValueError):
                 radio.convert(original, original / "nested")
 
             stream = (ROOT / "miami/src/audio/oal/stream.cpp").read_text()
-            self.assertIn('const char *radioPath = real ? real : wavPath;', stream)
+            self.assertIn('const char *streamPath = real ? real : wavPath;', stream)
+            self.assertIn('!strcasecmp(m_aFilename + filenameLength - 4, ".mp3")', stream)
             self.assertIn('if (!f)\n\t\t\t\treturn;', stream)
             # Match LCS's low-latency station startup: do not synchronously
             # decode the entire OpenAL queue every time the player retunes.
-            converted = stream[stream.index('// Prefer the same low-cost radio format used by LCS'):
-                               stream.index('#endif', stream.index('// Prefer the same low-cost radio format used by LCS'))]
+            converted = stream[stream.index('// Prefer the same low-cost continuous-stream format used by LCS'):
+                               stream.index('#endif', stream.index('// Prefer the same low-cost continuous-stream format used by LCS'))]
             self.assertNotIn('m_bFullInitialQueue = true', converted)
             header = (ROOT / "miami/src/audio/oal/stream.h").read_text()
             decoder = header[header.index("class IDecoder"):header.index("class CStream")]
