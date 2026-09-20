@@ -152,3 +152,8 @@ symlinks under `*/vendor/` are intact.
 For anything touching 3DS button/menu semantics or the packaging/build
 scripts, load the matching project skill (`.opencode/skills/`) — they carry
 exact commands and known-good reference hashes.
+
+When a reLCS behavior/constant is questionable and no existing fork has
+fixed it, the original PS2 disc is the tiebreaker — see the
+`ps2-lcs-decompilation` skill for ISO extraction, boot-ELF (MIPS/EE)
+disassembly, and `main.scm` disassembly tooling.
