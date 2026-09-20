@@ -1260,7 +1260,8 @@ int8 CRunningScript::ProcessCommands0To99(int32 command)
 		*/
 	case COMMAND_WAIT:
 		CollectParameters(&m_nIp, 1);
-		m_nWakeTime = CTimer::GetTimeInMilliseconds() + GET_INTEGER_PARAM(0);
+		m_nWakeTime = CTimer::GetTimeInMilliseconds() +
+			(CMessages::ConsumeMissionTitleScriptWait() ? 1500 : GET_INTEGER_PARAM(0));
 		m_bSkipWakeTime = false;
 		return 1;
 	case COMMAND_GOTO:

@@ -17,6 +17,7 @@ tMessage CMessages::BriefMessages[NUMBRIEFMESSAGES];
 tPreviousBrief CMessages::PreviousBriefs[NUMPREVIOUSBRIEFS];
 tBigMessage CMessages::BIGMessages[NUMBIGMESSAGES];
 char CMessages::PreviousMissionTitle[16]; // unused
+bool CMessages::MissionTitleWaitPending;
 
 void
 CMessages::Init()
@@ -78,6 +79,40 @@ CMessages::WideStringCompare(wchar *str1, wchar *str2, uint16 size)
 	return true;
 }
 
+bool
+CMessages::IsRaceBigMessage(wchar *text)
+{
+	if (text == nil)
+		return false;
+
+	static const char *raceKeys[] = {
+		"RACE_FL", "RACE_Y", "RACE_Y1", "RACE_Y2", "RACE_Y3",
+		"TRCR1", "TRCR2", "TRCR3", "TRCRGO",
+		"MRACEC1", "MRACEC2", "MRACEC3", "MRACEGO",
+	};
+	for (uint32 i = 0; i < ARRAY_SIZE(raceKeys); i++)
+		if (text == TheText.Get(raceKeys[i]))
+			return true;
+	return false;
+}
+
+bool
+CMessages::ConsumeMissionTitleScriptWait(void)
+{
+	if (!MissionTitleWaitPending)
+		return false;
+	MissionTitleWaitPending = false;
+	return true;
+}
+
+static uint32
+GetBigMessageTime(wchar *text, uint32 time, uint16 style)
+{
+	if (text == TheText.Get("RACE_FL"))
+		return 1000u;
+	return style == 1 ? Max(time, 1500u) : time;
+}
+
 void
 CMessages::Process()
 {
@@ -137,8 +172,16 @@ CMessages::Display()
 			outstr);
 		InsertStringInString(outstr, BIGMessages[i].m_Stack[0].m_pString);
 		InsertPlayerControlKeysInString(outstr);
-		CHud::BigMessageDuration[i] = i == 1
-			? Max(BIGMessages[i].m_Stack[0].m_nTime, 3000u)
+		if (BIGMessages[i].m_Stack[0].m_pText != nil) {
+			const bool useExactTiming = IsRaceBigMessage(BIGMessages[i].m_Stack[0].m_pText);
+			if (i < 6 && CHud::BigMessageUsesExactTiming[i] && !useExactTiming) {
+				BigMessageInUse[i] = 0.0f;
+				CHud::BigMessageAlpha[i] = 0.0f;
+			}
+			CHud::BigMessageUsesExactTiming[i] = useExactTiming;
+		}
+		CHud::BigMessageDuration[i] = CHud::BigMessageUsesExactTiming[i]
+			? BIGMessages[i].m_Stack[0].m_nTime
 			: Max(BIGMessages[i].m_Stack[0].m_nTime, 1500u);
 		CHud::SetBigMessage(outstr, i);
 	}
@@ -257,6 +300,7 @@ CMessages::AddMessageSoon(wchar *msg, uint32 time, uint16 flag)
 void
 CMessages::ClearMessages()
 {
+	MissionTitleWaitPending = false;
 	for (int32 i = 0; i < NUMBIGMESSAGES; i++) {
 		for (int32 j = 0; j < 4; j++) {
 			BIGMessages[i].m_Stack[j].m_pText = nil;
@@ -278,8 +322,9 @@ CMessages::ClearSmallMessagesOnly()
 void
 CMessages::AddBigMessage(wchar *msg, uint32 time, uint16 style)
 {
+	time = GetBigMessageTime(msg, time, style);
 	if (style == 1)
-		time = Max(time, 3000u);
+		MissionTitleWaitPending = true;
 	wchar outstr[512]; // unused
 	WideStringCopy(outstr, msg, 256);
 	InsertPlayerControlKeysInString(outstr);
@@ -301,8 +346,9 @@ CMessages::AddBigMessage(wchar *msg, uint32 time, uint16 style)
 void
 CMessages::AddBigMessageQ(wchar *msg, uint32 time, uint16 style)
 {
+	time = GetBigMessageTime(msg, time, style);
 	if (style == 1)
-		time = Max(time, 3000u);
+		MissionTitleWaitPending = true;
 	wchar outstr[512]; // unused
 	WideStringCopy(outstr, msg, 256);
 	InsertPlayerControlKeysInString(outstr);
@@ -814,8 +860,9 @@ CMessages::AddMessageSoonWithNumber(wchar *str, uint32 time, uint16 flag, int32 
 void
 CMessages::AddBigMessageWithNumber(wchar *str, uint32 time, uint16 style, int32 n1, int32 n2, int32 n3, int32 n4, int32 n5, int32 n6)
 {
+	time = GetBigMessageTime(str, time, style);
 	if (style == 1)
-		time = Max(time, 3000u);
+		MissionTitleWaitPending = true;
 	wchar outstr[512]; // unused
 	InsertNumberInString(str, n1, n2, n3, n4, n5, n6, outstr);
 	InsertPlayerControlKeysInString(outstr);
@@ -837,8 +884,9 @@ CMessages::AddBigMessageWithNumber(wchar *str, uint32 time, uint16 style, int32 
 void
 CMessages::AddBigMessageWithNumberQ(wchar *str, uint32 time, uint16 style, int32 n1, int32 n2, int32 n3, int32 n4, int32 n5, int32 n6)
 {
+	time = GetBigMessageTime(str, time, style);
 	if (style == 1)
-		time = Max(time, 3000u);
+		MissionTitleWaitPending = true;
 	wchar outstr[512]; // unused
 	InsertNumberInString(str, n1, n2, n3, n4, n5, n6, outstr);
 	InsertPlayerControlKeysInString(outstr);
