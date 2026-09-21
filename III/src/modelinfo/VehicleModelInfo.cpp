@@ -1014,6 +1014,15 @@ CVehicleModelInfo::SetEnvironmentMapCB(RpMaterial *material, void *data)
 
 bool initialised;
 
+#ifdef _3DS
+static RpAtomic*
+Enable3DSStableVehiclePipelineCB(RpAtomic *atomic, void*)
+{
+	RpMatFXAtomicEnableEffects(atomic);
+	return atomic;
+}
+#endif
+
 RpAtomic*
 CVehicleModelInfo::SetEnvironmentMapCB(RpAtomic *atomic, void *data)
 {
@@ -1059,6 +1068,15 @@ CVehicleModelInfo::SetEnvironmentMap(void)
 				SetEnvironmentMapCB(wheelmi->m_atomics[i], m_envMap);
 		}
 	}
+
+#ifdef _3DS
+	/* The Rhino has no specular materials, so the normal environment-map setup
+	 * leaves it on the default 3DS lighting pipeline.  That path exaggerates
+	 * the tank's large triangulated panels into dark diamond facets.  MatFX's
+	 * null-effect path keeps the original texture and material colour stable. */
+	if(this == CModelInfo::GetModelInfo(MI_RHINO))
+		RpClumpForAllAtomics(m_clump, Enable3DSStableVehiclePipelineCB, nil);
+#endif
 
 #ifdef EXTENDED_PIPELINES
 	CustomPipes::AttachVehiclePipe(m_clump);

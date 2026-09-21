@@ -57,6 +57,7 @@ CPolyBunch       CShadows::aPolyBunches     [MAX_POLYBUNCHES];
 CStaticShadow    CShadows::aStaticShadows   [MAX_STATICSHADOWS];
 CPolyBunch      *CShadows::pEmptyBunchList;
 CPermanentShadow CShadows::aPermanentShadows[MAX_PERMAMENTSHADOWS];
+static float fPlayerVehicleShadowScale = 1.0f;
 
 #ifndef MASTER
 bool gbCountPolysInShadow;
@@ -632,6 +633,8 @@ CShadows::StoreShadowForVehicle(CVehicle *pCar, VEH_SHD_TYPE type)
 					tex = gpShadowCarTex;
 					break;
 			}
+			if(pCar == FindPlayerVehicle())
+				nColorStrength = int32(nColorStrength*fPlayerVehicleShadowScale);
 			
 			float frontx = pCar->GetForward().x;
 			float fronty = pCar->GetForward().y;
@@ -2403,6 +2406,10 @@ CShadows::CalcPedShadowValues(CVector vecLightDir,
 }
 
 
+#define STORE_FADING_VEHICLE_SHADOW(...) CShadows::StoreShadowToBeRendered(__VA_ARGS__, nil, false)
+#include "../../../common/FadingVehicleShadows.inc"
+#undef STORE_FADING_VEHICLE_SHADOW
+
 void
 CShadows::RenderExtraPlayerShadows(void)
 {
@@ -2410,84 +2417,21 @@ CShadows::RenderExtraPlayerShadows(void)
 	if (CReplay::IsPlayingBack())
 		return;
 #endif
-	if ( CTimeCycle::GetLightShadowStrength() != 0 )
+	if ( CTimeCycle::GetLightShadowStrength() != 0 || FindPlayerVehicle() != nil )
 	{
 		CVehicle *pCar = FindPlayerVehicle();
 		if ( pCar == nil )
-			; // R* cut it out for playerped
+			ResetFadingVehicleShadows();
 		else
 		{
 			if ( pCar->GetModelIndex() != MI_RCBANDIT 
 				&& pCar->GetVehicleAppearance() != VEHICLE_APPEARANCE_BIKE
 				&& !pCar->IsBike() && !pCar->IsPlane() && !pCar->IsBoat() )
 			{
-				for ( int32 i = 0; i < CPointLights::NumLights; i++ )
-				{
-					if (  CPointLights::aLights[i].type == CPointLights::LIGHT_POINT
-						&& CPointLights::aLights[i].castExtraShadows
-						&&(0.0f != CPointLights::aLights[i].red
-						|| 0.0f != CPointLights::aLights[i].green
-						|| 0.0f != CPointLights::aLights[i].blue) )
-					{
-						CVector vecLight = CPointLights::aLights[i].coors - FindPlayerCoors();
-						float fLightDist = vecLight.Magnitude();
-						float fRadius = CPointLights::aLights[i].radius;
-
-						if ( fLightDist < fRadius )
-						{
-							// fLightDist == 0       -> 2.0f
-							// fLightDist == fRadius -> 0.0f
-							float fMult = (1.0f - (2.0f * fLightDist - fRadius) / fRadius);
-
-							int32 nColorStrength;
-							if ( fLightDist < fRadius*0.5f )
-								nColorStrength = (5*CTimeCycle::GetLightShadowStrength()/8);
-							else
-								nColorStrength = int32((5*CTimeCycle::GetLightShadowStrength()/8) * fMult);
-
-							float fInv = 1.0f / fLightDist;
-							vecLight.x *= fInv;
-							vecLight.y *= fInv;
-							vecLight.z *= fInv;
-
-							CVector shadowPos = pCar->GetPosition();
-
-							shadowPos.x -= vecLight.x * 1.2f;
-							shadowPos.y -= vecLight.y * 1.2f;
-
-							float fVehicleWidth   = pCar->GetColModel()->boundingBox.GetSize().x;
-							float fVehicleHeight  = pCar->GetColModel()->boundingBox.GetSize().y;
-
-							shadowPos.x -= ((fVehicleHeight/2) - pCar->GetColModel()->boundingBox.max.y)
-											* pCar->GetForward().x;
-
-							shadowPos.y -= ((fVehicleHeight/2) - pCar->GetColModel()->boundingBox.max.y)
-											* pCar->GetForward().y;
-
-							if ( pCar->GetUp().z > 0.0f )
-							{
-								StoreShadowToBeRendered(SHADOWTYPE_DARK, gpShadowCarTex, &shadowPos,
-									pCar->GetForward().x * (fVehicleHeight/2),
-									pCar->GetForward().y * (fVehicleHeight/2),
-									pCar->GetRight().x   * (fVehicleWidth/3),
-									pCar->GetRight().y   * (fVehicleWidth/3),
-									nColorStrength, 0, 0, 0,
-									4.5f, false, 1.0f, nil, false);
-							}
-							else
-							{
-								StoreShadowToBeRendered(SHADOWTYPE_DARK, gpShadowCarTex, &shadowPos,
-									pCar->GetForward().x * (fVehicleHeight/2),
-									pCar->GetForward().y * (fVehicleHeight/2),
-									-pCar->GetRight().x  * (fVehicleWidth/2),
-									-pCar->GetRight().y  * (fVehicleWidth/2),
-									nColorStrength, 0, 0, 0,
-									4.5f, false, 1.0f, nil, false);
-							}
-						}
-					}
-				}
+				RenderFadingVehicleShadows(pCar);
 			}
+			else
+				ResetFadingVehicleShadows();
 		}
 	}
 }

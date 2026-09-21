@@ -2118,9 +2118,6 @@ cSampleManager::SetStreamedVolumeAndPan(uint8 nVolume, uint8 nPan, bool8 nEffect
 	if ( nPan > MAX_VOLUME )
 		nPan = MAX_VOLUME;
 
-	if ( MusicManager.GetRadioInCar() == USERTRACK && !MusicManager.CheckForMusicInterruptions() )
-			boostMult = m_nMP3BoostVolume / 64.f;
-		
 	nStreamVolume[nStream] = nVolume;
 	nStreamPan   [nStream] = nPan;
 	

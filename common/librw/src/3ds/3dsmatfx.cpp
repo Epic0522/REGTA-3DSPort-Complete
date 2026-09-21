@@ -225,6 +225,8 @@ isVehicleDepthOffsetTexture(Texture *tex)
 #endif
 }
 
+static const float VEHICLE_DECAL_DEPTH_OFFSET = 0.0060f;
+
 static inline bool
 textureHasAlpha(Texture *tex)
 {
@@ -342,7 +344,7 @@ matfxTextureRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 		inst->vertexAlpha || m->color.alpha != 0xFF || textureHasAlpha(texture));
 	bool depthOffset = isVehicleDepthOffsetTexture(texture);
 	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, 0.0030f);
+		C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
 	drawInst(header, inst);
 	if(depthOffset)
 		C3D_DepthMap(true, -1.0f, 0.0f);
@@ -542,7 +544,7 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 		inst->vertexAlpha || m->color.alpha != 0xFF || textureHasAlpha(baseTexture));
 	bool depthOffset = isVehicleDepthOffsetTexture(baseTexture);
 	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, 0.0030f);
+		C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
 	drawInst(header, inst);
 	if(depthOffset)
 		C3D_DepthMap(true, -1.0f, 0.0f);

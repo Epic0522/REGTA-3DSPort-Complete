@@ -765,11 +765,8 @@ CMenuManager::Initialise(void)
 	m_PrefsRadioStation = DMAudio.GetRadioInCar();
 
 	DMAudio.SetMP3BoostVolume(m_PrefsMP3BoostVolume);
-	if (DMAudio.IsMP3RadioChannelAvailable()) {
-		if (m_PrefsRadioStation < WILDSTYLE || m_PrefsRadioStation > USERTRACK)
-			m_PrefsRadioStation = CGeneral::GetRandomNumber() % (USERTRACK + 1);
-	} else if (m_PrefsRadioStation < WILDSTYLE || m_PrefsRadioStation > WAVE)
-		m_PrefsRadioStation = CGeneral::GetRandomNumber() % (WAVE + 1);
+	if (m_PrefsRadioStation < WILDSTYLE || m_PrefsRadioStation > LCFR)
+		m_PrefsRadioStation = CGeneral::GetRandomNumber() % (LCFR + 1);
 
 	CFileMgr::SetDir("");
 	//CFileMgr::SetDir("");
@@ -1411,8 +1408,8 @@ CMenuManager::DrawStandardMenus(bool activeScreen)
 						case WAVE:
 							rightText = TheText.Get("FEA_FM8");
 							break;
-						case USERTRACK:
-							rightText = TheText.Get("FEA_MP3");
+						case LCFR:
+							rightText = TheText.Get("FEA_FM9");
 							break;
 					}
 					break;
@@ -4146,14 +4143,8 @@ CMenuManager::PrintRadioSelector(void)
 		MENU_X_LEFT_ALIGNED(428.f), MENU_Y(MENURADIO_SELECTOR_START_Y),
 		MENU_X_LEFT_ALIGNED(238.f), MENU_Y(MENURADIO_SELECTOR_START_Y), CRGBA(RADIO_SELECTOR_COLOR.r, RADIO_SELECTOR_COLOR.g, RADIO_SELECTOR_COLOR.b, FadeIn(180)));
 
-	int rightMostSprite, rightMostStation;
-	if (DMAudio.IsMP3RadioChannelAvailable()) {
-		rightMostSprite = MENUSPRITE_MP3;
-		rightMostStation = USERTRACK;
-	} else {
-		rightMostSprite = MENUSPRITE_WAVE;
-		rightMostStation = WAVE;
-	}
+	int rightMostSprite = MENUSPRITE_MP3;
+	int rightMostStation = LCFR;
  #ifdef THIS_IS_STUPID
 
 	// First radio
@@ -6271,17 +6262,10 @@ CMenuManager::ChangeRadioStation(int8 increaseBy)
 		m_LeftMostRadioX = MENU_X_LEFT_ALIGNED(MENURADIO_ICON_FIRST_X - (2 * MENURADIO_ICON_SIZE));
 	}
 
-	if (DMAudio.IsMP3RadioChannelAvailable()) {
-		if (m_PrefsRadioStation < WILDSTYLE)
-			m_PrefsRadioStation = USERTRACK;
-		if (m_PrefsRadioStation > USERTRACK)
-			m_PrefsRadioStation = WILDSTYLE;
-	} else {
-		if (m_PrefsRadioStation < WILDSTYLE)
-			m_PrefsRadioStation = WAVE;
-		if (m_PrefsRadioStation > WAVE)
-			m_PrefsRadioStation = WILDSTYLE;
-	}
+	if (m_PrefsRadioStation < WILDSTYLE)
+		m_PrefsRadioStation = LCFR;
+	if (m_PrefsRadioStation > LCFR)
+		m_PrefsRadioStation = WILDSTYLE;
 	DMAudio.StopFrontEndTrack();
 	DMAudio.PlayFrontEndSound(SOUND_RADIO_CHANGE, 0);
 }

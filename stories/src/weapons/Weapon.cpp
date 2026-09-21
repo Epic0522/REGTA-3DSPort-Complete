@@ -1145,7 +1145,7 @@ CWeapon::FireInstantHit(CEntity *shooter, CVector *fireSource)
 		{
 			CPointLights::AddLight(CPointLights::LIGHT_POINT,
 					*fireSource, CVector(0.0f, 0.0f, 0.0f), 5.0f,
-					1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 
 			CVector gunflashPos = *fireSource;
 
@@ -1186,7 +1186,7 @@ CWeapon::FireInstantHit(CEntity *shooter, CVector *fireSource)
 		{
 			CPointLights::AddLight(CPointLights::LIGHT_POINT,
 					*fireSource, CVector(0.0f, 0.0f, 0.0f), 5.0f,
-					1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 
 			CVector gunflashPos = *fireSource;
 
@@ -1225,7 +1225,7 @@ CWeapon::AddGunFlashBigGuns(CVector start, CVector end)
 {
 	CPointLights::AddLight(CPointLights::LIGHT_POINT,
 		start, CVector(0.0f, 0.0f, 0.0f), 5.0f,
-		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 	CVector gunflashPos = start;
 
 	CVector shootVec = end - start;
@@ -1686,7 +1686,7 @@ CWeapon::FireShotgun(CEntity *shooter, CVector *fireSource)
 	CEventList::RegisterEvent(EVENT_GUNSHOT, EVENT_ENTITY_PED, shooter, (CPed*)shooter, 1000);
 
 	CPointLights::AddLight(CPointLights::LIGHT_POINT, *fireSource, CVector(0.0, 0.0, 0.0), 5.0f,
-							1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 
 	float shooterAngle;
 
@@ -2582,7 +2582,7 @@ CWeapon::FireInstantHitFromCar(CVehicle *shooter, bool left, bool right)
 	CEventList::RegisterEvent(EVENT_GUNSHOT, EVENT_ENTITY_VEHICLE, shooter, FindPlayerPed(), 1000);
 
 	CPointLights::AddLight(CPointLights::LIGHT_POINT, source, CVector(0.0f, 0.0f, 0.0f), 5.0f,
-		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 
 	CColPoint point;
 	CEntity *victim;
@@ -3026,7 +3026,7 @@ FireOneInstantHitRound(CVector *source, CVector *target, int32 damage)
 
 	CPointLights::AddLight(CPointLights::LIGHT_POINT,
 		*source, CVector(0.0f, 0.0f, 0.0f), 5.0f,
-		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, false);
+		1.0f, 0.8f, 0.0f, CPointLights::FOG_NONE, true);
 
 	CColPoint point;
 	CEntity *victim;

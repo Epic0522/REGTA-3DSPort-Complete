@@ -17,6 +17,8 @@
 namespace rw {
 namespace c3d {
 
+static const float VEHICLE_DECAL_DEPTH_OFFSET = 0.0060f;
+
 static inline bool
 isVehicleDepthOffsetTexture(Texture *tex)
 {
@@ -290,7 +292,7 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 		rw::SetRenderState(VERTEXALPHA, inst->vertexAlpha || m->color.alpha != 0xFF);
 		bool depthOffset = isVehicleDepthOffsetTexture(m->texture);
 		if(depthOffset)
-			C3D_DepthMap(true, -1.0f, 0.0030f);
+			C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
 		drawInst(header, inst);
 		if(depthOffset)
 			C3D_DepthMap(true, -1.0f, 0.0f);

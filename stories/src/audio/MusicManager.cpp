@@ -609,24 +609,6 @@ cMusicManager::ServiceGameMode()
 		m_bSetNextStation = FALSE;
 	} else if (ped) {
 		if(!ped->DyingOrDead() && vehicle) {
-#ifdef GTA_PC
-			if (SampleManager.IsMP3RadioChannelAvailable()
-				&& vehicle->m_nRadioStation < USERTRACK
-				&& ControlsManager.GetIsKeyboardKeyJustDown(rsF9))
-			{
-				if (!UsesPoliceRadio(vehicle) && !UsesTaxiRadio(vehicle)) {
-					gNumRetunePresses = 0;
-					gRetuneCounter = 20;
-					RadioStaticCounter = 0;
-					if (vehicle->m_nRadioStation < USERTRACK)
-					{
-						do
-							++gNumRetunePresses;
-						while (gNumRetunePresses + vehicle->m_nRadioStation < USERTRACK);
-					}
-				}
-			}
-#endif
 			if (CPad::GetPad(0)->ChangeStationJustDown())
 			{
 				if (!UsesPoliceRadio(vehicle) && !UsesTaxiRadio(vehicle)) {
@@ -647,9 +629,8 @@ cMusicManager::ServiceGameMode()
 						gRetuneCounter = 20;
 						RadioStaticCounter = 0;
 						int track = gNumRetunePresses + vehicle->m_nRadioStation;
-						while(track < 0) track += NUM_RADIOS + 1;
-						while(track >= NUM_RADIOS + 1) track -= NUM_RADIOS + 1;
-						if(!DMAudio.IsMP3RadioChannelAvailable() && track == USERTRACK) gNumRetunePresses--;
+						while(track < 0) track += RADIO_OFF + 1;
+						while(track >= RADIO_OFF + 1) track -= RADIO_OFF + 1;
 					}
 				}
 			}
@@ -745,16 +726,10 @@ cMusicManager::ServiceGameMode()
 			{
 				int32 station = gNumRetunePresses + vehicle->m_nRadioStation;
 #ifdef RADIO_SCROLL_TO_PREV_STATION
-				while (station < 0) station += NUM_RADIOS + 1;
+				while (station < 0) station += RADIO_OFF + 1;
 #endif
-				while (station >= NUM_RADIOS + 1) station -= NUM_RADIOS + 1;
+				while (station >= RADIO_OFF + 1) station -= RADIO_OFF + 1;
 
-				// Scrolling back won't hit here, so increasing isn't problem
-				if (!DMAudio.IsMP3RadioChannelAvailable() && station == USERTRACK)
-				{
-					++gNumRetunePresses;
-					station = RADIO_OFF;
-				}
 				if (station == RADIO_OFF)
 				{
 					if (gRetuneCounter == 19) // One less then what switching radio sets, so runs right after turning off radio
@@ -1224,15 +1199,14 @@ cMusicManager::GetNextCarTuning()
 #ifdef RADIO_SCROLL_TO_PREV_STATION
 		// m_nRadioStation is unsigned, so...
 		int station = veh->m_nRadioStation + gNumRetunePresses;
-		while(station < 0) station += NUM_RADIOS + 1;
-		while(station >= NUM_RADIOS + 1) station -= NUM_RADIOS + 1;
+		while(station < 0) station += RADIO_OFF + 1;
+		while(station >= RADIO_OFF + 1) station -= RADIO_OFF + 1;
 		veh->m_nRadioStation = station;
 #else
 		veh->m_nRadioStation += gNumRetunePresses;
-		while(veh->m_nRadioStation >= NUM_RADIOS + 1)
-			veh->m_nRadioStation -= NUM_RADIOS + 1;
+		while(veh->m_nRadioStation >= RADIO_OFF + 1)
+			veh->m_nRadioStation -= RADIO_OFF + 1;
 #endif
-		DMAudio.IsMP3RadioChannelAvailable(); // woof, just call and do nothing =P they manipulate gNumRetunePresses on DisplayRadioStationName in this case
 		gNumRetunePresses = 0;
 	}
 	return veh->m_nRadioStation;
@@ -1245,8 +1219,6 @@ cMusicManager::GetCarTuning()
 	if (veh == nil) return STREAMED_SOUND_CITY_AMBIENT;
 	if (UsesPoliceRadio(veh)) return STREAMED_SOUND_RADIO_POLICE;
 	if (UsesTaxiRadio(veh)) return STREAMED_SOUND_RADIO_TAXI;
-	if (veh->m_nRadioStation == USERTRACK && !SampleManager.IsMP3RadioChannelAvailable())
-		veh->m_nRadioStation = AudioManager.m_anRandomTable[2] % USERTRACK;
 	return veh->m_nRadioStation;
 }
 
@@ -1383,13 +1355,10 @@ cMusicManager::DisplayRadioStationName()
 			{
 				track = gNumRetunePresses + gStreamedSound;
 #ifdef RADIO_SCROLL_TO_PREV_STATION
-				while (track < 0) track += NUM_RADIOS + 1;
+				while (track < 0) track += RADIO_OFF + 1;
 #endif
-				while (track >= NUM_RADIOS + 1) track -= NUM_RADIOS + 1;
+				while (track >= RADIO_OFF + 1) track -= RADIO_OFF + 1;
 
-				// On scrolling back we handle this condition on key press. No need to change this.
-				if (!DMAudio.IsMP3RadioChannelAvailable() && track == USERTRACK)
-					gNumRetunePresses++;
 			}
 			else
 #ifdef RADIO_OFF_TEXT
