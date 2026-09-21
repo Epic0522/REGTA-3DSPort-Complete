@@ -1308,13 +1308,20 @@ CFont::ParseToken(wchar* str, CRGBA &color, bool &flash, bool &bold)
 	while (*s != '~')
 		++s;
 
-	// seem to be gone in lcs
-	//if (*(++s) == '~')
-	//	s = ParseToken(s, color, flash, bold);
-
+#ifdef FIX_BUGS
+	// LCS dropped reVC's adjacent-token recursion (still present in
+	// miami/src/render/Font.cpp). Without it, back-to-back tokens like the
+	// "~w~~h~" produced by the 3DS touch-instruction rewrite in
+	// Normalize3DSTouchInstructionPrefix (text/Messages.cpp) leave RenderFontBuffer
+	// printing the next token's '~' as a literal glyph and desyncing the parse,
+	// which garbles R3/L3 help text (e.g. "Press~h~ ~k~ ~TGSUB~" -> "~w~~h~TOUCH...").
+	if (*(++s) == '~')
+		s = ParseToken(s, color, flash, bold);
+#else
 	// wtf?
 	if (*s == '\0') s++;
 	s++;
+#endif
 	return s;
 }
 
