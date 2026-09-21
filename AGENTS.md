@@ -98,6 +98,17 @@ and a map file literally named `.map`. None of these are checked in.
    `/packaging/prebuilt/**`.
 6. **Vendored libs in `common/{libctru,citro3d,mpg123-ctr,openal-soft-ctr}`
    are locally patched.** Do not replace with upstream/prebuilt versions.
+7. **`CTheScripts::LoadAllScripts` reverses script execution order — shared
+   by all three trees.** `SaveAllScripts` walks `pActiveScripts` head→tail;
+   `LoadAllScripts` restores each record via `StartNewScript`, which
+   head-inserts (`AddScriptToList`) — every save/load round-trip reverses
+   the list, and parity alternates each cycle. PS2 has no equivalent restore
+   step at all (it rebuilds the list from scratch via main.scm's bootstrap
+   on every load, disassembly-confirmed). reLCS fixed this in
+   `stories/src/control/Script5.cpp` (`SortScriptListByCreationOrder`,
+   restoring descending `CRunningScript::m_nId` order after the restore
+   loop) because it caused an intermittent TR1 mission mis-spawn — see
+   `git log --grep=TR1`. `III`/`miami` have the identical unfixed bug.
 
 ## Where things live (`stories/src`, 21 dirs, ~533 files)
 

@@ -261,3 +261,46 @@ set by separate one-line setters, resolve their VAs by *behavior* (branch
 structure, store offset) before generalizing a guessed identity across many
 call sites — a single swapped identity corrupts every decode that depends on
 it.
+
+## Case study: PS2 disassembly proving a port mechanism doesn't exist at all
+
+Not every investigation resolves into a wrong constant or swapped VA —
+sometimes the disassembly proves reLCS invented a whole mechanism PS2 never
+had, and that mechanism is the bug itself.
+
+**TR1 ("Wong Side of the Tracks") intermittent mis-spawn**: the player would
+occasionally start the race still on the mission Sanchez but at the wrong
+location, instantly failing. `scm_disasm.py` found the trigger script
+(`TCHRM`) latches global `$3761` from `$2289` (the player's live vehicle
+handle, refreshed every frame by a second thread, `CARM`) right before
+launching the mission — a same-frame dependency between two independently-
+scheduled script threads. That pointed at `stories/src/control/Script5.cpp`:
+`SaveAllScripts` writes `pActiveScripts` head→tail, but `LoadAllScripts`
+restores through `StartNewScript`, which head-inserts — every save/load
+round-trip reverses the list, and which of the two threads runs first
+depends on parity.
+
+Disassembling PS2's equivalent block loader (`SLUS_214.23` VA `0x300c10`,
+called from `GenericLoad`) proved **PS2's restore step never touches the
+running-script list at all** — it restores only registered save-vars (via a
+`GetSaveVarIndex` filter table) and zeroes every other global; the per-script
+records PS2's `SaveAllScripts` equivalent writes (`0x300ba8`) are written but
+never read back on load. PS2 rebuilds its script-thread list from scratch on
+every load by re-running main.scm's bootstrap, which always yields the same
+(creation) order. **There was no PS2 restore-order to match — the entire
+list-reversing mechanism in reLCS is a port-only invention**, non-
+deterministically putting the two racing threads in either order depending
+on how many save/load round-trips had happened.
+
+Fix: restore `pActiveScripts` into descending `CRunningScript::m_nId`
+(a strictly-increasing creation-order counter) after the restore loop, the
+invariant the live list always holds outside of a load — matching PS2's
+always-creation-order rebuild. See `SortScriptListByCreationOrder` in
+`stories/src/control/Script5.cpp` and
+`scripts/tests/test_script_load_order.py`.
+
+**Lesson:** when a cross-thread/cross-system interaction doesn't resolve
+from source alone, disassemble the *equivalent PS2 code path* — it can prove
+the mechanism doesn't exist on PS2 in the form you assumed, which is more
+decisive than finding the "right" constant, because the whole mechanism is
+suspect, not just a value.

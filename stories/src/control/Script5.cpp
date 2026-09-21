@@ -2243,6 +2243,43 @@ CTheScripts::RebindPlayerPedScriptHandle()
 		CPools::GetPedPool()->GetIndex(player);
 }
 
+// SaveAllScripts walks pActiveScripts head->tail, but LoadAllScripts restores
+// each record through StartNewScript, which head-inserts -- so every
+// save/load round trip reverses script execution order, and the parity
+// alternates on each cycle. PS2 has no equivalent restore step at all: it
+// rebuilds the running-script list from scratch by re-running main.scm's
+// bootstrap, which always yields creation order (most-recently-created
+// first). Scripts are created in that same head-insert fashion and m_nId is
+// a global, strictly-increasing creation counter, so descending m_nId is the
+// invariant the live list always holds outside of a load. Restore it here so
+// a save's on-disk order (whichever parity it happens to carry) can never
+// change execution order relative to a fresh boot.
+// ponytail: O(n^2) insertion sort, n ~= 75, once per load.
+static CRunningScript *SortScriptListByCreationOrder(CRunningScript *list)
+{
+	CRunningScript *sorted = nil;
+	while (list != nil) {
+		CRunningScript *script = list;
+		list = list->next;
+
+		CRunningScript *pos = sorted;
+		CRunningScript *prevPos = nil;
+		while (pos != nil && pos->m_nId > script->m_nId) {
+			prevPos = pos;
+			pos = pos->next;
+		}
+		script->prev = prevPos;
+		script->next = pos;
+		if (pos != nil)
+			pos->prev = script;
+		if (prevPos != nil)
+			prevPos->next = script;
+		else
+			sorted = script;
+	}
+	return sorted;
+}
+
 bool CTheScripts::LoadAllScripts(uint8* buf, uint32 size)
 {
 INITSAVEBUF
@@ -2364,6 +2401,10 @@ INITSAVEBUF
 	 * silently discards the thread and permanently truncates subsequent saves. */
 	for (uint32 i = 0; i < runningScripts; i++)
 		CTheScripts::StartNewScript(0)->Load(buf);
+	pActiveScripts = SortScriptListByCreationOrder(pActiveScripts);
+	for (CRunningScript *script = pActiveScripts; script != nil; script = script->next)
+		if (script->m_nId >= NextProcessId)
+			NextProcessId = script->m_nId + 1;
 	return true;
 VALIDATESAVEBUF(size)
 }
