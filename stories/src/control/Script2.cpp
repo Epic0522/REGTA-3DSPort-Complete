@@ -554,8 +554,20 @@ int8 CRunningScript::ProcessCommands300To399(int32 command)
 	case COMMAND_SET_CAR_HEADING:
 	{
 		CollectParameters(&m_nIp, 2);
-		CVehicle* pVehicle = CPools::GetVehiclePool()->GetAt(GET_INTEGER_PARAM(0));
-		script_assert(pVehicle);
+		int32 handle = GET_INTEGER_PARAM(0);
+		CVehicle* pVehicle = CPools::GetVehiclePool()->GetAt(handle);
+#ifdef RELCS_SCRIPT_DESYNC_PROBE
+		// ponytail: temporary diagnostic, see config.h
+		if (pVehicle == nil) {
+			ScriptDesyncProbeDump("NILCAR", handle, m_nIp);
+			return 0;
+		}
+#endif
+		/* PS2 dereferences a nil car here; its EE maps address 0 so the
+		 * scribble is harmless, the 3DS faults. TR1 reaches this with $3761
+		 * unset, same as the sibling set_car_coordinates. Do nothing. */
+		if (pVehicle == nil)
+			return 0;
 		pVehicle->SetHeading(DEGTORAD(GET_FLOAT_PARAM(1)));
 		return 0;
 	}

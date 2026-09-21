@@ -443,6 +443,12 @@ static_assert(false, "SUPPORT_XBOX_SCRIPT and SUPPORT_MOBILE_SCRIPT are mutually
 #undef USE_BASIC_SCRIPT_DEBUG_OUTPUT
 #endif
 
+// ponytail: temporary diagnostic for the TR1 (Wong Side of the Tracks) crash
+// investigation - logs a ring buffer of recently-executed script commands to
+// SCRDESYNC.LOG if an opcode goes unhandled or SET_CAR_HEADING sees a nil
+// vehicle. Remove this define and its call sites once the bug is found.
+//#define RELCS_SCRIPT_DESYNC_PROBE
+
 #ifndef MISSION_REPLAY
 #undef USE_MISSION_REPLAY_OVERRIDE_FOR_NON_MOBILE_SCRIPT
 #endif
