@@ -105,6 +105,55 @@ case study). If you need to read at an arbitrary offset, decode linearly from
 the nearest confirmed instruction boundary, not from the target offset
 directly.
 
+**Known limitation:** `load_opcode_table()`'s argument lists come from
+`ScriptDebug.cpp`'s `REGISTER_COMMAND` table, which is inherited from reVC and
+is *wrong* for a nontrivial number of LCS-only opcodes (wrong arg count or
+wrong types) — `disasm_linear` will desync a few instructions after any such
+opcode. If you hit a desync, don't assume the anchor was wrong; check whether
+the offending opcode's actual argument count (derived from its C++ `case`
+body: `CollectParameters`/`StoreParameters` counts, `GetPointerToScriptVariable`
+calls, `ReadTextLabelFromScript` = 8 bytes each) matches what
+`ScriptDebug.cpp` claims before concluding the anchor or decoder is broken.
+
+#### `main.scm` binary layout (verified against the real file)
+
+- Raw file starts with an 8-byte header: `uint32 MainScriptSize`, `uint32
+  LargestMissionSize`. `load_scm()` strips these 8 bytes, so offset 0 in its
+  returned bytes is ScriptSpace offset 0 (what GOTO/JSR targets are relative
+  to) — **not** the raw file offset.
+- **Mission table**: at raw file offset `MainScriptSize + 8 + 20`, preceded
+  by `uint32 LargestMissionSize` (repeated) and `uint32 missionCount`. Table
+  is `missionCount` `uint32` entries, each one a **ScriptSpace offset** for
+  that mission's code.
+- **Raw-file offset of mission `i`'s code**: `table[i] + 8 + local_offset`
+  (the `+8` re-adds the header that `load_scm()`/ScriptSpace strips — do not
+  forget it when seeking in the *raw* file, as opposed to indexing into
+  `load_scm()`'s returned bytes, which need no adjustment).
+- **Runtime `m_nIp` for mission code**: `MainScriptSize + local_offset`
+  (mission bytecode is loaded starting right after the main script in
+  `ScriptSpace`).
+- Opcodes are 2 bytes little-endian; bit `0x8000` is the NOT flag (strip it
+  before indexing `names`/`args`). `CRunningScript::ProcessOneCommand`
+  dispatches to `ProcessCommandsXToY` in bins of the form `<100, <200, <305,
+  <405, ...` — note the bin width creeps by 5 starting at 300, it is not a
+  uniform `<(N+100)`.
+- Parameter type-byte payload widths (`ARGUMENT_*` in `Script.h`, verified
+  against `CollectParameters`): END/INT_ZERO/FLOAT_ZERO = 0 bytes;
+  FLOAT_1BYTE=1; FLOAT_2BYTES=2; FLOAT_3BYTES=3; INT32/FLOAT=4; INT8=1;
+  INT16=2; TIMER=0; LOCAL=0; **LOCAL_ARRAY=2** extra bytes (index_id, size);
+  **GLOBAL=1** extra byte (global index low byte); GLOBAL_ARRAY=3 extra
+  bytes (index_in_block, index_id, size). `ARGTYPE_STRING`/`ARGTYPE_TEXT_LABEL`
+  parameters (not encoded via the type-byte scheme) are a fixed 8 raw bytes.
+- `first_instruction_offset()`'s target is itself a self-describing param
+  (type byte + payload), not a bare int32 immediately after the opcode —
+  decode it with `_read_param`, the same as any other instruction operand.
+
+These facts (and the `first_instruction_offset`/`LOCAL_ARRAY`/`GLOBAL` byte-
+width bugs they exposed) came from reverse-engineering the TR1 ("Wong Side of
+the Tracks") mission-23 spawn-loop crash; see `git log --grep=TR1` /
+`--grep="Wong Side"` for the investigation if more script-VM archaeology is
+needed later.
+
 ## Workflow for a "what does PS2 actually do" question
 
 1. Extract the boot ELF (`iso9660.py extract ... /SLUS_XXX.XX ...`).

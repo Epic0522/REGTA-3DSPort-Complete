@@ -64,11 +64,19 @@ def load_scm(path):
 
 def first_instruction_offset(scm_bytes):
     """Script-space byte 0 is always a GOTO past the mission-table area to
-    the real start of mainline code; return that target offset."""
+    the real start of mainline code; return that target offset.
+
+    NOTE: the GOTO's argument is a self-describing param (type byte at
+    offset 2, then payload) like any other — it is NOT a bare int32
+    immediately after the 2-byte opcode. Decode it with _read_param rather
+    than reading a raw int32 at offset 2, or you'll get a garbage offset
+    (verified: raw int32-at-offset-2 gives 4475910 instead of the correct
+    17484 on real main.scm)."""
     op = struct.unpack_from('<H', scm_bytes, 0)[0] & 0x7fff
     assert op == 0x002, "expected GOTO (opcode 2) at offset 0, got %#x" % op
-    target = struct.unpack_from('<i', scm_bytes, 2)[0]
-    return target
+    r = _read_param(scm_bytes, 2)
+    assert r is not None and r[2] == 'lit', "GOTO target must decode as a literal"
+    return r[0]
 
 
 def _read_param(d, i):
@@ -102,9 +110,9 @@ def _read_param(d, i):
     if t >= GLOBAL_ARRAY:
         return (None, i + 3, 'garr')
     if t >= GLOBAL:
-        return (None, i, 'glob')
+        return (None, i + 1, 'glob')
     if t >= LOCAL_ARRAY:
-        return (None, i + 3, 'larr')
+        return (None, i + 2, 'larr')
     if t >= TIMER:
         return (None, i, 'var')
     return None

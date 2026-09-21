@@ -157,3 +157,8 @@ When a reLCS behavior/constant is questionable and no existing fork has
 fixed it, the original PS2 disc is the tiebreaker — see the
 `ps2-lcs-decompilation` skill for ISO extraction, boot-ELF (MIPS/EE)
 disassembly, and `main.scm` disassembly tooling.
+
+When a build has crashed on-device and left a `crash_dump_*.dmp` on the SD
+card, see the `decoding-3ds-crash-dumps` skill for the Luma3DS dump format,
+register/fault decoding, and symbolizing the crash PC/LR against a matching
+`.elf`.
