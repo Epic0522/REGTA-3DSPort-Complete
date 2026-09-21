@@ -29,6 +29,14 @@ void ApplyLCSWorldBuildingSwap(int32 group, int32 state);
 void FlushLog();
 #define script_assert(_Expression) { FlushLog(); assert(_Expression); }
 
+#ifdef RELCS_SCRIPT_DESYNC_PROBE
+// ponytail: temporary diagnostic, see config.h. ip/command/retval describe
+// the command ProcessOneCommand just dispatched; reason/handle are only
+// used by the NILCAR trap.
+void ScriptDesyncProbeRecord(uint32 ip, int32 command, int8 retval);
+void ScriptDesyncProbeDump(const char *reason, int32 handle, uint32 ip);
+#endif
+
 #define PICKUP_PLACEMENT_OFFSET (0.5f)
 #define PED_FIND_Z_OFFSET (5.0f)
 #define COP_PED_FIND_Z_OFFSET (10.0f)

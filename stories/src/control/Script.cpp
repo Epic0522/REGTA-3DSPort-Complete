@@ -1186,10 +1186,61 @@ void CRunningScript::Process()
 		CMessages::BriefMessages[0].m_nStartTime = 0;
 }
 
+#ifdef RELCS_SCRIPT_DESYNC_PROBE
+// ponytail: temporary diagnostic, see config.h. Ring of recently-dispatched
+// commands so a crash/desync log can show what led up to it, not just the
+// single bad command.
+struct ScriptDesyncProbeEntry { uint32 ip; int32 command; int8 retval; };
+static ScriptDesyncProbeEntry gScriptDesyncRing[64];
+static int gScriptDesyncRingPos = 0;
+static bool gScriptDesyncUnhandledDumped = false;
+static bool gScriptDesyncNilcarDumped = false;
+
+static void ScriptDesyncProbeWriteRing(FILE *f)
+{
+	for (int i = 0; i < 64; i++) {
+		int idx = (gScriptDesyncRingPos + i) % 64;
+		ScriptDesyncProbeEntry &e = gScriptDesyncRing[idx];
+		fprintf(f, "  ip=%6u cmd=%4d retval=%d\n", e.ip, e.command, e.retval);
+	}
+}
+
+void ScriptDesyncProbeRecord(uint32 ip, int32 command, int8 retval)
+{
+	gScriptDesyncRing[gScriptDesyncRingPos] = { ip, command, retval };
+	gScriptDesyncRingPos = (gScriptDesyncRingPos + 1) % 64;
+	if (retval < 0 && !gScriptDesyncUnhandledDumped) {
+		gScriptDesyncUnhandledDumped = true;
+		FILE *f = fopen("SCRDESYNC.LOG", "a");
+		if (f != nil) {
+			fprintf(f, "UNHANDLED cmd=%d ip=%u (ring, oldest first):\n", command, ip);
+			ScriptDesyncProbeWriteRing(f);
+			fclose(f);
+		}
+	}
+}
+
+void ScriptDesyncProbeDump(const char *reason, int32 handle, uint32 ip)
+{
+	if (gScriptDesyncNilcarDumped)
+		return;
+	gScriptDesyncNilcarDumped = true;
+	FILE *f = fopen("SCRDESYNC.LOG", "a");
+	if (f != nil) {
+		fprintf(f, "%s handle=%d ip=%u (ring, oldest first):\n", reason, handle, ip);
+		ScriptDesyncProbeWriteRing(f);
+		fclose(f);
+	}
+}
+#endif
+
 int8 CRunningScript::ProcessOneCommand()
 {
 	int8 retval = -1;
 	++CTheScripts::CommandsExecuted;
+#ifdef RELCS_SCRIPT_DESYNC_PROBE
+	uint32 ipBeforeRead = m_nIp;
+#endif
 	int32 command = (uint16)CTheScripts::Read2BytesFromScript(&m_nIp);
 	m_bNotFlag = (command & 0x8000);
 	command &= 0x7FFF;
@@ -1232,6 +1283,9 @@ int8 CRunningScript::ProcessOneCommand()
 		retval = ProcessCommands1600To1699(command);
 	else
 		script_assert(false);
+#ifdef RELCS_SCRIPT_DESYNC_PROBE
+	ScriptDesyncProbeRecord(ipBeforeRead, command, retval);
+#endif
 #ifdef USE_MISSION_REPLAY_OVERRIDE_FOR_NON_MOBILE_SCRIPT
 	if (!AlreadySavedGame)
 #endif
