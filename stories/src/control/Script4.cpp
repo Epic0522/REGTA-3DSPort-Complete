@@ -1756,7 +1756,12 @@ int8 CRunningScript::ProcessCommands900To999(int32 command)
 		CollectParameters(&m_nIp, 1);
 		CPed* pPed = CPools::GetPedPool()->GetAt(GET_INTEGER_PARAM(0));
 		script_assert(pPed);
-		CVehicle* pVehicle = pPed->bInVehicle ? pPed->m_pMyVehicle : nil;
+		/* PS2 returns without writing the output variable when the ped isn't
+		 * in a vehicle; feeding nil to GetIndex indexes m_flags out of
+		 * bounds. */
+		if (!pPed->bInVehicle)
+			return 0;
+		CVehicle* pVehicle = pPed->m_pMyVehicle;
 		SET_INTEGER_PARAM(0, CPools::GetVehiclePool()->GetIndex(pVehicle));
 		StoreParameters(&m_nIp, 1);
 		return 0;
@@ -1766,7 +1771,12 @@ int8 CRunningScript::ProcessCommands900To999(int32 command)
 		CollectParameters(&m_nIp, 1);
 		CPed* pPed = CWorld::Players[GET_INTEGER_PARAM(0)].m_pPed;
 		script_assert(pPed);
-		CVehicle* pVehicle = pPed->bInVehicle ? pPed->m_pMyVehicle : nil;
+		/* PS2 returns without writing the output variable when the ped isn't
+		 * in a vehicle; feeding nil to GetIndex indexes m_flags out of
+		 * bounds. */
+		if (!pPed->bInVehicle)
+			return 0;
+		CVehicle* pVehicle = pPed->m_pMyVehicle;
 		SET_INTEGER_PARAM(0, CPools::GetVehiclePool()->GetIndex(pVehicle));
 		StoreParameters(&m_nIp, 1);
 		return 0;
