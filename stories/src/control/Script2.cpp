@@ -710,7 +710,7 @@ int8 CRunningScript::ProcessCommands300To399(int32 command)
 		if (pos.z <= MAP_Z_LOW_LIMIT)
 			pos.z = CWorld::FindGroundZForCoord(pos.x, pos.y);
 		CRadar::GetActualBlipArrayIndex(CollectNextParameterWithoutIncreasingPC(m_nIp));
-		int handle = CRadar::SetCoordBlip(BLIP_CONTACT_POINT, pos, 2, BLIP_DISPLAY_BOTH);
+		int handle = CRadar::SetCoordBlip(BLIP_CONTACT_POINT, pos, 5, BLIP_DISPLAY_BOTH);
 		CRadar::ChangeBlipScale(handle, 3);
 		SET_INTEGER_PARAM(0, handle);
 		StoreParameters(&m_nIp, 1);
@@ -723,7 +723,7 @@ int8 CRunningScript::ProcessCommands300To399(int32 command)
 		if (pos.z <= MAP_Z_LOW_LIMIT)
 			pos.z = CWorld::FindGroundZForCoord(pos.x, pos.y);
 		CRadar::GetActualBlipArrayIndex(CollectNextParameterWithoutIncreasingPC(m_nIp));
-		int handle = CRadar::SetCoordBlip(BLIP_COORD, pos, 5, BLIP_DISPLAY_BOTH);
+		int handle = CRadar::SetCoordBlip(BLIP_COORD, pos, 4, BLIP_DISPLAY_BOTH);
 		CRadar::ChangeBlipScale(handle, 3);
 		SET_INTEGER_PARAM(0, handle);
 		StoreParameters(&m_nIp, 1);

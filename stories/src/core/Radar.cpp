@@ -1335,7 +1335,7 @@ int32 CRadar::SetCoordBlip(eBlipType type, CVector pos, uint32 color, eBlipDispl
 		return -1;
 #endif
 	ms_RadarTrace[nextBlip].m_eBlipType = type;
-	ms_RadarTrace[nextBlip].m_nColor = RADAR_TRACE_MAGENTA;
+	ms_RadarTrace[nextBlip].m_nColor = color;
 	ms_RadarTrace[nextBlip].m_bDim = true;
 	ms_RadarTrace[nextBlip].m_bInUse = true;
 	ms_RadarTrace[nextBlip].m_bShortRange = false;
