@@ -79,14 +79,15 @@ int8 CRunningScript::ProcessCommands1600To1699(int32 command)
 		uint32 id = (uint32)(uintptr)GetPointerToScriptVariable(&ip, 0);
 		CollectParameters(&m_nIp, 10);
 		CVector pos = GET_VECTOR_PARAM(0);
+		CVector dir = CVector(GET_FLOAT_PARAM(3), GET_FLOAT_PARAM(4), GET_FLOAT_PARAM(5));
 		pos.z += GET_FLOAT_PARAM(9) + 7.0f;
-		/* The PSP command also supplies a direction vector.  The VC marker
-		 * backend has no directional overload, but its arrow model is already
-		 * vertical; preserving the authored position, colour and lifetime makes
-		 * the race/checkpoint arrow visible again. */
-		C3dMarkers::PlaceMarker(id, MARKERTYPE_ARROW, pos, 3.2f,
+		/* PS2 VA 0x273318: marker type 2 (the race arrow), pulsePeriod 1 /
+		 * pulseFraction 1.0 (bobbing fully disabled -- the shared pulse math
+		 * evaluates to sin(0) every frame when period is 1), and the real
+		 * direction vector instead of an auto-spin. */
+		C3dMarkers::PlaceMarker(id, MARKERTYPE_RACE_ARROW, pos, 3.2f,
 			GET_INTEGER_PARAM(6), GET_INTEGER_PARAM(7), GET_INTEGER_PARAM(8), 200,
-			1024, 0.2f, 1);
+			1, 1.0f, 0, &dir);
 		return 0;
 	}
 	case COMMAND_PRINT_NOW_OVERRIDE_FADE:

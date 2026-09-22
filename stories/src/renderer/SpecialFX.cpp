@@ -757,6 +757,16 @@ C3dMarkers::Init()
 	m_pRpClumpArray[MARKERTYPE_ARROW] = CFileLoader::LoadAtomicFile2Return("models/generic/arrow.dff");
 	m_pRpClumpArray[MARKERTYPE_CYLINDER] = CFileLoader::LoadAtomicFile2Return("models/generic/zonecylb.dff");
 	CTxdStore::PopCurrentTxd();
+
+	int raceArrowTxdSlot = CTxdStore::FindTxdSlot("race_arrow");
+	if (raceArrowTxdSlot == -1)
+		raceArrowTxdSlot = CTxdStore::AddTxdSlot("race_arrow");
+	CTxdStore::LoadTxd(raceArrowTxdSlot, "MODELS/RACE_ARROW.TXD");
+	CTxdStore::AddRef(raceArrowTxdSlot);
+	CTxdStore::PushCurrentTxd();
+	CTxdStore::SetCurrentTxd(raceArrowTxdSlot);
+	m_pRpClumpArray[MARKERTYPE_RACE_ARROW] = CFileLoader::LoadAtomicFile2Return("models/generic/race_arrow.dff");
+	CTxdStore::PopCurrentTxd();
 }
 
 void
@@ -798,14 +808,15 @@ C3dMarkers::Render()
 }
 
 C3dMarker *
-C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate)
+C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir)
 {
 	C3dMarker *pMarker;
 	CVector2D playerPos = FindPlayerCentreOfWorld(0);
 	pMarker = nil;
 	float dist = ((CVector2D)pos - playerPos).Magnitude();
 
-	if (type != MARKERTYPE_ARROW && type != MARKERTYPE_CYLINDER) return nil;
+	if (type != MARKERTYPE_ARROW && type != MARKERTYPE_CYLINDER && type != MARKERTYPE_RACE_ARROW) return nil;
+	if (type == MARKERTYPE_RACE_ARROW && m_pRpClumpArray[MARKERTYPE_RACE_ARROW] == nil) type = MARKERTYPE_ARROW;
 
 	for (int i = 0; i < NUM3DMARKERS; i++) {
 		if (!m_aMarkerArray[i].m_bIsUsed && m_aMarkerArray[i].m_nIdentifier == identifier) {
@@ -876,6 +887,10 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		}
 		if (type == MARKERTYPE_ARROW)
 			pMarker->m_Matrix.GetPosition() = pos;
+		else if (type == MARKERTYPE_RACE_ARROW && dir != nil) {
+			pMarker->m_Matrix.SetRotateZ(dir->Heading());
+			pMarker->m_Matrix.Translate(pos);
+		}
 
 		if (pMarker->m_bFindZOnNextPlacement) {
 			if ((playerPos - pos).MagnitudeSqr() < sq(100.f) && CColStore::HasCollisionLoaded(pos)) {
@@ -893,7 +908,7 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		pMarker->DeleteMarkerObject();
 
 	pMarker->AddMarker(identifier, type, size, r, g, b, a, pulsePeriod, pulseFraction, rotateRate);
-	if (type == MARKERTYPE_CYLINDER || type == MARKERTYPE_0 || type == MARKERTYPE_2) {
+	if (type == MARKERTYPE_CYLINDER || type == MARKERTYPE_0) {
 		if ((playerPos - pos).MagnitudeSqr() < sq(100.f) && CColStore::HasCollisionLoaded(pos)) {
 			float z = CWorld::FindGroundZFor3DCoord(pos.x, pos.y, pos.z + 1.0f, nil);
 			if (z != 0.0f)
@@ -904,9 +919,9 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		}
 	}
 	pMarker->m_Matrix.SetTranslate(pos.x, pos.y, pos.z);
-	if (type == MARKERTYPE_2) {
-		pMarker->m_Matrix.RotateX(PI);
-		pMarker->m_Matrix.GetPosition() = pos;
+	if (type == MARKERTYPE_RACE_ARROW && dir != nil) {
+		pMarker->m_Matrix.SetRotateZ(dir->Heading());
+		pMarker->m_Matrix.Translate(pos);
 	}
 	pMarker->m_Matrix.UpdateRW();
 	if (type == MARKERTYPE_ARROW) {

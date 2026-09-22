@@ -76,7 +76,7 @@ enum
 {
 	MARKERTYPE_0 = 0,
 	MARKERTYPE_ARROW,
-	MARKERTYPE_2,
+	MARKERTYPE_RACE_ARROW,
 	MARKERTYPE_3,
 	MARKERTYPE_CYLINDER,
 	NUMMARKERTYPES,
@@ -116,7 +116,7 @@ class C3dMarkers
 public:
 	static void Init();
 	static void Shutdown();
-	static C3dMarker *PlaceMarker(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate);
+	static C3dMarker *PlaceMarker(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir = nil);
 	static void PlaceMarkerSet(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate);
 	static void RetireMarker(uint32 id);
 	static void Render();
