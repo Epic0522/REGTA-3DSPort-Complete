@@ -208,6 +208,91 @@ Full technical derivation (palette VAs, function VAs, per-case logic,
 mapped source line numbers) is in this repo's git history — see the commit
 `stories: fix 3D-marker arrow colours to match PS2 LCS`.
 
+## Case study: checkpoint 3D markers (pillar height, arrow direction, arrow/pillar Z-fighting)
+
+A multi-bug investigation of `C3dMarkers` (`stories/src/renderer/SpecialFX.cpp`)
+and its two checkpoint-creating script opcodes
+(`COMMAND_ADD_POINT_3D_MARKER`/`COMMAND_ADD_ARROW_3D_MARKER`,
+`stories/src/control/Script9.cpp`/`Script10.cpp`). All four bugs traced back to
+the same root cause as the arrow-colour case study above: reLCS inherited
+reVC's marker backend, which only understands one arrow type and has no
+concept of the extra parameters PS2's LCS-specific marker calls pass — the
+port author read *some* of the PS2 disassembly (the `+7.0f` Z-offset literal
+in the arrow handler is lifted verbatim from PS2 VA `0x273318`) but not
+enough to get the geometry, orientation, and render state right. Fixes are in
+commits `7f3c23d`, `142cd44`, `df02ec4`, `08bcc4c` — read those diffs for the
+exact code; this section is the reusable RE method.
+
+**PS2 `C3dMarkers::PlaceMarker` (VA `0x249FF0`) accepts marker types 1
+(plain arrow), 2 (directional race arrow), 5 (cylinder/pillar)** — three
+types, gated at VA `0x24A0D8`-`0x24A0EC` (`beq $s0,1; beq $s0,5; bne
+$s0,2,bail`). reVC/reLCS's inherited enum only has two live slots (`ARROW`=1,
+`CYLINDER`=4); the third slot existed in the enum (`MARKERTYPE_2`) but had no
+model loaded and was dead code behind `PlaceMarker`'s type gate. Confirming a
+gap like this — an enum value with no corresponding `m_pRpClumpArray[]` load
+in `Init()` — is a strong signal the port dropped a whole PS2 marker type,
+not just a constant.
+
+**Bug 1 — direction params are an absolute target point, not a vector.**
+`ADD_ARROW_3D_MARKER`'s PS2 handler (VA `0x273318`) passes `ScriptParams[3..5]`
+straight through as a `CVector *dir` argument to `PlaceMarker`; disassembling
+`PlaceMarker`'s direction-handling block (VA `0x24AD84`-`0x24AE24`) shows it
+computing `delta = dir - pos` before normalizing. **The three "direction"
+floats a script passes are a world-space target point, exactly like the
+position params — PS2 subtracts the marker's own position to get a relative
+vector.** reLCS was feeding the raw absolute point straight into
+`CVector::Heading()`, which only ever looks *approximately* right near the
+origin and is why empirically tuning a constant angular offset never
+converged — the error scales with how far the target point is from the
+marker, not a fixed amount. Lesson: when a "direction" or "target" parameter
+comes from a script opcode, disassemble the callee to see whether it's used
+as-is or subtracted from the entity's own position before treating it as
+resolved.
+
+**Bug 2 — non-uniform Z scale drives pillar height, not a separate model.**
+`ADD_POINT_3D_MARKER`'s PS2 handler (VA `0x2F3008`, found via a `.rodata`
+jump table at `0x3BFC90`, index 82) passes an unusual extra float argument
+(`$f14 = 100.0f`) that every *other* `PlaceMarker` call site in the binary
+passes as `0.0f`. Tracing that argument through `PlaceMarker` (stored to
+marker-struct field `0x88`) and then into `C3dMarker::Render` (VA
+`0x249BEC`, `jal 0x26b780` = `CMatrix::Scale(sx, sy, sz)` with `sz` read from
+field `0x88`) proved it's a **third, independent Z scale factor** — PS2's
+pillar isn't a taller model, it's the same cylinder mesh non-uniformly
+scaled. reLCS's `C3dMarker::Render` only ever called the uniform
+`Scale(m_fSize)` overload, so every marker type was equally squat. The
+general lesson: an argument that's `0.0` at every call site except one is
+worth tracing all the way to its storage and consumption before assuming
+it's unused/legacy — it's more likely a feature only one caller exercises.
+
+**Bug 3 — Z-write gate is per-type, not per-"is it an arrow".** PS2's
+`C3dMarker::Render` (VA `0x249B80`) disables `rwRENDERSTATEZWRITEENABLE`
+around `RpAtomicRender` only for the cylinder (gate at VA `0x249C1C`:
+`(type-1) < 2` → skip the disable for types 1 *and* 2). reLCS's inherited
+code only tests `!= MARKERTYPE_ARROW`, so the new type-2 race arrow — added
+to fix Bug 1 above — wrongly got the cylinder's Z-write-disable treatment,
+suppressing its depth write and letting the pillar's far wall paint over it
+(reported as "the arrow blends into the pillar"). Decoding the shared
+render-state setter (`RwRenderStateSet`-equivalent at VA `0x144B58`, a
+12-entry jump table at `0x3AB520`; state 6's handler at `0x144BE0` sets GS
+bit 32 = `ZMSK` and writes GS register `0x4E` = `ZBUF_1`) confirmed which
+state the two-argument call was actually toggling. Lesson: when adding a new
+enum case to an existing type, grep every `if (type != OLD_CASE)`-shaped
+guard in the surrounding function — a boolean test written for a two-value
+enum silently misclassifies every new value added later as "not the special
+case", which is the opposite of what a `switch` would do.
+
+**Bug 4 — a wrong-but-plausible path guess (not PS2-related, still worth
+recording).** The console-hang fix's TXD load initially used
+`"MODELS/RACE_ARROW.TXD"` — copied from the `Font.cpp`/`Hud.cpp` pattern for
+root-level loose TXDs — but the actual staged asset lives at
+`models/generic/race_arrow.txd`, alongside its `.dff`. The existence guard
+(landmine #8 in `AGENTS.md`) meant the wrong path failed *safely* (fell back
+to the plain arrow) instead of crashing or hanging, but it also meant the
+bug was silent until a user specifically reported the new asset never
+appeared. When wiring a brand-new optional asset path, verify the path
+against the actual staged file layout (`ls` the asset's directory) rather
+than pattern-matching an existing loader call for a *different* asset class.
+
 ## Pitfall: generic one-argument setters are easy to swap
 
 Small setter functions (`SetFoo(int16)`, one argument, one store, `jr $ra`)

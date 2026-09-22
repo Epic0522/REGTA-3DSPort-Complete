@@ -109,6 +109,20 @@ and a map file literally named `.map`. None of these are checked in.
    restoring descending `CRunningScript::m_nId` order after the restore
    loop) because it caused an intermittent TR1 mission mis-spawn — see
    `git log --grep=TR1`. `III`/`miami` have the identical unfixed bug.
+8. **`CTxdStore::LoadTxd(int, const char*)` retries forever on a missing
+   file — it hard-locks the whole console, not just the app.** It wraps
+   `RwStreamOpen` in `do { ... } while (stream == nil);` with no backoff or
+   limit (`stories/src/rw/TxdStore.cpp`, shared pattern in `III`/`miami`
+   too). This is fine for the handful of built-in TXDs guaranteed to exist,
+   but loading any *new*, possibly-not-yet-staged TXD through it (e.g. a
+   3DS-port-added asset the SD card might not have yet — deploying a
+   `.3dsx` over `3dslink` does **not** push new SD card files, only the
+   executable) spins forever with no way to recover except a hardware reset.
+   Guard any new/optional `LoadTxd`/`LoadAtomicFile2Return` call with a
+   `CFileMgr::OpenFile(path)` existence check first (see
+   `CFont::LoadButtons`, `stories/src/renderer/Font.cpp:186-214`, for the
+   established pattern) — never call `LoadTxd` on a path you haven't
+   independently confirmed exists. See `git log --grep="console hang"`.
 
 ## Where things live (`stories/src`, 21 dirs, ~533 files)
 
