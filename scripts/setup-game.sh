@@ -210,7 +210,9 @@ case "$game" in
 		for relative_path in \
 			AUDIO/MUSIC \
 			movies \
-			txd/LOADSC0.TXD
+			txd/LOADSC0.TXD \
+			models/generic/race_arrow.dff \
+			models/generic/race_arrow.txd
 		do
 			copy_runtime_override "$relative_path"
 		done

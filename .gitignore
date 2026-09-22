@@ -102,6 +102,8 @@ crash_dump_*.dmp
 !/gamefiles/relcs/movies/Logo.3mv
 !/gamefiles/relcs/movies/Logo.pcm
 !/gamefiles/relcs/txd/LOADSC0.TXD
+!/gamefiles/relcs/models/generic/race_arrow.dff
+!/gamefiles/relcs/models/generic/race_arrow.txd
 !/gamefiles/revc/Audio/music/SELF_FM.WAV
 !/gamefiles/revc/Audio/music/SELF_LOOP.WAV
 !/gamefiles/revc/TEXT/american.gxt
