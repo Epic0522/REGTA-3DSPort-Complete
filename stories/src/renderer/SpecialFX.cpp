@@ -758,15 +758,28 @@ C3dMarkers::Init()
 	m_pRpClumpArray[MARKERTYPE_CYLINDER] = CFileLoader::LoadAtomicFile2Return("models/generic/zonecylb.dff");
 	CTxdStore::PopCurrentTxd();
 
-	int raceArrowTxdSlot = CTxdStore::FindTxdSlot("race_arrow");
-	if (raceArrowTxdSlot == -1)
-		raceArrowTxdSlot = CTxdStore::AddTxdSlot("race_arrow");
-	CTxdStore::LoadTxd(raceArrowTxdSlot, "MODELS/RACE_ARROW.TXD");
-	CTxdStore::AddRef(raceArrowTxdSlot);
-	CTxdStore::PushCurrentTxd();
-	CTxdStore::SetCurrentTxd(raceArrowTxdSlot);
-	m_pRpClumpArray[MARKERTYPE_RACE_ARROW] = CFileLoader::LoadAtomicFile2Return("models/generic/race_arrow.dff");
-	CTxdStore::PopCurrentTxd();
+	/* CTxdStore::LoadTxd(int,const char*) retries RwStreamOpen in an
+	 * unconditional loop, assuming the file always exists (true for
+	 * built-in PS2 assets) -- it hangs the whole console forever if it's
+	 * missing. Guard with an existence check first, same pattern as
+	 * CFont::LoadButtons (Font.cpp:197), so a missing/unstaged race_arrow
+	 * asset degrades to PlaceMarker's MARKERTYPE_ARROW fallback instead of
+	 * locking up at "Setup game variables". */
+	if (int raceArrowFile = CFileMgr::OpenFile("MODELS/RACE_ARROW.TXD")) {
+		CFileMgr::CloseFile(raceArrowFile);
+		int raceArrowTxdSlot = CTxdStore::FindTxdSlot("race_arrow");
+		if (raceArrowTxdSlot == -1)
+			raceArrowTxdSlot = CTxdStore::AddTxdSlot("race_arrow");
+		CTxdStore::LoadTxd(raceArrowTxdSlot, "MODELS/RACE_ARROW.TXD");
+		CTxdStore::AddRef(raceArrowTxdSlot);
+		CTxdStore::PushCurrentTxd();
+		CTxdStore::SetCurrentTxd(raceArrowTxdSlot);
+		if (int raceArrowDff = CFileMgr::OpenFile("models/generic/race_arrow.dff")) {
+			CFileMgr::CloseFile(raceArrowDff);
+			m_pRpClumpArray[MARKERTYPE_RACE_ARROW] = CFileLoader::LoadAtomicFile2Return("models/generic/race_arrow.dff");
+		}
+		CTxdStore::PopCurrentTxd();
+	}
 }
 
 void
