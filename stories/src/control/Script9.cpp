@@ -989,11 +989,27 @@ int8 CRunningScript::ProcessCommands1500To1599(int32 command)
 	}
 	case COMMAND_ADD_POINT_3D_MARKER:
 	{
+		uint32 ip = m_nIp;
+		uint32 id = (uint32)(uintptr)GetPointerToScriptVariable(&ip, 0);
 		CollectParameters(&m_nIp, 7);
-		/* The emulated point marker becomes a stale light column because this
-		 * backend cannot retire/re-key it with the race checkpoint progression.
-		 * Keep the separately authored arrow marker and intentionally omit the
-		 * light column. */
+		CVector pos = GET_VECTOR_PARAM(0);
+		if (pos.z <= MAP_Z_LOW_LIMIT)
+			pos.z = CWorld::FindGroundZForCoord(pos.x, pos.y);
+		/* PS2 VA 0x2F3008 caches the last placed position for this call site
+		 * and retires (destroys) the marker slot when the checkpoint moves --
+		 * C3dMarkers::PlaceMarker's cylinder reuse path only refreshes alpha,
+		 * it never moves the atomic, so without this the column would stay
+		 * pinned at the first checkpoint forever. */
+		static CVector lastPos(0.0f, 0.0f, 0.0f);
+		static bool hasLastPos = false;
+		if (!hasLastPos || !(lastPos == pos)) {
+			C3dMarkers::RetireMarker(id);
+			lastPos = pos;
+			hasLastPos = true;
+		}
+		C3dMarkers::PlaceMarker(id, MARKERTYPE_CYLINDER, pos, GET_FLOAT_PARAM(3) * 0.7f,
+			GET_INTEGER_PARAM(4), GET_INTEGER_PARAM(5), GET_INTEGER_PARAM(6),
+			255, 128, 0.0f, 1);
 		return 0;
 	}
 	case COMMAND_GET_VECTOR_FROM_MULTIPLAYER:

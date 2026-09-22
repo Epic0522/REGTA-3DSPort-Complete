@@ -940,6 +940,17 @@ C3dMarkers::PlaceMarkerSet(uint32 id, uint16 type, CVector &pos, float size, uin
 	PlaceMarker(id, type, pos, size * 0.86f, r, g, b, a, pulsePeriod, pulseFraction, -1);
 }
 
+void
+C3dMarkers::RetireMarker(uint32 id)
+{
+	for (int i = 0; i < NUM3DMARKERS; i++) {
+		if (m_aMarkerArray[i].m_nIdentifier == id && m_aMarkerArray[i].m_pAtomic != nil) {
+			m_aMarkerArray[i].DeleteMarkerObject();
+			break;
+		}
+	}
+}
+
 
 void
 C3dMarkers::Update()
