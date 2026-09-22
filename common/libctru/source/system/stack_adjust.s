@@ -26,12 +26,18 @@ BEGIN_ASM_FUNC initSystem, weak
 END_ASM_FUNC
 
 BEGIN_ASM_FUNC __ctru_exit, weak
-	@ The games explicitly tear down their active subsystems before returning.
-	@ Running C++ global destructors afterwards deletes frontend RenderWare
-	@ resources a second time, and a power-off request can reach that path while
-	@ those globals still retain stale texture pointers. The process is exiting
-	@ and the kernel will reclaim its address space, so skip the duplicate global
-	@ destructor sweep and proceed directly to service shutdown.
+	@ Running C++ global destructors at exit deletes frontend RenderWare
+	@ resources a second time, and a power-off request can reach that path
+	@ while those globals still retain stale texture pointers. The process is
+	@ exiting and the kernel will reclaim its address space, so skip the
+	@ duplicate global destructor sweep and proceed directly to service
+	@ shutdown.
+	@
+	@ REQUIREMENT: because the destructor sweep is skipped, each game must
+	@ explicitly stop every thread it started before returning from main().
+	@ __libctru_exit unmaps the heap immediately after this; any thread still
+	@ running will fault on freed memory. See callTheMaid() in each
+	@ <game>/src/skel/3ds/3ds.cpp.
 	bl	__appExit
 
 	ldr	r2, =saved_stack
