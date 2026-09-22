@@ -1007,9 +1007,14 @@ int8 CRunningScript::ProcessCommands1500To1599(int32 command)
 			lastPos = pos;
 			hasLastPos = true;
 		}
+		/* PS2 VA 0x2F3180 passes a $f14 extra argument of 100.0f here (every
+		 * other PlaceMarker call site passes 0.0f) -- it becomes the marker's
+		 * Z scale (see PlaceMarker/C3dMarker::Render), which is what makes
+		 * the PS2 light column tower far above the ground instead of being a
+		 * squat cylinder scaled uniformly with its width. */
 		C3dMarkers::PlaceMarker(id, MARKERTYPE_CYLINDER, pos, GET_FLOAT_PARAM(3) * 0.7f,
 			GET_INTEGER_PARAM(4), GET_INTEGER_PARAM(5), GET_INTEGER_PARAM(6),
-			255, 128, 0.0f, 1);
+			255, 128, 0.0f, 1, nil, 100.0f);
 		return 0;
 	}
 	case COMMAND_GET_VECTOR_FROM_MULTIPLAYER:

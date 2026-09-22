@@ -104,6 +104,7 @@ public:
 	float m_fSize;
 	float m_fBrightness;
 	float m_fCameraRange;
+	float m_fZScale;
 
 	bool AddMarker(uint32 identifier, uint16 type, float fSize, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate);
 	void DeleteMarkerObject();
@@ -116,7 +117,7 @@ class C3dMarkers
 public:
 	static void Init();
 	static void Shutdown();
-	static C3dMarker *PlaceMarker(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir = nil);
+	static C3dMarker *PlaceMarker(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir = nil, float zScale = 0.0f);
 	static void PlaceMarkerSet(uint32 id, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate);
 	static void RetireMarker(uint32 id);
 	static void Render();

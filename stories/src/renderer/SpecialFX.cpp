@@ -710,15 +710,25 @@ C3dMarker::Render()
 
 	CMatrix matrix;
 	matrix.Attach(m_Matrix.m_attachment);
-	matrix.Scale(m_fSize);
+	/* PS2 VA 0x249BEC-0x249BFC scales X/Y by m_fSize and Z separately by the
+	 * marker's zScale field (0x88) -- reduces to the plain uniform Scale(m_fSize)
+	 * for every marker type that never passes a zScale override, since m_fZScale
+	 * then equals m_fSize (see PlaceMarker). */
+	matrix.Scale(m_fSize, m_fSize, m_fZScale);
 	matrix.UpdateRW();
 
 	RwFrameUpdateObjects(RpAtomicGetFrame(m_pAtomic));
 	SetBrightMarkerColours(m_fBrightness);
-	if (m_nType != MARKERTYPE_ARROW)
+	/* PS2 VA 0x249C1C: (type - 1) < 2 skips the Z-write disable for both
+	 * arrow types (1 and 2) -- only the cylinder (type 5) disables Z-write.
+	 * reVC/reLCS only knew MARKERTYPE_ARROW, so the race arrow was wrongly
+	 * lumped in with the cylinder here, writing no depth and letting the
+	 * pillar's far wall paint over it (the "arrow blends into the pillar"
+	 * symptom). Do not simplify this back to a single type check. */
+	if (m_nType != MARKERTYPE_ARROW && m_nType != MARKERTYPE_RACE_ARROW)
 		RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
 	RpAtomicRender(m_pAtomic);
-	if (m_nType != MARKERTYPE_ARROW)
+	if (m_nType != MARKERTYPE_ARROW && m_nType != MARKERTYPE_RACE_ARROW)
 		RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)TRUE);
 	ReSetAmbientAndDirectionalColours();
 }
@@ -748,6 +758,7 @@ C3dMarkers::Init()
 		m_aMarkerArray[i].m_fSize = 1.0f;
 		m_aMarkerArray[i].m_fBrightness = 1.0f;
 		m_aMarkerArray[i].m_fCameraRange = 0.0f;
+		m_aMarkerArray[i].m_fZScale = 1.0f;
 	}
 	NumActiveMarkers = 0;
 	int txdSlot = CTxdStore::FindTxdSlot("particle");
@@ -765,12 +776,12 @@ C3dMarkers::Init()
 	 * CFont::LoadButtons (Font.cpp:197), so a missing/unstaged race_arrow
 	 * asset degrades to PlaceMarker's MARKERTYPE_ARROW fallback instead of
 	 * locking up at "Setup game variables". */
-	if (int raceArrowFile = CFileMgr::OpenFile("MODELS/RACE_ARROW.TXD")) {
+	if (int raceArrowFile = CFileMgr::OpenFile("models/generic/race_arrow.txd")) {
 		CFileMgr::CloseFile(raceArrowFile);
 		int raceArrowTxdSlot = CTxdStore::FindTxdSlot("race_arrow");
 		if (raceArrowTxdSlot == -1)
 			raceArrowTxdSlot = CTxdStore::AddTxdSlot("race_arrow");
-		CTxdStore::LoadTxd(raceArrowTxdSlot, "MODELS/RACE_ARROW.TXD");
+		CTxdStore::LoadTxd(raceArrowTxdSlot, "models/generic/race_arrow.txd");
 		CTxdStore::AddRef(raceArrowTxdSlot);
 		CTxdStore::PushCurrentTxd();
 		CTxdStore::SetCurrentTxd(raceArrowTxdSlot);
@@ -803,7 +814,10 @@ C3dMarkers::Render()
 	ActivateDirectional();
 	for (int i = 0; i < NUM3DMARKERS; i++) {
 		if (m_aMarkerArray[i].m_bIsUsed) {
-			if (m_aMarkerArray[i].m_fCameraRange < 150.0f) {
+			/* PS2 VA 0x249E48: a marker with a zScale override (size != zScale)
+			 * always renders, bypassing the 150m cull -- this is what lets the
+			 * checkpoint light pillar stay visible from far down the tracks. */
+			if (m_aMarkerArray[i].m_fSize != m_aMarkerArray[i].m_fZScale || m_aMarkerArray[i].m_fCameraRange < 150.0f) {
 				m_aMarkerArray[i].Render();
 				if (m_aMarkerArray[i].m_nType == MARKERTYPE_ARROW) {
 					CCoronas::RegisterCorona((uintptr)&m_aMarkerArray[i],
@@ -821,7 +835,7 @@ C3dMarkers::Render()
 }
 
 C3dMarker *
-C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir)
+C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size, uint8 r, uint8 g, uint8 b, uint8 a, uint16 pulsePeriod, float pulseFraction, int16 rotateRate, CVector *dir, float zScale)
 {
 	C3dMarker *pMarker;
 	CVector2D playerPos = FindPlayerCentreOfWorld(0);
@@ -884,6 +898,9 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		}
 		float someSin = Sin(TWOPI * (float)((pMarker->m_nPulsePeriod - 1) & (CTimer::GetTimeInMilliseconds() - pMarker->m_nStartTime)) / (float)pMarker->m_nPulsePeriod);
 		pMarker->m_fSize = pMarker->m_fStdSize - pulseFraction * pMarker->m_fStdSize * someSin;
+		/* PS2 VA 0x24A410 clamps the extra $f14 argument the same way: a
+		 * non-zero override becomes the Z scale, otherwise Z scales like X/Y. */
+		pMarker->m_fZScale = (zScale > 0.0f) ? zScale : pMarker->m_fSize;
 
 		if (type == MARKERTYPE_ARROW) {
 			pos.z += 0.25f * pMarker->m_fStdSize * someSin;
@@ -901,7 +918,19 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		if (type == MARKERTYPE_ARROW)
 			pMarker->m_Matrix.GetPosition() = pos;
 		else if (type == MARKERTYPE_RACE_ARROW && dir != nil) {
-			pMarker->m_Matrix.SetRotateZ(dir->Heading());
+			/* PS2 VA 0x24AD58 calls SetRotateX(marker, -0.34906587f) (-20 degrees)
+			 * on the marker matrix first, then VA 0x24AE28 builds a fresh basis
+			 * with forward=normalize(dir), up=(0,0,1) -- equivalent to
+			 * SetRotateZ(dir->Heading()), since Heading()'s Atan2(-x,y) convention
+			 * makes SetRotateZ's forward row (-sin,cos,0) equal normalize(dir) -- and
+			 * multiplies it into the already-pitched marker matrix. Reproduced here
+			 * as SetRotateX then RotateZ, applying the pitch first and the yaw
+			 * second to match that call order; the exact PS2 multiply order
+			 * (0x26B7C0/0x26B988) could not be fully disassembled (MMI-instruction
+			 * desync), so this composition is a best-faith match -- if the tilt
+			 * axis looks wrong on-device, this is the spot to adjust. */
+			pMarker->m_Matrix.SetRotateX(-DEGTORAD(20.0f));
+			pMarker->m_Matrix.RotateZ(dir->Heading());
 			pMarker->m_Matrix.Translate(pos);
 		}
 
@@ -921,6 +950,8 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 		pMarker->DeleteMarkerObject();
 
 	pMarker->AddMarker(identifier, type, size, r, g, b, a, pulsePeriod, pulseFraction, rotateRate);
+	/* See the matching comment in the reuse path above (PS2 VA 0x24AC08). */
+	pMarker->m_fZScale = (zScale > 0.0f) ? zScale : pMarker->m_fSize;
 	if (type == MARKERTYPE_CYLINDER || type == MARKERTYPE_0) {
 		if ((playerPos - pos).MagnitudeSqr() < sq(100.f) && CColStore::HasCollisionLoaded(pos)) {
 			float z = CWorld::FindGroundZFor3DCoord(pos.x, pos.y, pos.z + 1.0f, nil);
@@ -933,7 +964,9 @@ C3dMarkers::PlaceMarker(uint32 identifier, uint16 type, CVector &pos, float size
 	}
 	pMarker->m_Matrix.SetTranslate(pos.x, pos.y, pos.z);
 	if (type == MARKERTYPE_RACE_ARROW && dir != nil) {
-		pMarker->m_Matrix.SetRotateZ(dir->Heading());
+		/* See the matching comment in the reuse path above. */
+		pMarker->m_Matrix.SetRotateX(-DEGTORAD(20.0f));
+		pMarker->m_Matrix.RotateZ(dir->Heading());
 		pMarker->m_Matrix.Translate(pos);
 	}
 	pMarker->m_Matrix.UpdateRW();

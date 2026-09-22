@@ -79,7 +79,14 @@ int8 CRunningScript::ProcessCommands1600To1699(int32 command)
 		uint32 id = (uint32)(uintptr)GetPointerToScriptVariable(&ip, 0);
 		CollectParameters(&m_nIp, 10);
 		CVector pos = GET_VECTOR_PARAM(0);
-		CVector dir = CVector(GET_FLOAT_PARAM(3), GET_FLOAT_PARAM(4), GET_FLOAT_PARAM(5));
+		/* PS2 VA 0x273318 passes params 3/4/5 as an absolute target point,
+		 * not a direction -- PlaceMarker (VA 0x24AD84) subtracts the marker
+		 * position from it before normalizing. Do the same subtraction here;
+		 * feeding the raw target straight into Heading() (as an earlier
+		 * version of this fix did) computes a position-dependent yaw error,
+		 * which is why no constant angular offset ever fully corrected it. */
+		CVector dir = CVector(GET_FLOAT_PARAM(3), GET_FLOAT_PARAM(4), GET_FLOAT_PARAM(5)) - pos;
+		dir.z = 0.0f;
 		pos.z += GET_FLOAT_PARAM(9) + 7.0f;
 		/* PS2 VA 0x273318: marker type 2 (the race arrow), pulsePeriod 1 /
 		 * pulseFraction 1.0 (bobbing fully disabled -- the shared pulse math
