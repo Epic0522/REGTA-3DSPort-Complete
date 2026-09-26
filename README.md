@@ -18,6 +18,7 @@ REGTA brings three classic Grand Theft Auto games to New Nintendo 3DS:
   [reStories/reLCS](https://github.com/knackers4/res) (`stories`)
 
 Trailer：https://youtu.be/fBzzLx0BX5M
+https://youtu.be/M6l40wRYKgA
 
 Build any of the three games from this repository. Each has a full lower-screen
 interface, touch controls, Nintendo button prompts and a cheat-code keyboard.
@@ -907,3 +908,5 @@ This project is not affiliated with Rockstar Games or Take-Two Interactive.
 The full original games are not included. The selected overrides and HOME Menu
 artwork do not replace the required game data. Please keep the upstream credits
 and follow the licences of the code you use.
+
+Special thanks: Aria, she is cute.
