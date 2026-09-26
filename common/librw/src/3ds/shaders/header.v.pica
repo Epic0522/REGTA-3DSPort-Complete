@@ -14,10 +14,14 @@
 ;;.ivec u_nLights
 
 	;; Uniforms
-.fvec u_proj[4]
+.fvec u_proj[8]
 .fvec u_view[4]
 .fvec u_world[4]
 .fvec u_texMatrix[4]
+
+	;; Select the left (0..3) or right (4..7) projection matrix.
+.fvec u_stereoParams
+.alias screenSide u_stereoParams.x
 
 	;; for im2d
 .fvec u_xform
@@ -33,7 +37,7 @@
 .fvec u_matColor
 .fvec u_surfProps
 
+
 .alias surfAmbient  u_surfProps.x
 .alias surfSpecular u_surfProps.y
 .alias surfDiffuse  u_surfProps.z
-

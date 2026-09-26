@@ -31,6 +31,9 @@
 #include "Fire.h"
 #include "World.h"
 #include "Zones.h"
+#ifdef _3DS
+#include <3ds/os.h>
+#endif
 
 #define DISTANCE_TO_SPAWN_ROADBLOCK_PEDS 51.0f
 #define DISTANCE_TO_SCAN_FOR_DANGER 11.0f
@@ -87,6 +90,18 @@ int32 CCarCtrl::CarArrays[TOTAL_CUSTOM_CLASSES][MAX_CAR_MODELS_IN_ARRAY];
 CVehicle* apCarsToKeep[MAX_CARS_TO_KEEP];
 uint32 aCarsToKeepTime[MAX_CARS_TO_KEEP];
 
+static float
+AmbientCarScale3DS(void)
+{
+#ifdef _3DS
+	if(rw::c3d::stereoControlsActive())
+		return rw::c3d::performanceModeActive() ? 0.55f : 0.70f;
+	return rw::c3d::performanceModeActive() ? 0.75f : 1.0f;
+#else
+	return 1.0f;
+#endif
+}
+
 void
 CCarCtrl::GenerateRandomCars()
 {
@@ -117,9 +132,12 @@ CCarCtrl::GenerateOneRandomCar()
 	CZoneInfo zone;
 	CTheZones::GetZoneInfoForTimeOfDay(&vecTargetPos, &zone);
 	pPlayer->m_nTrafficMultiplier = pPlayer->m_fRoadDensity * zone.carDensity;
-	if (NumRandomCars >= pPlayer->m_nTrafficMultiplier * CarDensityMultiplier * CIniFile::CarNumberMultiplier)
+	const float stereoCarScale = AmbientCarScale3DS();
+	if (NumRandomCars >= pPlayer->m_nTrafficMultiplier * CarDensityMultiplier * CIniFile::CarNumberMultiplier * stereoCarScale)
 		return;
-	if (NumFiretrucksOnDuty + NumAmbulancesOnDuty + NumParkedCars + NumMissionCars + NumLawEnforcerCars + NumRandomCars >= MaxNumberOfCarsInUse)
+	if (NumRandomCars >= MaxNumberOfCarsInUse * stereoCarScale)
+		return;
+	if (CPools::GetVehiclePool()->GetSize() - CPools::GetVehiclePool()->GetNoOfUsedSpaces() <= 8)
 		return;
 	CWanted* pWanted = pPlayer->m_pPed->m_pWanted;
 	int carClass;
@@ -730,6 +748,9 @@ CCarCtrl::PossiblyRemoveVehicle(CVehicle* pVehicle)
 			return;
 		}
 		float distanceToPlayer = (pVehicle->GetPosition() - vecPlayerPos).Magnitude2D();
+		/* Spawn points sit around 40/120 units away.  Scaling these thresholds
+		 * deletes new traffic before it can enter the camera, especially while
+		 * driving.  Population count, not the spawn corridor, is the budget. */
 		float threshold = 50.0f;
 		if (pVehicle->GetIsOnScreen() ||
 			TheCamera.Cams[TheCamera.ActiveCam].LookingLeft ||

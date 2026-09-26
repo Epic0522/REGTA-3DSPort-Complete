@@ -23,6 +23,7 @@
 #include "TempColModels.h"
 #include "WaterLevel.h"
 #include "World.h"
+#include "../../../../common/3ds/CameraCollision.h"
 
 #define OBJECT_REPOSITION_OFFSET_Z 2.0f
 
@@ -352,6 +353,9 @@ CWorld::ProcessLineOfSightSectorList(CPtrList &list, const CColLine &line, CColP
 
 	for(node = list.first; node; node = node->next) {
 		e = (CEntity *)node->item;
+#ifdef _3DS
+		if(CameraCollision3DS::Ignore(e)) continue;
+#endif
 		if(e->m_scanCode != GetCurrentScanCode() && e != pIgnoreEntity && (e->bUsesCollision || deadPeds || bikers) &&
 		   !(ignoreSomeObjects && CameraToIgnoreThisObject(e))) {
 			colmodel = nil;
@@ -369,7 +373,9 @@ CWorld::ProcessLineOfSightSectorList(CPtrList &list, const CColLine &line, CColP
 
 			if(colmodel && CCollision::ProcessLineOfSight(line, e->GetMatrix(), *colmodel, point, mindist,
 			                                              ignoreSeeThrough, ignoreShootThrough))
+			{
 				entity = e;
+			}
 			if(carTyres && ((CVehicle*)e)->SetUpWheelColModel(&tyreCol) && CCollision::ProcessLineOfSight(line, e->GetMatrix(), tyreCol, tyreColPoint, tyreDist, false, ignoreShootThrough)){
 				float dp1 = DotProduct(line.p1 - line.p0, e->GetRight());
 				float dp2 = DotProduct(point.point - e->GetPosition(), e->GetRight());
@@ -660,6 +666,9 @@ CWorld::GetIsLineOfSightSectorListClear(CPtrList &list, const CColLine &line, bo
 
 	for(node = list.first; node; node = node->next) {
 		e = (CEntity *)node->item;
+#ifdef _3DS
+		if(CameraCollision3DS::Ignore(e)) continue;
+#endif
 		if(e->m_scanCode != GetCurrentScanCode() && e->bUsesCollision) {
 
 			e->m_scanCode = GetCurrentScanCode();
@@ -961,6 +970,9 @@ CWorld::TestSphereAgainstSectorList(CPtrList &list, CVector spherePos, float rad
 
 	for(CPtrNode *node = list.first; node; node = node->next) {
 		CEntity *e = (CEntity *)node->item;
+#ifdef _3DS
+		if(CameraCollision3DS::Ignore(e)) continue;
+#endif
 
 		if(e->m_scanCode != GetCurrentScanCode()) {
 			e->m_scanCode = GetCurrentScanCode();
@@ -976,6 +988,17 @@ CWorld::TestSphereAgainstSectorList(CPtrList &list, CVector spherePos, float rad
 					    CCollision::ProcessColModels(sphereMat, OurColModel, e->GetMatrix(), *eCol,
 					                                 gaTempSphereColPoints, nil, nil);
 
+#ifdef _3DS
+					if(CameraOcclusion3DS::Data().collect) {
+						// Only real collision geometry touching the camera sphere may fade.
+						// The vehicle proximity heuristic below is not a contact test.
+						if(collidedSpheres != 0) {
+							CameraOcclusion3DS::Touch(e);
+							CameraOcclusion3DS::Data().contact = true;
+						}
+						continue;
+					}
+#endif
 					if(collidedSpheres != 0 ||
 					   (e->IsVehicle() && ((CVehicle *)e)->m_vehType == VEHICLE_TYPE_CAR && e->GetModelIndex() != MI_DODO &&
 					    radius + eCol->boundingBox.max.x > distance)) {

@@ -656,7 +656,7 @@ stateMachine()
 		ms = (float)CTimer::GetCurrentTimeInCycles() /
 		     (float)CTimer::GetCyclesPerMillisecond();
 		if(RwInitialised){
-			if (!CMenuManager::m_PrefsFrameLimiter ||
+			if (rw::c3d::consumeStereoRenderRetry(ms) || !CMenuManager::m_PrefsFrameLimiter ||
 			    (1000.0f / (float)RsGlobal.maxFPS) < ms)
 				RsEventHandler(rsIDLE, (void*)TRUE);
 		}
@@ -852,7 +852,11 @@ main(int argc, char *argv[])
 	}
 	
 	callTheMaid();
-	return 0;
+	/* The owned subsystems are already shut down. newlib exit() would run
+	 * registered C++ destructors before __ctru_exit, touching dead RW objects.
+	 * _exit still performs libctru service cleanup and the HBL return callback. */
+	fflush(NULL);
+	_exit(0);
 }
 
 #endif

@@ -2,6 +2,9 @@
 
 #ifdef AUDIO_OAL
 #include <AL/al.h>
+#ifdef _3DS
+#include <3ds.h>
+#endif
 
 #define NUM_STREAMBUFFERS 8
 
@@ -122,6 +125,13 @@ class CStream
 	bool     m_bPaused;
 	bool     m_bActive;
 	bool     m_bSingleSource;
+#ifdef _3DS
+	struct AsyncState;
+	AsyncState *m_async;
+	void CancelAsync();
+	void DestroyAsync();
+	void UpdateAsync();
+#endif
 	
 public:
 #ifdef MULTITHREADED_AUDIO
@@ -191,6 +201,10 @@ public:
 	void SetSeamlessLoop(bool8 enabled) { m_bSeamlessLoop = enabled != FALSE; }
 	void SetFullInitialQueue(bool8 enabled) { m_bFullInitialQueue = enabled != FALSE; }
 	
+#ifdef _3DS
+	bool BeginAsyncStream(const char *filename, uint32 position, uint32 rate, bool loop);
+	void ShutdownAsync() { DestroyAsync(); }
+#endif
 	void ProviderInit();
 	void ProviderTerm();
 };

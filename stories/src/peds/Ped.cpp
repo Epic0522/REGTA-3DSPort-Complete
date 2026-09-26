@@ -6,6 +6,7 @@
 #include "RpAnimBlend.h"
 #include "Bones.h"
 #include "Ped.h"
+#include "../../../../common/3ds/CameraOcclusion.h"
 #include "AnimBlendAssociation.h"
 #include "Fire.h"
 #include "DMAudio.h"
@@ -5040,7 +5041,11 @@ void
 CPed::Render(void)
 {
 	if (bInVehicle && m_pMyVehicle && m_nPedState != PED_EXIT_CAR && m_nPedState != PED_DRAG_FROM_CAR) {
-		if (!bRenderPedInCar)
+		if (!bRenderPedInCar
+#ifdef _3DS
+		    && !CameraOcclusion3DS::PresetVisible(this)
+#endif
+		)
 			return;
 
 		if (!m_pMyVehicle->IsBike() && !IsPlayer()) {

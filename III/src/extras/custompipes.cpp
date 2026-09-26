@@ -125,6 +125,18 @@ EnvMapRender(void)
 {
 	if(VehiclePipeSwitch != VEHICLEPIPE_NEO)
 		return;
+	bool stereoCapture = false;
+#ifdef RW_3DS
+	/* Keep reflections live in both stereo modes, but avoid paying for the
+	 * additional city capture on every rendered frame. */
+	stereoCapture = rw::c3d::stereoControlsActive();
+	if(stereoCapture){
+		static bool skipStereoCapture;
+		skipStereoCapture = !skipStereoCapture;
+		if(skipStereoCapture)
+			return;
+	}
+#endif
 
 	RwCameraEndUpdate(Scene.camera);
 
@@ -132,6 +144,7 @@ EnvMapRender(void)
 	rw::V3d camPos = FindPlayerCoors();
 	EnvMapCam->getFrame()->matrix.pos = camPos;
 	EnvMapCam->getFrame()->transform(&EnvMapCam->getFrame()->matrix, rw::COMBINEREPLACE);
+	EnvMapCam->setFarPlane(stereoCapture ? 125.0f : 250.0f);
 
 	rw::RGBA skycol;
 	skycol.red = CTimeCycle::GetSkyBottomRed();
@@ -141,7 +154,10 @@ EnvMapRender(void)
 	EnvMapCam->clear(&skycol, rwCAMERACLEARZ|rwCAMERACLEARIMAGE);
 	RwCameraBeginUpdate(EnvMapCam);
 	bRenderingEnvMap = true;
-	RenderEnvMapScene();
+	CRenderer::RenderRoads();
+	CRenderer::RenderEverythingBarRoads();
+	if(!stereoCapture)
+		CRenderer::RenderFadingInEntities();
 	bRenderingEnvMap = false;
 
 	if(EnvMaskTex){

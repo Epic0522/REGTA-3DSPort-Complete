@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "General.h"
 #include "Timer.h"
@@ -26,6 +27,14 @@
 // This bounds update/render work and avoids weather or vehicle effects pushing
 // the system over the memory/performance cliff.
 #define MAX_ACTIVE_PARTICLES_3DS  (256)
+
+#ifdef _3DS
+static int32
+GetActiveParticleLimit3DS(void)
+{
+	return EffectBudget3DS::Limit(rw::c3d::performanceModeActive() ? 160 : MAX_ACTIVE_PARTICLES_3DS);
+}
+#endif
 
 
 //(5)
@@ -1012,8 +1021,13 @@ CParticle *CParticle::AddParticle(tParticleType type, CVector const &vecPos, CVe
 	if ( CTimer::GetIsPaused() )
 		return nil;
 
+#ifdef _3DS
+	if ( nActiveParticles >= GetActiveParticleLimit3DS() )
+		return nil;
+#else
 	if ( nActiveParticles >= MAX_ACTIVE_PARTICLES_3DS )
 		return nil;
+#endif
 
 	if ( ( type == PARTICLE_ENGINE_SMOKE
 		|| type == PARTICLE_ENGINE_SMOKE2

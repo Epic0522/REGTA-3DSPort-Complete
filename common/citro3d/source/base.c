@@ -97,6 +97,7 @@ bool C3D_Init(size_t cmdBufSize)
 	}
 
 	ctx->flags = C3DiF_Active | C3DiF_TexEnvBuf | C3DiF_TexEnvAll | C3DiF_Effect | C3DiF_TexStatus | C3DiF_TexAll;
+	ctx->texEnvColorDirty = 0;
 
 	// TODO: replace with direct struct access
 	C3D_DepthMap(true, -1.0f, 0.0f);
@@ -266,15 +267,8 @@ void C3Di_UpdateContext(void)
 	if ((ctx->texEnvBuf&7) == GPU_GAS)
 		C3Di_GasUpdate(ctx);
 
-	if (ctx->flags & C3DiF_TexEnvAll)
-	{
-		for (i = 0; i < 6; i ++)
-		{
-			if (!(ctx->flags & C3DiF_TexEnv(i))) continue;
-			C3Di_TexEnvBind(i, &ctx->texEnv[i]);
-		}
-		ctx->flags &= ~C3DiF_TexEnvAll;
-	}
+	if ((ctx->flags & C3DiF_TexEnvAll) || ctx->texEnvColorDirty)
+		C3Di_UpdateTexEnv();
 
 	C3D_LightEnv* env = ctx->lightEnv;
 

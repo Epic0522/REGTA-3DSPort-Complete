@@ -796,6 +796,7 @@ public:
 	void UnloadTextures();
 #ifdef _3DS
 	void ReleasePauseHomeTextures();
+	void ServiceDeferredMenuTextureUnload();
 #endif
 	void WaitForUserCD();
 	void PrintController();

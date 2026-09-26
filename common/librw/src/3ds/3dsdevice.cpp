@@ -17,6 +17,7 @@
 #include "rw3dsplg.h"
 #include "rw3dsshader.h"
 #include "default_shbin.h"
+#include "presentation_cadence.h"
 
 #define IMAX(i1, i2) ((i1) > (i2) ? (i1) : (i2))
 #define MINT(i1, i2) ((i1) < (i2) ? (i1) : (i2))
@@ -37,7 +38,7 @@ void *linearScratch;
 	
 struct UniformScene
 {
-	C3D_Mtx proj;
+	C3D_Mtx proj[2];
 	C3D_Mtx view;
 };
 
@@ -186,7 +187,22 @@ Shader *defaultShader;
 
 static bool32 stateDirty = 1;
 static bool32 sceneDirty = 1;
-static bool32 objectDirty = 1;
+static bool32 worldDirty = 1;
+static bool32 lightingDirty = 1;
+static bool32 stereoActive;
+static Rect stereoViewport[2];
+static C3D_FrameBuf *stereoFrameBuffer[2];
+static bool32 stereoExtendedDepth = true;
+static bool32 performanceMode2D;
+static bool32 performanceMode3D;
+static uint64 stereoNextFrameDeadline;
+static bool32 stereoSkippedLastFrame;
+static bool32 stereoRenderRetryPending;
+static float32 frameSkipRatio;
+static uint32 frameSkipSamples;
+static float32 adaptiveWorldRange = 1.0f;
+static int32 stereoViewportEye = -1;
+static int32 stereoProjectionEye = -1;
 
 #define MAXNUMSTAGES 3
 
@@ -886,6 +902,8 @@ static void
 resetRenderState(void)
 {
 	memset(&oldC3DState, 0xFE, sizeof(oldC3DState));
+	worldDirty = 1;
+	lightingDirty = 1;
 
 	rwStateCache.alphaTestEnable = 0;
 	setC3DRenderState(RWC3D_ALPHATEST, 0);
@@ -957,6 +975,8 @@ setLights(WorldLights *lightData)
 	int i, n;
 	Light *l;
 	int32 bits;
+	bool32 changed = memcmp(&uniformObject.ambLight, &lightData->ambient,
+	                        sizeof(uniformObject.ambLight)) != 0;
 
 	uniformObject.ambLight = lightData->ambient;
 
@@ -968,9 +988,15 @@ setLights(WorldLights *lightData)
 	n = 0;
 	for(i = 0; i < lightData->numDirectionals && i < 8; i++){
 		l = lightData->directionals[i];
+		const V3d &direction = l->getFrame()->getLTM()->at;
+		if(uniformObject.lightParams[n].type != 1.0f ||
+		   memcmp(&uniformObject.lightColor[n], &l->color, sizeof(RGBAf)) != 0 ||
+		   memcmp(&uniformObject.lightDirection[n], &direction, sizeof(V3d)) != 0)
+			changed = true;
 		uniformObject.lightParams[n].type = 1.0f;
 		uniformObject.lightColor[n] = l->color;
-		memcpy(&uniformObject.lightDirection[n], &l->getFrame()->getLTM()->at, sizeof(V3d));
+		memcpy(&uniformObject.lightDirection[n], &direction, sizeof(V3d));
+		uniformObject.lightDirection[n].w = 0.0f;
 		bits |= VSLIGHT_DIRECT; /* bug fix? */
 		n++;
 		if(n >= MAX_LIGHTS)
@@ -1012,10 +1038,13 @@ setLights(WorldLights *lightData)
 	// 	}
 	// }
 
+	if(uniformObject.nLights != n || uniformObject.lightParams[n].type != 0.0f)
+		changed = true;
 	uniformObject.lightParams[n].type = 0.0f;
 out:
 	uniformObject.nLights = n;
-	objectDirty = 1;
+	if(changed)
+		lightingDirty = 1;
 	return bits;
 }
 #endif
@@ -1100,15 +1129,15 @@ setLights(WorldLights *lightData)
 	}
 
 out:
-	objectDirty = 1;
+	lightingDirty = 1;
 	return bits;
 }
 #endif
 
-void
-setProjectionMatrix(C3D_Mtx proj)
+static void
+setProjectionMatrix(int32 eye, C3D_Mtx proj)
 {
-	uniformScene.proj = proj;
+	uniformScene.proj[eye] = proj;
 	sceneDirty = 1;
 }
 
@@ -1120,37 +1149,56 @@ setViewMatrix(C3D_Mtx view)
 }
 
 void
-setWorldMatrix(Matrix *mat)
+setWorldMatrix(Matrix *mat, float positionScale)
 {
 	RawMatrix raw;
+	C3D_Mtx world;
 	convMatrix(&raw, mat);
 
-	uniformObject.world.r[0].x = raw.right.x;
-	uniformObject.world.r[1].x = raw.right.y;
-	uniformObject.world.r[2].x = raw.right.z;
-	uniformObject.world.r[3].x = raw.rightw;
+	world.r[0].x = raw.right.x;
+	world.r[1].x = raw.right.y;
+	world.r[2].x = raw.right.z;
+	world.r[3].x = raw.rightw;
 
-	uniformObject.world.r[0].y = raw.up.x;
-	uniformObject.world.r[1].y = raw.up.y;
-	uniformObject.world.r[2].y = raw.up.z;
-	uniformObject.world.r[3].y = raw.upw;
+	world.r[0].y = raw.up.x;
+	world.r[1].y = raw.up.y;
+	world.r[2].y = raw.up.z;
+	world.r[3].y = raw.upw;
 
-	uniformObject.world.r[0].z = raw.at.x;
-	uniformObject.world.r[1].z = raw.at.y;
-	uniformObject.world.r[2].z = raw.at.z;
-	uniformObject.world.r[3].z = raw.upw;
+	world.r[0].z = raw.at.x;
+	world.r[1].z = raw.at.y;
+	world.r[2].z = raw.at.z;
+	world.r[3].z = raw.upw;
 
-	uniformObject.world.r[0].w = raw.pos.x;
-	uniformObject.world.r[1].w = raw.pos.y;
-	uniformObject.world.r[2].w = raw.pos.z;
-	uniformObject.world.r[3].w = raw.posw;
+	world.r[0].w = raw.pos.x;
+	world.r[1].w = raw.pos.y;
+	world.r[2].w = raw.pos.z;
+	world.r[3].w = raw.posw;
+	// Decode rigid packed positions through the existing world transform.
+	// Translation and homogeneous w stay untouched; uniform scale preserves
+	// the direction of normals, which the default shader normalizes.
+	if(positionScale != 1.0f)
+		for(int i = 0; i < 4; ++i){
+			world.r[i].x *= positionScale;
+			world.r[i].y *= positionScale;
+			world.r[i].z *= positionScale;
+		}
 
-	objectDirty = 1;
+	if(memcmp(&uniformObject.world, &world, sizeof(world)) != 0){
+		uniformObject.world = world;
+		worldDirty = 1;
+	}
 }
 
+static EntityRenderStyle entityRenderStyle = {1.f, 1.f, false};
+EntityRenderStyle getEntityRenderStyle(void) { return entityRenderStyle; }
+void setEntityRenderStyle(EntityRenderStyle style) { entityRenderStyle = style; }
+
 void
-setMaterialColor(const RGBA &color)
+setMaterialColor(const RGBA &inputColor)
 {
+	RGBA color = inputColor;
+	// Entity opacity is applied once in the final TEV stage for every mesh.
 	if(!equal(materialState.matColor, color)){
 		rw::RGBAf col;
 		convColor(&col, &color);
@@ -1181,6 +1229,7 @@ setMaterial(const RGBA &color, const SurfaceProperties &surfaceprops, float extr
 		surfProps[3] = extraSurfProp;
 		c3dUniform4fv(U(u_surfProps), 1, surfProps);
 		materialState.surfProps = surfaceprops;
+		materialState.extraSurfProp = extraSurfProp;
 	}
 }
 
@@ -1190,24 +1239,30 @@ flushCache(void)
 	flushC3DRenderState();
 
 	if(sceneDirty){
-		c3dUniformMatrix4fv(U(u_proj), 1, 0, &uniformScene.proj);
+		c3dUniformMatrix4fv(U(u_proj), 2, 0, &uniformScene.proj[0]);
 		c3dUniformMatrix4fv(U(u_view), 1, 0, &uniformScene.view);
 		sceneDirty = 0;
 	}
 
-	if(objectDirty){
+	if(worldDirty){
 		c3dUniformMatrix4fv(U(u_world), 1, 0, &uniformObject.world);
-		if(currentShader == nil || currentShader->usesLighting){
-			c3dUniform4fv(U(u_ambLight), 1, (float*)&uniformObject.ambLight);
+		worldDirty = 0;
+	}
 
-			int nLights = uniformObject.nLights;
-			int nParams = MINT(MAX_LIGHTS, nLights + 1);
-			c3dUniform4fv(U(u_lightParams),    nParams, (float*)uniformObject.lightParams);
-			c3dUniform4fv(U(u_lightPosition),  nLights, (float*)uniformObject.lightPosition);
-			c3dUniform4fv(U(u_lightDirection), nLights, (float*)uniformObject.lightDirection);
-			c3dUniform4fv(U(u_lightColor),     nLights, (float*)uniformObject.lightColor);
-		}
-		objectDirty = 0;
+	if(lightingDirty && (currentShader == nil || currentShader->usesLighting)){
+		c3dUniform4fv(U(u_ambLight), 1, (float*)&uniformObject.ambLight);
+
+		int nLights = uniformObject.nLights;
+		int nParams = MINT(MAX_LIGHTS, nLights + 1);
+		c3dUniform4fv(U(u_lightParams), nParams,
+		              (float*)uniformObject.lightParams);
+		/* Local point/spot lighting is disabled in the vertex shader, so position
+		 * vectors were pure command-buffer traffic. */
+		c3dUniform4fv(U(u_lightDirection), nLights,
+		              (float*)uniformObject.lightDirection);
+		c3dUniform4fv(U(u_lightColor), nLights,
+		              (float*)uniformObject.lightColor);
+		lightingDirty = 0;
 	}
 
 	if(stateDirty){
@@ -1237,13 +1292,16 @@ prepareFrameBuffer(Camera *cam)
 	assert(fbo);
 
 	if(zbuf){
-		C3D_FrameBufDepth(fbo, natzb->zbuf, GPU_RB_DEPTH24_STENCIL8);
+		C3D_FrameBufDepth(fbo, natzb->zbuf, GPU_RB_DEPTH24);
 		if(natfb->fboMate != zbuf){
 			natfb->fboMate = zbuf;
 			natzb->fboMate = fbuf;
 		}
 	}else{
-		C3D_FrameBufDepth(fbo, NULL, GPU_RB_DEPTH24_STENCIL8);
+		C3D_FrameBufDepth(fbo, NULL, GPU_RB_DEPTH24);
+		if(natfb->stereoFbo)
+			C3D_FrameBufDepth(natfb->stereoFbo, NULL,
+			                  GPU_RB_DEPTH24);
 		natfb->fboMate = nil;
 	}
 
@@ -1256,6 +1314,193 @@ cameraTilt(Camera *cam)
 	Raster *fbuf = cam->frameBuffer->parent;
 	C3DRaster *natfb = NATRAS(fbuf);
 	return natfb->tilt;
+}
+
+static bool
+isTopCamera(Camera *cam)
+{
+	Raster *fb = cam->frameBuffer->parent;
+	C3DRaster *natfb = NATRAS(fb);
+	return natfb->tilt && fb->width == 400 && fb->height == 240;
+}
+
+bool32
+stereoControlsActive(void)
+{
+	return osGet3DSliderState() > 0.001f;
+}
+
+bool32
+stereoExtendedDepthEnabled(void)
+{
+	return stereoExtendedDepth;
+}
+
+void
+setStereoExtendedDepth(bool32 extendedDepth)
+{
+	stereoExtendedDepth = extendedDepth;
+}
+
+bool32
+performanceModeActive(void)
+{
+	return stereoControlsActive() ? performanceMode3D : performanceMode2D;
+}
+
+bool32 performanceMode2DEnabled(void) { return performanceMode2D; }
+bool32 performanceMode3DEnabled(void) { return performanceMode3D; }
+
+void
+set3DSPerformanceModes(bool32 mode2D, bool32 mode3D)
+{
+	performanceMode2D = mode2D;
+	performanceMode3D = mode3D;
+}
+
+void
+handle3DSPerformanceDPad(uint32 buttonsDown)
+{
+	if(buttonsDown & KEY_DLEFT){
+		if(stereoControlsActive()) performanceMode3D = false;
+		else                       performanceMode2D = false;
+	}
+	if(buttonsDown & KEY_DRIGHT){
+		if(stereoControlsActive()) performanceMode3D = true;
+		else                       performanceMode2D = true;
+	}
+	if(stereoControlsActive()){
+		if(buttonsDown & KEY_DUP)   stereoExtendedDepth = false;
+		if(buttonsDown & KEY_DDOWN) stereoExtendedDepth = true;
+	}
+}
+
+bool32
+consumeStereoRenderRetry(float elapsedLogicMs)
+{
+	if(!stereoControlsActive()){
+		stereoRenderRetryPending = false;
+		return false;
+	}
+	// Retry still enters the complete game update, not just the renderer.
+	// Allow an early update only after a real 20ms interval (one 50Hz unit).
+	// Do not clamp Timer's timestep or consume the request while waiting.
+	if(!stereoRenderRetryPending || !(elapsedLogicMs >= 20.0f))
+		return false;
+	stereoRenderRetryPending = false;
+	return true;
+}
+
+bool32
+shouldSkipStereoFrame(void)
+{
+	/* Measure lateness against the previous update, not an indefinitely
+	 * advancing deadline. Otherwise a stable slow scene accrues
+	 * permanent debt and drops nearly every second image. */
+	const bool32 stereo = stereoControlsActive();
+	const uint64 now = svcGetSystemTick() / (uint64)CPU_TICKS_PER_MSEC;
+	if(stereoNextFrameDeadline == 0 || now > stereoNextFrameDeadline + 250) {
+		stereoNextFrameDeadline = now + 33;
+		stereoSkippedLastFrame = false;
+		stereoRenderRetryPending = false;
+		frameSkipRatio = 0.0f;
+		frameSkipSamples = 0;
+		return false;
+	}
+
+	// Treat a frame more than 3ms beyond the 30 FPS deadline as a missed
+	// presentation. Stereo drops it; Flat records the same decision so its
+	// detail range can react without changing Flat's presentation cadence.
+	const bool32 skip = !stereoSkippedLastFrame && now > stereoNextFrameDeadline + 3;
+	stereoNextFrameDeadline = now + 33;
+	stereoSkippedLastFrame = skip;
+	stereoRenderRetryPending = stereo && skip;
+	// A short window makes sustained drops affect range within a few frames.
+	// The skip guard permits at most every other presentation to be marked, so
+	// a 50 percent raw rate represents full pressure.
+	const float32 sample = skip ? 1.0f : 0.0f;
+	if(frameSkipSamples < 12){
+		++frameSkipSamples;
+		frameSkipRatio += (sample-frameSkipRatio) / frameSkipSamples;
+	}else
+		frameSkipRatio += (sample-frameSkipRatio) / 12.0f;
+	return stereo && skip;
+}
+
+float32
+frameSkipPressure(void)
+{
+	const float32 pressure = frameSkipRatio * 2.0f;
+	return pressure < 1.0f ? pressure : 1.0f;
+}
+
+void
+resetFrameSkipPressure(void)
+{
+	stereoNextFrameDeadline = 0;
+	stereoSkippedLastFrame = false;
+	stereoRenderRetryPending = false;
+	frameSkipRatio = 0.0f;
+	frameSkipSamples = 0;
+}
+
+void
+setAdaptiveWorldRangeScale(float32 scale)
+{
+	adaptiveWorldRange = scale;
+}
+
+float32
+adaptiveWorldRangeScale(void)
+{
+	return adaptiveWorldRange;
+}
+
+static bool
+ensureStereoBuffers(Camera *cam)
+{
+	if(!isTopCamera(cam) || osGet3DSliderState() <= 0.001f)
+		return false;
+	Raster *fb = cam->frameBuffer->parent;
+	C3DRaster *natfb = NATRAS(fb);
+	if(!natfb->stereoFbo){
+		const u32 colorSize = C3D_CalcColorBufSize(natfb->fbo->width,
+			natfb->fbo->height, GPU_RB_RGB8);
+		natfb->stereoBuf = vramAlloc(colorSize);
+		natfb->stereoFbo = rwMallocT(C3D_FrameBuf, 1, MEMDUR_EVENT | ID_DRIVER);
+		if(!natfb->stereoBuf || !natfb->stereoFbo){
+			printf("not enough vram for stereo color buffer.\n");
+			svcBreak(USERBREAK_PANIC);
+		}
+		C3D_FrameBufAttrib(natfb->stereoFbo, natfb->fbo->width,
+		                   natfb->fbo->height, natfb->fbo->block32);
+		C3D_FrameBufColor(natfb->stereoFbo, natfb->stereoBuf,
+		                  GPU_RB_RGB8);
+	}
+	Raster *zbuf = cam->zBuffer ? cam->zBuffer->parent : nil;
+	if(zbuf){
+		C3DRaster *natzb = NATRAS(zbuf);
+		if(!natzb->stereoBuf){
+			const u32 depthSize = C3D_CalcDepthBufSize(natfb->fbo->width,
+				natfb->fbo->height, GPU_RB_DEPTH24);
+			natzb->stereoBuf = vramAlloc(depthSize);
+			if(!natzb->stereoBuf){
+				printf("not enough vram for full-resolution stereo depth buffer.\n");
+				svcBreak(USERBREAK_PANIC);
+			}
+		}
+		C3D_FrameBufDepth(natfb->stereoFbo, natzb->stereoBuf,
+		                  GPU_RB_DEPTH24);
+	}else
+		C3D_FrameBufDepth(natfb->stereoFbo, NULL, GPU_RB_DEPTH24);
+
+	return true;
+}
+
+static bool
+isStereoTopCamera(Camera *cam)
+{
+	return isTopCamera(cam) && NATRAS(cam->frameBuffer->parent)->stereoFbo != nil;
 }
 
 Rect
@@ -1295,8 +1540,83 @@ cameraRenderOn(Camera *cam)
 	Raster *fbuf = cam->frameBuffer->parent;
 	C3DRaster *natras = NATRAS(fbuf);
 	Rect vp = cameraViewPort(cam, natras->tilt);
-	C3D_SetFrameBuf(natras->fbo);
-	C3D_SetViewport(vp.x, vp.y, vp.w, vp.h);
+	const bool stereoTop = isStereoTopCamera(cam);
+	stereoActive = stereoTop && osGet3DSliderState() > 0.001f;
+	if(stereoActive){
+		stereoViewport[0] = vp;
+		stereoViewport[1] = vp;
+		stereoFrameBuffer[0] = natras->fbo;
+		stereoFrameBuffer[1] = natras->stereoFbo;
+	}else{
+		stereoViewport[0] = vp;
+		stereoViewport[1] = vp;
+		stereoFrameBuffer[0] = natras->fbo;
+		stereoFrameBuffer[1] = natras->fbo;
+	}
+	C3D_SetFrameBuf(stereoFrameBuffer[0]);
+	C3D_SetViewport(stereoViewport[0].x,
+	                stereoViewport[0].y,
+	                stereoViewport[0].w,
+	                stereoViewport[0].h);
+	C3D_FVUnifSet(GPU_VERTEX_SHADER, U(u_stereoParams), 0.0f, 0.0f, 0.0f, 0.0f);
+	stereoViewportEye = 0;
+	stereoProjectionEye = 0;
+}
+
+bool32
+stereoRenderActive(void)
+{
+	return stereoActive;
+}
+
+int32
+stereoRenderPassCount(void)
+{
+	return stereoActive ? 2 : 1;
+}
+
+int32
+stereoRenderEye(int32 pass)
+{
+	if(!stereoActive)
+		return 0;
+	/* Keep rendering on the eye which is already bound, then cross to the
+	 * other eye once.  Consecutive draws therefore alternate L/R and R/L
+	 * instead of switching back to the left framebuffer after every mesh. */
+	const int32 currentEye = stereoViewportEye == 1 ? 1 : 0;
+	return pass ? 1 - currentEye : currentEye;
+}
+
+void
+setStereoEyeViewport(int32 eye)
+{
+	if(!stereoActive)
+		eye = 0;
+	eye = eye ? 1 : 0;
+	if(stereoViewportEye == eye)
+		return;
+	C3D_SetFrameBuf(stereoFrameBuffer[eye ? 1 : 0]);
+	const Rect &vp = stereoViewport[eye ? 1 : 0];
+	const Rect &previous = stereoViewport[stereoViewportEye == 1 ? 1 : 0];
+	// Both full-resolution eyes share a viewport. Only the target changes.
+	if(vp.x != previous.x || vp.y != previous.y ||
+	   vp.w != previous.w || vp.h != previous.h)
+		C3D_SetViewport(vp.x, vp.y, vp.w, vp.h);
+	stereoViewportEye = eye;
+}
+
+void
+setStereoEye(int32 eye)
+{
+	if(!stereoActive)
+		eye = 0;
+	eye = eye ? 1 : 0;
+	setStereoEyeViewport(eye);
+	if(stereoProjectionEye == eye)
+		return;
+	C3D_FVUnifSet(GPU_VERTEX_SHADER, U(u_stereoParams),
+	              eye ? 4.0f : 0.0f, 0.0f, 0.0f, 0.0f);
+	stereoProjectionEye = eye;
 }
 
 static void
@@ -1315,11 +1635,15 @@ updateFog(Camera *cam)
 static void
 beginUpdate(Camera *cam)
 {
-	C3D_FrameBuf *fbo;
-	C3D_Mtx view, proj;
-	int tilt = cameraTilt(cam);
+	C3D_Mtx view, proj[2];
 
-	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+	ensureStereoBuffers(cam);
+	loadVegetationCache();
+	// 3D: omit the fresh-VBlank wait before each camera submission.
+	// Flag 0 still waits for GPU completion before reusing dynamic buffers.
+	// 2D, transfer completion and paired eye presentation remain unchanged.
+	C3D_FrameBegin(stereoControlsActive() ? 0 : C3D_FRAME_SYNCDRAW);
+	resetVertexLayoutCache();
 	/* The previous frame is now finished, so CPU-skinned instance buffers can
 	 * safely be reused without one ped overwriting another ped's queued draw. */
 	resetSkinFrameBuffers();
@@ -1357,44 +1681,48 @@ beginUpdate(Camera *cam)
 	float32 invwy = 1.0f/cam->viewWindow.y;
 	float32 invz  = -1.0f/(cam->farPlane-cam->nearPlane);
 
-	proj.r[0].x = 0.0f;
-	proj.r[1].x = 0.0f;
-	proj.r[2].x = 0.0f;
-	proj.r[3].x = 0.0f;
+	/* Put the convergence plane well into the scene so nearby vehicles,
+	 * pedestrians and props use negative disparity and appear in front of the
+	 * panel.  The physical slider still provides continuous control. */
+	/* Normal View keeps the player close to the zero-disparity plane and uses
+	 * gentler separation.  Extended Depth preserves the stronger city-depth
+	 * presentation used by the first stereoscopic builds. */
+	const float32 separation = isStereoTopCamera(cam) ? osGet3DSliderState() *
+	                           (stereoExtendedDepth ? 0.64f : 0.24f) : 0.0f;
+	const float32 convergence = stereoExtendedDepth ? 9.0f : 6.0f;
+	for(int32 eye = 0; eye < 2; eye++){
+		const float32 iod = eye == 0 ? -separation : separation;
+		const float32 shift = iod / (2.0f * convergence);
+		const float32 viewOffsetX = cam->viewOffset.x*invwx;
+		const float32 viewOffsetY = cam->viewOffset.y*invwy;
+		memset(&proj[eye], 0, sizeof(C3D_Mtx));
+		proj[eye].r[1].x = -invwx;
+		proj[eye].r[0].y = invwy;
+		proj[eye].r[0].z = viewOffsetX;
+		proj[eye].r[1].z = viewOffsetY - shift*invwx;
+		proj[eye].r[0].w = -viewOffsetX;
+		/* The eye translation is independent of the depth-dependent frustum
+		 * shear above.  Negating the complete r[1].z here also folds that shear
+		 * into the constant term and moves the convergence plane. */
+		proj[eye].r[1].w = -viewOffsetY + iod/2.0f;
 
-	proj.r[0].y = 0.0f;
-	proj.r[1].y = 0.0f;
-	proj.r[2].y = 0.0f;
-	proj.r[3].y = 0.0f;
-
-	if (tilt){
-		proj.r[1].x =-invwx;
-		proj.r[0].y = invwy;
-	}else {
-		proj.r[1].x =-invwx;
-		proj.r[0].y = invwy;
-	}
-
-	proj.r[0].z = cam->viewOffset.x*invwx;
-	proj.r[1].z = cam->viewOffset.y*invwy;
-	proj.r[0].w = -proj.r[0].z;
-	proj.r[1].w = -proj.r[1].z;
-
-	if(cam->projection == Camera::PERSPECTIVE){
-		proj.r[3].w = 0.0f;
-		proj.r[2].w = far * near / (near - far);
-		proj.r[3].z = 1.0f;
-		proj.r[2].z = -proj.r[3].z * near / (near - far);
-	}else{
-		proj.r[0].w = -(cam->farPlane+cam->nearPlane)*invz;
-		proj.r[1].w = 0.0f;
-		proj.r[2].w = 2.0f*invz;
-		proj.r[3].w = 1.0f;
+		if(cam->projection == Camera::PERSPECTIVE){
+			proj[eye].r[3].w = 0.0f;
+			proj[eye].r[2].w = far * near / (near - far);
+			proj[eye].r[3].z = 1.0f;
+			proj[eye].r[2].z = -proj[eye].r[3].z * near / (near - far);
+		}else{
+			proj[eye].r[0].w = -(cam->farPlane+cam->nearPlane)*invz;
+			proj[eye].r[1].w = 0.0f;
+			proj[eye].r[2].w = 2.0f*invz;
+			proj[eye].r[3].w = 1.0f;
+		}
 	}
 
 	// Update the uniforms
 	setViewMatrix(view);
-	setProjectionMatrix(proj);
+	setProjectionMatrix(0, proj[0]);
+	setProjectionMatrix(1, proj[1]);
 
 	//Update Fog
 	updateFog(cam);
@@ -1411,13 +1739,20 @@ endUpdate(Camera *cam)
 static void
 clearCamera(Camera *cam, RGBA *col, uint32 mode)
 {
+	ensureStereoBuffers(cam);
 	C3D_FrameBuf *fbo = prepareFrameBuffer(cam);
+	C3DRaster *natfb = NATRAS(cam->frameBuffer->parent);
 	u32 coli = RWRGBAINT(col->alpha, col->blue, col->green, col->red);
 	u32 mask = 0;
 	if(mode & Camera::CLEARIMAGE)  { mask |= C3D_CLEAR_COLOR; }
 	if(mode & Camera::CLEARZ)      { mask |= C3D_CLEAR_DEPTH; }
 	if(mode & Camera::CLEARSTENCIL){ mask |= C3D_CLEAR_DEPTH; }
-	C3D_FrameBufClear(fbo, mask, coli, 0);
+	if(isTopCamera(cam) && natfb->stereoFbo &&
+	         osGet3DSliderState() > 0.001f){
+		C3D_FrameBufClear(fbo, mask, coli, 0);
+		C3D_FrameBufClear(natfb->stereoFbo, mask, coli, 0);
+	}else
+		C3D_FrameBufClear(fbo, mask, coli, 0);
 }
 
 #define GX_TRANSFER_CROP 4
@@ -1431,10 +1766,20 @@ clearCamera(Camera *cam, RGBA *col, uint32 mode)
 	 GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)    |         \
 	 GX_TRANSFER_CROP)
 
+#define DISPLAY_TRANSFER_FLAGS_RGB8				\
+	(GX_TRANSFER_FLIP_VERT(0)                     |		\
+	 GX_TRANSFER_OUT_TILED(0)                     |		\
+	 GX_TRANSFER_RAW_COPY(0)                      |		\
+	 GX_TRANSFER_IN_FORMAT(GX_TRANSFER_FMT_RGB8)  |		\
+	 GX_TRANSFER_OUT_FORMAT(GX_TRANSFER_FMT_RGB8) |		\
+	 GX_TRANSFER_SCALING(GX_TRANSFER_SCALE_NO)    |         \
+	 GX_TRANSFER_CROP)
+
 /* The top and bottom screens have independent double buffers.  The original
  * global swap alternated the lower buffers even on a frame where the 15 Hz
  * radar was intentionally not updated, exposing an older map frame. */
 static bool bottomPresentedThisFrame;
+static PresentationCadence stereoPresentationCadence;
 
 static void
 showRaster(Raster *raster, uint32 flags)
@@ -1445,10 +1790,8 @@ showRaster(Raster *raster, uint32 flags)
 
 	u32 fbo_dim, scr_dim;
 
-	u32 gap = fbo->height - raster->width;
-
 	if(natras->tilt){
-		fbo_dim = GX_BUFFER_DIM(fbo->width,     fbo->height);   /* 256x512 */
+		fbo_dim = GX_BUFFER_DIM(fbo->width, fbo->height);
 		scr_dim = GX_BUFFER_DIM(raster->height, raster->width); /* 240*400 */
 	}else{
 		svcBreak(USERBREAK_PANIC);
@@ -1458,6 +1801,11 @@ showRaster(Raster *raster, uint32 flags)
 	// The normal game camera is 400 pixels wide. A 320-pixel auxiliary
 	// camera is used by reVC for the lower-screen radar/HUD.
 	const bool bottomScreen = raster->width == 320 && raster->height == 240;
+	/* The bottom-screen camera is rendered between the top camera's EndUpdate
+	 * and ShowRaster calls.  It necessarily disables stereoActive, so that
+	 * transient global cannot describe the already-rendered top raster here. */
+	const bool presentStereo = !bottomScreen && natras->stereoFbo != nil &&
+	                           osGet3DSliderState() > 0.001f;
 	u32 *scr_ptr = (u32*)gfxGetFramebuffer(bottomScreen ? GFX_BOTTOM : GFX_TOP,
 		GFX_LEFT, NULL, NULL);
 
@@ -1466,15 +1814,33 @@ showRaster(Raster *raster, uint32 flags)
 			   DISPLAY_TRANSFER_FLAGS);
 
 	gspWaitForPPF();
+	if(presentStereo){
+		u32 *fboRight = (u32*)natras->stereoFbo->colorBuf;
+		u32 *screenRight = (u32*)gfxGetFramebuffer(GFX_TOP, GFX_RIGHT, NULL, NULL);
+		GX_DisplayTransfer(fboRight, fbo_dim, screenRight, scr_dim,
+		                   DISPLAY_TRANSFER_FLAGS_RGB8);
+		gspWaitForPPF();
+	}
 	// The lower camera is presented first. Swap only screens which received a
 	// new transfer, so a throttled lower camera retains its last complete frame.
 	if(bottomScreen){
 		bottomPresentedThisFrame = true;
 	}else{
-		gfxScreenSwapBuffers(GFX_TOP, false);
+		// Only pace a completed pair, after both transfers. Late frames go
+		// straight through; a fast frame following a stall cannot burst out
+		// immediately afterwards. Never accumulate a catch-up deadline.
+		const uint64 delay=stereoPresentationCadence.delay(svcGetSystemTick(),
+			(uint64)SYSCLOCK_ARM11/30,presentStereo);
+		if(delay)
+			svcSleepThread((int64)(delay*1000000000ULL/(uint64)SYSCLOCK_ARM11));
+		/* hasStereo must follow the frame we just transferred.  Passing false
+		 * makes GSP present the left framebuffer to both eyes even though the
+		 * right-eye image was rendered and copied successfully. */
+		gfxScreenSwapBuffers(GFX_TOP, presentStereo);
 		if(bottomPresentedThisFrame)
 			gfxScreenSwapBuffers(GFX_BOTTOM, false);
 		bottomPresentedThisFrame = false;
+		stereoPresentationCadence.presented(svcGetSystemTick(),presentStereo);
 	}
 }
 
@@ -1544,8 +1910,9 @@ static int
 openC3D(EngineOpenParams *openparams)
 {
 	gfxInitDefault();
+	gfxSet3D(true);
 
-	if (!C3D_Init(C3D_DEFAULT_CMDBUF_SIZE*4)){
+	if (!C3D_Init(C3D_DEFAULT_CMDBUF_SIZE*8)){
 		svcBreak(USERBREAK_PANIC);
 	}
 
@@ -1575,9 +1942,15 @@ closeC3D(void)
 	return 1;
 }
 
+void
+closeFrameProfileLog(void)
+{
+}
+
 static int
 stopC3D(void)
 {
+	closeFrameProfileLog();
 	closeIm3D();
 	closeIm2D();
 	C3D_Fini();

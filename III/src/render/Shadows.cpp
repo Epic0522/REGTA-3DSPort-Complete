@@ -1,9 +1,11 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "main.h"
 #include "TxdStore.h"
 #include "Timer.h"
 #include "Camera.h"
+#include "../../../../common/3ds/CameraOcclusion.h"
 #include "Timecycle.h"
 #include "CutsceneMgr.h"
 #include "Automobile.h"
@@ -193,6 +195,10 @@ CShadows::AddPermanentShadow(uint8 ShadowType, RwTexture *pTexture, CVector *pPo
 
 
 	// find free slot
+	int activePermanent = 0;
+	for(int slot = 0; slot < MAX_PERMAMENTSHADOWS; ++slot)
+		if(aPermanentShadows[slot].m_nType != SHADOWTYPE_NONE) ++activePermanent;
+	if(activePermanent >= EffectBudget3DS::Limit(MAX_PERMAMENTSHADOWS)) return;
 	int32 nSlot = 0;
 	while ( nSlot < MAX_PERMAMENTSHADOWS && aPermanentShadows[nSlot].m_nType != SHADOWTYPE_NONE )
 		nSlot++;
@@ -313,6 +319,10 @@ CShadows::StoreStaticShadow(uint32 nID, uint8 ShadowType, RwTexture *pTexture, C
 		}
 		else
 		{
+			int activeStatic = 0;
+			for(int slot = 0; slot < MAX_STATICSHADOWS; ++slot)
+				if(aStaticShadows[slot].m_pPolyBunch != 0) ++activeStatic;
+			if(activeStatic >= EffectBudget3DS::Limit(MAX_STATICSHADOWS)) return;
 			nSlot = 0;
 			while ( nSlot < MAX_STATICSHADOWS && aStaticShadows[nSlot].m_pPolyBunch != NULL )
 				nSlot++;
@@ -430,7 +440,7 @@ CShadows::StoreShadowToBeRendered(uint8 ShadowType, RwTexture *pTexture, CVector
 	ASSERT(pTexture != NULL);
 	ASSERT(pPosn != NULL);
 
-	if ( ShadowsStoredToBeRendered < MAX_STOREDSHADOWS )
+	if ( ShadowsStoredToBeRendered < EffectBudget3DS::Limit(MAX_STOREDSHADOWS) )
 	{
 		asShadowsStored[ShadowsStoredToBeRendered].m_ShadowType          = ShadowType;
 		asShadowsStored[ShadowsStoredToBeRendered].m_pTexture            = pTexture;
@@ -454,6 +464,9 @@ CShadows::StoreShadowToBeRendered(uint8 ShadowType, RwTexture *pTexture, CVector
 void
 CShadows::StoreShadowForCar(CAutomobile *pCar)
 {
+#ifdef _3DS
+	if(CameraOcclusion3DS::HideFixedShadow(pCar))return;
+#endif
 	ASSERT(pCar != NULL);
 
 	if ( CTimeCycle::GetShadowStrength() != 0 )

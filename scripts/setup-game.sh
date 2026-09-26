@@ -217,6 +217,15 @@ case "$game" in
 		;;
 esac
 
+if python3 -c 'import PIL' >/dev/null 2>&1; then
+	if ! python3 "$script_dir/tools/bake_vegetation.py" "$target" "$target/models/vegetation.vgi"; then
+		echo "Vegetation cache was not generated; the game will use original vegetation."
+	fi
+else
+	echo "Optional far-canopy cache: install Pillow, then run:"
+	printf 'python3 "%s/tools/bake_vegetation.py" "%s" "%s/models/vegetation.vgi"\n' "$script_dir" "$target" "$target"
+fi
+
 sync
 echo "Prepared $game data: $target"
 du -sh "$target"

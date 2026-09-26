@@ -66,8 +66,9 @@ class CRenderer
 	static BlockedRange *pEmptyBlockedRanges;
 public:
 #ifdef _3DS
-	static float GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId);
+	static float GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *ent = nil);
 	static float GetNew3DSWorldDistance(CEntity *ent, float originDistance, const CVector &cameraPosition = ms_vecCameraPosition);
+	static uint32 GetAttachedWindowLightMask(CEntity *ent);
 #endif
 	static float ms_lodDistScale;
 	static bool m_loadingPriority;

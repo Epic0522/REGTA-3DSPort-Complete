@@ -37,7 +37,7 @@ MPG123_CFG	:=-DOPT_MULTI -DOPT_GENERIC -DOPT_GENERIC_DITHER -DOPT_NEON -DREAL_IS
 #-DOPT_GENERIC
 
 DEBUG		:=-g
-OPTFLAGS	:=-O2	# -flto -fwhole-program
+OPTFLAGS	:=-O3
 WISDOM		:=	# -Wall (yeah right)
 ifeq ($(OPTIMIZED_BUILD),1)
 	OPTFLAGS := -O3
@@ -50,9 +50,9 @@ endif
 FPSTR		:="$(RE3_CFG)$(LIBRW_CFG)$(MPG123_CFG)$(DEBUG)$(OPTFLAGS)$(WISDOM)"
 FINGERPRINT	:=$(shell echo "$(FPSTR)" | md5sum | cut -d' ' -f1)
 ifeq ($(EMULATOR_SKIP_OP),1)
-	PREFIX := ./obj-azahar-noop/
+	PREFIX := ./obj-azahar-noop/$(FINGERPRINT)/
 else
-	PREFIX := ./obj/
+	PREFIX := ./obj/$(FINGERPRINT)/
 endif
 
 # re3

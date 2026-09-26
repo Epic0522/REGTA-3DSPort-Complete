@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "main.h"
 #include "General.h"
@@ -242,6 +243,7 @@ RwRaster *gpMultiPlayerHitRaster;
 
 float      CParticle::ms_afRandTable[CParticle::RAND_TABLE_SIZE];
 CParticle *CParticle::m_pUnusedListHead;
+static int nActiveParticles3DS;
 float      CParticle::m_SinTable[CParticle::SIN_COS_TABLE_SIZE];
 float      CParticle::m_CosTable[CParticle::SIN_COS_TABLE_SIZE]; 
 
@@ -261,6 +263,7 @@ void CParticle::ReloadConfig()
 	
 	debug("Initialising CParticle...");
 	
+	nActiveParticles3DS = 0;
 	m_pUnusedListHead = gParticleArray;
 	
 	for ( int32 i = 0; i < MAX_PARTICLES_ON_SCREEN; i++ )
@@ -1069,6 +1072,9 @@ CParticle *CParticle::AddParticle(tParticleType type, CVector const &vecPos, CVe
 		CReplay::RecordParticle(type, vecPos, vecDir, fSize, color);
 */
 	
+#ifdef _3DS
+	if(nActiveParticles3DS >= EffectBudget3DS::Limit(MAX_PARTICLES_ON_SCREEN)) return nil;
+#endif
 	CParticle *pParticle = m_pUnusedListHead;
 	
 	if ( pParticle == nil )
@@ -1270,6 +1276,7 @@ CParticle *CParticle::AddParticle(tParticleType type, CVector const &vecPos, CVe
 		pParticle->m_fSize = fSize;
 	
 	m_pUnusedListHead = pParticle->m_pNext;
+	++nActiveParticles3DS;
 
 	pParticle->m_pNext = psystem->m_pParticles;
 
@@ -2159,6 +2166,7 @@ void CParticle::RemoveParticle(CParticle *pParticle, CParticle *pPrevParticle, t
 	else
 		pPSystemData->m_pParticles = pParticle->m_pNext;
 
+	if(nActiveParticles3DS > 0) --nActiveParticles3DS;
 	pParticle->m_pNext = m_pUnusedListHead;
 	m_pUnusedListHead = pParticle;
 }

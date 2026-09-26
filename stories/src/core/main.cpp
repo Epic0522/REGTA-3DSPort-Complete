@@ -79,6 +79,10 @@
 #include "PlayerInfo.h"
 #include "Vehicle.h"
 #include "Timer.h"
+#ifdef _3DS
+#include <3ds/os.h>
+#include <3ds.h>
+#endif
 #ifdef USE_OUR_VERSIONING
 #include "GitSHA1.h"
 #endif
@@ -1727,9 +1731,18 @@ RenderEffects(void)
 	CRopes::Render();
 	CShadows::RenderStaticShadows();
 	CShadows::RenderStoredShadows();
+#ifdef RW_3DS
+	const bool performanceProfile = rw::c3d::performanceModeActive();
+	CSkidmarks::Render();
+	if(!performanceProfile && !rw::c3d::stereoControlsActive()){
+		CAntennas::Render();
+	}
+	CRubbish::Render();
+#else
 	CSkidmarks::Render();
 	CAntennas::Render();
 	CRubbish::Render();
+#endif
 	CCoronas::Render();
 	CParticle::Render();
 	CPacManPickups::Render();
@@ -1737,7 +1750,12 @@ RenderEffects(void)
 #ifndef RW_3DS
 	CPointLights::RenderFogEffect();
 #endif
+#ifdef RW_3DS
+	if(!performanceProfile)
+		CMovingThings::Render();
+#else
 	CMovingThings::Render();
+#endif
 	CRenderer::RenderFirstPersonVehicle();
 	POP_RENDERGROUP();
 }
@@ -1843,6 +1861,8 @@ Render2dStuffAfterFade(void)
 	DisplayGameDebugText();
 #endif
 
+
+
 #ifdef MOBILE_IMPROVEMENTS
 	if (CDraw::FadeValue != 0)
 #endif
@@ -1852,9 +1872,32 @@ Render2dStuffAfterFade(void)
 	POP_RENDERGROUP();
 }
 
+static float
+Apply3DSFarClipProfile(float farClip)
+{
+#ifdef _3DS
+	return Min(farClip, Max(180.0f, farClip * rw::c3d::adaptiveWorldRangeScale()));
+#else
+	return farClip;
+#endif
+}
+
+static float
+Apply3DSFogProfile(float fogStart)
+{
+#ifdef _3DS
+	return Min(fogStart, Max(120.0f, fogStart * rw::c3d::adaptiveWorldRangeScale()));
+#else
+	return fogStart;
+#endif
+}
+
 void
 Idle(void *arg)
 {
+#ifdef _3DS
+	rw::c3d::ProfileLogicFrameScope profileLogicFrame;
+#endif
 	CTimer::Update();
 
 	tbInit();
@@ -1866,9 +1909,15 @@ Idle(void *arg)
 	CPointLights::InitPerFrame();
 
 	double phaseStart = re3_wall_time_ms();
+#ifdef _3DS
+	uint64 profileGameplayStart = rw::c3d::profileTimerStart();
+#endif
 	tbStartTimer(0, "CGame::Process");
 	CGame::Process();
 	tbEndTimer("CGame::Process");
+#ifdef _3DS
+	rw::c3d::profileRecordGameplay(profileGameplayStart);
+#endif
 	double phaseMs = re3_wall_time_ms() - phaseStart;
 	if(phaseMs >= 80.0)
 		re3_stall_log("FRAME game-process %.0f ms", phaseMs);
@@ -1882,9 +1931,15 @@ Idle(void *arg)
 		return;
 #endif
 	phaseStart = re3_wall_time_ms();
+#ifdef _3DS
+	uint64 profileAudioStart = rw::c3d::profileTimerStart();
+#endif
 	tbStartTimer(0, "DMAudio.Service");
 	DMAudio.Service();
 	tbEndTimer("DMAudio.Service");
+#ifdef _3DS
+	rw::c3d::profileRecordAudio(profileAudioStart);
+#endif
 	phaseMs = re3_wall_time_ms() - phaseStart;
 	if(phaseMs >= 80.0)
 		re3_stall_log("FRAME audio-service %.0f ms", phaseMs);
@@ -1899,6 +1954,11 @@ Idle(void *arg)
 	{
 		return;
 	}
+
+#ifdef _3DS
+	if(arg != nil && !FrontEndMenuManager.m_bMenuActive && rw::c3d::shouldSkipStereoFrame())
+		return;
+#endif
 	
 	SetLightsWithTimeOfDayColour(Scene.world);
 
@@ -1941,8 +2001,8 @@ Idle(void *arg)
 #ifdef FIX_BUGS
 		RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *)FALSE); // TODO: temp? this fixes OpenGL render but there should be a better place for this
 		// This has to be done BEFORE RwCameraBeginUpdate
-		RwCameraSetFarClipPlane(Scene.camera, CTimeCycle::GetFarClip());
-		RwCameraSetFogDistance(Scene.camera, CTimeCycle::GetFogStart());
+		RwCameraSetFarClipPlane(Scene.camera, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()));
+		RwCameraSetFogDistance(Scene.camera, Apply3DSFogProfile(CTimeCycle::GetFogStart()));
 #endif
 
 		if(CWeather::LightningFlash && !CCullZones::CamNoRain()){
@@ -1958,8 +2018,8 @@ Idle(void *arg)
 		DefinedState();
 
 #ifndef FIX_BUGS
-		RwCameraSetFarClipPlane(Scene.camera, CTimeCycle::GetFarClip());
-		RwCameraSetFogDistance(Scene.camera, CTimeCycle::GetFogStart());
+		RwCameraSetFarClipPlane(Scene.camera, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()));
+		RwCameraSetFogDistance(Scene.camera, Apply3DSFogProfile(CTimeCycle::GetFogStart()));
 #endif
 
 		tbStartTimer(0, "RenderScene");
@@ -1980,15 +2040,22 @@ Idle(void *arg)
 		if((TheCamera.m_BlurType == MOTION_BLUR_NONE || TheCamera.m_BlurType == MOTION_BLUR_LIGHT_SCENE) &&
 		   TheCamera.m_ScreenReductionPercentage > 0.0f)
 		        TheCamera.SetMotionBlurAlpha(150);
+		bool stereo3D = false;
+#ifdef _3DS
+		stereo3D = rw::c3d::stereoControlsActive();
+#endif
 
 #ifdef SCREEN_DROPLETS
-		CPostFX::GetBackBuffer(Scene.camera);
-		ScreenDroplets::Process();
-		ScreenDroplets::Render();
+		if(!stereo3D){
+			CPostFX::GetBackBuffer(Scene.camera);
+			ScreenDroplets::Process();
+			ScreenDroplets::Render();
+		}
 #endif
 
 		tbStartTimer(0, "RenderMotionBlur");
-		TheCamera.RenderMotionBlur();
+		if(!stereo3D)
+			TheCamera.RenderMotionBlur();
 		tbEndTimer("RenderMotionBlur");
 
 		tbStartTimer(0, "Render2dStuff");
@@ -2250,10 +2317,22 @@ void TheGame(void)
 
 			PUSH_MEMID(MEMID_GAME_PROCESS)
 			CPointLights::InitPerFrame();
+#ifdef _3DS
+			uint64 profileGameplayStart = rw::c3d::profileTimerStart();
+#endif
 			CGame::Process();
+#ifdef _3DS
+			rw::c3d::profileRecordGameplay(profileGameplayStart);
+#endif
 			POP_MEMID();
 
+#ifdef _3DS
+			uint64 profileAudioStart = rw::c3d::profileTimerStart();
+#endif
 			DMAudio.Service();
+#ifdef _3DS
+			rw::c3d::profileRecordAudio(profileAudioStart);
+#endif
 
 			if (CGame::bDemoMode && CTimer::GetTimeInMilliseconds() > (3*60 + 30)*1000 && !CCutsceneMgr::IsCutsceneProcessing())
 			{
@@ -2278,8 +2357,8 @@ void TheGame(void)
 
 #ifdef FIX_BUGS
 				// This has to be done BEFORE RwCameraBeginUpdate
-				RwCameraSetFarClipPlane(Scene.camera, CTimeCycle::GetFarClip());
-				RwCameraSetFogDistance(Scene.camera, CTimeCycle::GetFogStart());
+				RwCameraSetFarClipPlane(Scene.camera, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()));
+				RwCameraSetFogDistance(Scene.camera, Apply3DSFogProfile(CTimeCycle::GetFogStart()));
 #endif
 
 				if (CWeather::LightningFlash && !CCullZones::CamNoRain())
@@ -2289,8 +2368,8 @@ void TheGame(void)
 
 				DefinedState();
 #ifndef FIX_BUGS
-				RwCameraSetFarClipPlane(Scene.camera, CTimeCycle::GetFarClip());
-				RwCameraSetFogDistance(Scene.camera, CTimeCycle::GetFogStart());
+				RwCameraSetFarClipPlane(Scene.camera, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()));
+				RwCameraSetFogDistance(Scene.camera, Apply3DSFogProfile(CTimeCycle::GetFogStart()));
 #endif
 
 				RenderScene();

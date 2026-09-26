@@ -23,12 +23,37 @@
 #include "Script.h"
 #include "Shadows.h"
 #include "Bike.h"
+#ifdef _3DS
+#include <3ds/os.h>
+#endif
 
 #define MIN_CREATION_DIST		40.0f // not for start of the game (look at the GeneratePedsAtStartOfGame)
 #define CREATION_RANGE			10.0f // added over the MIN_CREATION_DIST.
 #define OFFSCREEN_CREATION_MULT	0.5f
 #define PED_REMOVE_DIST			(MIN_CREATION_DIST + CREATION_RANGE + 1.0f)
 #define PED_REMOVE_DIST_SPECIAL	(MIN_CREATION_DIST + CREATION_RANGE + 15.0f) // for peds with bCullExtraFarAway flag
+
+static float
+AmbientPedScale3DS(void)
+{
+	#ifdef _3DS
+	if(rw::c3d::stereoControlsActive())
+		return rw::c3d::performanceModeActive() ? 0.60f : 0.80f;
+	return rw::c3d::performanceModeActive() ? 0.55f : 1.0f;
+#else
+	return 1.0f;
+#endif
+}
+
+static float
+PedDespawnScale3DS(void)
+{
+#ifdef _3DS
+	if(rw::c3d::stereoControlsActive())
+		return rw::c3d::performanceModeActive() ? 0.70f : 0.82f;
+#endif
+	return 1.0f;
+}
 
 // Transition areas between zones
 const RegenerationPoint aSafeZones[] = {
@@ -594,8 +619,9 @@ CPopulation::AddToPopulation(float minDist, float maxDist, float minDistOffScree
 		}
 	}
 	// Yeah, float
-	float maxPossiblePedsForArea = (zoneInfo.pedDensity + zoneInfo.carDensity) * playerInfo->m_fRoadDensity * PedDensityMultiplier * CIniFile::PedNumberMultiplier;
-	maxPossiblePedsForArea = Min(maxPossiblePedsForArea, MaxNumberOfPedsInUse);
+	const float stereoPedScale = AmbientPedScale3DS();
+	float maxPossiblePedsForArea = (zoneInfo.pedDensity + zoneInfo.carDensity) * playerInfo->m_fRoadDensity * PedDensityMultiplier * CIniFile::PedNumberMultiplier * stereoPedScale;
+	maxPossiblePedsForArea = Min(maxPossiblePedsForArea, MaxNumberOfPedsInUse * stereoPedScale);
 
 	if (ms_nTotalPeds < maxPossiblePedsForArea || addCop) {
 		int decisionThreshold = CGeneral::GetRandomNumberInRange(0, 1000);
@@ -1129,9 +1155,10 @@ CPopulation::ManagePopulation(void)
 #endif
 
 			bool pedIsFarAway = false;
+			const float stereoDespawnScale = PedDespawnScale3DS();
 			if (PedCreationDistMultiplier() * (PED_REMOVE_DIST_SPECIAL * TheCamera.GenerationDistMultiplier) < dist
 				|| (!ped->bCullExtraFarAway && PedCreationDistMultiplier() * PED_REMOVE_DIST * TheCamera.GenerationDistMultiplier < dist)
-				|| (PedCreationDistMultiplier() * (MIN_CREATION_DIST + CREATION_RANGE) * OFFSCREEN_CREATION_MULT < dist
+				|| (PedCreationDistMultiplier() * (MIN_CREATION_DIST + CREATION_RANGE) * OFFSCREEN_CREATION_MULT * stereoDespawnScale < dist
 				&& !ped->GetIsOnScreen()
 				&& TheCamera.Cams[TheCamera.ActiveCam].Mode != CCam::MODE_SNIPER
 				&& TheCamera.Cams[TheCamera.ActiveCam].Mode != CCam::MODE_SNIPER_RUNABOUT

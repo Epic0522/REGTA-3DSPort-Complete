@@ -38,6 +38,9 @@
 #include "World.h"
 #include "Zones.h"
 #include "Pickups.h"
+#ifdef _3DS
+#include <3ds/os.h>
+#endif
 
 //--LCS: file done except TODO
 
@@ -135,6 +138,18 @@ bool CCarCtrl::scriptControlsMpCarLimit = false;
 
 bool gbEmergencyVehiclesEnabled = true;
 
+static float
+AmbientCarScale3DS(void)
+{
+#ifdef _3DS
+	if(rw::c3d::stereoControlsActive())
+		return rw::c3d::performanceModeActive() ? 0.55f : 0.70f;
+	return rw::c3d::performanceModeActive() ? 0.75f : 1.0f;
+#else
+	return 1.0f;
+#endif
+}
+
 #ifdef GTA_NETWORK // TMP
 extern bool gIsMultiplayerGame;
 extern int8 nAmbientCarBank; // actually gMultiGame.nAmbientCarBank (TODO)
@@ -184,9 +199,12 @@ CCarCtrl::GenerateOneRandomCar()
 	else
 #endif
 	{
-		if (NumRandomCars >= pPlayer->m_nTrafficMultiplier * CarDensityMultiplier * CIniFile::CarNumberMultiplier)
+		const float stereoCarScale = AmbientCarScale3DS();
+		if (NumRandomCars >= pPlayer->m_nTrafficMultiplier * CarDensityMultiplier * CIniFile::CarNumberMultiplier * stereoCarScale)
 			return;
-		if (NumFiretrucksOnDuty + NumAmbulancesOnDuty + NumParkedCars + NumMissionCars + NumLawEnforcerCars + NumRandomCars >= MaxNumberOfCarsInUse)
+		if (NumRandomCars >= MaxNumberOfCarsInUse * stereoCarScale)
+			return;
+		if (CPools::GetVehiclePool()->GetSize() - CPools::GetVehiclePool()->GetNoOfUsedSpaces() <= 8)
 			return;
 	}
 	CWanted* pWanted = pPlayer->m_pPed->m_pWanted;

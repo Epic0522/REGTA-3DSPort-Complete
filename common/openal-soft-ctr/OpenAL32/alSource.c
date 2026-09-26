@@ -209,8 +209,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_PITCH:
                 if(flValue >= 0.0f)
                 {
-                    Source->flPitch = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flPitch != flValue)
+                    {
+                        Source->flPitch = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -239,8 +243,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_GAIN:
                 if(flValue >= 0.0f)
                 {
-                    Source->flGain = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flGain != flValue)
+                    {
+                        Source->flGain = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -249,8 +257,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_MAX_DISTANCE:
                 if(flValue >= 0.0f)
                 {
-                    Source->flMaxDistance = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flMaxDistance != flValue)
+                    {
+                        Source->flMaxDistance = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -259,8 +271,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_ROLLOFF_FACTOR:
                 if(flValue >= 0.0f)
                 {
-                    Source->flRollOffFactor = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flRollOffFactor != flValue)
+                    {
+                        Source->flRollOffFactor = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -269,8 +285,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_REFERENCE_DISTANCE:
                 if(flValue >= 0.0f)
                 {
-                    Source->flRefDistance = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flRefDistance != flValue)
+                    {
+                        Source->flRefDistance = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -279,8 +299,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_MIN_GAIN:
                 if(flValue >= 0.0f && flValue <= 1.0f)
                 {
-                    Source->flMinGain = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flMinGain != flValue)
+                    {
+                        Source->flMinGain = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -289,8 +313,12 @@ AL_API ALvoid AL_APIENTRY alSourcef(ALuint source, ALenum eParam, ALfloat flValu
             case AL_MAX_GAIN:
                 if(flValue >= 0.0f && flValue <= 1.0f)
                 {
-                    Source->flMaxGain = flValue;
-                    Source->NeedsUpdate = AL_TRUE;
+                    /* Identical parameters do not invalidate the mixer. */
+                    if(Source->flMaxGain != flValue)
+                    {
+                        Source->flMaxGain = flValue;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -403,11 +431,16 @@ AL_API ALvoid AL_APIENTRY alSource3f(ALuint source, ALenum eParam, ALfloat flVal
                 if(isfinite(flValue1) && isfinite(flValue2) && isfinite(flValue3))
                 {
                     LockContext(pContext);
-                    Source->vPosition[0] = flValue1;
-                    Source->vPosition[1] = flValue2;
-                    Source->vPosition[2] = flValue3;
+                    if(Source->vPosition[0] != flValue1 ||
+                       Source->vPosition[1] != flValue2 ||
+                       Source->vPosition[2] != flValue3)
+                    {
+                        Source->vPosition[0] = flValue1;
+                        Source->vPosition[1] = flValue2;
+                        Source->vPosition[2] = flValue3;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                     UnlockContext(pContext);
-                    Source->NeedsUpdate = AL_TRUE;
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -417,11 +450,16 @@ AL_API ALvoid AL_APIENTRY alSource3f(ALuint source, ALenum eParam, ALfloat flVal
                 if(isfinite(flValue1) && isfinite(flValue2) && isfinite(flValue3))
                 {
                     LockContext(pContext);
-                    Source->vVelocity[0] = flValue1;
-                    Source->vVelocity[1] = flValue2;
-                    Source->vVelocity[2] = flValue3;
+                    if(Source->vVelocity[0] != flValue1 ||
+                       Source->vVelocity[1] != flValue2 ||
+                       Source->vVelocity[2] != flValue3)
+                    {
+                        Source->vVelocity[0] = flValue1;
+                        Source->vVelocity[1] = flValue2;
+                        Source->vVelocity[2] = flValue3;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                     UnlockContext(pContext);
-                    Source->NeedsUpdate = AL_TRUE;
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);
@@ -431,11 +469,16 @@ AL_API ALvoid AL_APIENTRY alSource3f(ALuint source, ALenum eParam, ALfloat flVal
                 if(isfinite(flValue1) && isfinite(flValue2) && isfinite(flValue3))
                 {
                     LockContext(pContext);
-                    Source->vOrientation[0] = flValue1;
-                    Source->vOrientation[1] = flValue2;
-                    Source->vOrientation[2] = flValue3;
+                    if(Source->vOrientation[0] != flValue1 ||
+                       Source->vOrientation[1] != flValue2 ||
+                       Source->vOrientation[2] != flValue3)
+                    {
+                        Source->vOrientation[0] = flValue1;
+                        Source->vOrientation[1] = flValue2;
+                        Source->vOrientation[2] = flValue3;
+                        Source->NeedsUpdate = AL_TRUE;
+                    }
                     UnlockContext(pContext);
-                    Source->NeedsUpdate = AL_TRUE;
                 }
                 else
                     alSetError(pContext, AL_INVALID_VALUE);

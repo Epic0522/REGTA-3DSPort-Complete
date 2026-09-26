@@ -1,9 +1,15 @@
 #include "common.h"
+#ifdef _3DS
+#include "../../../../common/3ds/WorldDrawDistance.h"
+#endif
 
 #include "RwHelper.h"
 #include "templates.h"
 #include "main.h"
 #include "Entity.h"
+#ifdef _3DS
+#include "../../../../common/3ds/CameraOcclusionRender.h"
+#endif
 #include "ModelInfo.h"
 #include "Lights.h"
 #include "Renderer.h"
@@ -12,6 +18,9 @@
 #include "World.h"
 #include "custompipes.h"
 #include "MemoryHeap.h"
+#ifdef _3DS
+#include <3ds/os.h>
+#endif
 
 CLinkList<CVisibilityPlugins::AlphaObjectInfo> CVisibilityPlugins::m_alphaList;
 CLinkList<CVisibilityPlugins::AlphaObjectInfo> CVisibilityPlugins::m_alphaEntityList;
@@ -250,14 +259,47 @@ CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
 	else
 		ms_cullCompsDist = sq(TheCamera.LODDistMultiplier * 20.0f);
 
-	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
-        ms_vehicleLod1Dist = sq(90.0f * VEHICLE_LODDIST_MULTIPLIER);
-        ms_vehicleFadeDist = sq(100.0f * VEHICLE_LODDIST_MULTIPLIER);
-	ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER);
-        ms_bigVehicleLod1Dist = sq(150.0f * VEHICLE_LODDIST_MULTIPLIER);
-	ms_pedLod0Dist = sq(25.0f * TheCamera.LODDistMultiplier * PED_HIDETAIL_DIST_MULTIPLIER);
-        ms_pedLod1Dist = sq(60.0f * TheCamera.LODDistMultiplier);
-        ms_pedFadeDist = sq(70.0f * TheCamera.LODDistMultiplier);
+	float vehicleDetail = 1.0f;
+	float pedDetail = 1.0f;
+#ifdef _3DS
+	if(rw::c3d::stereoControlsActive()){
+		vehicleDetail = rw::c3d::performanceModeActive() ? 0.75f : 0.90f;
+		pedDetail = rw::c3d::performanceModeActive() ? 0.35f : 0.50f;
+	}else if(rw::c3d::performanceModeActive()){
+		vehicleDetail = 0.80f;
+		pedDetail = 0.55f;
+	}
+#endif
+#ifdef _3DS
+	rw::c3d::setVegetationLodDistance(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER *
+		(rw::c3d::stereoControlsActive() ? 0.75f : 0.80f));
+#endif
+	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER * vehicleDetail);
+	ms_vehicleLod1Dist = sq(90.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_vehicleFadeDist = sq(100.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_bigVehicleLod0Dist = sq(60.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER * vehicleDetail);
+	ms_bigVehicleLod1Dist = sq(150.0f * VEHICLE_LODDIST_MULTIPLIER);
+	ms_pedLod0Dist = sq(25.0f * TheCamera.LODDistMultiplier * PED_HIDETAIL_DIST_MULTIPLIER * pedDetail);
+	ms_pedLod1Dist = sq(60.0f * TheCamera.LODDistMultiplier);
+	ms_pedFadeDist = sq(70.0f * TheCamera.LODDistMultiplier);
+}
+
+static float
+GetVehicleLod0DistSq(RwFrame *frame, bool bigVehicle)
+{
+	float limit = bigVehicle ? CVisibilityPlugins::ms_bigVehicleLod0Dist :
+		CVisibilityPlugins::ms_vehicleLod0Dist;
+#ifdef _3DS
+	RwV3d toVehicle;
+	RwV3dSub(&toVehicle, &RwFrameGetLTM(frame)->pos, CVisibilityPlugins::ms_pCameraPosn);
+	const RwV3d *cameraForward = RwMatrixGetAt(
+		RwFrameGetLTM(RwCameraGetFrame(CVisibilityPlugins::ms_pCamera)));
+	const float front = Sqrt(limit);
+	const float rear = rw::c3d::stereoControlsActive() ? Min(front, bigVehicle ? 16.0f : 12.0f) : front * 0.50f;
+	limit = sq(WorldDrawDistance3DS::FrontScale(rear, front,
+		Sqrt(RwV3dDotProduct(&toVehicle, &toVehicle)), RwV3dDotProduct(&toVehicle, cameraForward)));
+#endif
+	return limit;
 }
 
 RpMaterial*
@@ -295,6 +337,11 @@ CVisibilityPlugins::RenderFadingEntities(void)
 		CEntity *e = node->item.entity;
 		if(e->m_rwObject == nil)
 			continue;
+#ifdef _3DS
+		const uint32 attachedWindowLightMask = CRenderer::GetAttachedWindowLightMask(e);
+		if(attachedWindowLightMask == 0)
+			continue;
+#endif
 #ifdef EXTENDED_PIPELINES
 		if(CustomPipes::bRenderingEnvMap && (e->IsPed() || e->IsVehicle()))
 			continue;
@@ -312,13 +359,18 @@ CVisibilityPlugins::RenderFadingEntities(void)
 #endif
 
 		if(e->bDistanceFade){
+#ifdef _3DS
+			CameraOcclusion3DS::RenderScope cameraFade(e);
+#endif
 			DeActivateDirectional();
 			SetAmbientColours();
 			e->bImBeingRendered = true;
 			#ifdef _3DS
+			rw::c3d::setWorldLightClusterMask(attachedWindowLightMask);
 			RenderFadingAtomic((RpAtomic*)e->m_rwObject,
 				CRenderer::GetNew3DSWorldDistance(e, node->item.sort) /
-				CRenderer::GetNew3DSWorldLodScale(mi, e->GetModelIndex()));
+					CRenderer::GetNew3DSWorldLodScale(mi, e->GetModelIndex(), e));
+			rw::c3d::setWorldLightClusterMask(0xFFFFFFFF);
 #else
 			RenderFadingAtomic((RpAtomic*)e->m_rwObject, node->item.sort);
 #endif
@@ -391,9 +443,20 @@ CVisibilityPlugins::RenderAlphaAtomic(RpAtomic *atomic, int alpha)
 	geo = RpAtomicGetGeometry(atomic);
 	flags = RpGeometryGetFlags(geo);
 	RpGeometrySetFlags(geo, flags | rpGEOMETRYMODULATEMATERIALCOLOR);
+#ifdef _3DS
+	// Compose fades without destroying glass/material alpha. The backend also
+	// scales the alpha-test threshold with opacity, avoiding a half-fade cut.
+	const rw::c3d::EntityRenderStyle previous = rw::c3d::getEntityRenderStyle();
+	rw::c3d::EntityRenderStyle style = previous;
+	style.opacity *= Max(0, Min(alpha, 255)) / 255.0f;
+	rw::c3d::setEntityRenderStyle(style);
+	RENDERCALLBACK(atomic);
+	rw::c3d::setEntityRenderStyle(previous);
+#else
 	RpGeometryForAllMaterials(geo, SetAlphaCB, (void*)alpha);
 	RENDERCALLBACK(atomic);
 	RpGeometryForAllMaterials(geo, SetAlphaCB, (void*)255);
+#endif
 	RpGeometrySetFlags(geo, flags);
 	return atomic;
 }
@@ -407,6 +470,8 @@ CVisibilityPlugins::RenderFadingAtomic(RpAtomic *atomic, float camdist)
 	CSimpleModelInfo *mi;
 
 	mi = GetAtomicModelInfo(atomic);
+	if(mi->m_alpha == 0)
+		return atomic;
 	lodatm = mi->GetAtomicFromDistance(camdist - FADE_DISTANCE);
 	if(lodatm == nil) lodatm = atomic;
 	if(mi->m_additive){
@@ -418,17 +483,25 @@ CVisibilityPlugins::RenderFadingAtomic(RpAtomic *atomic, float camdist)
 		if(fadefactor > 1.0f)
 			fadefactor = 1.0f;
 		alpha = mi->m_alpha * Max(0.0f, Min(fadefactor, 1.0f));
+		if(alpha == 0)
+			return atomic;
 		if(alpha == 255)
 			RENDERCALLBACK(atomic);
 		else{
 			RpGeometry *geo = RpAtomicGetGeometry(lodatm);
 			uint32 flags = RpGeometryGetFlags(geo);
 			RpGeometrySetFlags(geo, flags | rpGEOMETRYMODULATEMATERIALCOLOR);
+#ifdef _3DS
+			if(geo != RpAtomicGetGeometry(atomic))
+				RpAtomicSetGeometry(atomic, geo, rpATOMICSAMEBOUNDINGSPHERE); // originally 5 (mistake?)
+			RenderAlphaAtomic(atomic, alpha);
+#else
 			RpGeometryForAllMaterials(geo, SetAlphaCB, (void*)alpha);
 			if(geo != RpAtomicGetGeometry(atomic))
 				RpAtomicSetGeometry(atomic, geo, rpATOMICSAMEBOUNDINGSPHERE); // originally 5 (mistake?)
 			RENDERCALLBACK(atomic);
 			RpGeometryForAllMaterials(geo, SetAlphaCB, (void*)255);
+#endif
 			RpGeometrySetFlags(geo, flags);
 		}
 	}
@@ -446,7 +519,7 @@ CVisibilityPlugins::RenderVehicleHiDetailCB(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq < ms_vehicleLod0Dist){
+	if(distsq < GetVehicleLod0DistSq(clumpframe, false)){
 		flags = GetAtomicId(atomic);
 		if(distsq > ms_cullCompsDist && (flags & ATOMIC_FLAG_NOCULL) == 0){
 			dot = GetDotProductWithCameraVector(RwFrameGetLTM(RpAtomicGetFrame(atomic)),
@@ -468,7 +541,7 @@ CVisibilityPlugins::RenderVehicleHiDetailAlphaCB(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq < ms_vehicleLod0Dist){
+	if(distsq < GetVehicleLod0DistSq(clumpframe, false)){
 		flags = GetAtomicId(atomic);
 		dot = GetDotProductWithCameraVector(RwFrameGetLTM(RpAtomicGetFrame(atomic)),
 			RwFrameGetLTM(clumpframe), flags);
@@ -497,7 +570,7 @@ CVisibilityPlugins::RenderVehicleHiDetailCB_BigVehicle(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq < ms_bigVehicleLod0Dist){
+	if(distsq < GetVehicleLod0DistSq(clumpframe, true)){
 		flags = GetAtomicId(atomic);
 		if(distsq > ms_cullCompsDist && (flags & ATOMIC_FLAG_NOCULL) == 0){
 			dot = GetDotProductWithCameraVector(RwFrameGetLTM(RpAtomicGetFrame(atomic)),
@@ -537,8 +610,9 @@ CVisibilityPlugins::RenderVehicleTailRotorAlphaCB(RpAtomic *atomic)
 	float dot;
 	RwV3d cam2atm;
 
-	distsq = GetDistanceSquaredFromCamera(RpClumpGetFrame(RpAtomicGetClump(atomic)));
-	if(distsq < ms_bigVehicleLod0Dist){
+	RwFrame *clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
+	distsq = GetDistanceSquaredFromCamera(clumpframe);
+	if(distsq < GetVehicleLod0DistSq(clumpframe, true)){
 		atmMat = RwFrameGetLTM(RpAtomicGetFrame(atomic));
 		clumpMat = RwFrameGetLTM(RpClumpGetFrame(RpAtomicGetClump(atomic)));
 		RwV3dSub(&cam2atm, &atmMat->pos, ms_pCameraPosn);
@@ -558,7 +632,7 @@ CVisibilityPlugins::RenderVehicleHiDetailAlphaCB_BigVehicle(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq < ms_bigVehicleLod0Dist){
+	if(distsq < GetVehicleLod0DistSq(clumpframe, true)){
 		flags = GetAtomicId(atomic);
 		dot = GetDotProductWithCameraVector(RwFrameGetLTM(RpAtomicGetFrame(atomic)),
 			RwFrameGetLTM(clumpframe), flags);
@@ -594,7 +668,7 @@ CVisibilityPlugins::RenderVehicleLowDetailCB_BigVehicle(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq >= ms_bigVehicleLod0Dist &&
+	if(distsq >= GetVehicleLod0DistSq(clumpframe, true) &&
 	   distsq < ms_bigVehicleLod1Dist){
 		flags = GetAtomicId(atomic);
 		if(distsq > ms_cullCompsDist && (flags & ATOMIC_FLAG_NOCULL) == 0){
@@ -617,7 +691,7 @@ CVisibilityPlugins::RenderVehicleLowDetailAlphaCB_BigVehicle(RpAtomic *atomic)
 
 	clumpframe = RpClumpGetFrame(RpAtomicGetClump(atomic));
 	distsq = GetDistanceSquaredFromCamera(clumpframe);
-	if(distsq >= ms_bigVehicleLod0Dist &&
+	if(distsq >= GetVehicleLod0DistSq(clumpframe, true) &&
 	   distsq < ms_bigVehicleLod1Dist){
 		flags = GetAtomicId(atomic);
 		dot = GetDotProductWithCameraVector(RwFrameGetLTM(RpAtomicGetFrame(atomic)),
@@ -641,7 +715,7 @@ CVisibilityPlugins::RenderVehicleReallyLowDetailCB(RpAtomic *atomic)
 
 	clump = RpAtomicGetClump(atomic);
 	dist = GetDistanceSquaredFromCamera(RpClumpGetFrame(clump));
-	if(dist >= ms_vehicleLod0Dist){
+	if(dist >= GetVehicleLod0DistSq(RpClumpGetFrame(clump), false)){
 		alpha = GetClumpAlpha(clump);
 		if(alpha == 255)
 			RENDERCALLBACK(atomic);
@@ -725,6 +799,22 @@ CVisibilityPlugins::RenderPlayerCB(RpAtomic *atomic)
 	return atomic;
 }
 
+static float
+PedDetailDistanceSq(RpClump *clump)
+{
+	float limit = CVisibilityPlugins::ms_pedLod0Dist;
+#ifdef _3DS
+	RwV3d offset;
+	RwV3dSub(&offset, &RwFrameGetLTM(RpClumpGetFrame(clump))->pos, CVisibilityPlugins::ms_pCameraPosn);
+	const RwV3d *forward = RwMatrixGetAt(RwFrameGetLTM(RwCameraGetFrame(CVisibilityPlugins::ms_pCamera)));
+	const float front = 25.0f * TheCamera.LODDistMultiplier * PED_HIDETAIL_DIST_MULTIPLIER;
+	const float rear = rw::c3d::stereoControlsActive() ? Min(Sqrt(limit), 8.0f) : front * 0.50f;
+	limit = sq(WorldDrawDistance3DS::FrontScale(rear, front,
+		Sqrt(RwV3dDotProduct(&offset, &offset)), RwV3dDotProduct(&offset, forward)));
+#endif
+	return limit;
+}
+
 RpAtomic*
 CVisibilityPlugins::RenderPedLowDetailCB(RpAtomic *atomic)
 {
@@ -734,7 +824,7 @@ CVisibilityPlugins::RenderPedLowDetailCB(RpAtomic *atomic)
 
 	clump = RpAtomicGetClump(atomic);
 	dist = GetDistanceSquaredFromCamera(RpClumpGetFrame(clump));
-	if(dist >= ms_pedLod0Dist){
+	if(dist >= PedDetailDistanceSq(clump)){
 		alpha = GetClumpAlpha(clump);
 		if(alpha == 255)
 			RENDERCALLBACK(atomic);
@@ -753,7 +843,7 @@ CVisibilityPlugins::RenderPedHiDetailCB(RpAtomic *atomic)
 
 	clump = RpAtomicGetClump(atomic);
 	dist = GetDistanceSquaredFromCamera(RpClumpGetFrame(clump));
-	if(dist < ms_pedLod0Dist){
+	if(dist < PedDetailDistanceSq(clump)){
 		alpha = GetClumpAlpha(clump);
 		if(alpha == 255)
 			RENDERCALLBACK(atomic);
@@ -772,8 +862,24 @@ CVisibilityPlugins::RenderPedCB(RpAtomic *atomic)
 	RwV3d cam2atm;
 
 	RwV3dSub(&cam2atm, &RwFrameGetLTM(RpAtomicGetFrame(atomic))->pos, ms_pCameraPosn);
-	if(RwV3dDotProduct(&cam2atm, &cam2atm) < ms_pedLod1Dist){
+	float limitSq = ms_pedLod1Dist;
+#ifdef _3DS
+	const bool smoothDistance = true;
+	const float distance = Sqrt(RwV3dDotProduct(&cam2atm, &cam2atm));
+	float limit = Sqrt(limitSq);
+	if(smoothDistance){
+		const RwV3d *forward = RwMatrixGetAt(RwFrameGetLTM(RwCameraGetFrame(ms_pCamera)));
+		const float frontLimit = Max(limit, 60.0f * TheCamera.LODDistMultiplier * 0.75f);
+		limit = WorldDrawDistance3DS::FrontScale(rw::c3d::stereoControlsActive() ? limit : limit * 0.50f, frontLimit,
+			distance, RwV3dDotProduct(&cam2atm, forward));
+		limitSq = sq(limit);
+	}
+#endif
+	if(RwV3dDotProduct(&cam2atm, &cam2atm) < limitSq){
 		alpha = GetClumpAlpha(RpAtomicGetClump(atomic));
+#ifdef _3DS
+		if(smoothDistance) alpha = WorldDrawDistance3DS::FadeAlpha(distance, limit, alpha);
+#endif
 		if(alpha == 255)
 			RENDERCALLBACK(atomic);
 		else
@@ -921,8 +1027,8 @@ bool
 CVisibilityPlugins::IsVehicleHighDetail(RpClump *vehicle)
 {
 	float distance = GetDistanceSquaredFromCamera(RpClumpGetFrame(vehicle));
-	float limit = CLUMPEXT(vehicle)->visibilityCB == VehicleVisibilityCB_BigVehicle ?
-		ms_bigVehicleLod0Dist : ms_vehicleLod0Dist;
+	const bool bigVehicle = CLUMPEXT(vehicle)->visibilityCB == VehicleVisibilityCB_BigVehicle;
+	float limit = GetVehicleLod0DistSq(RpClumpGetFrame(vehicle), bigVehicle);
 	return distance < limit;
 }
 

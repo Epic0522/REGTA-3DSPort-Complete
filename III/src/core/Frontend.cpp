@@ -2606,11 +2606,10 @@ void
 CMenuManager::DrawFrontEnd()
 {
 	CFont::SetAlphaFade(255.0f);
-	// Both classic and PS2-like frontends compose their backgrounds from
-	// separately drawn sprites.  Alpha transitions expose those pieces as
-	// flicker on 3DS, so present every menu page fully opaque.
 #ifdef _3DS
-	m_nMenuFadeAlpha = 255;
+	// Keep quick pause immediate; allow the unloaded-game frontend to fade.
+	if (!m_bGameNotLoaded)
+		m_nMenuFadeAlpha = 255;
 #endif
 
 #ifdef PS2_LIKE_MENU
@@ -2940,6 +2939,12 @@ CMenuManager::DrawFrontEndNormal()
 #endif
 
 	LoadSplash(nil);
+
+#ifdef _3DS
+	// Both layers of a crossfade are screen-space sprites.
+	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
+	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
+#endif
 	
 	eMenuSprites previousSprite;
 	if (m_nMenuFadeAlpha < 255) {
@@ -2992,10 +2997,17 @@ CMenuManager::DrawFrontEndNormal()
 				break;
 		}
 		
+		// An opaque old page under the fading new page avoids exposing the
+		// previous framebuffer through two partially transparent backgrounds.
+#ifdef _3DS
+		const int backgroundAlpha = 255;
+#else
+		const int backgroundAlpha = 255 - m_nMenuFadeAlpha;
+#endif
 		if (m_nPrevScreen == m_nCurrScreen)
-			CSprite2d::DrawRect(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(0, 0, 0, 255 - m_nMenuFadeAlpha));
+			CSprite2d::DrawRect(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(0, 0, 0, backgroundAlpha));
 		else
-			m_aMenuSprites[previousSprite].Draw(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(255, 255, 255, 255 - m_nMenuFadeAlpha));
+			m_aMenuSprites[previousSprite].Draw(CRect(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT), CRGBA(255, 255, 255, backgroundAlpha));
 	}
 
 	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
@@ -4457,7 +4469,6 @@ CMenuManager::Process(void)
 	} else {
 #ifdef _3DS
 		BeginDeferredMenuTextureUnload3DS(this);
-		ServiceDeferredMenuTextureUnload3DS();
 #else
 		UnloadTextures();
 #endif
@@ -6068,8 +6079,9 @@ BeginDeferredMenuTextureUnload3DS(CMenuManager *menu)
 
 	menu->m_bSpritesLoaded = false;
 	gDeferredMenuTextureUnload3DS = true;
-	// Never destroy a raster in the frame that resumes gameplay.
-	gDeferredMenuTextureUnloadDelay3DS = 1;
+	// Give gameplay about one second to replace every menu texture still cached
+	// by the renderer and to refill the radio stream before retiring rasters.
+	gDeferredMenuTextureUnloadDelay3DS = 30;
 }
 
 static void
@@ -6097,6 +6109,12 @@ FinishDeferredMenuTextureUnload3DS(void)
 	gDeferredMenuTextureUnloadDelay3DS = 0;
 	while (gDeferredMenuTextureUnload3DS)
 		ServiceDeferredMenuTextureUnload3DS();
+}
+
+void
+CMenuManager::ServiceDeferredMenuTextureUnload()
+{
+	ServiceDeferredMenuTextureUnload3DS();
 }
 
 void

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "main.h"
 #include "CutsceneMgr.h"
@@ -78,12 +79,12 @@ CPointLights::AddLight(uint8 type, CVector coors, CVector dir, float radius, flo
 						farthestWorld = i;
 					}
 				}
-				if(isVehicleHeadlight && numHeadlights >= MAX_VEHICLE_HEADLIGHT_SHADOWS){
+				if(isVehicleHeadlight && numHeadlights >= EffectBudget3DS::Limit(MAX_VEHICLE_HEADLIGHT_SHADOWS)){
 					if(farthestHeadlight < 0 || distance*distance >= farthestHeadlightDistSqr)
 						return;
 					slot = farthestHeadlight;
-				}else if(numShadowLights >= MAX_DYNAMIC_SHADOW_LIGHTS){
-					if(isVehicleHeadlight && numHeadlights < MAX_VEHICLE_HEADLIGHT_SHADOWS){
+				}else if(numShadowLights >= EffectBudget3DS::Limit(MAX_DYNAMIC_SHADOW_LIGHTS)){
+					if(isVehicleHeadlight && numHeadlights < EffectBudget3DS::Limit(MAX_VEHICLE_HEADLIGHT_SHADOWS)){
 						if(farthestWorld < 0)
 							return;
 						slot = farthestWorld;
@@ -92,12 +93,12 @@ CPointLights::AddLight(uint8 type, CVector coors, CVector dir, float radius, flo
 							return;
 						slot = farthestWorld;
 					}
-				}else if(NumLights >= NUMPOINTLIGHTS)
+				}else if(NumLights >= EffectBudget3DS::Limit(NUMPOINTLIGHTS))
 					return;
 				else
 					NumLights++;
 			}else{
-				if(NumLights >= NUMPOINTLIGHTS)
+				if(NumLights >= EffectBudget3DS::Limit(NUMPOINTLIGHTS))
 					return;
 				NumLights++;
 			}

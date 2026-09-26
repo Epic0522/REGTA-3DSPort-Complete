@@ -16,6 +16,8 @@
 #include "Sprite2d.h"
 #include "Text.h"
 #include "Timer.h"
+#include "../../../../common/3ds/HudDisplayTimer.h"
+#include "../../../../common/3ds/ProfileHintLayout.h"
 #include "Script.h"
 #include "TxdStore.h"
 #include "User.h"
@@ -289,6 +291,7 @@ DrawLaserScopeCenterCross()
 
 void CHud::Draw()
 {
+	HudDisplayTimer::Sample();
 	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERNEAREST);
 	RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, (void*)rwTEXTUREADDRESSCLAMP);
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)FALSE);
@@ -845,7 +848,7 @@ void CHud::Draw()
 					}
 					break;
 				case 2:
-					m_ZoneFadeTimer += CTimer::GetTimeStepInMilliseconds();
+					m_ZoneFadeTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_ZoneFadeTimer > 1000.0f) {
 						m_ZoneState = 1;
 						m_ZoneFadeTimer = 1000;
@@ -853,7 +856,7 @@ void CHud::Draw()
 					fZoneAlpha = m_ZoneFadeTimer * 0.001f * 255.0f;
 					break;
 				case 3:
-					m_ZoneFadeTimer -= CTimer::GetTimeStepInMilliseconds();
+					m_ZoneFadeTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_ZoneFadeTimer < 0.0f) {
 						m_ZoneState = 0;
 						m_ZoneFadeTimer = 0;
@@ -861,7 +864,7 @@ void CHud::Draw()
 					fZoneAlpha = m_ZoneFadeTimer * 0.001f * 255.0f;
 					break;
 				case 4:
-					m_ZoneFadeTimer -= CTimer::GetTimeStepInMilliseconds();
+					m_ZoneFadeTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_ZoneFadeTimer < 0.0f) {
 						m_ZoneFadeTimer = 0;
 						m_ZoneToPrint = m_pLastZoneName;
@@ -876,7 +879,7 @@ void CHud::Draw()
 
 				if (!m_Message[0] && BigMessageInUse[1] == 0.0f && BigMessageInUse[2] == 0.0f) {
 
-					m_ZoneNameTimer += CTimer::GetTimeStepInMilliseconds();
+					m_ZoneNameTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 					CFont::SetJustifyOff();
 					CFont::SetPropOn();
 					CFont::SetBackgroundOff();
@@ -946,7 +949,7 @@ void CHud::Draw()
 					fVehicleAlpha = 255.0f;
 					break;
 				case 2:
-					m_VehicleFadeTimer += CTimer::GetTimeStepInMilliseconds();
+					m_VehicleFadeTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_VehicleFadeTimer > 1000) {
 						m_VehicleState = 1;
 						m_VehicleFadeTimer = 1000;
@@ -954,7 +957,7 @@ void CHud::Draw()
 					fVehicleAlpha = m_VehicleFadeTimer * 0.001f * 255.0f;
 					break;
 				case 3:
-					m_VehicleFadeTimer -= CTimer::GetTimeStepInMilliseconds();
+					m_VehicleFadeTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_VehicleFadeTimer < 0) {
 						m_VehicleState = 0;
 						m_VehicleFadeTimer = 0;
@@ -962,7 +965,7 @@ void CHud::Draw()
 					fVehicleAlpha = m_VehicleFadeTimer * 0.001f * 255.0f;
 					break;
 				case 4:
-					m_VehicleFadeTimer -= CTimer::GetTimeStepInMilliseconds();
+					m_VehicleFadeTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_VehicleFadeTimer < 0) {
 						m_VehicleFadeTimer = 0;
 						m_pVehicleNameToPrint = m_pLastVehicleName;
@@ -976,7 +979,7 @@ void CHud::Draw()
 				}
 
 				if (!m_Message[0]) {
-					m_VehicleNameTimer += CTimer::GetTimeStepInMilliseconds();
+					m_VehicleNameTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 					CFont::SetJustifyOff();
 					CFont::SetPropOn();
 					CFont::SetBackgroundOff();
@@ -1363,7 +1366,7 @@ void CHud::Draw()
 					if (TheCamera.m_WideScreenOn)
 						break;
 
-					m_HelpMessageFadeTimer += 2 * CTimer::GetTimeStepInMilliseconds();
+					m_HelpMessageFadeTimer += 2 * HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_HelpMessageFadeTimer > 0) {
 						m_HelpMessageState = 1;
 						m_HelpMessageFadeTimer = 0;
@@ -1371,7 +1374,7 @@ void CHud::Draw()
 					fAlpha = m_HelpMessageFadeTimer * 0.001f * 225.0f;
 					break;
 				case 3:
-					m_HelpMessageFadeTimer -= 2 * CTimer::GetTimeStepInMilliseconds();
+					m_HelpMessageFadeTimer -= 2 * HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_HelpMessageFadeTimer < 0 || TheCamera.m_WideScreenOn) {
 						m_HelpMessageState = 0;
 						m_HelpMessageFadeTimer = 0;
@@ -1379,7 +1382,7 @@ void CHud::Draw()
 					fAlpha = m_HelpMessageFadeTimer * 0.001f * 225.0f;
 					break;
 				case 4:
-					m_HelpMessageFadeTimer -= 2 * CTimer::GetTimeStepInMilliseconds();
+					m_HelpMessageFadeTimer -= 2 * HudDisplayTimer::GetTimeStepInMilliseconds();
 					if (m_HelpMessageFadeTimer < 0) {
 						m_HelpMessageState = 2;
 						m_HelpMessageFadeTimer = 0;
@@ -1392,7 +1395,7 @@ void CHud::Draw()
 				}
 
 				if (!TheCamera.m_WideScreenOn) {
-					m_HelpMessageTimer += CTimer::GetTimeStepInMilliseconds();
+					m_HelpMessageTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 
 					CFont::SetAlphaFade(fAlpha);
 					CFont::SetCentreOff();
@@ -1422,6 +1425,11 @@ void CHud::Draw()
 					CFont::SetDropShadowPosition(0);
 					CFont::SetBackgroundColor(CRGBA(0, 0, 0, fAlpha * 0.9f));
 					CFont::SetColor(CRGBA(175, 175, 175, 255));
+#ifdef _3DS
+					if(!ProfileHintLayout3DS::Draw(m_HelpMessageToPrint, SCREEN_SCALE_X(34.0f), SCREEN_SCALE_Y(28.0f + (150.0f - PagerXOffset) * 0.6f),
+						SCREEN_WIDTH - SCREEN_SCALE_X(16.0f), SCREEN_SCALE_X(8.0f),
+						SCREEN_SCALE_X(0.52f), SCREEN_SCALE_Y(1.1f), fAlpha))
+#endif
 					CFont::PrintString(SCREEN_SCALE_X(34.0f), SCREEN_SCALE_Y(28.0f + (150.0f - PagerXOffset) * 0.6f), m_HelpMessageToPrint);
 					CFont::SetAlphaFade(255.0f);
 					CFont::SetWrapx(SCREEN_WIDTH);
@@ -1453,11 +1461,11 @@ void CHud::Draw()
 				// Appearently sliding text in here was abandoned very early, since this text is centered now.
 
 				if (BigMessageX[0] >= SCALE_AND_CENTER_X(620.0f)) {
-					BigMessageInUse[0] += CTimer::GetTimeStep();
+					BigMessageInUse[0] += HudDisplayTimer::GetTimeStep();
 
 					if (BigMessageInUse[0] >= 120.0f) {
 						BigMessageInUse[0] = 120.0f;
-						BigMessageAlpha[0] -= (CTimer::GetTimeStepInMilliseconds() * 0.3f);
+						BigMessageAlpha[0] -= (HudDisplayTimer::GetTimeStepInMilliseconds() * 0.3f);
 					}
 
 					if (BigMessageAlpha[0] <= 0.0f) {
@@ -1466,8 +1474,8 @@ void CHud::Draw()
 					}
 				}
 				else {
-					BigMessageX[0] += SCREEN_SCALE_X((CTimer::GetTimeStepInMilliseconds() * 0.3f));
-					BigMessageAlpha[0] += (CTimer::GetTimeStepInMilliseconds() * 0.3f);
+					BigMessageX[0] += SCREEN_SCALE_X((HudDisplayTimer::GetTimeStepInMilliseconds() * 0.3f));
+					BigMessageAlpha[0] += (HudDisplayTimer::GetTimeStepInMilliseconds() * 0.3f);
 
 					if (BigMessageAlpha[0] > 255.0f)
 						BigMessageAlpha[0] = 255.0f;
@@ -1491,7 +1499,7 @@ void CHud::Draw()
 		// WastedBustedText
 		if (m_BigMessage[2][0]) {
 			if (BigMessageInUse[2] != 0.0f) {
-				BigMessageAlpha[2] += (CTimer::GetTimeStepInMilliseconds() * 0.4f);
+				BigMessageAlpha[2] += (HudDisplayTimer::GetTimeStepInMilliseconds() * 0.4f);
 
 				if (BigMessageAlpha[2] > 255.0f)
 					BigMessageAlpha[2] = 255.0f;
@@ -1530,6 +1538,7 @@ void CHud::Draw()
 
 void CHud::DrawAfterFade()
 {
+	HudDisplayTimer::Sample();
 	RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void*)rwFILTERNEAREST);
 	RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, (void*)rwTEXTUREADDRESSCLAMP);
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)FALSE);
@@ -1629,7 +1638,7 @@ void CHud::DrawAfterFade()
 
 	// Oddjob result
 	if (OddJob2OffTimer > 0)
-		OddJob2OffTimer -= CTimer::GetTimeStepInMilliseconds();
+		OddJob2OffTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 
 	float fStep;
 	if (m_BigMessage[5][0] && OddJob2OffTimer <= 0.0f) {
@@ -1649,7 +1658,7 @@ void CHud::DrawAfterFade()
 				}
 				break;
 			case 2:
-				OddJob2Timer += CTimer::GetTimeStepInMilliseconds();
+				OddJob2Timer += HudDisplayTimer::GetTimeStepInMilliseconds();
 				if (OddJob2Timer > 1500) {
 					OddJob2On = 3;
 				}
@@ -1704,11 +1713,11 @@ void CHud::DrawAfterFade()
 			CFont::SetScale(FrontEndMenuManager.m_PrefsLanguage == CMenuManager::LANGUAGE_AMERICAN ? SCREEN_SCALE_X(1.7f) : SCREEN_SCALE_X(1.5f), SCREEN_SCALE_Y(1.8f));
 
 			if (BigMessageX[1] >= SCREEN_SCALE_FROM_RIGHT(20.0f)) {
-				BigMessageInUse[1] += CTimer::GetTimeStep();
+				BigMessageInUse[1] += HudDisplayTimer::GetTimeStep();
 
 				if (BigMessageInUse[1] >= 120.0f) {
 					BigMessageInUse[1] = 120.0f;
-					BigMessageAlpha[1] -= CTimer::GetTimeStepInMilliseconds();
+					BigMessageAlpha[1] -= HudDisplayTimer::GetTimeStepInMilliseconds();
 				}
 				if (BigMessageAlpha[1] <= 0.0f) {
 					m_BigMessage[1][0] = 0;
@@ -1716,8 +1725,8 @@ void CHud::DrawAfterFade()
 					BigMessageAlpha[1] = 0.0f;
 				}
 			} else {
-				BigMessageX[1] += SCREEN_SCALE_X((CTimer::GetTimeStepInMilliseconds() * 0.3f));
-				BigMessageAlpha[1] += CTimer::GetTimeStepInMilliseconds();
+				BigMessageX[1] += SCREEN_SCALE_X((HudDisplayTimer::GetTimeStepInMilliseconds() * 0.3f));
+				BigMessageAlpha[1] += HudDisplayTimer::GetTimeStepInMilliseconds();
 
 				if (BigMessageAlpha[1] > 255.0f)
 					BigMessageAlpha[1] = 255.0f;
@@ -2135,7 +2144,7 @@ float CHud::DrawFadeState(DRAW_FADE_STATE fadingElement, int forceFadingIn)
 				}
 				break;
 			case FADING_IN:
-				fadeTimer += CTimer::GetTimeStepInMilliseconds();
+				fadeTimer += HudDisplayTimer::GetTimeStepInMilliseconds();
 				if (fadeTimer > 1000.0f) {
 					operation = START_FADE_OUT;
 					fadeTimer = 1000;
@@ -2143,7 +2152,7 @@ float CHud::DrawFadeState(DRAW_FADE_STATE fadingElement, int forceFadingIn)
 				alpha = fadeTimer / 1000.0f * 255.0f;
 				break;
 			case FADING_OUT:
-				fadeTimer -= CTimer::GetTimeStepInMilliseconds();
+				fadeTimer -= HudDisplayTimer::GetTimeStepInMilliseconds();
 				if (fadeTimer < 0.0f) {
 					fadeTimer = 0;
 					operation = FADED_OUT;
@@ -2153,7 +2162,7 @@ float CHud::DrawFadeState(DRAW_FADE_STATE fadingElement, int forceFadingIn)
 			default:
 				break;
 		}
-		timer += CTimer::GetTimeStepInMilliseconds();
+		timer += HudDisplayTimer::GetTimeStepInMilliseconds();
 	}
 
 	switch (fadingElement) {

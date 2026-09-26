@@ -112,12 +112,12 @@ bool DoRWStuffStartOfFrame(int16 TopRed, int16 TopGreen, int16 TopBlue, int16 Bo
 void DoRWStuffEndOfFrame(void);
 #ifdef _3DS
 #include <3ds.h>
+#include "../../../common/3ds/GameInstallation.h"
 static void
-Initialise3DSRenderState(void)
+Show3DSStartupError(const char *text, bool gameFont = true)
 {
-	if(rw::c3d::initialiseMaterialState()) return;
-	wchar message[32];
-	AsciiToUnicode("Device not supported", message);
+	wchar message[384];
+	AsciiToUnicode(text, message);
 	gfxSetScreenFormat(GFX_BOTTOM, GSP_BGR8_OES);
 	for(unsigned i = 0; i < 2; i++) {
 		u16 width, height;
@@ -127,10 +127,18 @@ Initialise3DSRenderState(void)
 		GSPGPU_FlushDataCache(buffer, bytes);
 		gfxScreenSwapBuffers(GFX_BOTTOM, false);
 	}
+	if(!gameFont){
+		gfxSet3D(false);
+		consoleInit(GFX_TOP, NULL);
+		for(const char *p=text; *p; ++p){
+			if(strncmp(p,"~n~",3)==0){ putchar('\n'); p+=2; }
+			else putchar(*p);
+		}
+	}
 	while(aptMainLoop()) {
 		hidScanInput();
 		if(hidKeysDown() & KEY_B) break;
-		if(DoRWStuffStartOfFrame(0, 0, 0, 0, 0, 0, 255)) {
+		if(gameFont && DoRWStuffStartOfFrame(0, 0, 0, 0, 0, 0, 255)) {
 			CSprite2d::SetRecipNearClip();
 			CSprite2d::InitPerFrame();
 			CFont::InitPerFrame();
@@ -153,7 +161,25 @@ Initialise3DSRenderState(void)
 		}
 		gspWaitForVBlank();
 	}
-	exit(EXIT_FAILURE);
+	svcExitProcess();
+}
+
+static void
+Initialise3DSRenderState(void)
+{
+	if(!rw::c3d::initialiseMaterialState())
+		Show3DSStartupError("Device not supported~n~Press B.");
+}
+
+static void
+Initialise3DSInstallation(void)
+{
+	static bool checked = false;
+	if(checked) return;
+	if(!RegtaInstall::validate(RegtaInstall::III, [](){
+		if(!aptMainLoop()) svcExitProcess();
+	})) Show3DSStartupError(RegtaInstall::errorMessage());
+	checked = true;
 }
 #endif
 #ifdef PS2_MENU
@@ -309,7 +335,16 @@ CGame::InitialiseRenderWare(void)
 #if GTA_VERSION > GTA3_PS2_160
 	// in GameInit on PS2
 	PUSH_MEMID(MEMID_TEXTURES);
+#ifdef _3DS
+	if(!RegtaInstall::present("models/fonts.txd")){
+		RegtaInstall::failure("models/fonts.txd", "Missing or empty file");
+		Show3DSStartupError(RegtaInstall::errorMessage(), false);
+	}
+#endif
 	CFont::Initialise();
+#ifdef _3DS
+	Initialise3DSInstallation();
+#endif
 	CHud::Initialise();
 	POP_MEMID();
 	// TODO: define
@@ -1075,7 +1110,13 @@ void CGame::Process(void)
 		FrontEndMenuManager.Process();
 	POP_MEMID();
 
+#ifdef _3DS
+	uint64 profileStreamingStart = rw::c3d::profileTimerStart();
+#endif
 	CStreaming::Update();
+#ifdef _3DS
+	rw::c3d::profileRecordStreaming(profileStreamingStart);
+#endif
 	if (!CTimer::GetIsPaused())
 	{
 		CTheZones::Update();
@@ -1097,7 +1138,9 @@ void CGame::Process(void)
 		CPlane::UpdatePlanes();
 		CHeli::UpdateHelis();
 		CDarkel::Update();
+#ifndef _3DS
 		CSkidmarks::Update();
+#endif
 		CAntennas::Update();
 		CGlass::Update();
 #ifdef GTA_SCENE_EDIT

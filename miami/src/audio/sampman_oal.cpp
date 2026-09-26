@@ -144,7 +144,11 @@ EAXLISTENERPROPERTIES EAX3Params;
 
 bool IsFXSupported()
 {
+	#ifdef _3DS
+	return false;
+	#else
 	return usingEAX || usingEAX3 || _usingEFX;
+	#endif
 }
 
 void EAX_SetAll(const EAXLISTENERPROPERTIES *allparameters)
@@ -179,6 +183,7 @@ add_providers()
 				n++;
 			}
 			
+			#ifndef _3DS
 			if ( alGetEnumValue("AL_EFFECT_EAXREVERB") != 0
 				|| pDeviceList->IsExtensionSupported(i, ADEXT_EAX2)
 				|| pDeviceList->IsExtensionSupported(i, ADEXT_EAX3) 
@@ -205,6 +210,7 @@ add_providers()
 					n++;
 				}
 			}
+			#endif
 		}
 		SampleManager.SetNum3DProvidersAvailable(n);
 	
@@ -323,11 +329,13 @@ set_new_provider(int index)
 		
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 		
+		#ifndef _3DS
 		if ( alcIsExtensionPresent(ALDevice, (ALCchar*)ALC_EXT_EFX_NAME) )
 		{
 			alGenAuxiliaryEffectSlots(1, &ALEffectSlot);
 			alGenEffects(1, &ALEffect);
 		}
+		#endif
 
 		alGenSources(MAX_STREAMS*2, ALStreamSources[0]);
 		for ( int32 i = 0; i < MAX_STREAMS; i++ )
@@ -349,6 +357,7 @@ set_new_provider(int index)
 		usingEAX3 = 0;
 		_usingEFX = false;
 		
+		#ifndef _3DS
 		if ( !strcmp(&providers[index].name[strlen(providers[index].name) - strlen(" EAX3")], " EAX3") 
 				&& alcIsExtensionPresent(ALDevice, (ALCchar*)ALC_EXT_EFX_NAME) )
 		{
@@ -374,6 +383,7 @@ set_new_provider(int index)
 				DEV("EFX\n");
 			}
 		}
+		#endif
 		
 		//SampleManager.SetSpeakerConfig(speaker_type);
 		
@@ -927,7 +937,9 @@ cSampleManager::Initialise(void)
 	if ( _bSampmanInitialised )
 		return true;
 
+	#ifndef _3DS
 	EFXInit();
+	#endif
 	CStream::Initialise();
 
 	{
@@ -1796,6 +1808,13 @@ cSampleManager::StartStreamedFile(uint32 nFile, uint32 nPos, uint8 nStream)
 			if (stream == NULL) {
 				stream = new CStream(ALStreamSources[0], ALStreamBuffers[0]);
 				aStream[0] = stream;
+			}
+			// Stock radio and ambient tracks only; cutscenes keep their existing path.
+			if(nFile <= STREAMED_SOUND_RADIO_TAXI &&
+			   stream->BeginAsyncStream(StreamedNameTable[nFile], position,
+			       IsThisTrackAt16KHz(nFile) ? 16000 : 32000, nStreamLoopedFlag[0])){
+				nStreamLoopedFlag[0] = true;
+				return true;
 			}
 			stream->Close();
 			strcpy(filename, StreamedNameTable[nFile]);

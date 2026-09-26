@@ -1416,8 +1416,11 @@ int16 CRunningScript::GetPadState(uint16 pad, uint16 button)
 #ifdef _3DS
 		/* Ammu-Nation and the hardware store poll the PS2 Triangle slot while
 		 * player controls are disabled.  Make their back/cancel button B. */
-		if (pPad->ArePlayerControlsDisabled())
+		if (pPad->ArePlayerControlsDisabled()){
+			if(pPad->NewState.Square)
+				CPad::SuppressJumpUntilButtonRelease();
 			return pPad->NewState.Square;
+		}
 #endif
 		return pPad->NewState.Triangle;
 	case 16: return pPad->NewState.Cross;

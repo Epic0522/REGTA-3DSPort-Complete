@@ -365,6 +365,11 @@ Engine::stop(void)
 		return;
 	}
 
+#ifdef RW_3DS
+	// This cache owns Texture objects. Release them while the texture module
+	// and native raster plugins are alive, before textureClose sweeps them.
+	c3d::closeVegetationCache();
+#endif
 	for(uint i = 0; i < NUM_PLATFORMS; i++)
 		Driver::s_plglist[i].destruct(rw::engine->driver[i]);
 	Engine::s_plglist.destruct(engine);

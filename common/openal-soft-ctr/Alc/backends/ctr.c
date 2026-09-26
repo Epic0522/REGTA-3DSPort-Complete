@@ -27,7 +27,7 @@
 #include "AL/alc.h"
 
 #define BYTES_PER_SAMPLE	4
-#define NUM_WAVEBUFFERS		2
+#define NUM_WAVEBUFFERS		3
 #define SAMPLES_PER_BUF        1024
 #define BYTES_PER_BUF	    	(SAMPLES_PER_BUF * BYTES_PER_SAMPLE)
 #define SAMPLERATE             NDSP_SAMPLE_RATE
@@ -63,7 +63,6 @@ CtrProc(ALvoid *ptr)
 	ALubyte *WritePtr = waveBuf[wbi].data_vaddr;
 	if(waveBuf[wbi].status == NDSP_WBUF_PLAYING ||
 	   waveBuf[wbi].status == NDSP_WBUF_QUEUED){
-	    usleep(1000);
 	    svcWaitSynchronization(BufferIsReady, U64_MAX);
 	}else if (waveBuf[wbi].status == NDSP_WBUF_FREE ||
 	          waveBuf[wbi].status == NDSP_WBUF_DONE){
@@ -95,7 +94,7 @@ static ALCenum ctr_open_playback(ALCdevice *device, const ALCchar *deviceName)
 
     device->Frequency   = SAMPLERATE;
     device->UpdateSize  = SAMPLES_PER_BUF;
-    device->NumUpdates  = 1;//NUM_WAVEBUFFERS;
+    device->NumUpdates  = NUM_WAVEBUFFERS;
     device->FmtType     = DevFmtShort;
     device->FmtChans    = DevFmtStereo;
 
@@ -130,7 +129,12 @@ static ALCenum ctr_open_playback(ALCdevice *device, const ALCchar *deviceName)
 static void ctr_close_playback(ALCdevice *device)
 {
     ctr_data *data = (ctr_data*)device->ExtraData;
+    ndspSetCallback(NULL, NULL);
+    ndspChnWaveBufClear(0);
     ndspExit();
+    /* ndspExit joins the callback thread before its event is closed. */
+    svcCloseHandle(BufferIsReady);
+    BufferIsReady = 0;
     linearFree(data->buffer);
     free(data);
     device->ExtraData = NULL;
@@ -161,6 +165,9 @@ static void ctr_stop_playback(ALCdevice *device)
         return;
 
     data->killNow = 1;
+    /* HOME/power-off can suspend DSP callbacks. Wake the mixer ourselves so
+     * joining it cannot wait forever for a callback which will never arrive. */
+    svcSignalEvent(BufferIsReady);
     StopThread(data->thread);
     data->thread = NULL;
 

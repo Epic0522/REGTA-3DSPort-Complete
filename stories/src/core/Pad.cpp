@@ -47,6 +47,7 @@
 #include "Script.h"
 #include "Zones.h"
 #include "Pools.h"
+#include "main.h"
 
 #ifdef GTA_PS2
 #include "eetypes.h"
@@ -2093,6 +2094,14 @@ void CPad::AffectFromXinput(uint32 pad)
 
 #ifdef _3DS
 static void
+ShowStereoSetting(const char *setting)
+{
+	static wchar message[80];
+	AsciiToUnicode(setting, message);
+	CHud::SetHelpMessage(message, true);
+}
+
+static void
 Apply3DSRadialDeadzone(float &x, float &y, float deadzone)
 {
 	float magnitude = Sqrt(x*x + y*y);
@@ -2168,15 +2177,45 @@ CPad::AffectFrom3DS()
 	circlePosition left, right;
 	hidCircleRead(&left);
 	hidCstickRead(&right);
+	const bool profileControls = !FrontEndMenuManager.m_bMenuActive && FindPlayerPed() != nil;
+	const bool stereoControls = profileControls && rw::c3d::stereoControlsActive();
+	static bool profileWasAvailable = false;
+	static bool previousStereo = false;
+	if(profileControls){
+		const bool old2D = rw::c3d::performanceMode2DEnabled();
+		const bool old3D = rw::c3d::performanceMode3DEnabled();
+		const bool oldDepth = rw::c3d::stereoExtendedDepthEnabled();
+		rw::c3d::handle3DSPerformanceDPad(down);
+		const bool switchedDisplay = profileWasAvailable && previousStereo != stereoControls;
+		if(switchedDisplay || (down & (KEY_DLEFT | KEY_DRIGHT)) ||
+		   (stereoControls && (down & (KEY_DUP | KEY_DDOWN)))) {
+			char setting[80];
+			snprintf(setting, sizeof(setting), "%s %s%s%s",
+				stereoControls ? "Stereo" : "Flat",
+				rw::c3d::performanceModeActive() ? "Performance" : "Quality",
+				stereoControls ? "~n~" : "",
+				stereoControls ? (rw::c3d::stereoExtendedDepthEnabled() ? "Extended Depth" : "Normal View") : "");
+			ShowStereoSetting(setting);
+		}
+#ifdef LOAD_INI_SETTINGS
+		// Repeating the selected preset only refreshes its hint, without SD I/O.
+		if(old2D != bool(rw::c3d::performanceMode2DEnabled()) ||
+		   old3D != bool(rw::c3d::performanceMode3DEnabled()) ||
+		   oldDepth != bool(rw::c3d::stereoExtendedDepthEnabled()))
+			SaveINISettings();
+#endif
+		previousStereo = stereoControls;
+	}
+	profileWasAvailable = profileControls;
 
 	PCTempJoyState.Cross = (held & KEY_A) ? 255 : 0;
 	PCTempJoyState.Circle = (held & KEY_X) ? 255 : 0;
 	PCTempJoyState.Square = (held & KEY_B) ? 255 : 0;
 	PCTempJoyState.Triangle = (held & KEY_Y) ? 255 : 0;
-	PCTempJoyState.DPadDown = (held & KEY_DDOWN) ? 255 : 0;
-	PCTempJoyState.DPadLeft = (held & KEY_DLEFT) ? 255 : 0;
-	PCTempJoyState.DPadRight = (held & KEY_DRIGHT) ? 255 : 0;
-	PCTempJoyState.DPadUp = (held & KEY_DUP) ? 255 : 0;
+	PCTempJoyState.DPadDown = (!profileControls && (held & KEY_DDOWN)) ? 255 : 0;
+	PCTempJoyState.DPadLeft = (!profileControls && (held & KEY_DLEFT)) ? 255 : 0;
+	PCTempJoyState.DPadRight = (!profileControls && (held & KEY_DRIGHT)) ? 255 : 0;
+	PCTempJoyState.DPadUp = (!profileControls && (held & KEY_DUP)) ? 255 : 0;
 	PCTempJoyState.LeftShoulder1 = (held & KEY_L) ? 255 : 0;
 	PCTempJoyState.LeftShoulder2 = (held & KEY_ZL) ? 255 : 0;
 	PCTempJoyState.RightShoulder1 = (held & KEY_R) ? 255 : 0;
@@ -3557,10 +3596,28 @@ bool CPad::DuckJustDown(void)
 	return !!(NewState.LeftShock && !OldState.LeftShock);
 }
 
+#ifdef _3DS
+static bool gSuppressJumpUntilButtonRelease;
+
+void
+CPad::SuppressJumpUntilButtonRelease(void)
+{
+	gSuppressJumpUntilButtonRelease = true;
+}
+#endif
+
 bool CPad::JumpJustDown(void)
 {
 	if ( ArePlayerControlsDisabled() )
 		return false;
+
+#ifdef _3DS
+	if(gSuppressJumpUntilButtonRelease){
+		if(!NewState.Square)
+			gSuppressJumpUntilButtonRelease = false;
+		return false;
+	}
+#endif
 
 	return !!(NewState.Square && !OldState.Square);
 }

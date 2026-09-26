@@ -47,13 +47,9 @@ Shader::use(void)
 {
 	if(currentShader != this) {
 		C3D_BindProgram(&this->vsh_program);
-		/* Some specialised passes use four TEV stages. Reset the complete chain
-		 * on every shader transition so their later stages cannot leak into the
-		 * following world, glass or 2D draw. */
-		for(int i = 0; i < 6; i++)
-			C3D_TexEnvInit(C3D_GetTexEnv(i));
-		C3D_TexEnvBufUpdate(C3D_Both, 0);
-		this->combiner();
+		// Rebuild the same complete chain, but don't resend unchanged stages.
+		// Pending full invalidations, including HOME restore, remain intact.
+		C3D_ConfigureTexEnv(this->combiner);
 		currentShader = this;
 	}
 }

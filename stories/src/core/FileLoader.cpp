@@ -476,6 +476,32 @@ InitClump(RpClump *clump)
 #define InitClump(clump)
 #endif
 
+#ifdef _3DS
+static RpAtomic*
+NeutralizeBuildingPrelight3DS(RpAtomic *atomic, void*)
+{
+	RpGeometry *geometry = RpAtomicGetGeometry(atomic);
+	RwRGBA *colors = RpGeometryGetPreLightColors(geometry);
+	if(colors == nil)
+		return atomic;
+
+	const int32 count = RpGeometryGetNumVertices(geometry);
+	RpGeometryLock(geometry, rpGEOMETRYLOCKPRELIGHT);
+	for(int32 i = 0; i < count; i++){
+		/* LCS bakes saturated red, blue, cyan and yellow/green light pools into
+		 * otherwise neutral walls, stairs and roads. Retain their luminance and
+		 * alpha while removing the hue, so texture colour and authored shading
+		 * survive without the conspicuous coloured patches. */
+		const uint32 grey = (77u * colors[i].red +
+		                     150u * colors[i].green +
+		                      29u * colors[i].blue + 128u) >> 8;
+		colors[i].red = colors[i].green = colors[i].blue = (uint8)grey;
+	}
+	RpGeometryUnlock(geometry);
+	return atomic;
+}
+#endif
+
 void
 CFileLoader::LoadModelFile(const char *filename)
 {
@@ -583,8 +609,12 @@ CFileLoader::LoadAtomicFile(RwStream *stream, uint32 id)
 		clump = RpClumpStreamRead(stream);
 		if(clump == nil)
 			return false;
-		InitClump(clump);
 		gpRelatedModelInfo = (CSimpleModelInfo*)CModelInfo::GetModelInfo(id);
+		InitClump(clump);
+#ifdef _3DS
+		if(gpRelatedModelInfo->IsBuilding())
+			RpClumpForAllAtomics(clump, NeutralizeBuildingPrelight3DS, nil);
+#endif
 		RpClumpForAllAtomics(clump, SetRelatedModelInfoCB, clump);
 		RpClumpDestroy(clump);
 	}

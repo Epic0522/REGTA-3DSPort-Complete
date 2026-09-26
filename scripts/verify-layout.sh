@@ -27,4 +27,6 @@ done
 
 [ "$failed" -eq 0 ] || exit 1
 echo "REGTA source layout is complete; all shared dependency links resolve."
-
+if command -v python3 >/dev/null 2>&1; then
+	python3 "$script_dir/tools/generate_install_manifest.py" --check
+fi

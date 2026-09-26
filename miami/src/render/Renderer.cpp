@@ -1,5 +1,6 @@
 #define WITHD3D
 #include "common.h"
+#include "../../../../common/3ds/CameraPresetTransition.h"
 
 #include "main.h"
 #include "Lights.h"
@@ -14,18 +15,25 @@
 #include "PathFind.h"
 #include "Collision.h"
 #include "VisibilityPlugins.h"
+#ifdef _3DS
+#include "../../../../common/3ds/CrowdDrawBudget.h"
+#include "../../../../common/3ds/CameraOcclusionRender.h"
+#endif
 #include "Clock.h"
 #include "World.h"
 #include "Camera.h"
 #include "ModelIndices.h"
 #include "Streaming.h"
 #include "Shadows.h"
+#ifdef _3DS
+#include "Skidmarks.h"
+#include "Timer.h"
+#endif
 #include "PointLights.h"
 #include "Occlusion.h"
 #include "Renderer.h"
 #include "custompipes.h"
 #include "Frontend.h"
-
 bool gbShowPedRoadGroups;
 bool gbShowCarRoadGroups;
 bool gbShowCollisionPolys;
@@ -82,7 +90,7 @@ BlockedRange* CRenderer::pEmptyBlockedRanges;
 static float gWorldLodScales[MODELINFOSIZE];
 
 float
-CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId)
+CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *ent)
 {
 	if(modelId < 0 || modelId >= MODELINFOSIZE) return 1.0f;
 	float &scale = gWorldLodScales[modelId];
@@ -94,7 +102,37 @@ CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId)
 			modelId == MI_PHONESIGN || modelId == MI_PHONEBOOTH1;
 		scale = WorldDrawDistance3DS::Scale(mi->GetModelName(), IsTreeModel(modelId), streetProp);
 	}
-	return scale;
+	float profileScale = scale;
+	if(rw::c3d::stereoControlsActive() && !WorldDrawDistance3DS::IsIsland(mi->GetModelName())) {
+		const bool streetProp = IsLampPost(modelId) || IsTrafficLight(modelId) ||
+			modelId == MI_WASTEBIN || modelId == MI_BIN || modelId == MI_DUMP1 ||
+			modelId == MI_POSTBOX1 || modelId == MI_NEWSSTAND ||
+			modelId == MI_BUSSIGN1 || modelId == MI_NOPARKINGSIGN1 ||
+			modelId == MI_PHONESIGN || modelId == MI_PHONEBOOTH1;
+		if(profileScale > 1.0f || IsTreeModel(modelId))
+			profileScale = Min(profileScale, 0.75f);
+		else if(streetProp)
+			profileScale = Min(profileScale, 0.60f);
+		else
+			profileScale = Min(profileScale, 0.55f);
+	}
+	if(!rw::c3d::performanceModeActive() || WorldDrawDistance3DS::IsIsland(mi->GetModelName()))
+		;
+	else
+		profileScale *= rw::c3d::stereoControlsActive() ? 1.0f : 0.65f;
+	if(ent && !WorldDrawDistance3DS::IsIsland(mi->GetModelName())){
+		const CVector offset = ent->GetBoundCentre() - ms_vecCameraPosition;
+		const float distance = offset.Magnitude();
+		const bool small = ent->GetBoundRadius() < 12.0f;
+		const bool stereo = rw::c3d::stereoControlsActive();
+		const float frontScale = stereo ? (small ? (rw::c3d::performanceModeActive() ? 0.70f : 0.85f) : 0.55f) : scale;
+		profileScale = WorldDrawDistance3DS::WorldFrontScale(profileScale, Min(scale, frontScale),
+			distance, DotProduct(offset, TheCamera.GetForward()), ent->GetBoundRadius(),
+			stereo || rw::c3d::performanceModeActive());
+	}
+	if(!WorldDrawDistance3DS::IsIsland(mi->GetModelName()))
+		profileScale *= CrowdDrawBudget3DS::DetailFactor(ent, mi->m_noFade);
+	return profileScale;
 }
 
 float
@@ -102,11 +140,130 @@ CRenderer::GetNew3DSWorldDistance(CEntity *ent, float originDistance, const CVec
 {
 	// Island LOD spheres cover whole islands: retain their authored origins.
 	CSimpleModelInfo *mi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(ent->GetModelIndex());
-	const bool island = GetNew3DSWorldLodScale(mi, ent->GetModelIndex()) == 1.0f;
+	const bool island = GetNew3DSWorldLodScale(mi, ent->GetModelIndex(), nil) == 1.0f;
 	if(!ent->IsBuilding() || island || ent->GetBoundRadius() < 16.0f)
 		return originDistance;
 	return WorldDrawDistance3DS::SurfaceDistance(originDistance,
 		(ent->GetBoundCentre() - cameraPosition).Magnitude(), ent->GetBoundRadius(), true, false);
+}
+
+namespace {
+struct AttachedWindowLightModels
+{
+	int16 lights[2];
+	int16 carriers[3][2];
+	uint8 numCarriers;
+};
+
+static int16
+FindAttachedModelId(const char *name)
+{
+	int id = -1;
+	CModelInfo::GetModelInfo(name, &id);
+	return id;
+}
+
+static bool
+IsScheduledAttachedCarrier(CEntity *candidate, const CVector &lightPosition,
+	int16 detailModel, int16 lodModel, float renderDistance = -1.0f)
+{
+	if(candidate == nil ||
+	   (candidate->GetModelIndex() != detailModel && candidate->GetModelIndex() != lodModel))
+		return false;
+	if((candidate->GetPosition() - lightPosition).MagnitudeSqr() >= 180.0f*180.0f ||
+	   candidate->m_rwObject == nil || !candidate->bIsVisible)
+		return false;
+
+	CSimpleModelInfo *mi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(candidate->GetModelIndex());
+	if(mi->m_alpha == 0)
+		return false;
+	if(candidate->bDistanceFade){
+		if(renderDistance < 0.0f)
+			renderDistance = (candidate->GetPosition() - TheCamera.GetPosition()).Magnitude();
+		renderDistance = CRenderer::GetNew3DSWorldDistance(candidate, renderDistance) /
+			CRenderer::GetNew3DSWorldLodScale(mi, candidate->GetModelIndex(), candidate);
+		const float fade = Max(0.0f, Min((mi->GetLargestLodDistance() -
+			(renderDistance - FADE_DISTANCE))/FADE_DISTANCE, 1.0f));
+		if(mi->m_alpha * fade < 16.0f)
+			return false;
+	}
+	return true;
+}
+
+static void
+MatchAttachedDetailRange(const char *detailName, const char *carrierName)
+{
+	const int16 detailId = FindAttachedModelId(detailName);
+	const int16 carrierId = FindAttachedModelId(carrierName);
+	if(detailId < 0 || carrierId < 0)
+		return;
+	CSimpleModelInfo *detail = (CSimpleModelInfo*)CModelInfo::GetModelInfo(detailId);
+	CSimpleModelInfo *carrier = (CSimpleModelInfo*)CModelInfo::GetModelInfo(carrierId);
+	if(detail == nil || carrier == nil || detail->m_numAtomics == 0 || carrier->m_numAtomics == 0)
+		return;
+	const int detailLod = detail->m_numAtomics - 1;
+	const int carrierLod = carrier->m_numAtomics - 1;
+	detail->m_lodDistances[detailLod] = Max(detail->m_lodDistances[detailLod],
+		carrier->m_lodDistances[carrierLod]);
+}
+}
+
+bool
+CRenderer::ShouldRenderAttachedWindowLights(CEntity *ent)
+{
+	static bool modelsResolved;
+	static AttachedWindowLightModels windows[2];
+	if(!modelsResolved){
+		windows[0].lights[0] = FindAttachedModelId("od_hotel_windows");
+		windows[0].lights[1] = FindAttachedModelId("lodhotel_windows");
+		windows[0].carriers[0][0] = FindAttachedModelId("od_bighotel_nt");
+		windows[0].carriers[0][1] = FindAttachedModelId("lodbighotel_nt");
+		windows[0].numCarriers = 1;
+
+		// Downtown's sixth night-light shell contains three contiguous groups,
+		// one for each of these buildings.  It must not outlive any carrier as
+		// one giant 1000-unit object when adaptive range contracts the buildings.
+		windows[1].lights[0] = FindAttachedModelId("dt_nitelites6");
+		windows[1].lights[1] = -1;
+		windows[1].carriers[0][0] = FindAttachedModelId("doontoon20");
+		windows[1].carriers[0][1] = FindAttachedModelId("LODntoon20");
+		windows[1].carriers[1][0] = FindAttachedModelId("doontoon50");
+		windows[1].carriers[1][1] = FindAttachedModelId("LODntoon50");
+		windows[1].carriers[2][0] = FindAttachedModelId("doontoon51");
+		windows[1].carriers[2][1] = FindAttachedModelId("LODntoon51");
+		windows[1].numCarriers = 3;
+		modelsResolved = true;
+	}
+	AttachedWindowLightModels *attachment = nil;
+	for(uint32 i = 0; i < ARRAY_SIZE(windows); ++i)
+		if(ent->GetModelIndex() == windows[i].lights[0] || ent->GetModelIndex() == windows[i].lights[1]){
+			attachment = &windows[i];
+			break;
+		}
+	if(attachment == nil)
+		return true;
+
+	const CVector lightPosition = ent->GetPosition();
+	for(uint32 carrier = 0; carrier < attachment->numCarriers; ++carrier){
+		const int16 detail = attachment->carriers[carrier][0];
+		const int16 lod = attachment->carriers[carrier][1];
+		bool found = false;
+		for(int32 i = 0; i < ms_nNoOfVisibleEntities && !found; i++)
+			found = IsScheduledAttachedCarrier(ms_aVisibleEntityPtrs[i], lightPosition, detail, lod);
+#ifdef NEW_RENDERER
+		for(int32 i = 0; i < ms_nNoOfVisibleBuildings && !found; i++)
+			found = IsScheduledAttachedCarrier(ms_aVisibleBuildingPtrs[i], lightPosition, detail, lod);
+		for(CLink<CVisibilityPlugins::AlphaObjectInfo> *node = CVisibilityPlugins::m_alphaBuildingList.head.next;
+		    node != &CVisibilityPlugins::m_alphaBuildingList.tail && !found; node = node->next)
+			found = IsScheduledAttachedCarrier(node->item.entity, lightPosition, detail, lod, node->item.sort);
+#endif
+		for(CLink<CVisibilityPlugins::AlphaObjectInfo> *node = CVisibilityPlugins::m_alphaEntityList.head.next;
+		    node != &CVisibilityPlugins::m_alphaEntityList.tail && !found; node = node->next)
+			found = IsScheduledAttachedCarrier(node->item.entity, lightPosition, detail, lod, node->item.sort);
+		if(!found)
+			return false;
+	}
+	return true;
 }
 #endif
 
@@ -115,6 +272,10 @@ CRenderer::Init(void)
 {
 #ifdef _3DS
 	memset(gWorldLodScales, 0, sizeof(gWorldLodScales));
+	// These are separate transparent detail objects.  The authored 40/50-unit
+	// ranges make their panes arrive after the corresponding shop body.
+	MatchAttachedDetailRange("ammu_windows1", "ammunation_dt");
+	MatchAttachedDetailRange("mall_ammuwin", "mall_ammu");
 #endif
 	gSortedVehiclesAndPeds.Init(40);
 	SortBIGBuildings();
@@ -129,6 +290,11 @@ CRenderer::Shutdown(void)
 void
 CRenderer::PreRender(void)
 {
+#ifdef _3DS
+	// Registration happens in vehicle PreRender, not in skipped logic frames.
+	if(!CTimer::GetIsPaused())
+		CSkidmarks::Update();
+#endif
 	int i;
 	CLink<CVisibilityPlugins::AlphaObjectInfo> *node;
 
@@ -184,6 +350,11 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 	int i;
 	bool resetLights;
 
+#ifdef _3DS
+	if(!ShouldRenderAttachedWindowLights(e))
+		return;
+#endif
+
 #ifndef MASTER
 	if(gbShowCollisionPolys){
 		if(!e->IsVehicle()){
@@ -220,6 +391,10 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 	}
 #endif
 
+#ifdef _3DS
+	CrowdDrawBudget3DS::RenderScope crowdStyle(e, e->GetModelIndex() == MI_KAUFMAN);
+	CameraOcclusion3DS::RenderScope cameraFade(e);
+#endif
 	resetLights = e->SetupLighting();
 
 	if(e->IsVehicle()){
@@ -273,6 +448,7 @@ CRenderer::RenderFirstPersonVehicle(void)
 
 inline bool IsRoad(CEntity *e) { return e->IsBuilding() && ((CSimpleModelInfo*)CModelInfo::GetModelInfo(e->GetModelIndex()))->m_wetRoadReflection; }
 
+
 void
 CRenderer::RenderRoads(void)
 {
@@ -284,6 +460,7 @@ CRenderer::RenderRoads(void)
 	SetCullMode(rwCULLMODECULLBACK);
 	DeActivateDirectional();
 	SetAmbientColours();
+
 
 	for(i = 0; i < ms_nNoOfVisibleEntities; i++){
 		e = ms_aVisibleEntityPtrs[i];
@@ -434,6 +611,10 @@ CRenderer::RenderOneBuilding(CEntity *ent, float camdist)
 {
 	if(ent->m_rwObject == nil)
 		return;
+#ifdef _3DS
+	if(!ShouldRenderAttachedWindowLights(ent))
+		return;
+#endif
 
 	ent->bImBeingRendered = true;	// TODO: this seems wrong, but do we even need it?
 
@@ -449,7 +630,7 @@ CRenderer::RenderOneBuilding(CEntity *ent, float camdist)
 
 	if(ent->bDistanceFade){
 #ifdef _3DS
-		camdist = GetNew3DSWorldDistance(ent, camdist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+		camdist = GetNew3DSWorldDistance(ent, camdist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex(), ent);
 #endif
 		RpAtomic *lodatm;
 		float fadefactor;
@@ -461,6 +642,10 @@ CRenderer::RenderOneBuilding(CEntity *ent, float camdist)
 		if(fadefactor > 1.0f)
 			fadefactor = 1.0f;
 		alpha = mi->m_alpha * Max(0.0f, Min(fadefactor, 1.0f));
+		if(alpha == 0){
+			ent->bImBeingRendered = false;
+			return;
+		}
 
 		if(alpha == 255)
 			WorldRender::AtomicFirstPass(atomic, pass);
@@ -679,6 +864,10 @@ enum Visbility
 int32
 CRenderer::SetupEntityVisibility(CEntity *ent)
 {
+#ifdef _3DS
+	if((ent->IsVehicle() || ent->IsPed()) && CrowdDrawBudget3DS::Hide(ent))
+		return VIS_OFFSCREEN;
+#endif
 	CSimpleModelInfo *mi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(ent->m_modelIndex);
 	CTimeModelInfo *ti;
 	int32 other;
@@ -703,6 +892,9 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 	}else{
 		if(mi->GetModelType() != MITYPE_SIMPLE && mi->GetModelType() != MITYPE_WEAPON){
 			if(FindPlayerVehicle() == ent &&
+#ifdef _3DS
+			   !CameraOcclusion3DS::PresetVisible(ent) &&
+#endif
 			   TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_1STPERSON &&
 			   !(FindPlayerVehicle()->IsBike() && ((CBike*)FindPlayerVehicle())->bWheelieCam)){
 				// Player's vehicle in first person mode
@@ -727,7 +919,11 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 			}
 
 			// All sorts of Clumps
-			if(ent->m_rwObject == nil || !ent->bIsVisible)
+			if(ent->m_rwObject == nil || (!ent->bIsVisible
+#ifdef _3DS
+			   && !CameraOcclusion3DS::PresetVisible(ent)
+#endif
+			   ))
 				return VIS_INVISIBLE;
 			if(!ent->GetIsOnScreen() || ent->IsEntityOccluded())
 				return VIS_OFFSCREEN;
@@ -740,7 +936,11 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 			return VIS_VISIBLE;
 		}
 		if(ent->bDontStream){
-			if(ent->m_rwObject == nil || !ent->bIsVisible)
+			if(ent->m_rwObject == nil || (!ent->bIsVisible
+#ifdef _3DS
+			   && !CameraOcclusion3DS::PresetVisible(ent)
+#endif
+			   ))
 				return VIS_INVISIBLE;
 			if(!ent->GetIsOnScreen() || ent->IsEntityOccluded())
 				return VIS_OFFSCREEN;
@@ -761,7 +961,7 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 
 	dist = (ent->GetPosition() - ms_vecCameraPosition).Magnitude();
 #ifdef _3DS
-	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex(), ent);
 #else
 	float lodDist = dist;
 #endif
@@ -794,7 +994,11 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 		if(RpAtomicGetGeometry(a) != RpAtomicGetGeometry(rwobj))
 			RpAtomicSetGeometry(rwobj, RpAtomicGetGeometry(a), rpATOMICSAMEBOUNDINGSPHERE); // originally 5 (mistake?)
 		mi->IncreaseAlpha();
-		if(ent->m_rwObject == nil || !ent->bIsVisible)
+		if(ent->m_rwObject == nil || (!ent->bIsVisible
+#ifdef _3DS
+			   && !CameraOcclusion3DS::PresetVisible(ent)
+#endif
+			   ))
 			return VIS_INVISIBLE;
 
 		if(!ent->GetIsOnScreen() || ent->IsEntityOccluded()){
@@ -845,7 +1049,11 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 	if(RpAtomicGetGeometry(a) != RpAtomicGetGeometry(rwobj))
 		RpAtomicSetGeometry(rwobj, RpAtomicGetGeometry(a), rpATOMICSAMEBOUNDINGSPHERE); // originally 5 (mistake?)
 	mi->IncreaseAlpha();
-	if(ent->m_rwObject == nil || !ent->bIsVisible)
+	if(ent->m_rwObject == nil || (!ent->bIsVisible
+#ifdef _3DS
+			   && !CameraOcclusion3DS::PresetVisible(ent)
+#endif
+			   ))
 		return VIS_INVISIBLE;
 
 	if(!ent->GetIsOnScreen() || ent->IsEntityOccluded()){
@@ -891,7 +1099,7 @@ CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 
 	float dist = (ms_vecCameraPosition-ent->GetPosition()).Magnitude();
 #ifdef _3DS
-	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+	float lodDist = GetNew3DSWorldDistance(ent, dist) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex(), ent);
 #else
 	float lodDist = dist;
 #endif
@@ -984,6 +1192,9 @@ CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 void
 CRenderer::ConstructRenderList(void)
 {
+#ifdef _3DS
+	CrowdDrawBudget3DS::BeginFrame();
+#endif
 	COcclusion::ProcessBeforeRendering();
 #ifdef NEW_RENDERER
 	if(!gbNewRenderer)
@@ -1090,11 +1301,28 @@ CRenderer::ScanWorld(void)
 	RwV3dTransformPoints(vectors, vectors, 9, cammatrix);
 
 	m_loadingPriority = false;
+	#ifdef _3DS
+	if((CameraPreset3DS::Display().moving || CameraPreset3DS::TopDownFrustum(cammatrix->at.z))){
+#else
 	if(TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_TOPDOWN ||
 #ifdef FIX_BUGS
 	   TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_GTACLASSIC ||
 #endif
 	   TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_TOP_DOWN_PED){
+#endif
+#ifdef _3DS
+		CVector footprintCorners[5];footprintCorners[0]=vectors[CORNER_CAM];
+		const float scanScale=Min(f,LOD_DISTANCE)/f;
+		for(int i=1;i<5;++i)footprintCorners[i]=vectors[CORNER_CAM]+(vectors[i]-vectors[CORNER_CAM])*scanScale;
+		CameraPreset3DS::Point2 hull[10];RwV2d sectorHull[10];
+		const int count=CameraPreset3DS::FrustumHull(footprintCorners,hull);
+		for(int i=0;i<count;++i){sectorHull[i].x=CWorld::GetSectorX(hull[i].x);sectorHull[i].y=CWorld::GetSectorY(hull[i].y);}
+		if(count>=3)ScanSectorPoly(sectorHull,count,ScanSectorList);
+#ifndef GTA_WORLDSTREAM
+		if(CGame::currLevel!=LEVEL_GENERIC)ScanBigBuildingList(CWorld::GetBigBuildingList(CGame::currLevel));
+		ScanBigBuildingList(CWorld::GetBigBuildingList(LEVEL_GENERIC));
+#endif
+#else
 		CRect rect;
 		int x1, x2, y1, y2;
 		LimitFrustumVector(vectors[CORNER_FAR_TOPLEFT], vectors[CORNER_CAM], -100.0f);
@@ -1116,6 +1344,7 @@ CRenderer::ScanWorld(void)
 		for(; x1 <= x2; x1++)
 			for(int y = y1; y <= y2; y++)
 				ScanSectorList(CWorld::GetSector(x1, y)->m_lists);
+#endif
 	}else{
 #ifdef GTA_TRAIN
 		CVehicle *train = FindPlayerTrain();
@@ -1220,11 +1449,24 @@ CRenderer::RequestObjectsInFrustum(void)
 	vectors[CORNER_PRIO_RIGHT].z = vectors[CORNER_LOD_RIGHT].z;
 	RwV3dTransformPoints(vectors, vectors, 9, cammatrix);
 
+	#ifdef _3DS
+	if((CameraPreset3DS::Display().moving || CameraPreset3DS::TopDownFrustum(cammatrix->at.z))){
+#else
 	if(TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_TOPDOWN ||
 #ifdef FIX_BUGS
 	   TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_GTACLASSIC ||
 #endif
 	   TheCamera.Cams[TheCamera.ActiveCam].Mode == CCam::MODE_TOP_DOWN_PED){
+#endif
+#ifdef _3DS
+		CVector footprintCorners[5];footprintCorners[0]=vectors[CORNER_CAM];
+		const float scanScale=Min(f,LOD_DISTANCE)/f;
+		for(int i=1;i<5;++i)footprintCorners[i]=vectors[CORNER_CAM]+(vectors[i]-vectors[CORNER_CAM])*scanScale;
+		CameraPreset3DS::Point2 hull[10];RwV2d sectorHull[10];
+		const int count=CameraPreset3DS::FrustumHull(footprintCorners,hull);
+		for(int i=0;i<count;++i){sectorHull[i].x=CWorld::GetSectorX(hull[i].x);sectorHull[i].y=CWorld::GetSectorY(hull[i].y);}
+		if(count>=3)ScanSectorPoly(sectorHull,count,ScanSectorList_RequestModels);
+#else
 		CRect rect;
 		int x1, x2, y1, y2;
 		LimitFrustumVector(vectors[CORNER_FAR_TOPLEFT], vectors[CORNER_CAM], -100.0f);
@@ -1246,6 +1488,7 @@ CRenderer::RequestObjectsInFrustum(void)
 		for(; x1 <= x2; x1++)
 			for(int y = y1; y <= y2; y++)
 				ScanSectorList_RequestModels(CWorld::GetSector(x1, y)->m_lists);
+#endif
 	}else{
 		poly[0].x = CWorld::GetSectorX(vectors[CORNER_CAM].x);
 		poly[0].y = CWorld::GetSectorY(vectors[CORNER_CAM].y);
@@ -1698,7 +1941,7 @@ CRenderer::ShouldModelBeStreamed(CEntity *ent, const CVector &campos)
 			return false;
 	float dist = (ent->GetPosition() - campos).Magnitude();
 #ifdef _3DS
-	dist = GetNew3DSWorldDistance(ent, dist, campos) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex());
+	dist = GetNew3DSWorldDistance(ent, dist, campos) / GetNew3DSWorldLodScale(mi, ent->GetModelIndex(), ent);
 #endif
 	if(mi->m_noFade)
 		return dist - STREAM_DISTANCE < mi->GetLargestLodDistance();

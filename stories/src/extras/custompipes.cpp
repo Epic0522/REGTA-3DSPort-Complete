@@ -126,7 +126,6 @@ EnvMapRender(void)
 {
 	if(VehiclePipeSwitch != VEHICLEPIPE_NEO)
 		return;
-
 	RwCameraEndUpdate(Scene.camera);
 
 	// Neo does this differently, but i'm not quite convinced it's much better

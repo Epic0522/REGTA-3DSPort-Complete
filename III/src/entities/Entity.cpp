@@ -5,6 +5,9 @@
 #include "ModelIndices.h"
 #include "Timer.h"
 #include "Entity.h"
+#ifdef _3DS
+#include "../../../../common/3ds/CameraOcclusionRender.h"
+#endif
 #include "Object.h"
 #include "World.h"
 #include "Camera.h"
@@ -78,6 +81,9 @@ CEntity::CEntity(void)
 
 CEntity::~CEntity(void)
 {
+#ifdef _3DS
+	CameraOcclusion3DS::Forget(this);
+#endif
 	DeleteRwObject();
 	ResolveReferences();
 }
@@ -369,6 +375,9 @@ CEntity::PreRender(void)
 void
 CEntity::Render(void)
 {
+#ifdef _3DS
+	CameraOcclusion3DS::RenderScope cameraFade(this);
+#endif
 	if(m_rwObject){
 		bImBeingRendered = true;
 		if(RwObjectGetType(m_rwObject) == rpATOMIC)

@@ -16,6 +16,22 @@ export PATH="$DEVKITARM/bin:$DEVKITPRO/tools/bin:$PATH"
 	exit 2
 }
 
+# Older devkitARM base_rules prepend $DEVKITPRO/devkitARM/bin inside make.
+# Pin every compiler tool explicitly so a newer system-wide devkitARM cannot
+# silently replace the required r55 toolchain after this script has checked it.
+make_with_r55()
+{
+	make "$@" \
+		CC="$DEVKITARM/bin/arm-none-eabi-gcc" \
+		CXX="$DEVKITARM/bin/arm-none-eabi-g++" \
+		AS="$DEVKITARM/bin/arm-none-eabi-as" \
+		AR="$DEVKITARM/bin/arm-none-eabi-gcc-ar" \
+		NM="$DEVKITARM/bin/arm-none-eabi-gcc-nm" \
+		RANLIB="$DEVKITARM/bin/arm-none-eabi-gcc-ranlib" \
+		OBJCOPY="$DEVKITARM/bin/arm-none-eabi-objcopy" \
+		STRIP="$DEVKITARM/bin/arm-none-eabi-strip"
+}
+
 if command -v sysctl >/dev/null 2>&1; then
 	jobs=$(sysctl -n hw.ncpu 2>/dev/null || echo 4)
 else
@@ -26,14 +42,14 @@ build_one()
 {
 	case "$1" in
 		re3)
-			make -C "$project_root/III/build" -f GNUmakefile -j"$jobs"
+			make_with_r55 -C "$project_root/III/build" -f GNUmakefile -j"$jobs"
 			;;
 		revc)
-			make -C "$project_root/miami/build" -f GNUmakefile -j"$jobs" \
+			make_with_r55 -C "$project_root/miami/build" -f GNUmakefile -j"$jobs" \
 				LOADING_PIPELINE=1 BOTTOM_LOADING=1 BOTTOM_RADAR=1 OPTIMIZED_BUILD=1
 			;;
 		relcs)
-			make -C "$project_root/stories/build" -f GNUmakefile -j"$jobs" \
+			make_with_r55 -C "$project_root/stories/build" -f GNUmakefile -j"$jobs" \
 				LOADING_PIPELINE=1 BOTTOM_LOADING=1 BOTTOM_RADAR=1
 			;;
 		*)

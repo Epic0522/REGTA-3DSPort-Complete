@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "General.h"
 #include "Timer.h"
@@ -22,6 +23,12 @@
 // layout or save/replay-facing data.
 #ifdef _3DS
 #define MAX_ACTIVE_PARTICLES_3DS  (256)
+
+static int32
+GetActiveParticleLimit3DS(void)
+{
+	return EffectBudget3DS::Limit(rw::c3d::performanceModeActive() ? 160 : MAX_ACTIVE_PARTICLES_3DS);
+}
 #endif
 
 
@@ -824,7 +831,7 @@ CParticle *CParticle::AddParticle(tParticleType type, CVector const &vecPos, CVe
 		return NULL;
 
 #ifdef _3DS
-	if ( nActiveParticles >= MAX_ACTIVE_PARTICLES_3DS )
+	if ( nActiveParticles >= GetActiveParticleLimit3DS() )
 		return nil;
 #endif
 

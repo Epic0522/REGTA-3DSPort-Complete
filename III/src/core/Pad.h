@@ -467,6 +467,9 @@ public:
 	void SetDisablePlayerControls(uint8 who) { DisablePlayerControls |= who; }
 	void SetEnablePlayerControls(uint8 who) { DisablePlayerControls &= ~who; }
 	bool IsPlayerControlsDisabledBy(uint8 who) { return DisablePlayerControls & who; }
+#ifdef _3DS
+	static void SuppressJumpUntilButtonRelease(void);
+#endif
 	
 	int16 GetMode() { return Mode; }
 	void SetMode(int16 mode) { Mode = mode; }

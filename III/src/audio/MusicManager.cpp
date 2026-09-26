@@ -87,6 +87,9 @@ cMusicManager::DisplayRadioStationName()
 	int8 gRetuneCounter;
 	static wchar *pCurrentStation = nil;
 	static uint8 cDisplay = 0;
+#ifdef _3DS
+	static uint32 displayStarted = 0;
+#endif
 	if (wasFinaleRadio) {
 		// OFF (or mission end) restores the normal station title, even if
 		// the car is still tuned to the same station as before the finale.
@@ -207,9 +210,20 @@ cMusicManager::DisplayRadioStationName()
 			m_nNextTrack == STREAMED_SOUND_RADIO_MP3_PLAYER && m_nPlayingTrack != STREAMED_SOUND_RADIO_MP3_PLAYER) {
 			pCurrentStation = string;
 			cDisplay = 60;
+#ifdef _3DS
+			displayStarted = CTimer::GetTimeInMilliseconds();
+#endif
 		} else {
 			if(cDisplay == 0) return;
+#ifdef _3DS
+			// Expire by game time, including skipped presentation frames.
+			if (uint32(CTimer::GetTimeInMilliseconds() - displayStarted) >= 2000) {
+				cDisplay = 0;
+				return;
+			}
+#else
 			cDisplay--;
+#endif
 		}
 
 		CFont::SetJustifyOff();

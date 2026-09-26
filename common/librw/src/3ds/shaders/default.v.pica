@@ -23,10 +23,11 @@
 	dp4	r1.z, u_view[2], r8
 	dp4	r1.w, u_view[3], r8
 
-	dp4	r0.x, u_proj[0], r1	; v_pos = proj * C
-	dp4	r0.y, u_proj[1], r1
-	dp4	r0.z, u_proj[2], r1
-	dp4	r0.w, u_proj[3], r1
+	mova	a0.x, screenSide
+	dp4	r0.x, u_proj[a0.x+0], r1	; v_pos = proj * C
+	dp4	r0.y, u_proj[a0.x+1], r1
+	dp4	r0.z, u_proj[a0.x+2], r1
+	dp4	r0.w, u_proj[a0.x+3], r1
 .end
 
 ;; .proc xform_normal
@@ -46,6 +47,8 @@
 ;; 	mul	r9.xyz, r9.xyz, r1.x
 ;; .end
 
+
+
 .proc xform_normal
 	mov	r0, in_normal
 	;dp3	r1.x, r0.xyz, r0.xyz	; Normalize byte vector.
@@ -62,12 +65,31 @@
 	mul	r9.xyz, r9.xyz, r2.x
 .end
 	
+;; Default world entry point, shared by III, VC and LCS. No directional lights means the
+;; original lighting loop exits before reading the normal. Preserve its
+;; ambient/prelight/clamp/material operations in the same order.
 .entry default_main
 .proc default_main
-	call	xform_vertex	; (r8 = world-space vertex)
+	call	xform_vertex
 	mov	v_pos, r0
-	call	xform_normal	; (r9 = world-space normal)
+	mov	r15, u_lightParams[0]
+	cmp	DIRECT, gt, lt, r15.x
+	jmpc	cmp.x, default_ambient_only
+	call	xform_normal
 	call	DynamicLights
+	mov	v_color, r0
+	mov	v_tex0, in_tex0
+	end
+
+default_ambient_only:
+	mov	r0, zeros
+	mul	r0, surfDiffuse, r0
+	mov	r1, u_ambLight
+	mad	r0.rgb, r1.rgb, surfAmbient.rgb, r0.rgb
+	mad	r0, in_color, fixclr, r0
+	max	r0, zeros, r0
+	min	r0, ones, r0
+	mul	r0, u_matColor, r0
 	mov	v_color, r0
 	mov	v_tex0, in_tex0
 	end

@@ -105,6 +105,48 @@ namespace c3d {
 
 void registerPlatformPlugins(void);
 bool initialiseMaterialState(void);
+/* During gameplay the D-pad selects the presentation preset instead of
+ * controlling the player.  Left/right choose the independently saved 2D/3D
+ * quality profile; up/down retain their 3D view-mode function only while the
+ * stereoscopic slider is open. */
+bool32 stereoControlsActive(void);
+bool32 stereoExtendedDepthEnabled(void);
+void setStereoExtendedDepth(bool32 extendedDepth);
+bool32 performanceModeActive(void);
+bool32 performanceMode2DEnabled(void);
+bool32 performanceMode3DEnabled(void);
+void set3DSPerformanceModes(bool32 mode2D, bool32 mode3D);
+void handle3DSPerformanceDPad(uint32 buttonsDown);
+bool32 shouldSkipStereoFrame(void);
+bool32 consumeStereoRenderRetry(float elapsedLogicMs);
+// Normalised recent missed-frame frequency for both Flat and Stereo. Flat
+// records the same skip decisions without dropping the presentation.
+float32 frameSkipPressure(void);
+void resetFrameSkipPressure(void);
+void setAdaptiveWorldRangeScale(float32 scale);
+float32 adaptiveWorldRangeScale(void);
+
+enum ProfileDrawClass
+{
+	PROFILE_DRAW_WORLD,
+	PROFILE_DRAW_SKIN,
+	PROFILE_DRAW_MATFX,
+	PROFILE_DRAW_IM2D,
+	PROFILE_DRAW_IM3D
+};
+
+inline uint64 profileTimerStart(void) { return 0; }
+inline void profileRecordLogicFrame(uint64) {}
+inline void profileRecordGameplay(uint64) {}
+inline void profileRecordAudio(uint64) {}
+inline void profileRecordStreaming(uint64) {}
+void closeFrameProfileLog(void);
+struct ProfileLogicFrameScope
+{
+	uint64 startTick;
+	ProfileLogicFrameScope() : startTick(profileTimerStart()) {}
+	~ProfileLogicFrameScope() { profileRecordLogicFrame(startTick); }
+};
 
 extern Device renderdevice;
   
@@ -147,8 +189,10 @@ struct InstanceData
 	int32     numVertices;	//
 	Material *material;
 	bool32    vertexAlpha;
+	uint8     maxVertexAlpha;
 	uint32    program;
 	uint16   *indexBuffer;
+
 };
 
 #ifdef RW_3DS
@@ -168,8 +212,18 @@ struct InstanceDataHeader : rw::InstanceDataHeader
 	C3D_AttrInfo vao;
 	ptrdiff_t    stride;
 
+
 	InstanceData *inst;
+	int32 vegetationProxy;
 };
+
+void loadVegetationCache(void);
+void closeVegetationCache(void);
+int32 findVegetationProxy(Geometry *geo);
+void setVegetationLodDistance(float distance);
+float vegetationBlend(Atomic *atomic, int32 proxy);
+bool vegetationMaterial(Geometry *geo, int32 proxy, Material *material);
+void renderVegetationProxy(Atomic *atomic, int32 proxy, float blend);
 
 struct Shader;
 extern Shader *defaultShader;
@@ -227,6 +281,9 @@ struct Im2DVertex
 
 void genAttribPointers(InstanceDataHeader *header);
 void setAttribPointers(InstanceDataHeader *header);
+void setVertexLayout(C3D_AttrInfo *layout);
+void setVertexBuffer(C3D_BufInfo *buffer);
+void resetVertexLayoutCache(void);
 void setAttribsFixed(void);
   
 // Render state
@@ -248,13 +305,22 @@ enum
 // void setViewMatrix(float32*);
 
 // per Object
-void setWorldMatrix(Matrix*);
+void setWorldMatrix(Matrix*, float positionScale = 1.0f);
 int32 setLights(WorldLights *lightData);
 RGBAf getCurrentAmbientLight(void);
 
 // per Mesh
 void setTexture(int32 n, Texture *tex);
 void setMaterialColor(const RGBA &color);
+struct EntityRenderStyle {
+	float opacity, reflection;
+	bool untexturedBlackDecal;
+};
+EntityRenderStyle getEntityRenderStyle(void);
+void setEntityRenderStyle(EntityRenderStyle style);
+// Select the five contiguous Shoreside Vale tower-light index ranges.  The
+// default mask leaves every ordinary mesh untouched.
+void setWorldLightClusterMask(uint32 mask);
 inline void setMaterialColor(uint32 flags, const RGBA &color)
 {
 	static RGBA white = { 255, 255, 255, 255 };
@@ -309,11 +375,11 @@ void defaultRenderCB(Atomic *atomic, InstanceDataHeader *header);
 int32 lightingCB(Atomic *atomic);
 RGBAf getAtomicAmbientLight(Atomic *atomic);
 
-void drawInst_simple(InstanceDataHeader *header, InstanceData *inst);
+void drawInst_simple(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass);
 // Emulate PS2 GS alpha test FB_ONLY case: failed alpha writes to frame- but not to depth buffer
-void drawInst_GSemu(InstanceDataHeader *header, InstanceData *inst);
+void drawInst_GSemu(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass);
 // This one switches between the above two depending on render state;
-void drawInst(InstanceDataHeader *header, InstanceData *inst);
+void drawInst(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass);
 
 
 void *destroyNativeData(void *object, int32, int32);
@@ -335,12 +401,20 @@ struct C3DRaster
 	GPU_TEXCOLOR format;
 	GX_TRANSFER_FORMAT transfer;
 	C3D_FrameBuf *fbo;
-	
+	/* The main upper-screen raster remains the proven single-eye target.  The
+	 * right eye uses a separate raw render buffer instead of a 1024-high
+	 * combined target, which the physical PICA/display-transfer path corrupts. */
+	void *stereoBuf;
+	C3D_FrameBuf *stereoFbo;
+
 	// texture object
 	bool  tilt;
 	bool  onVram;
 	bool  isCompressed;
 	bool  hasAlpha;
+	/* Distinguish real translucency from binary cut-outs so glass keeps its
+	 * blended pass without making foliage pay for it. */
+	bool  hasTranslucentAlpha;
 	bool  autogenMipmap;
 	int8  numLevels;
 	int8  bpp;

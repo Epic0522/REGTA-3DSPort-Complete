@@ -42,6 +42,39 @@ getImagePtr(C3D_Tex* tex, int level)
 {
 	return C3D_Tex2DGetImagePtr(tex, level, NULL);
 }
+
+static bool
+hasIntermediateAlpha(const C3DRaster *natras, const uint8 *data, uint32 size)
+{
+	if(!natras->hasAlpha || data == nil)
+		return false;
+
+	bool intermediate = false;
+	bool transparent = false;
+	if(natras->format == GPU_ETC1A4){
+		/* Each ETC1A4 block stores eight alpha bytes followed by eight colour
+		 * bytes.  Every nibble is one pixel's alpha. */
+		for(uint32 block = 0; block + 16 <= size; block += 16)
+			for(uint32 i = 0; i < 8; ++i){
+				const uint8 packed = data[block + i];
+				const uint8 lo = packed & 0xF;
+				const uint8 hi = packed >> 4;
+				transparent |= lo == 0 || hi == 0;
+				intermediate |= (lo != 0 && lo != 0xF) ||
+				                (hi != 0 && hi != 0xF);
+			}
+	}else if(natras->format == GPU_RGBA8){
+		/* The upload path stores this format in ABGR byte order. */
+		for(uint32 i = 0; i + 3 < size; i += 4){
+			transparent |= data[i] == 0;
+			intermediate |= data[i] != 0 && data[i] != 0xFF;
+		}
+	}
+	/* A cut-out with anti-aliased edges contains zero-alpha texels.  Keeping
+	 * those on the cut-out path avoids restoring a second draw for foliage,
+	 * fences and decals.  Glass textures use a translucent floor instead. */
+	return intermediate && !transparent;
+}
   
   
 #define GX_TRANSFER_FMT_NONE ((GX_TRANSFER_FORMAT)0xff)
@@ -106,6 +139,9 @@ rasterCreateCameraTexture(Raster *raster, bool tilt)
 
 	int tw; for(tw = 8; tw < raster->width; tw <<= 1);
 	int th; for(th = 8; th < raster->height; th <<= 1);
+	/* Only the native 400x240 upper-screen camera is stereoscopic.  Reflection
+	 * cameras and the 320x240 lower-screen camera remain single-eye targets. */
+	const bool stereoTop = tilt && raster->width == 400 && raster->height == 240;
 	GPU_TEXCOLOR tex_fmt = natras->format;
 	GPU_COLORBUF fbc_fmt = cameraFormat(tex_fmt);
 
@@ -142,7 +178,11 @@ rasterCreateCameraTexture(Raster *raster, bool tilt)
 	}
 
 	C3D_FrameBufColor(natras->fbo, natras->tex->data, fbc_fmt);
-	C3D_FrameBufDepth(natras->fbo, NULL, GPU_RB_DEPTH24_STENCIL8);
+	C3D_FrameBufDepth(natras->fbo, NULL, GPU_RB_DEPTH24);
+
+	natras->stereoBuf = nil;
+	natras->stereoFbo = nil;
+	(void)stereoTop; /* right-eye storage is allocated lazily by beginUpdate */
 
 	natras->tilt = tilt;
 	natras->numLevels = 1;
@@ -166,8 +206,10 @@ rasterCreateZbuffer(Raster *raster)
 
 	int w; for (w = 8; w < raster->width; w <<= 1);
 	int h; for (h = 8; h < raster->height; h <<= 1);
-	u32 size = C3D_CalcDepthBufSize(w, h, GPU_RB_DEPTH24_STENCIL8);
+	u32 size = C3D_CalcDepthBufSize(w, h, GPU_RB_DEPTH24);
 	natras->zbuf = vramAlloc(size);
+	natras->stereoBuf = nil;
+	natras->stereoFbo = nil;
 
 	if(!natras->zbuf){
 		printf("not enough vram for zbuffer. Consider blowing up a government building.\n");
@@ -459,6 +501,7 @@ rasterCreate(Raster *raster)
 
 	natras->isCompressed = 0;
 	natras->hasAlpha     = 0;
+	natras->hasTranslucentAlpha = 0;
 	natras->numLevels    = 1;
 
 	if(raster->width == 0 || raster->height == 0){
@@ -885,6 +928,8 @@ createNativeRaster(void *object, int32 offset, int32)
 #ifdef RW_3DS
 	ras->tex = nil;
 	ras->fbo = nil;
+	ras->stereoBuf = nil;
+	ras->stereoFbo = nil;
 	ras->lastUsedSerial = 0;
 	ras->shrinkProtected = false;
 #endif	
@@ -899,6 +944,8 @@ copyNativeRaster(void *dst, void *, int32 offset, int32)
 #ifdef RW_3DS       
 	d->tex = 0;
 	d->fbo = 0;
+	d->stereoBuf = nil;
+	d->stereoFbo = nil;
 	d->lastUsedSerial = 0;
 	d->shrinkProtected = false;
 #endif	
@@ -933,6 +980,10 @@ destroyNativeRaster(void *object, int32 offset, int32)
 		if (natras->tex){
 			TexFree(natras);
 		}
+		if(natras->stereoBuf)
+			vramFree(natras->stereoBuf);
+		if(natras->stereoFbo)
+			rwFree(natras->stereoFbo);
 		rwFree(natras->fbo);
 		break;
 
@@ -941,18 +992,25 @@ destroyNativeRaster(void *object, int32 offset, int32)
 			// Detatch from FBO we may be attached to
 			C3DRaster *oldfb = GETC3DRASTEREXT(natras->fboMate);
 			if(oldfb->fbo){
-				C3D_FrameBufDepth(oldfb->fbo, nil, GPU_RB_DEPTH24_STENCIL8);
+				C3D_FrameBufDepth(oldfb->fbo, nil, GPU_RB_DEPTH24);
 			}
+			if(oldfb->stereoFbo)
+				C3D_FrameBufDepth(oldfb->stereoFbo, nil,
+				                  GPU_RB_DEPTH24);
 			oldfb->fboMate = nil;
 		}
 		if(natras->zbuf){
 			vramFree(natras->zbuf);
 		}
+		if(natras->stereoBuf)
+			vramFree(natras->stereoBuf);
 		break;
 	}
 
 	natras->tex = 0;
 	natras->fbo = 0;
+	natras->stereoBuf = nil;
+	natras->stereoFbo = nil;
 #endif
 	return object;
 }
@@ -1039,6 +1097,7 @@ readNativeTexture(Stream *stream)
 	{
 		stream->read8(data, size);
 	}
+	natras->hasTranslucentAlpha = hasIntermediateAlpha(natras, (const uint8*)data, size);
 
 	return tex;
 }

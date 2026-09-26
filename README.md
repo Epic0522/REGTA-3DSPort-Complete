@@ -600,6 +600,80 @@ prompts for those.
 
 ## Changelog
 
+### September 25, 2026
+
+- Made draw distance recover much faster after frame pressure falls; switching from Stereo to Flat
+  now restores the full world immediately and measures Flat mode again from a clean history.
+- Kept building window lights and other attached 2D lighting effects hidden whenever their carrier
+  model is outside its current adaptive LOD range in all three games.
+- Bound separate night-window geometry to the actual high-detail or LOD buildings beneath it in all
+  three games, preventing illuminated window polygons from remaining visible over an empty section of world.
+- Fixed LCS building handoff gaps by keeping each low-detail instance visible until its matching
+  high-detail map entity has completed its fade and is ready to render fully opaque.
+- Kept LCS Stereo light carriers resident under adaptive pressure, and made moving lamp shadows use
+  elapsed game time between rendered frames so Stereo frame skipping cannot slow their movement or fade.
+- Handed garage, safehouse, fixed, scripted and cutscene cameras fully back to the original camera
+  system in all three games. LCS script teleports retain their native camera restore or jump cut for the
+  complete frame, and the custom follow camera is rebased only after the original shot ends.
+- Kept the vehicle being entered or exited out of normal follow-camera obstacle queries so close entry
+  angles can orbit continuously into the rear follow view instead of stalling beside the body and jumping.
+
+### September 24, 2026
+
+#### Stereo and display
+
+- Added stereoscopic 3D to all three games, with **Flat** and **Stereo** display modes.
+- Added separate **Quality** and **Performance** profiles for both display modes.
+- Added Normal View and Extended Depth options for Stereo mode.
+- Added a clear on-screen summary when changing the display mode, quality profile or depth.
+- Repeated profile inputs now show the current selection without rewriting the INI file.
+- Corrected HUD, location, vehicle, radio and help-text timing while Stereo mode is active.
+- Restored smooth fades for distant buildings, vegetation, vehicles and pedestrians.
+- Made vegetation LOD fades complete once triggered instead of remaining as a stationary
+  half-billboard, half-mesh blend at the switching boundary.
+- Extended the high-detail vegetation range in both Flat profiles to reduce visible model changes.
+- Fixed vehicle glass and transparent materials disappearing in Stereo mode.
+
+#### Performance and rendering
+
+- Added adaptive frame pacing for steadier movement when a scene cannot sustain its full frame rate.
+- Draw distance in both Flat and Stereo now follows recent missed-frame frequency, reducing the overall
+  world range first and shortening distant high-detail models only if pressure remains high.
+- Reduced CPU and GPU work shared by both eyes instead of repeating unchanged scene preparation.
+- Reduced geometry submission, texture changes and material-state overhead in busy scenes.
+- Improved skinned-character, immediate-mode and MatFX rendering on the 3DS GPU.
+- Added load-aware budgets for distant traffic, pedestrians, particles, lights, shadows and small effects.
+- Prioritised the player, mission actors and nearby vehicles when the scene is under pressure.
+- Reduced the cost of high-detail vehicles while preserving their reflections and visible body parts.
+- Refined building and vehicle LOD ranges to keep nearby detail while reducing distant rendering cost.
+- Improved vegetation batching and fading without shortening objects that have no lower-detail model.
+- Restored GTA III's original light-blue colour filter in Stereo mode.
+- Removed detailed profiling and CSV logging from production builds.
+
+#### Camera
+
+- Added smooth transitions between pedestrian, vehicle, top-down, bonnet and cinematic cameras.
+- Kept the player or vehicle framed while changing camera height, angle and follow distance.
+- Smoothed vehicle entry, exit, carjacking, knockdown and other game-controlled camera movements.
+- Prevented exit cameras from settling at extreme low angles or behind the vehicle and nearby scenery.
+- Prevented rapid spins, excessive tilt and abrupt distance changes during camera hand-offs.
+- Manual camera input now takes control immediately during a transition, then settles at the selected
+  near, middle or far follow distance.
+- Camera rotation now stops at solid obstacles instead of pushing the viewpoint through them.
+- Only geometry touching the camera is faded, preventing unrelated scenery in front of the player
+  from disappearing.
+- Vehicles and occupants now fade smoothly during close bonnet and cinematic transitions.
+
+#### Stability and installation
+
+- Improved audio streaming and prefetching to reduce radio, station-change and ambient-audio stalls.
+- Improved renderer and audio shutdown when returning to HOME or powering off from a game.
+- Added a startup integrity check for every replacement file supplied by this project.
+- Supplied replacements must match their exact size and SHA-256; missing or modified files stop
+  startup and identify the affected path.
+- Original game data and player-converted audio remain compatible across supported source versions
+  and are checked for usability rather than one fixed checksum.
+
 ### Shared New Nintendo 3DS platform
 
 #### Interface and controls

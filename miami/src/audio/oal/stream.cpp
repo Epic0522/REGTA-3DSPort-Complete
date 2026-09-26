@@ -82,7 +82,7 @@ public:
 
 };
 
-CSortStereoBuffer SortStereoBuffer;
+// Scratch belongs to each decoder; background radio and dialogue may overlap.
 
 class CImaADPCMDecoder
 {
@@ -150,6 +150,7 @@ public:
 
 class CWavFile : public IDecoder
 {
+	CSortStereoBuffer SortStereoBuffer;
 	enum
 	{
 		WAVEFMT_PCM = 1,
@@ -398,6 +399,7 @@ public:
 #ifdef AUDIO_OAL_USE_SNDFILE
 class CSndFile : public IDecoder
 {
+	CSortStereoBuffer SortStereoBuffer;
 	SNDFILE *m_pfSound;
 	SF_INFO m_soundInfo;
 public:
@@ -472,6 +474,7 @@ public:
 
 class CMP3File : public IDecoder
 {
+	CSortStereoBuffer SortStereoBuffer;
 protected:
 	mpg123_handle *m_pMH;
 	bool m_bOpened;
@@ -726,6 +729,7 @@ public:
 
 class CVbFile : public IDecoder
 {
+	CSortStereoBuffer SortStereoBuffer;
 	FILE        *m_pFile;
 	CVagDecoder *m_pVagDecoders;
 
@@ -895,6 +899,7 @@ public:
 #ifdef AUDIO_OAL_USE_OPUS
 class COpusFile : public IDecoder
 {
+	CSortStereoBuffer SortStereoBuffer;
 	OggOpusFile *m_FileH;
 	bool m_bOpened;
 	uint32 m_nRate;
@@ -988,6 +993,10 @@ public:
 };
 #endif
 
+#ifdef _3DS
+#include "stream_prefetch.inc"
+#endif
+
 void CStream::Initialise()
 {
 #ifdef AUDIO_OAL_USE_MPG123
@@ -1031,6 +1040,7 @@ CStream::CStream(ALuint *sources, ALuint (&buffers)[NUM_STREAMBUFFERS]) :
 	m_nDirectBytes(0),
 	m_PrepareThread(nil),
 	m_nPrepareState(0),
+	m_async(nil),
 	m_RadioStartThread(nil),
 	m_nRadioStartState(0)
 #endif
@@ -1161,6 +1171,9 @@ CStream::~CStream()
 void CStream::Delete()
 {
 #ifdef _3DS
+	DestroyAsync();
+#endif
+#ifdef _3DS
 	JoinPrepareThread();
 	JoinRadioStartThread();
 #endif
@@ -1182,6 +1195,12 @@ void CStream::Delete()
 
 void CStream::Close()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		CancelAsync();
+		return;
+	}
+#endif
 	Delete();
 	m_bPaused = false;
 	m_bActive = false;
@@ -1365,11 +1384,25 @@ bool CStream::HasSource()
 
 bool CStream::IsOpened()
 {
+#ifdef _3DS
+	if(m_async && m_async->active) return true;
+#endif
 	return m_pSoundFile && m_pSoundFile->IsOpened();
 }
 
 bool CStream::IsPlaying()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		if(m_bPaused || !m_bActive) return false;
+		LightLock_Lock(&m_async->lock);
+		const bool pending = !m_async->done || m_async->count != 0;
+		LightLock_Unlock(&m_async->lock);
+		ALint state = AL_STOPPED;
+		alGetSourcei(m_pAlSources[0], AL_SOURCE_STATE, &state);
+		return pending || state == AL_PLAYING;
+	}
+#endif
 	if ( !HasSource() || !IsOpened() ) return false;
 
 #ifdef _3DS
@@ -1497,6 +1530,18 @@ void CStream::SetPan(uint8 nPan)
 // Should only be called if source is stopped
 void CStream::SetPosMS(uint32 nPos)
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		char filename[128];
+		LightLock_Lock(&m_async->lock);
+		memcpy(filename,m_async->filename,sizeof(filename));
+		const uint32 rate=m_async->overrideRate;
+		const bool loop=m_async->loop;
+		LightLock_Unlock(&m_async->lock);
+		BeginAsyncStream(filename,nPos,rate,loop);
+		return;
+	}
+#endif
 	if ( !IsOpened() ) return;
 	m_pSoundFile->Seek(nPos);
 	ClearBuffers();
@@ -1504,6 +1549,26 @@ void CStream::SetPosMS(uint32 nPos)
 
 uint32 CStream::GetPosMS()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		ALint offset = 0, processed = 0;
+		alGetSourcei(m_pAlSources[0], AL_SAMPLE_OFFSET, &offset);
+		alGetSourcei(m_pAlSources[0], AL_BUFFERS_PROCESSED, &processed);
+		if(m_async->queued && processed >= (ALint)m_async->queued){
+			const unsigned slot=m_async->order[m_async->queued-1];
+			return m_async->start[slot]+(uint32)((uint64)m_async->frames[slot]*1000/m_async->rate[slot]);
+		}
+		// OpenAL offset is relative to the whole queue, including processed buffers.
+		uint64 frames = offset > 0 ? (uint32)offset : 0;
+		for(unsigned i=0;i<m_async->queued;i++){
+			const unsigned slot = m_async->order[i];
+			if(frames < m_async->frames[slot] || i+1 == m_async->queued)
+				return m_async->start[slot] + (uint32)(frames*1000/m_async->rate[slot]);
+			frames -= m_async->frames[slot];
+		}
+		return m_async->playPosition;
+	}
+#endif
 	if ( !HasSource() ) return 0;
 	if ( !IsOpened() ) return 0;
 
@@ -1528,12 +1593,28 @@ uint32 CStream::GetPosMS()
 
 uint32 CStream::GetLengthMS()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		LightLock_Lock(&m_async->lock);
+		uint32 length=m_async->length;
+		LightLock_Unlock(&m_async->lock);
+		return length;
+	}
+#endif
 	if ( !IsOpened() ) return 0;
 	return m_pSoundFile->GetLength();
 }
 
 bool CStream::HasDecodedToEnd()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		LightLock_Lock(&m_async->lock);
+		bool done=m_async->done;
+		LightLock_Unlock(&m_async->lock);
+		return done;
+	}
+#endif
 	if ( !IsOpened() ) return false;
 	const uint32 length = m_pSoundFile->GetLength();
 	return length != 0 && m_pSoundFile->Tell() >= length;
@@ -1829,6 +1910,9 @@ void CStream::Stop()
 
 void CStream::Update()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){ UpdateAsync(); return; }
+#endif
 	if ( !IsOpened() )
 		return;
 	
@@ -1959,6 +2043,21 @@ void CStream::Update()
 
 void CStream::ProviderInit()
 {
+#ifdef _3DS
+	if(m_async && m_async->resume){
+		const bool paused=m_bPaused;
+		char filename[128];
+		LightLock_Lock(&m_async->lock);
+		memcpy(filename,m_async->filename,sizeof(filename));
+		const uint32 rate=m_async->overrideRate;
+		const bool loop=m_async->loop;
+		LightLock_Unlock(&m_async->lock);
+		m_async->resume=false;
+		BeginAsyncStream(filename,m_nPosBeforeReset,rate,loop);
+		SetPan(m_nPan); SetVolume(m_nVolume); SetPause(paused);
+		return;
+	}
+#endif
 	if ( m_bReset )
 	{
 		if ( Setup(true) )
@@ -1980,6 +2079,15 @@ void CStream::ProviderInit()
 
 void CStream::ProviderTerm()
 {
+#ifdef _3DS
+	if(m_async && m_async->active){
+		m_nPosBeforeReset=GetPosMS();
+		m_async->resume=m_bActive;
+		CancelAsync();
+		m_bReset=true;
+		return;
+	}
+#endif
 	m_bReset = true;
 	m_nPosBeforeReset = GetPosMS();
 	

@@ -1198,8 +1198,13 @@ cSampleManager::Initialise(void)
 void
 cSampleManager::Terminate(void)
 {
-	for (int32 i = 0; i < MAX_STREAMS; i++)
+	for (int32 i = 0; i < MAX_STREAMS; i++){
 		aStream[i]->Close();
+#ifdef _3DS
+		// Join before OpenAL/context teardown and mpg123_exit.
+		aStream[i]->ShutdownAsync();
+#endif
+	}
 
 	for ( int32 i = 0; i < NUM_CHANNELS; i++ )
 		aChannel[i].Term();
@@ -1930,6 +1935,15 @@ cSampleManager::StartStreamedFile(uint32 nFile, uint32 nPos, uint8 nStream)
 	if ( nFile >= TOTAL_STREAMED_SOUNDS )
 		return FALSE;
 
+#ifdef _3DS
+	if(nStream == 0 && nFile <= STREAMED_SOUND_RADIO_TAXI &&
+	   nFile != STREAMED_SOUND_RADIO_MP3_PLAYER &&
+	   aStream[0]->BeginAsyncStream(StreamedNameTable[nFile], position,
+	       IsThisTrackAt16KHz(nFile) ? 16000 : 32000, nStreamLoopedFlag[0] != FALSE)){
+		nStreamLoopedFlag[0] = TRUE;
+		return TRUE;
+	}
+#endif
 	aStream[nStream]->Close();
 
 	if ( nFile == STREAMED_SOUND_RADIO_MP3_PLAYER )

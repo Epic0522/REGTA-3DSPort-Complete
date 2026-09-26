@@ -239,19 +239,29 @@ im2DRenderIndexedPrimitive(PrimitiveType primType,
 
 	flushCache();
 	im2DSetXform();
-	C3D_SetAttrInfo(&im2DVao);
+	setVertexLayout(&im2DVao);
 
-	C3D_ImmDrawBegin(prim);
-	for(i = 0; i < ni; i++){
-		vi = indices ? ind[i] : i;
-		C3D_ImmSendAttrib(vtx[vi].x, vtx[vi].y, vtx[vi].z, vtx[vi].w);
-		C3D_ImmSendAttrib((float)vtx[vi].r/255.0f,
-				  (float)vtx[vi].g/255.0f,
-				  (float)vtx[vi].b/255.0f,
-				  (float)vtx[vi].a/255.0f);
-		C3D_ImmSendAttrib(vtx[vi].u, vtx[vi].v, 0, 0);
+	const bool32 stereo = stereoRenderActive();
+	const int32 passes = stereoRenderPassCount();
+	for(int32 pass = 0; pass < passes; pass++){
+		const int32 eye = stereoRenderEye(pass);
+		if(stereo)
+			setStereoEyeViewport(eye);
+		C3D_ImmDrawBegin(prim);
+		for(i = 0; i < ni; i++){
+			vi = indices ? ind[i] : i;
+			C3D_ImmSendAttrib(vtx[vi].x, vtx[vi].y, vtx[vi].z, vtx[vi].w);
+			C3D_ImmSendAttrib((float)vtx[vi].r/255.0f,
+					  (float)vtx[vi].g/255.0f,
+					  (float)vtx[vi].b/255.0f,
+					  (float)vtx[vi].a/255.0f);
+			C3D_ImmSendAttrib(vtx[vi].u, vtx[vi].v, 0, 0);
+		}
+		C3D_ImmDrawEnd();
+		profileRecordDraw(ni, PROFILE_DRAW_IM2D);
 	}
-	C3D_ImmDrawEnd();
+	if(stereo)
+		setStereoEyeViewport(stereoRenderEye(0));
 }
 
 void
@@ -289,7 +299,7 @@ im2DRenderBlit()
 	C3D_FVUnifSet(GPU_VERTEX_SHADER, U(u_xform), 2.0f, -2.0, -1, 1);
 	C3D_FVUnifSet(GPU_VERTEX_SHADER, U(u_flip), 1.0f, 0.0f, 0.0f, 1.0f);
 	
-	C3D_SetAttrInfo(&im2DVao);
+	setVertexLayout(&im2DVao);
 	C3D_ImmDrawBegin(GPU_TRIANGLES);
 	for(i = 0; i < 6; i++){
 		vi = ind[i];
@@ -298,8 +308,9 @@ im2DRenderBlit()
 		C3D_ImmSendAttrib(vtx[vi][4], vtx[vi][5], 0,          0);
 	}
 	C3D_ImmDrawEnd();
+	profileRecordDraw(6, PROFILE_DRAW_IM2D);
 }
-  
+
 void
 openIm3D(void)
 {
@@ -424,12 +435,22 @@ im3DRenderIndexedPrimitive(PrimitiveType primType, void *indices, int32 numIndic
 
 		im3dShader->use();
 		flushCache();
-		C3D_SetAttrInfo(&im3DVao);
-		C3D_SetBufInfo(&vbo);
-		if(ind)
-			C3D_DrawElements(prim, ni, C3D_UNSIGNED_SHORT, ibuf);
-		else
-			C3D_DrawArrays(prim, 0, ni);
+		setVertexLayout(&im3DVao);
+		setVertexBuffer(&vbo);
+		const bool32 stereo = stereoRenderActive();
+		const int32 passes = stereoRenderPassCount();
+		for(int32 pass = 0; pass < passes; pass++){
+			const int32 eye = stereoRenderEye(pass);
+			if(stereo)
+				setStereoEye(eye);
+			if(ind)
+				C3D_DrawElements(prim, ni, C3D_UNSIGNED_SHORT, ibuf);
+			else
+				C3D_DrawArrays(prim, 0, ni);
+			profileRecordDraw(ni, PROFILE_DRAW_IM3D);
+		}
+		if(stereo)
+			setStereoEye(stereoRenderEye(0));
 		return;
 		}
 	}
@@ -437,22 +458,32 @@ im3DRenderIndexedPrimitive(PrimitiveType primType, void *indices, int32 numIndic
 
 	im3dShader->use();
 	flushCache();
-	C3D_SetAttrInfo(&im3DVao);
+	setVertexLayout(&im3DVao);
 
-	C3D_ImmDrawBegin(prim);
-	for(i = 0; i < ni; i++){
-		vi = ind ? ind[i] : i;
-		C3D_ImmSendAttrib(vtx[vi].position.x,
-				  vtx[vi].position.y,
-				  vtx[vi].position.z,
-				  1.0f);
-		C3D_ImmSendAttrib((float)vtx[vi].r/255.0f,
-				  (float)vtx[vi].g/255.0f,
-				  (float)vtx[vi].b/255.0f,
-				  (float)vtx[vi].a/255.0f);
-		C3D_ImmSendAttrib(vtx[vi].u, vtx[vi].v, 0, 0);
+	const bool32 stereo = stereoRenderActive();
+	const int32 passes = stereoRenderPassCount();
+	for(int32 pass = 0; pass < passes; pass++){
+		const int32 eye = stereoRenderEye(pass);
+		if(stereo)
+			setStereoEye(eye);
+		C3D_ImmDrawBegin(prim);
+		for(i = 0; i < ni; i++){
+			vi = ind ? ind[i] : i;
+			C3D_ImmSendAttrib(vtx[vi].position.x,
+					  vtx[vi].position.y,
+					  vtx[vi].position.z,
+					  1.0f);
+			C3D_ImmSendAttrib((float)vtx[vi].r/255.0f,
+					  (float)vtx[vi].g/255.0f,
+					  (float)vtx[vi].b/255.0f,
+					  (float)vtx[vi].a/255.0f);
+			C3D_ImmSendAttrib(vtx[vi].u, vtx[vi].v, 0, 0);
+		}
+		C3D_ImmDrawEnd();
+		profileRecordDraw(ni, PROFILE_DRAW_IM3D);
 	}
-	C3D_ImmDrawEnd();
+	if(stereo)
+		setStereoEye(stereoRenderEye(0));
 }
 
 void

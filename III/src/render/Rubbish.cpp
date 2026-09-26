@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 #include "main.h"
 
 #include "General.h"
@@ -66,6 +67,11 @@ CRubbish::Render(void)
 		for(sheet = &aSheets[type*NUM_RUBBISH_SHEETS / 4];
 		    sheet < &aSheets[(type+1)*NUM_RUBBISH_SHEETS / 4];
 		    sheet++){
+			// Stable selection, never alternate sheets between eyes or frames.
+#ifdef _3DS
+			if(((sheet - aSheets) & 1) != 0) continue;
+			if(EffectBudget3DS::Limit(2) == 1 && ((sheet - aSheets) & 2) != 0) continue;
+#endif
 			if(sheet->m_state == 0)
 				continue;
 

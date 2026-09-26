@@ -87,6 +87,11 @@ class CStream
 	ndspWaveBuf m_DirectWaveBuf;
 	Thread  m_PrepareThread;
 	volatile int32 m_nPrepareState;
+	struct AsyncState;
+	AsyncState *m_async;
+	void CancelAsync();
+	void DestroyAsync();
+	void UpdateAsync();
 	Thread  m_RadioStartThread;
 	volatile int32 m_nRadioStartState;
 #endif
@@ -149,6 +154,7 @@ public:
 	int8 BeginPrepare();
 	int8 GetPrepareStatus() const;
 	bool BeginRadioStart();
+	bool BeginAsyncStream(const char *filename, uint32 position, uint32 rate, bool loop);
 #endif
 
 	

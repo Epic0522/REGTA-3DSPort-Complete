@@ -443,6 +443,14 @@ bool LoadINISettings()
 	ReadIniIfExists("Display", "DrawDistance", &FrontEndMenuManager.m_PrefsLOD);
 	ReadIniIfExists("Display", "Subtitles", &FrontEndMenuManager.m_PrefsShowSubtitles);
 	ReadIniIfExists("Graphics", "AspectRatio", &FrontEndMenuManager.m_PrefsUseWideScreen);
+	bool stereoExtendedDepth = true;
+	bool performanceMode2D = false;
+	bool performanceMode3D = false;
+	ReadIniIfExists("Graphics", "StereoExtendedDepth", &stereoExtendedDepth);
+	ReadIniIfExists("Graphics", "PerformanceMode2D", &performanceMode2D);
+	ReadIniIfExists("Graphics", "PerformanceMode3D", &performanceMode3D);
+	rw::c3d::setStereoExtendedDepth(stereoExtendedDepth);
+	rw::c3d::set3DSPerformanceModes(performanceMode2D, performanceMode3D);
 	ReadIniIfExists("Graphics", "FrameLimiter", &FrontEndMenuManager.m_PrefsFrameLimiter);
 #ifdef LEGACY_MENU_OPTIONS
 	ReadIniIfExists("Graphics", "VSync", &FrontEndMenuManager.m_PrefsVsyncDisp);
@@ -540,6 +548,12 @@ void SaveINISettings()
 	StoreIni("Display", "DrawDistance", FrontEndMenuManager.m_PrefsLOD);
 	StoreIni("Display", "Subtitles", FrontEndMenuManager.m_PrefsShowSubtitles);
 	StoreIni("Graphics", "AspectRatio", FrontEndMenuManager.m_PrefsUseWideScreen);
+	StoreIni("Graphics", "StereoExtendedDepth",
+	         rw::c3d::stereoExtendedDepthEnabled() != 0);
+	StoreIni("Graphics", "PerformanceMode2D",
+	         rw::c3d::performanceMode2DEnabled() != 0);
+	StoreIni("Graphics", "PerformanceMode3D",
+	         rw::c3d::performanceMode3DEnabled() != 0);
 #ifdef LEGACY_MENU_OPTIONS
 	StoreIni("Graphics", "VSync", FrontEndMenuManager.m_PrefsVsyncDisp);
 	StoreIni("Graphics", "Trails", CMBlur::BlurOn);

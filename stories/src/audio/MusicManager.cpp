@@ -976,6 +976,27 @@ cMusicManager::ServiceTrack(CVehicle *veh, CPed *ped)
 	uint8 volume;
 	if (!m_bTrackChangeStarted)
 		m_nNextTrack = m_nFrontendTrack;
+	/* Slot 10 is the legacy MP3/HEAD stream, but the LCS tuner uses the same
+	 * numeric value for RADIO_OFF.  Intercept only a vehicle that is actually
+	 * tuned off; keep the public tuning value intact so retune timing and static
+	 * continue to advance normally. */
+	if (veh != nil && veh->m_nRadioStation == RADIO_OFF && m_nNextTrack == RADIO_OFF) {
+		if (SampleManager.IsStreamPlaying()) {
+			if (m_nPlayingTrack != NO_TRACK) {
+				m_aTracks[m_nPlayingTrack].m_nPosition = SampleManager.GetStreamedFilePosition();
+				m_aTracks[m_nPlayingTrack].m_nLastPosCheckTimer = CTimer::GetTimeInMillisecondsPauseMode();
+				RecordRadioStats();
+			}
+			SampleManager.SetStreamedVolumeAndPan(0, 63, FALSE);
+			SampleManager.StopStreamedFile();
+		}
+		m_nPlayingTrack = NO_TRACK;
+		m_bTrackChangeStarted = FALSE;
+		m_bVerifyNextTrackStartedToPlay = FALSE;
+		bRadioStatsRecorded = FALSE;
+		bRadioStatsRecorded2 = FALSE;
+		return;
+	}
 	if (gRetuneCounter != 0 || m_bSetNextStation) {
 		if (SampleManager.IsStreamPlaying()) {
 			if (m_nPlayingTrack != NO_TRACK && !bRadioStatsRecorded) {
@@ -1209,6 +1230,9 @@ cMusicManager::GetNextCarTuning()
 #endif
 		gNumRetunePresses = 0;
 	}
+	/* RADIO_OFF is a tuning/UI value.  Its numeric value happens to equal the
+	 * old MP3-player stream slot, so passing it to ServiceTrack starts that file
+	 * from the beginning instead of turning the radio off. */
 	return veh->m_nRadioStation;
 }
 
@@ -1328,6 +1352,9 @@ cMusicManager::DisplayRadioStationName()
 	uint8 gStreamedSound;
 	static wchar *pCurrentStation = nil;
 	static uint8 cDisplay = 0;
+#ifdef _3DS
+	static uint32 displayStarted = 0;
+#endif
 	if (wasFinaleRadio) {
 		// OFF (or mission end) restores the normal station title, even if
 		// the car is still tuned to the same station as before the finale.
@@ -1377,24 +1404,32 @@ cMusicManager::DisplayRadioStationName()
 			case RADIO_ESPANTOSO: string = TheText.Get("FEA_FM6"); break;
 			case EMOTION: string = TheText.Get("FEA_FM7"); break;
 			case WAVE: string = TheText.Get("FEA_FM8"); break;
-			case 9: string = TheText.Get("FEA_FM9"); break;
-			case 10:
-				if (!SampleManager.IsMP3RadioChannelAvailable())
-					return;
-				string = TheText.Get("FEA_MP3"); break;
+			case LCFR: string = TheText.Get("FEA_FM9"); break;
+			case RADIO_OFF: string = TheText.Get("FEA_NON"); break;
 			default: string = TheText.Get("FEA_NON"); break;
 			};
 
 			if (pCurrentStation != string) {
 				pCurrentStation = string;
 				cDisplay = 60;
+#ifdef _3DS
+			displayStarted = CTimer::GetTimeInMilliseconds();
+#endif
 			}
 			else {
 				if (cDisplay == 0) return;
+#ifdef _3DS
+			// Expire by game time, including skipped presentation frames.
+			if (uint32(CTimer::GetTimeInMilliseconds() - displayStarted) >= 2000) {
+				cDisplay = 0;
+				return;
+			}
+#else
 #ifdef FIX_BUGS
 				cDisplay -= CTimer::GetLogicalFramesPassed();
 #else
 				cDisplay--;
+#endif
 #endif
 			}
 

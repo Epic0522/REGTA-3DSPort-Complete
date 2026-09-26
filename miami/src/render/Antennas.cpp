@@ -1,4 +1,5 @@
 #include "common.h"
+#include "../../../../common/3ds/EffectBudget.h"
 
 #include "Antennas.h"
 
@@ -40,6 +41,10 @@ CAntennas::RegisterOne(uint32 id, CVector dir, CVector position, float length)
 	if(i >= NUMANTENNAS){
 		// not found, register new one
 
+		int active = 0;
+		for(int slot = 0; slot < NUMANTENNAS; ++slot)
+			if(aAntennas[slot].active) ++active;
+		if(active >= EffectBudget3DS::Limit(NUMANTENNAS)) return;
 		// find empty slot
 		for(i = 0; i < NUMANTENNAS; i++)
 			if(!aAntennas[i].active)

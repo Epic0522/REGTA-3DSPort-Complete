@@ -17,3 +17,14 @@ and the exact file exceptions in the root `.gitignore` in sync when adding
 an override.
 
 The original source installation and existing destination saves are preserved.
+
+The 3DS executable checks these overrides by exact size and SHA-256 at startup.
+Missing or mismatched files stop loading and show the affected path; details also go to
+`regta-install-check.log` in the game's data folder. Original core archives are
+checked for presence, not against a particular PC/PS2 release's checksum.
+Player-converted VC/LCS audio, saves, settings, other language files and optional
+generated caches are excluded from exact hashes; converter output may vary while
+remaining usable.
+Replacing a checked override (including `american.gxt`) requires rebuilding its
+manifest with `python3 scripts/tools/generate_install_manifest.py` and rebuilding
+the executable. `scripts/verify-layout.sh` checks that the manifest is current.

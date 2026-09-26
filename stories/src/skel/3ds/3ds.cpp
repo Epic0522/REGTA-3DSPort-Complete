@@ -672,7 +672,7 @@ stateMachine()
 		ms = (float)CTimer::GetCurrentTimeInCycles() /
 		     (float)CTimer::GetCyclesPerMillisecond();
 		if(RwInitialised){
-			if (!FrontEndMenuManager.m_PrefsFrameLimiter ||
+			if (rw::c3d::consumeStereoRenderRetry(ms) || !FrontEndMenuManager.m_PrefsFrameLimiter ||
 			    (1000.0f / (float)RsGlobal.maxFPS) < ms)
 				RsEventHandler(rsIDLE, (void*)TRUE);
 		}
@@ -763,12 +763,11 @@ void
 callTheMaid()
 {
 #ifdef RESTORIES_3DS_BUILD
-	/* This is the final process-exit path, not the in-game restart path.  A
-	 * long session can leave the linear allocator's address tree too fragile
-	 * for the thousands of render-resource frees in CGame::ShutDown; the OS is
-	 * about to reclaim the complete process address space anyway.  Only drain
-	 * and detach the GPU queue here so its event thread cannot race process
-	 * shutdown; avoid the full game/resource teardown. */
+	/* Retain LCS's lightweight final exit, distinct from in-game restart.
+	 * Stop the audio worker before libctru unmaps its buffers and returns to
+	 * HBL; detach and drain the GPU before shutting down GSP. */
+	DMAudio.Terminate();
+	rw::c3d::closeFrameProfileLog();
 	C3D_Fini();
 	gfxExit();
 	return;
@@ -864,7 +863,9 @@ main(int argc, char *argv[])
 		      !FrontEndMenuManager.m_bWantToRestart &&
 		      aptMainLoop()){
 			stateMachine();
+#ifdef REGTA_MEMORY_DIAGNOSTICS
 			memoryInfo();
+#endif
 		}
 
 		/* About to shut down or restart - block resize events again... */
@@ -878,7 +879,11 @@ main(int argc, char *argv[])
 	}
 	
 	callTheMaid();
-	return 0;
+	/* The owned subsystems are already shut down. newlib exit() would run
+	 * registered C++ destructors before __ctru_exit, touching dead RW objects.
+	 * _exit still performs libctru service cleanup and the HBL return callback. */
+	fflush(NULL);
+	_exit(0);
 }
 
 #endif

@@ -57,8 +57,9 @@ public:
 	static float ms_lodDistScale;
 	static bool m_loadingPriority;
 #ifdef _3DS
-	static float GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId);
+	static float GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *ent = nil);
 	static float GetNew3DSWorldDistance(CEntity *ent, float originDistance);
+	static bool ShouldRenderAttachedWindowLights(CEntity *ent);
 #endif
 
 	static void Init(void);

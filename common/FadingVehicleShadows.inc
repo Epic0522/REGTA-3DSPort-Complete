@@ -16,6 +16,7 @@ struct CFadingVehicleShadow
 };
 
 static CFadingVehicleShadow aFadingVehicleShadows[MAX_FADING_VEHICLE_SHADOWS];
+static uint32 nFadingVehicleShadowUpdateTime;
 
 static void
 ResetFadingVehicleShadows(void)
@@ -23,12 +24,22 @@ ResetFadingVehicleShadows(void)
 	for(int32 i = 0; i < MAX_FADING_VEHICLE_SHADOWS; i++)
 		aFadingVehicleShadows[i].used = false;
 	fPlayerVehicleShadowScale = 1.0f;
+	nFadingVehicleShadowUpdateTime = CTimer::GetTimeInMilliseconds();
 }
 
 static void
 RenderFadingVehicleShadows(CVehicle *pCar)
 {
-	float dt = Min(CTimer::GetTimeStepInSeconds(), 0.1f);
+	/* This update runs only on rendered frames.  A skipped Stereo frame still
+	 * advances game time, so using one logic-frame time step here made lamp
+	 * shadows move and fade in slow motion.  Accumulate the game-time interval
+	 * between actual shadow updates; Flat keeps its original cadence while a
+	 * skipped render catches up on the next visible frame. */
+	uint32 now = CTimer::GetTimeInMilliseconds();
+	float dt = nFadingVehicleShadowUpdateTime == 0 ? CTimer::GetTimeStepInSeconds() :
+		(now-nFadingVehicleShadowUpdateTime)*(1.0f/1000.0f);
+	nFadingVehicleShadowUpdateTime = now;
+	dt = Min(dt, 0.1f);
 	int32 numCurrent = 0;
 	for(int32 i = 0; i < CPointLights::NumLights; i++){
 		CRegisteredPointLight &light = CPointLights::aLights[i];
@@ -49,7 +60,7 @@ RenderFadingVehicleShadows(CVehicle *pCar)
 	// full strength into one opaque patch.
 	int32 numLayers = numCurrent+1; // include the vehicle's regular ground shadow
 	float targetScale = numLayers > 2 ? Max(0.5f, Sqrt(2.0f/(float)numLayers)) : 1.0f;
-	float scaleBlend = Min(CTimer::GetTimeStepInSeconds()/0.25f, 1.0f);
+	float scaleBlend = Min(dt/0.25f, 1.0f);
 	fPlayerVehicleShadowScale += (targetScale-fPlayerVehicleShadowScale)*scaleBlend;
 	float strengthScale = fPlayerVehicleShadowScale;
 	for(int32 i = 0; i < CPointLights::NumLights; i++){
@@ -102,7 +113,7 @@ RenderFadingVehicleShadows(CVehicle *pCar)
 					measuredVelocity *= 80.0f/speed;
 				shadow.sourceVelocity = shadow.sourceVelocity*0.5f + measuredVelocity*0.5f;
 			}
-			float dirBlend = Min(CTimer::GetTimeStepInSeconds()/0.12f, 1.0f);
+			float dirBlend = Min(dt/0.12f, 1.0f);
 			shadow.lightDir = shadow.lightDir*(1.0f-dirBlend) + vecLight*dirBlend;
 			float dirLength = shadow.lightDir.Magnitude();
 			if(dirLength > 0.001f)

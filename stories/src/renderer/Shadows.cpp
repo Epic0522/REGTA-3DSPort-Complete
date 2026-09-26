@@ -7,6 +7,7 @@
 #include "TxdStore.h"
 #include "Timer.h"
 #include "Camera.h"
+#include "../../../../common/3ds/CameraOcclusion.h"
 #include "Timecycle.h"
 #include "CutsceneMgr.h"
 #include "Automobile.h"
@@ -543,6 +544,9 @@ CShadows::StoreShadowToBeRendered(uint8 ShadowType, RwTexture *pTexture, CVector
 void
 CShadows::StoreShadowForVehicle(CVehicle *pCar, VEH_SHD_TYPE type)
 {
+#ifdef _3DS
+	if(CameraOcclusion3DS::HideFixedShadow(pCar))return;
+#endif
 	ASSERT(pCar != nil);
 
 	if ( CTimeCycle::GetShadowStrength() != 0 )

@@ -24,6 +24,12 @@ typedef enum
 C3D_TexEnv* C3D_GetTexEnv(int id);
 void C3D_SetTexEnv(int id, C3D_TexEnv* env);
 void C3D_DirtyTexEnv(C3D_TexEnv* env);
+// Change only a stage's constant color; other combiner registers stay valid.
+void C3D_SetTexEnvColor(int id, u32 color);
+// Reset and configure the complete combiner, retaining only actual changes
+// plus any previously pending invalidation. Callback must only configure TEV;
+// it must not draw or submit the GPU context. NULL selects the default chain.
+void C3D_ConfigureTexEnv(void (*configure)(void));
 
 void C3D_TexEnvBufUpdate(int mode, int mask);
 void C3D_TexEnvBufColor(u32 color);

@@ -14,7 +14,7 @@
 
 .entry matfx_main
 .proc matfx_main
-	call	xform_vertex	; (r8 = world-space vertex)
+	call	xform_vertex
 	mov	v_pos, r0
 	call	xform_normal	; (r9 = world-space normal)
 	; The LCS 3DS MatFX pass is restricted to fully opaque paint.  Its TEV
