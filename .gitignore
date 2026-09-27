@@ -18,6 +18,7 @@
 # Local toolchains
 /toolchains/
 /tools/cia-tools/
+/tools/save_converter/
 
 # Build products and diagnostics
 **/[Bb]uild/*
