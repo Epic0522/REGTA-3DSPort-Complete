@@ -25,9 +25,9 @@ interface, touch controls, Nintendo button prompts and a cheat-code keyboard.
 
 > [!IMPORTANT]
 > Build the ports yourself and provide your own game data: PC GTA III or Vice
-> City, or converted PS2 Liberty City Stories. Full game data, executables and
-> the devkitARM toolchain are not included. Runtime overrides and finished HOME
-> Menu artwork are included.
+> City, or converted PS2 Liberty City Stories. 
+> Game streaming performance is affected by the SD card;
+> please use a high-quality, stable SD card.
 
 ## The games today
 
