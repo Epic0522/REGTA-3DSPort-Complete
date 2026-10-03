@@ -1,6 +1,9 @@
 #include "common.h"
 
 #include "CarCtrl.h"
+#ifdef _3DS
+#include "../../../../common/3ds/TrafficSpawn.h"
+#endif
 
 #include "Accident.h"
 #include "Automobile.h"
@@ -186,6 +189,19 @@ CCarCtrl::GenerateOneRandomCar()
 		testForCollision = true;
 		frontX = TheCamera.CamFrontXNorm;
 		frontY = TheCamera.CamFrontYNorm;
+#ifdef _3DS
+		// Keep one attempt per frame and the existing cap, but prioritise nearby
+		// unseen road segments so walking does not depend on distant arrivals.
+		if(TrafficSpawn3DS::PreferNearby(CTimer::GetFrameCounter())) {
+			angleLimit = -0.15f;
+			invertAngleLimitTest = false;
+			preferredDistance = TrafficSpawn3DS::NearbyDistance();
+		} else {
+			angleLimit = 0.707f;
+			invertAngleLimitTest = true;
+			preferredDistance = 120.0f * TheCamera.GenerationDistMultiplier;
+		}
+#else
 		switch (CTimer::GetFrameCounter() & 1) {
 		case 0:
 			/* Spawn a vehicle relatively far away from player. */
@@ -202,6 +218,7 @@ CCarCtrl::GenerateOneRandomCar()
 			preferredDistance = 40.0f;
 			break;
 		}
+#endif
 	}else if (fPlayerVehicleSpeed > 0.4f){ /* 72 km/h */
 		/* Player is moving fast in vehicle */
 		/* Prefer spawning vehicles very far away from him. */
@@ -767,6 +784,14 @@ CCarCtrl::PossiblyRemoveVehicle(CVehicle* pVehicle)
 		}
 		if (pVehicle->bExtendedRange)
 			threshold *= 1.5f;
+#ifdef _3DS
+		const bool ordinaryCar = pVehicle->VehicleCreatedBy == RANDOM_VEHICLE &&
+			!pVehicle->bIsLawEnforcer && !pVehicle->bExtendedRange &&
+			!pVehicle->bIsCarParkVehicle && !pVehicle->IsBoat() &&
+			!pVehicle->IsPlane() && !pVehicle->IsHeli() && !pVehicle->IsTrain();
+		threshold = TrafficSpawn3DS::OffscreenRetention(!FindPlayerVehicle(), ordinaryCar,
+			pVehicle->GetIsOnScreen(), threshold);
+#endif
 		if (distanceToPlayer > threshold && !CGarages::IsPointWithinHideOutGarage(pVehicle->GetPosition())){
 			if (pVehicle->GetIsOnScreen() && CRenderer::IsEntityCullZoneVisible(pVehicle)) {
 				pVehicle->bFadeOut = true;

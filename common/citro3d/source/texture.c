@@ -232,7 +232,7 @@ void C3D_TexBind(int unitId, C3D_Tex* tex)
 	if (!(ctx->flags & C3DiF_Active))
 		return;
 
-	if (unitId > 0 && C3D_TexGetType(tex) != GPU_TEX_2D)
+	if (tex && unitId > 0 && C3D_TexGetType(tex) != GPU_TEX_2D)
 		return;
 
 	ctx->flags |= C3DiF_Tex(unitId);

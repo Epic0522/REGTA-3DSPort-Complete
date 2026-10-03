@@ -132,6 +132,9 @@ CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *
 	}
 	if(!WorldDrawDistance3DS::IsIsland(mi->GetModelName()))
 		profileScale *= CrowdDrawBudget3DS::DetailFactor(ent, mi->m_noFade);
+	if(rw::c3d::ps2GraphicsEnabled() && ent && ent->IsBuilding() &&
+	   !ent->bIsBIGBuilding && mi->m_numAtomics < 3 && mi->GetRelatedModel() && !IsTreeModel(modelId))
+		profileScale *= PS2Graphics3DS::DetailRangeScale;
 	return profileScale;
 }
 
@@ -410,7 +413,14 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 #ifdef _3DS
 		renderOccupants = CVisibilityPlugins::IsVehicleHighDetail((RpClump*)e->m_rwObject);
 #endif
+#ifdef _3DS
+		const float occupantOpacity = CrowdDrawBudget3DS::PS2OccupantOpacity(veh);
+		renderOccupants = renderOccupants && occupantOpacity > 0.0f;
+#endif
 		if(renderOccupants){
+#ifdef _3DS
+		CrowdDrawBudget3DS::OccupantRenderScope occupantStyle(occupantOpacity);
+#endif
 		if(veh->pDriver && veh->pDriver->m_nPedState == PED_DRIVING)
 			veh->pDriver->Render();
 		for(i = 0; i < 8; i++)

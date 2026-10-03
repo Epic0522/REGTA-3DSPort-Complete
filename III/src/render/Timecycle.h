@@ -125,6 +125,10 @@ public:
 	static float GetLightOnGroundBrightness(void) { return m_fCurrentLightsOnGroundBrightness; }
 	static float GetFarClip(void) { return m_fCurrentFarClip; }
 	static float GetFogStart(void) { return m_fCurrentFogStart; }
+	static float GetBlurRed(void) { return m_fCurrentBlurRed; }
+	static float GetBlurGreen(void) { return m_fCurrentBlurGreen; }
+	static float GetBlurBlue(void) { return m_fCurrentBlurBlue; }
+	static float GetBlurAlpha(void) { return m_fCurrentBlurAlpha; }
 
 	static int32 GetLowCloudsRed(void) { return m_nCurrentLowCloudsRed; }
 	static int32 GetLowCloudsGreen(void) { return m_nCurrentLowCloudsGreen; }

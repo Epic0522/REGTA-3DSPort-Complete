@@ -26,6 +26,9 @@ enum
 
 float C3D_FrameRate(float fps);
 void C3D_FrameSync(void);
+// Between frames, drain submitted GPU work without waiting for a new VBlank.
+// Safe after APT suspension (which disables the VBlank callbacks).
+void C3D_FrameWaitDone(void);
 u32 C3D_FrameCounter(int id);
 
 bool C3D_FrameBegin(u8 flags);

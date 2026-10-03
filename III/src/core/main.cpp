@@ -1,4 +1,7 @@
 #include "common.h"
+#ifdef _3DS
+#include "../../../../common/3ds/PS2GraphicsProfile.h"
+#endif
 #include <time.h>
 #include "rpmatfx.h"
 #include "rphanim.h"
@@ -1894,6 +1897,9 @@ RenderEffects(void)
 void
 Render2dStuff(void)
 {
+#ifdef _3DS
+	rw::c3d::renderPS2Graphics(PS2Graphics3DS::GTAIII, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue(), CTimeCycle::GetBlurAlpha());
+#endif
 	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
 	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)TRUE);
@@ -1989,7 +1995,10 @@ static float
 Apply3DSFarClipProfile(float farClip)
 {
 #ifdef _3DS
-	return Min(farClip, Max(180.0f, farClip * rw::c3d::adaptiveWorldRangeScale()));
+	if(rw::c3d::ps2GraphicsEnabled())
+		rw::c3d::preparePS2GraphicsColour(PS2Graphics3DS::GTAIII, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue(), CTimeCycle::GetBlurAlpha());
+	return PS2Graphics3DS::FarClip(farClip, rw::c3d::adaptiveWorldRangeScale(),
+		rw::c3d::ps2GraphicsEnabled(), PS2Graphics3DS::GTAIII);
 #else
 	return farClip;
 #endif
@@ -1999,7 +2008,8 @@ static float
 Apply3DSFogProfile(float fogStart)
 {
 #ifdef _3DS
-	return Min(fogStart, Max(120.0f, fogStart * rw::c3d::adaptiveWorldRangeScale()));
+	return PS2Graphics3DS::FogStart(fogStart, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()),
+		rw::c3d::adaptiveWorldRangeScale(), rw::c3d::ps2GraphicsEnabled());
 #else
 	return fogStart;
 #endif
@@ -2195,9 +2205,12 @@ Idle(void *arg)
 #endif
 
 		tbStartTimer(0, "RenderMotionBlur");
-		// The 3DS backend disables historical-frame trails, but this call still
-		// draws GTA III's authored colour overlay. Render it for both stereo eyes.
-		TheCamera.RenderMotionBlur();
+		// Keep the baseline colour overlay unless PS2's dedicated grading owns it.
+#ifdef _3DS
+		if(!rw::c3d::ps2GraphicsEnabled() ||
+		   (TheCamera.m_BlurType != MOTION_BLUR_NONE && TheCamera.m_BlurType != MOTION_BLUR_LIGHT_SCENE))
+#endif
+			TheCamera.RenderMotionBlur();
 		tbEndTimer("RenderMotionBlur");
 
 		tbStartTimer(0, "Render2dStuff");

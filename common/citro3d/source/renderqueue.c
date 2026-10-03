@@ -148,6 +148,12 @@ void C3Di_RenderQueueWaitDone(void)
 	C3Di_WaitAndClearQueue(-1);
 }
 
+void C3D_FrameWaitDone(void)
+{
+	if (C3Di_GetContext()->flags & C3DiF_Active)
+		C3Di_RenderQueueWaitDone();
+}
+
 float C3D_FrameRate(float fps)
 {
 	float old = framerate;

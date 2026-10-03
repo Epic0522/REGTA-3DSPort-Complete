@@ -33,6 +33,8 @@
 
 #ifdef CUSTOM_FRONTEND_OPTIONS
 
+#include "../../../../common/3ds/PS2GraphicsMenu.h"
+
 #ifdef IMPROVED_VIDEOMODE
 	#define VIDEOMODE_SELECTOR MENUACTION_CFO_SELECT, "FEM_SCF", { new CCFOSelect((int8*)&FrontEndMenuManager.m_nPrefsWindowed, "VideoMode", "Windowed", screenModes, 2, true, ScreenModeAfterChange, true) },
 #else
@@ -152,6 +154,14 @@ void RestoreDefDisplay(int8 action) {
 		CMenuManager::m_PrefsShowSubtitles = true;
 		FrontEndMenuManager.SaveSettings();
 	#endif
+#ifdef _3DS
+	if(!rw::c3d::ps2GraphicsEnabled()){
+		rw::c3d::setPS2Graphics(true);
+#ifdef LOAD_INI_SETTINGS
+		SaveINISettings();
+#endif
+	}
+#endif
 }
 
 #ifdef NO_ISLAND_LOADING
@@ -432,6 +442,9 @@ CMenuScreenCustom aScreens[MENUPAGES] = {
 	// MENUPAGE_DISPLAY_SETTINGS = 6
 	{ "FET_DIS", MENUPAGE_OPTIONS, MENUPAGE_OPTIONS, nil, nil,
 		MENUACTION_BRIGHTNESS,	"FED_BRI", { nil, SAVESLOT_NONE, MENUPAGE_DISPLAY_SETTINGS },
+#ifdef _3DS
+		MENUACTION_CFO_DYNAMIC, "F3PS2", { new CCFODynamic(nil, nil, nil, PS2GraphicsDraw, PS2GraphicsButtonPress) },
+#endif
 #ifndef _3DS
 		MENUACTION_DRAWDIST,	"FEM_LOD", { nil, SAVESLOT_NONE, MENUPAGE_DISPLAY_SETTINGS },
 #endif
@@ -474,6 +487,9 @@ CMenuScreenCustom aScreens[MENUPAGES] = {
 	// MENUPAGE_DISPLAY_SETTINGS = 6
 	{ "FET_DIS", MENUPAGE_OPTIONS, MENUPAGE_OPTIONS, nil, nil,
 		MENUACTION_BRIGHTNESS,	"FED_BRI", { nil, SAVESLOT_NONE, MENUPAGE_DISPLAY_SETTINGS },
+#ifdef _3DS
+		MENUACTION_CFO_DYNAMIC, "F3PS2", { new CCFODynamic(nil, nil, nil, PS2GraphicsDraw, PS2GraphicsButtonPress) },
+#endif
 #ifndef _3DS
 		MENUACTION_DRAWDIST,	"FEM_LOD", { nil, SAVESLOT_NONE, MENUPAGE_DISPLAY_SETTINGS },
 #endif

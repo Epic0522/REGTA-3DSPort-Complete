@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 shlist=$1
 vsh_obj=$2
@@ -7,6 +8,7 @@ name=$(basename ${vsh_obj%.shbin.o})
 vsh_bin=${vsh_obj%.shbin.o}.shbin
 vsh_hdr=${vsh_obj%.shbin.o}_shbin.h
 shaders_src=$(for sh in $(cat $shlist); do echo $(dirname $shlist)/$sh; done)
+shaders_hdr=$(for sh in $(cat $shlist); do echo $(dirname $shlist)/$(dirname $sh)/header.v.pica; done)
 shaders_tmp=$(for sh in $(cat $shlist); do echo $(dirname $vsh_bin)/$sh; done)
 
 echo compiling shader \"$name\"
@@ -21,7 +23,7 @@ do
 done
 
 echo generating deps
-echo $vsh_obj: $(dirname $shlist)/shaders/header.v.pica $shaders_src > ${vsh_obj}.d
+echo $vsh_obj: ${shaders_hdr} $shaders_src > ${vsh_obj}.d
 
 echo removing old shader
 if [ -f $vsh_obj ]; then rm -f $vsh_obj; fi
@@ -37,6 +39,8 @@ echo >> $vsh_hdr
 cnt=0
 for prg in $(< $shlist)
 do
+    # Helper files do not create a DVLE; do not consume a program index.
+    if grep -q '^[[:space:]]*\.nodvle' "$(dirname "$shlist")/$prg"; then continue; fi
     prg_name=$(basename $prg .v.pica | tr [a-z] [A-Z])
     echo "#define VSH_PRG_${prg_name} $cnt" >> $vsh_hdr
     cnt=$((cnt+1))

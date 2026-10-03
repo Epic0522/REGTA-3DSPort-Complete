@@ -1,0 +1,27 @@
+;; Optional PS2 distance-fog variant; keep body aligned with im3d.v.pica.
+	;; inputs
+.alias in_pos     v0
+.alias in_color   v1
+.alias in_tex0    v2
+
+	;; outputs
+.out v_pos position
+.out v_color color
+.out v_tex0 texcoord0
+.out v_fog texcoord2
+
+.entry im3dfog_main
+.proc im3dfog_main
+	call	xform_vertex
+	mov	v_pos, r0
+	; Clamp in the sampler, after interpolation; large building faces must
+	; keep their nearby portion clear even when distant vertices are in fog.
+	mov	r2, u_ps2FogParams
+	mad	r2.x, r0.w, u_ps2FogParams.x, r2.y
+	mov	r2.y, u_ps2FogParams.z
+	mov	r2.zw, zeros
+	mov	v_fog, r2
+	mov	v_color, in_color
+	mov	v_tex0, in_tex0
+	end
+.end

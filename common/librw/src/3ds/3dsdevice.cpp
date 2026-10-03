@@ -14,9 +14,11 @@
 #ifdef RW_3DS
 #include "rw3ds.h"
 #include "rw3dsimpl.h"
+#include "../../../3ds/PS2GraphicsProfile.h"
 #include "rw3dsplg.h"
 #include "rw3dsshader.h"
 #include "default_shbin.h"
+#include "ps2fog_shbin.h"
 #include "presentation_cadence.h"
 
 #define IMAX(i1, i2) ((i1) > (i2) ? (i1) : (i2))
@@ -174,7 +176,27 @@ initialiseMaterialState()
 static UniformScene uniformScene;
 static UniformObject uniformObject;
 static C3DMaterialState materialState;
-static C3D_FogLut       fogState;
+static bool32 ps2Graphics = PS2Graphics3DS::DefaultEnabled;
+static bool32 ps2FogCamera;
+static C3D_Tex ps2FogTexture;
+static bool32 ps2FogTextureReady;
+static bool32 ps2FogTextureBound;
+static Shader *ps2FogStageShader;
+static bool32 ps2FogStageEnabled;
+static uint32 ps2FogStageColor;
+static float32 ps2FogParams[4] = {0.0f, 0.0f, 0.5f, 0.0f};
+static int32 ps2GraphicsGame = PS2Graphics3DS::GTAIII;
+static float32 ps2OrdinaryWorldRange;
+static float32 ps2ColourGain[3] = {1.0f, 1.0f, 1.0f};
+static float32 ps2FogColourCompensation[3] = {1.0f, 1.0f, 1.0f};
+static C3D_Tex ps2EyeTexture[2];
+static bool32 ps2EyeTextureReady[2];
+static bool32 ps2HistoryValid[2];
+static uint64 ps2HistoryTick;
+static int32 ps2HistoryPasses;
+static float32 ps2HistorySlider;
+static bool32 ps2HistoryExtended;
+static V3d ps2HistoryPosition, ps2HistoryForward;
 
 #ifdef FRAGMENT_LIGHTING
 static C3D_Material materialState;
@@ -396,6 +418,8 @@ setC3DRenderState(uint32 state, uint32 value)
 	case RWC3D_DEPTHMASK:        SET(depthMask);        break;
 	case RWC3D_CULL:             SET(cullEnable);       break;
 	case RWC3D_CULLFACE:         SET(cullFace);         break;
+	case RWC3D_FOGMODE:          SET(fogMode);          break;
+	case RWC3D_FOGCOLOR:         SET(fogColor);         break;
 	case RWC3D_STENCIL:          SET(stencilEnable);    break;
 	case RWC3D_STENCILFUNC:      SET(stencilFunc);      break;
 	case RWC3D_STENCILFAIL:      SET(stencilFail);      break;
@@ -451,15 +475,15 @@ flushC3DRenderState(void)
 		}
 	}
 
-	// if(REQ(fogMode)){
-	// 	ACK(mode, fogMode);
-	// 	C3D_FogGasMode(mode, GPU_PLAIN_DENSITY, false);
-	// }
+	if(REQ(fogMode)){
+		ACK(mode, fogMode);
+		C3D_FogGasMode(mode, GPU_PLAIN_DENSITY, false);
+	}
+	if(REQ(fogColor)){
+		ACK(col, fogColor);
+		C3D_FogColor((col >> 16 & 0xFF) | (col & 0xFF00) | ((col & 0xFF) << 16));
+	}
 
-	// if(REQ(fogColor)){
-	// 	ACK(col, fogColor);
-	// 	C3D_FogColor(col);
-	// }
 
 	// if(REQ(stencilEnable) || REQ(stencilFunc) || REQ(stencilRef) ||
 	//    REQ(stencilMask) || REQ(stencilWriteMask)){
@@ -1190,7 +1214,7 @@ setWorldMatrix(Matrix *mat, float positionScale)
 	}
 }
 
-static EntityRenderStyle entityRenderStyle = {1.f, 1.f, false};
+static EntityRenderStyle entityRenderStyle = {1.f, 1.f, false, false, false};
 EntityRenderStyle getEntityRenderStyle(void) { return entityRenderStyle; }
 void setEntityRenderStyle(EntityRenderStyle style) { entityRenderStyle = style; }
 
@@ -1236,6 +1260,41 @@ setMaterial(const RGBA &color, const SurfaceProperties &surfaceprops, float extr
 void
 flushCache(void)
 {
+	// Nonlinear PICA depth LUTs compress distant world space into the last bin.
+	// Distance-fog variants export their own normalised camera-space coordinate.
+	const bool fog = ps2Graphics && ps2FogCamera && ps2FogTextureReady &&
+		rwStateCache.fogEnable && currentShader && currentShader->hasFogProgram;
+	if(currentShader) currentShader->selectFog(fog);
+	if(ps2FogTextureBound != fog){
+		C3D_TexBind(2, fog ? &ps2FogTexture : nil);
+		ps2FogTextureBound = fog;
+	}
+	uint32 color = rwStateCache.fogColor;
+	if(fog){
+		const float32 r = ((color >> 16) & 0xFF) * ps2FogColourCompensation[0];
+		const float32 g = ((color >> 8) & 0xFF) * ps2FogColourCompensation[1];
+		const float32 b = (color & 0xFF) * ps2FogColourCompensation[2];
+		const float32 scale = PS2Graphics3DS::FogColourScale(r, g, b, ps2ColourGain);
+		color = (uint32(r * scale) << 16) | (uint32(g * scale) << 8) | uint32(b * scale);
+	}
+	if(ps2FogStageShader != currentShader || ps2FogStageEnabled != fog ||
+	   (fog && ps2FogStageColor != color)){
+		C3D_TexEnv fogEnv;
+		C3D_TexEnvInit(&fogEnv);
+		if(fog){
+			C3D_TexEnvColor(&fogEnv, (color >> 16 & 0xFF) | (color & 0xFF00) |
+				((color & 0xFF) << 16) | 0xFF000000);
+			C3D_TexEnvSrc(&fogEnv, C3D_RGB, GPU_CONSTANT, GPU_PREVIOUS, GPU_TEXTURE2);
+			C3D_TexEnvOpRgb(&fogEnv, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_ALPHA);
+			C3D_TexEnvFunc(&fogEnv, C3D_RGB, GPU_INTERPOLATE);
+			// Preserve glass, object fades and cut-out alpha.
+		}
+		C3D_SetTexEnv(5, &fogEnv);
+		ps2FogStageShader = currentShader;
+		ps2FogStageEnabled = fog;
+		ps2FogStageColor = color;
+	}
+	setC3DRenderState(RWC3D_FOGMODE, GPU_NO_FOG);
 	flushC3DRenderState();
 
 	if(sceneDirty){
@@ -1265,15 +1324,7 @@ flushCache(void)
 		lightingDirty = 0;
 	}
 
-	if(stateDirty){
-		/* kinda subjective? I don't really have a reference other than
-		   gl3device or the ps2 version (emulation on a ps3 so not reliable).
-		   by the way... does fog end up in the secondary fragment combiner?
-		*/
-		// FogLut_Exp(&fogState, 0.5, 1.0f, rwStateCache.fogStart, rwStateCache.fogEnd);
-		// C3D_FogLutBind(&fogState);
-		stateDirty = 0;
-	}
+	stateDirty = 0;
 }
 
 static C3D_FrameBuf*
@@ -1340,6 +1391,18 @@ void
 setStereoExtendedDepth(bool32 extendedDepth)
 {
 	stereoExtendedDepth = extendedDepth;
+}
+
+bool32 ps2GraphicsEnabled(void) { return ps2Graphics; }
+
+void
+setPS2Graphics(bool32 enabled)
+{
+	if(ps2Graphics == enabled) return;
+	ps2Graphics = enabled;
+	ps2FogParams[0] = ps2FogParams[1] = 0.0f;
+	ps2HistoryValid[0] = ps2HistoryValid[1] = false;
+	ps2HistoryTick = 0;
 }
 
 bool32
@@ -1622,14 +1685,146 @@ setStereoEye(int32 eye)
 static void
 updateFog(Camera *cam)
 {
-	if(rwStateCache.fogStart != cam->fogPlane){
-		rwStateCache.fogStart = cam->fogPlane;
-		stateDirty = 1;
+	rwStateCache.fogStart = cam->fogPlane;
+	rwStateCache.fogEnd = cam->farPlane;
+	ps2FogCamera = isTopCamera(cam) && cam->projection == Camera::PERSPECTIVE &&
+		cam->nearPlane > 0.0f && cam->farPlane > cam->nearPlane;
+	if(ps2Graphics && ps2FogCamera && ps2OrdinaryWorldRange > cam->fogPlane)
+		rwStateCache.fogEnd = PS2Graphics3DS::Minimum(cam->farPlane, ps2OrdinaryWorldRange);
+	// Initialised for every camera, even when disabled. Only the dedicated
+	// fog shader entries consume these values; normal/HUD entries are intact.
+	ps2FogParams[0] = ps2FogParams[1] = 0.0f;
+	ps2FogParams[2] = 0.5f;
+	ps2FogParams[3] = 0.0f;
+	if(!ps2Graphics || !ps2FogCamera){
+		c3dUniform4fv(U(u_ps2FogParams), 1, ps2FogParams);
+		return;
 	}
-	if(rwStateCache.fogEnd != cam->farPlane){
-		rwStateCache.fogEnd = cam->farPlane;
-		stateDirty = 1;
+	const float32 span = PS2Graphics3DS::Maximum(1.0f, rwStateCache.fogEnd - cam->fogPlane);
+	ps2FogParams[0] = (127.0f / 128.0f) / span;
+	ps2FogParams[1] = 0.5f / 128.0f - cam->fogPlane * ps2FogParams[0];
+	c3dUniform4fv(U(u_ps2FogParams), 1, ps2FogParams);
+}
+
+// Prepare the matching world/fog grade before either eye draws its geometry.
+void
+preparePS2GraphicsColour(int32 game, float32 red, float32 green, float32 blue, float32 alpha)
+{
+	ps2GraphicsGame = game;
+	ps2ColourGain[0] = PS2Graphics3DS::ColourGain(game, red, alpha);
+	ps2ColourGain[1] = PS2Graphics3DS::ColourGain(game, green, alpha);
+	ps2ColourGain[2] = PS2Graphics3DS::ColourGain(game, blue, alpha);
+	ps2FogColourCompensation[0] = PS2Graphics3DS::FogColourCompensation(game, red, ps2ColourGain[0]);
+	ps2FogColourCompensation[1] = PS2Graphics3DS::FogColourCompensation(game, green, ps2ColourGain[1]);
+	ps2FogColourCompensation[2] = PS2Graphics3DS::FogColourCompensation(game, blue, ps2ColourGain[2]);
+}
+
+void
+setPS2WorldRange(float32 range)
+{
+	ps2OrdinaryWorldRange = range;
+}
+
+float32
+ps2WorldRange(void)
+{
+	return ps2Graphics ? ps2OrdinaryWorldRange : 0.0f;
+}
+
+void
+setPS2SilhouetteWeight(float32 weight)
+{
+	if(ps2FogParams[3] == weight) return;
+	ps2FogParams[3] = weight;
+	c3dUniform4fv(U(u_ps2FogParams), 1, ps2FogParams);
+}
+
+float32
+ps2SilhouetteWeight(Atomic *atomic)
+{
+	if(!ps2Graphics || !ps2FogCamera || !ps2FogTextureReady ||
+	   !rwStateCache.fogEnable || !entityRenderStyle.worldBuilding ||
+	   entityRenderStyle.opacity < 1.0f) return 0.0f;
+	Camera *cam = (Camera*)engine->currentCamera;
+	if(entityRenderStyle.worldSkyline) return 1.0f;
+	const Matrix &view = *cam->getFrame()->getLTM();
+	const Sphere &bounds = *atomic->getWorldBoundingSphere();
+	const V3d offset = sub(bounds.center, view.pos);
+	const float32 nearestDepth = dot(offset, view.at) - bounds.radius;
+	return PS2Graphics3DS::SilhouetteWeight(nearestDepth, cam->fogPlane, rwStateCache.fogEnd, ps2GraphicsGame);
+}
+
+// Retain pre-HUD world history separately for each native eye format. Native
+// copies split the command list, so history sampling completes before overwrite.
+void
+renderPS2Graphics(int32 game, float32 red, float32 green, float32 blue, float32 alpha)
+{
+	Camera *cam = (Camera*)engine->currentCamera;
+	if(!ps2Graphics || !cam || !isTopCamera(cam)) return;
+	const int32 initialEye = stereoActive && stereoViewportEye == 1 ? 1 : 0;
+	const int32 passes = stereoActive ? 2 : 1;
+	const uint64 tick = svcGetSystemTick();
+	const float32 slider = stereoActive ? osGet3DSliderState() : 0.0f;
+	const Matrix &matrix = *cam->getFrame()->getLTM();
+	const float32 dx = matrix.pos.x - ps2HistoryPosition.x;
+	const float32 dy = matrix.pos.y - ps2HistoryPosition.y;
+	const float32 dz = matrix.pos.z - ps2HistoryPosition.z;
+	const float32 facing = matrix.at.x * ps2HistoryForward.x +
+		matrix.at.y * ps2HistoryForward.y + matrix.at.z * ps2HistoryForward.z;
+	if(!ps2HistoryTick || tick - ps2HistoryTick > (uint64)SYSCLOCK_ARM11 * 150 / 1000 ||
+	   passes != ps2HistoryPasses || fabsf(slider - ps2HistorySlider) > 0.08f ||
+	   stereoExtendedDepth != ps2HistoryExtended || dx*dx + dy*dy + dz*dz > 256.0f || facing < 0.0f){
+		ps2HistoryValid[0] = ps2HistoryValid[1] = false;
 	}
+	const float32 gain[3] = {PS2Graphics3DS::ColourGain(game, red, alpha),
+		PS2Graphics3DS::ColourGain(game, green, alpha), PS2Graphics3DS::ColourGain(game, blue, alpha)};
+	for(int32 pass = 0; pass < passes; ++pass){
+		const int32 eye = pass ? 1 - initialEye : initialEye;
+		C3D_FrameBuf *source = stereoFrameBuffer[eye];
+		if(!source || !source->colorBuf || source->width != 256 || source->height != 512 ||
+		   source->block32 || (source->colorFmt != GPU_RB_RGBA8 && source->colorFmt != GPU_RB_RGB8)){
+			ps2HistoryValid[eye] = false;
+			continue;
+		}
+		// Left is RGBA8 (512 KiB), right is RGB8 (384 KiB). Never read the
+		// smaller right buffer as RGBA or reinterpret its three-byte pixels.
+		const GPU_TEXCOLOR format = source->colorFmt == GPU_RB_RGBA8 ? GPU_RGBA8 : GPU_RGB8;
+		const u32 size = C3D_CalcColorBufSize(source->width, source->height, source->colorFmt);
+		if(ps2EyeTextureReady[eye] && ps2EyeTexture[eye].fmt != format){
+			// Do not free a texture that an earlier queued draw may still sample.
+			ps2HistoryValid[eye] = false;
+			continue;
+		}
+		if(!ps2EyeTextureReady[eye]){
+			if(linearSpaceFree() < (2 << 20) + size ||
+			   !C3D_TexInit(&ps2EyeTexture[eye], source->width, source->height, format)) continue;
+			C3D_TexSetFilter(&ps2EyeTexture[eye], GPU_LINEAR, GPU_LINEAR);
+			C3D_TexSetWrap(&ps2EyeTexture[eye], GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+			ps2EyeTextureReady[eye] = true;
+		}
+		setStereoEyeViewport(eye);
+		if(ps2HistoryValid[eye])
+			im2DRenderPS2Overlay(&ps2EyeTexture[eye], 1.0f, 1.0f, 1.0f, 30.0f/255.0f, 0.0f, 0.0f);
+		// Store the temporal mixture before grading/edge softness. This keeps
+		// the filter from amplifying itself over successive frames, and HUD
+		// text never becomes part of the retained image.
+		C3D_SyncTextureCopy((u32*)source->colorBuf, 0,
+			(u32*)ps2EyeTexture[eye].data, 0, size, 8);
+		im2DRenderPS2Overlay(&ps2EyeTexture[eye], gain[0], gain[1], gain[2], 1.0f, 0.0f, 0.0f);
+		// Desktop's shifted second overlay: a subtle two-pixel image echo,
+		// not a dark-corner vignette. Same displacement in both eyes.
+		im2DRenderPS2Overlay(&ps2EyeTexture[eye], gain[0], gain[1], gain[2], 0.18f, 2.0f, 2.0f);
+		ps2HistoryValid[eye] = true;
+	}
+	ps2HistoryTick = tick;
+	ps2HistoryPasses = passes;
+	ps2HistorySlider = slider;
+	ps2HistoryExtended = stereoExtendedDepth;
+	ps2HistoryPosition = matrix.pos;
+	ps2HistoryForward = matrix.at;
+	setStereoEyeViewport(initialEye);
+	Raster *oldTexture = rwStateCache.texstage[0];
+	C3D_TexBind(0, oldTexture && NATRAS(oldTexture)->tex ? NATRAS(oldTexture)->tex : &whitetex);
 }
 
 static void
@@ -1951,8 +2146,23 @@ static int
 stopC3D(void)
 {
 	closeFrameProfileLog();
+	// HOME suspension disables VBlank callbacks. Drain GPU work, not refreshes.
+	C3D_FrameWaitDone();
+	for(int eye = 0; eye < 2; ++eye){
+		if(ps2EyeTextureReady[eye]) C3D_TexDelete(&ps2EyeTexture[eye]);
+		ps2EyeTextureReady[eye] = ps2HistoryValid[eye] = false;
+	}
+	ps2HistoryTick = 0;
+	ps2FogParams[0] = ps2FogParams[1] = 0.0f;
+	ps2FogCamera = ps2FogTextureBound = ps2FogStageEnabled = false;
+	ps2FogStageShader = nil;
+	if(ps2FogTextureReady){
+		C3D_TexDelete(&ps2FogTexture);
+		ps2FogTextureReady = false;
+	}
 	closeIm3D();
 	closeIm2D();
+	closePS2SilhouetteRenderer();
 	C3D_Fini();
 	gfxExit();
 	return 1;
@@ -1972,6 +2182,27 @@ initC3D(void)
 
 	resetRenderState();
 
+	// A 4 KiB, linearly sampled alpha ramp. Initialise all texels before any
+	// shader can use it; alpha is the first byte in native ABGR textures.
+	if(C3D_TexInit(&ps2FogTexture, 128, 8, GPU_RGBA8)){
+		uint8 *pixels = (uint8*)ps2FogTexture.data;
+		for(unsigned y = 0; y < 8; ++y) for(unsigned x = 0; x < 128; ++x){
+			unsigned morton = 0;
+			for(unsigned bit = 0; bit < 3; ++bit){
+				morton |= ((x >> bit) & 1) << (2 * bit);
+				morton |= ((y >> bit) & 1) << (2 * bit + 1);
+			}
+			const unsigned offset = ((x >> 3) * 64 + morton) * 4;
+			// Clamp the haze itself, not just its distance coordinate. Skyline
+			// LODs beyond the ordinary budget must retain outline contrast.
+			pixels[offset] = (x * 217 + 63) / 127;
+			pixels[offset+1] = pixels[offset+2] = pixels[offset+3] = 255;
+		}
+		C3D_TexSetFilter(&ps2FogTexture, GPU_LINEAR, GPU_LINEAR);
+		C3D_TexSetWrap(&ps2FogTexture, GPU_CLAMP_TO_EDGE, GPU_CLAMP_TO_EDGE);
+		C3D_TexFlush(&ps2FogTexture);
+		ps2FogTextureReady = true;
+	}
 	Shader::loadDVLB(default_shbin, default_shbin_size);
 	defaultShader = Shader::create(VSH_PRG_DEFAULT, combiner_simple, true);
 	assert(defaultShader);

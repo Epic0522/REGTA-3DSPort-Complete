@@ -1,6 +1,9 @@
 #include <csignal>
 #define WITHWINDOWS
 #include "common.h"
+#ifdef _3DS
+#include "../../../../common/3ds/PS2GraphicsProfile.h"
+#endif
 #include "FinalMissionMusic.h"
 #if defined DETECT_JOYSTICK_MENU && defined XINPUT
 #include <xinput.h>
@@ -500,12 +503,15 @@ bool LoadINISettings()
 	ReadIniIfExists("Display", "DrawDistance", &FrontEndMenuManager.m_PrefsLOD);
 	ReadIniIfExists("Display", "Subtitles", &FrontEndMenuManager.m_PrefsShowSubtitles);
 	ReadIniIfExists("Graphics", "AspectRatio", &FrontEndMenuManager.m_PrefsUseWideScreen);
+	bool ps2Graphics = PS2Graphics3DS::DefaultEnabled;
 	bool stereoExtendedDepth = true;
 	bool performanceMode2D = false;
 	bool performanceMode3D = false;
+	ReadIniIfExists("Graphics", "PS2Graphics", &ps2Graphics);
 	ReadIniIfExists("Graphics", "StereoExtendedDepth", &stereoExtendedDepth);
 	ReadIniIfExists("Graphics", "PerformanceMode2D", &performanceMode2D);
 	ReadIniIfExists("Graphics", "PerformanceMode3D", &performanceMode3D);
+	rw::c3d::setPS2Graphics(ps2Graphics);
 	rw::c3d::setStereoExtendedDepth(stereoExtendedDepth);
 	rw::c3d::set3DSPerformanceModes(performanceMode2D, performanceMode3D);
 	ReadIniIfExists("Graphics", "VSync", &FrontEndMenuManager.m_PrefsVsyncDisp);
@@ -599,6 +605,7 @@ void SaveINISettings()
 	StoreIni("Display", "DrawDistance", FrontEndMenuManager.m_PrefsLOD);
 	StoreIni("Display", "Subtitles", FrontEndMenuManager.m_PrefsShowSubtitles);
 	StoreIni("Graphics", "AspectRatio", FrontEndMenuManager.m_PrefsUseWideScreen);
+	StoreIni("Graphics", "PS2Graphics", rw::c3d::ps2GraphicsEnabled() != 0);
 	StoreIni("Graphics", "StereoExtendedDepth",
 	         rw::c3d::stereoExtendedDepthEnabled() != 0);
 	StoreIni("Graphics", "PerformanceMode2D",

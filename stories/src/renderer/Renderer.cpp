@@ -149,6 +149,34 @@ IsLCSIslandLodModel(int16 modelId)
 		modelId == islandLODsubCom;
 }
 
+static float
+LCSPS2BuildingOpacity(CEntity *ent)
+{
+	const float range = rw::c3d::ps2WorldRange();
+	if(range <= 0.0f || !ent->IsBuilding() || IsLCSIslandLodModel(ent->GetModelIndex()))
+		return 1.0f;
+	CBaseModelInfo *base = CModelInfo::GetModelInfo(ent->GetModelIndex());
+	// Never dissolve the ground under the player or transparent road overlays.
+	if(!base->IsSimple() || ((CSimpleModelInfo*)base)->m_wetRoadReflection)
+		return 1.0f;
+	const CVector offset = ent->GetBoundCentre() - TheCamera.GetPosition();
+	const float depth = DotProduct(offset, TheCamera.GetForward()) - ent->GetBoundRadius();
+	return PS2Graphics3DS::WorldOpacity(depth, range);
+}
+
+struct LCSPS2BuildingRenderScope {
+	rw::c3d::EntityRenderStyle previous;
+	explicit LCSPS2BuildingRenderScope(CEntity *ent) : previous(rw::c3d::getEntityRenderStyle())
+	{
+		rw::c3d::EntityRenderStyle style = previous;
+		style.opacity *= LCSPS2BuildingOpacity(ent);
+		style.worldBuilding = ent->IsBuilding();
+		style.worldSkyline = rw::c3d::ps2GraphicsEnabled() && IsLCSIslandLodModel(ent->GetModelIndex());
+		rw::c3d::setEntityRenderStyle(style);
+	}
+	~LCSPS2BuildingRenderScope() { rw::c3d::setEntityRenderStyle(previous); }
+};
+
 // Model metadata is fixed after level loading. Build the reverse HD->LOD link
 // once at renderer init; never scan the model table during frame rendering.
 static std::vector<uint8> gLCSBuildingLodPairs;
@@ -309,7 +337,7 @@ GetLCSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *ent, const LCS
 	// original draw distance, and coarse models keep their original far limit.
 	if(ent && ent->IsBuilding() && !ent->bIsBIGBuilding &&
 	   HasLCSBuildingLodPair(modelId, LCS_HD_HAS_LOD))
-		scale *= LCS_BUILDING_HD_RANGE;
+		scale *= LCS_BUILDING_HD_RANGE * (rw::c3d::ps2GraphicsEnabled() ? PS2Graphics3DS::DetailRangeScale : 1.0f);
 	return scale;
 }
 
@@ -605,6 +633,7 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 #ifdef _3DS
 	CrowdDrawBudget3DS::RenderScope crowdStyle(e);
 	CameraOcclusion3DS::RenderScope cameraFade(e);
+	LCSPS2BuildingRenderScope ps2BuildingStyle(e);
 #endif
 	resetLights = e->SetupLighting();
 
@@ -628,7 +657,14 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 #ifdef VIS_DISTANCE_ALPHA
 		int vehalpha = CVisibilityPlugins::GetObjectDistanceAlpha(veh->m_rwObject);
 #endif
+#ifdef _3DS
+		const float occupantOpacity = CrowdDrawBudget3DS::PS2OccupantOpacity(veh);
+		renderOccupants = renderOccupants && occupantOpacity > 0.0f;
+#endif
 		if(renderOccupants){
+#ifdef _3DS
+		CrowdDrawBudget3DS::OccupantRenderScope occupantStyle(occupantOpacity);
+#endif
 		if(veh->pDriver && veh->pDriver->m_nPedState == PED_DRIVING){
 #ifdef VIS_DISTANCE_ALPHA
 			int alpha = CVisibilityPlugins::GetObjectDistanceAlpha(veh->pDriver->m_rwObject);
@@ -957,6 +993,7 @@ CRenderer::RenderOneBuilding(CEntity *ent, float camdist)
 #ifdef _3DS
 	if(!ShouldRenderAttachedWindowLights(ent))
 		return;
+	LCSPS2BuildingRenderScope ps2BuildingStyle(ent);
 #endif
 
 	ent->bImBeingRendered = true;	// TODO: this seems wrong, but do we even need it?
@@ -1319,6 +1356,7 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 	dist = (ent->GetPosition() - ms_vecCameraPosition).Magnitude();
 #ifdef _3DS
 	const LCSWorldBounds bounds(ent, ms_vecCameraPosition);
+	if(LCSPS2BuildingOpacity(ent) <= 0.0f) return VIS_INVISIBLE;
 	const float lodDist = GetLCSWorldDistance(ent, dist, bounds) /
 		GetLCSWorldLodScale(mi, ent->m_modelIndex, ent, bounds);
 #else
@@ -1440,6 +1478,9 @@ CRenderer::SetupEntityVisibility(CEntity *ent)
 int32
 CRenderer::SetupBigBuildingVisibility(CEntity *ent)
 {
+#ifdef _3DS
+	if(LCSPS2BuildingOpacity(ent) <= 0.0f) return VIS_INVISIBLE;
+#endif
 	CSimpleModelInfo *mi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(ent->m_modelIndex);
 	CTimeModelInfo *ti;
 	int32 other;
@@ -1630,6 +1671,9 @@ void
 CRenderer::ScanWorld(void)
 {
 	float f = RwCameraGetFarClipPlane(TheCamera.m_pRwCamera);
+#ifdef _3DS
+	if(rw::c3d::ps2WorldRange() > 0.0f) f = Min(f, rw::c3d::ps2WorldRange());
+#endif
 	RwV2d vw = *RwCameraGetViewWindow(TheCamera.m_pRwCamera);
 	CVector vectors[9];
 	RwMatrix *cammatrix;
@@ -1792,6 +1836,9 @@ void
 CRenderer::RequestObjectsInFrustum(void)
 {
 	float f = RwCameraGetFarClipPlane(TheCamera.m_pRwCamera);
+#ifdef _3DS
+	if(rw::c3d::ps2WorldRange() > 0.0f) f = Min(f, rw::c3d::ps2WorldRange());
+#endif
 	RwV2d vw = *RwCameraGetViewWindow(TheCamera.m_pRwCamera);
 	CVector vectors[9];
 	RwMatrix *cammatrix;

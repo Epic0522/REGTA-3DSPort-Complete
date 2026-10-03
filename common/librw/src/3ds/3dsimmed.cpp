@@ -312,6 +312,50 @@ im2DRenderBlit()
 }
 
 void
+im2DRenderPS2Overlay(C3D_Tex *texture, float32 red, float32 green, float32 blue,
+	float32 alpha, float32 offsetX, float32 offsetY)
+{
+	const uint32 alphaFunction = GetRenderState(ALPHATESTFUNC);
+	SetRenderState(FOGENABLE, false);
+	SetRenderState(ZTESTENABLE, false);
+	SetRenderState(ZWRITEENABLE, false);
+	SetRenderState(CULLMODE, CULLNONE);
+	SetRenderState(ALPHATESTFUNC, ALPHAALWAYS);
+	SetRenderState(VERTEXALPHA, true);
+	SetRenderState(SRCBLEND, BLENDSRCALPHA);
+	SetRenderState(DESTBLEND, BLENDINVSRCALPHA);
+	im2dShader->use();
+	flushCache();
+	im2DSetXform();
+	setVertexLayout(&im2DVao);
+	C3D_TexBind(0, texture);
+	const C3D_TexEnv previousEnv = *C3D_GetTexEnv(0);
+	C3D_TexEnvSrc(C3D_GetTexEnv(0), C3D_Alpha, GPU_PRIMARY_COLOR);
+	C3D_TexEnvFunc(C3D_GetTexEnv(0), C3D_Alpha, GPU_REPLACE);
+	C3D_TexEnvScale(C3D_GetTexEnv(0), C3D_RGB, GPU_TEVSCALE_4);
+	// Tilted native viewport: x=[0,240], y=[112,512]. Each pass is issued
+	// once on the explicitly selected eye, never through the stereo loop.
+	const float coords[4][4] = {
+		{0.0f,   0.0f,   240.0f/256.0f, 1.0f},
+		{400.0f, 0.0f,   240.0f/256.0f, 112.0f/512.0f},
+		{400.0f, 240.0f, 0.0f,          112.0f/512.0f},
+		{0.0f,   240.0f, 0.0f,          1.0f}
+	};
+	const uint16 indices[6] = {0, 1, 2, 0, 2, 3};
+	C3D_ImmDrawBegin(GPU_TRIANGLES);
+	for(int i = 0; i < 6; ++i){
+		const float *v = coords[indices[i]];
+		C3D_ImmSendAttrib(v[0] + offsetX, v[1] + offsetY, 0.0f, 1.0f);
+		C3D_ImmSendAttrib(red * 0.25f, green * 0.25f, blue * 0.25f, alpha);
+		C3D_ImmSendAttrib(v[2], v[3], 0.0f, 0.0f);
+	}
+	C3D_ImmDrawEnd();
+	profileRecordDraw(6, PROFILE_DRAW_IM2D);
+	C3D_SetTexEnv(0, &previousEnv);
+	SetRenderState(ALPHATESTFUNC, alphaFunction);
+}
+
+void
 openIm3D(void)
 {
 	im3dShader = Shader::create(VSH_PRG_IM3D, combiner_simple, false);

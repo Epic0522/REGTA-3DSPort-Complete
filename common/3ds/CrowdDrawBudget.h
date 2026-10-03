@@ -1,4 +1,5 @@
 #pragma once
+#include "PS2GraphicsProfile.h"
 
 #ifdef _3DS
 #include "Camera.h"
@@ -8,6 +9,7 @@
 #include "Script.h"
 #include "Timer.h"
 #include "World.h"
+#include "VisibilityPlugins.h"
 #include "main.h"
 
 namespace CrowdDrawBudget3DS
@@ -312,12 +314,36 @@ Hide(CEntity *entity)
 	return state && state->opacity <= 0.f;
 }
 
+inline float PS2OccupantOpacity(CVehicle *vehicle)
+{
+	if(!rw::c3d::ps2GraphicsEnabled() || vehicle->VehicleCreatedBy != RANDOM_VEHICLE)
+		return 1.0f;
+	CPlayerPed *player = FindPlayerPed();
+	if(player && vehicle == player->m_pMyVehicle) return 1.0f;
+	if(vehicle->IsBoat() || vehicle->IsPlane() || vehicle->IsHeli() || vehicle->IsTrain())
+		return 1.0f;
+	const float range = Max(12.0f, Sqrt(CVisibilityPlugins::ms_vehicleLod0Dist) * 0.70f);
+	return PS2Graphics3DS::OccupantOpacity(
+		(vehicle->GetPosition() - TheCamera.GetPosition()).MagnitudeSqr(), range);
+}
+
+struct OccupantRenderScope {
+	rw::c3d::EntityRenderStyle previous;
+	explicit OccupantRenderScope(float alpha) : previous(rw::c3d::getEntityRenderStyle())
+	{
+		rw::c3d::EntityRenderStyle style = previous;
+		style.opacity *= alpha;
+		rw::c3d::setEntityRenderStyle(style);
+	}
+	~OccupantRenderScope() { rw::c3d::setEntityRenderStyle(previous); }
+};
+
 struct RenderScope {
 	rw::c3d::EntityRenderStyle previous;
 	explicit RenderScope(CEntity *entity, bool untexturedBlackDecal = false) : previous(rw::c3d::getEntityRenderStyle())
 	{
 		FadeState *state = State(entity);
-		rw::c3d::EntityRenderStyle style = {state ? state->opacity : 1.f, state ? state->reflection : 1.f, untexturedBlackDecal};
+		rw::c3d::EntityRenderStyle style = {state ? state->opacity : 1.f, state ? state->reflection : 1.f, untexturedBlackDecal, entity && entity->IsBuilding(), false};
 		rw::c3d::setEntityRenderStyle(style);
 	}
 	~RenderScope() { rw::c3d::setEntityRenderStyle(previous); }

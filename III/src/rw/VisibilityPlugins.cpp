@@ -1,5 +1,8 @@
 #include "common.h"
 #ifdef _3DS
+#include "../../../../common/3ds/PS2GraphicsProfile.h"
+#endif
+#ifdef _3DS
 #include "../../../../common/3ds/WorldDrawDistance.h"
 #endif
 
@@ -271,8 +274,13 @@ CVisibilityPlugins::SetRenderWareCamera(RwCamera *camera)
 	}
 #endif
 #ifdef _3DS
+	if(rw::c3d::ps2GraphicsEnabled()){
+		vehicleDetail *= PS2Graphics3DS::DetailRangeScale;
+		pedDetail *= PS2Graphics3DS::DetailRangeScale;
+	}
 	rw::c3d::setVegetationLodDistance(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER *
-		(rw::c3d::stereoControlsActive() ? 0.75f : 0.80f));
+		(rw::c3d::stereoControlsActive() ? 0.75f : 0.80f) *
+		(rw::c3d::ps2GraphicsEnabled() ? PS2Graphics3DS::DetailRangeScale : 1.0f));
 #endif
 	ms_vehicleLod0Dist = sq(70.0f * VEHICLE_LODDIST_MULTIPLIER * VEHICLE_HIDETAIL_DIST_MULTIPLIER * vehicleDetail);
 	ms_vehicleLod1Dist = sq(90.0f * VEHICLE_LODDIST_MULTIPLIER);

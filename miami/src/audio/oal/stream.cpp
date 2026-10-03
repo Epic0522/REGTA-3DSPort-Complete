@@ -3,6 +3,10 @@
 #ifdef AUDIO_OAL
 #include "stream.h"
 #include "sampman.h"
+#ifdef _3DS
+#include "audio_enums.h"
+#include <ctype.h>
+#endif
 
 #if defined _MSC_VER && !defined CMAKE_NO_AUTOLINK
 #ifdef AUDIO_OAL_USE_SNDFILE
@@ -1058,6 +1062,28 @@ CStream::CStream(char *filename, ALuint *sources, ALuint (&buffers)[NUM_STREAMBU
 	Open(filename, overrideSampleRate, fullInitialBuffer, forceMonoDecode, directChannel);
 }
 
+#ifdef _3DS
+static bool
+IsConvertedContinuousStream(const char *filename)
+{
+	// Only the stock radio/ambience/announcement entries are converted by setup.
+	// Cutscene MP3s can share a basename with unrelated mission-dialogue WAVs.
+	for(uint32 i = 0; i < STREAMED_SOUND_CUTSCENE_ASS_1; ++i){
+		const char *path = filename;
+		const char *track = StreamedNameTable[i];
+		while(*path && *track){
+			const unsigned char a = *path == '\\' ? '/' : *path;
+			const unsigned char b = *track == '\\' ? '/' : *track;
+			if(toupper(a) != toupper(b)) break;
+			++path;
+			++track;
+		}
+		if(!*path && !*track) return true;
+	}
+	return false;
+}
+#endif
+
 bool
 CStream::Open(const char *filename, uint32 overrideSampleRate, bool fullInitialBuffer,
 	bool forceMonoDecode, uint8 directChannel)
@@ -1101,10 +1127,10 @@ CStream::Open(const char *filename, uint32 overrideSampleRate, bool fullInitialB
 	DEV("Stream %s\n", m_aFilename);
 
 #ifdef _3DS
-	// Prefer the same low-cost continuous-stream format used by LCS. Keep the
-	// original ADF/MP3 as a fallback when setup has not generated a matching WAV.
+	// Prefer converted WAV only for the setup tool's stock continuous streams.
+	// Keep the original ADF/MP3 when that conversion is missing or invalid.
 	const size_t filenameLength = strlen(m_aFilename);
-	if (filenameLength >= 4 &&
+	if (IsConvertedContinuousStream(filename) && filenameLength >= 4 &&
 	    (!strcasecmp(m_aFilename + filenameLength - 4, ".adf") ||
 	     !strcasecmp(m_aFilename + filenameLength - 4, ".mp3"))) {
 		char wavPath[sizeof(m_aFilename)];

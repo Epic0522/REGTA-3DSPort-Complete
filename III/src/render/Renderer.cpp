@@ -159,6 +159,9 @@ CRenderer::GetNew3DSWorldLodScale(CSimpleModelInfo *mi, int16 modelId, CEntity *
 	}
 	if(!WorldDrawDistance3DS::IsIsland(mi->GetModelName()))
 		profileScale *= CrowdDrawBudget3DS::DetailFactor(ent, mi->m_noFade);
+	if(rw::c3d::ps2GraphicsEnabled() && ent && ent->IsBuilding() &&
+	   !ent->bIsBIGBuilding && mi->m_numAtomics < 3 && mi->GetRelatedModel() && !IsTreeModel(modelId))
+		profileScale *= PS2Graphics3DS::DetailRangeScale;
 	// sublightsb is a single 3000-unit shell for five Shoreside tower models
 	// whose authored LOD range is 1000.  Give it the same effective far limit;
 	// otherwise its huge bounds survive adaptive contraction after the towers.
@@ -457,13 +460,21 @@ CRenderer::RenderOneNonRoad(CEntity *e)
 	if(e->IsVehicle()){
 		veh = (CVehicle*)e;
 #ifdef _3DS
-		// Occupants use the same range as the vehicle's highest-detail geometry.
+		// Occupants require the vehicle's highest-detail geometry; PS2 mode
+		// applies a closer fade below.
 		// Once the body switches LOD, do not keep skinning invisible passengers.
 		bool renderOccupants = CVisibilityPlugins::IsVehicleHighDetail((RpClump*)e->m_rwObject);
 #else
 		bool renderOccupants = true;
 #endif
+#ifdef _3DS
+		const float occupantOpacity = CrowdDrawBudget3DS::PS2OccupantOpacity(veh);
+		renderOccupants = renderOccupants && occupantOpacity > 0.0f;
+#endif
 		if(renderOccupants){
+#ifdef _3DS
+		CrowdDrawBudget3DS::OccupantRenderScope occupantStyle(occupantOpacity);
+#endif
 		if(veh->pDriver && veh->pDriver->m_nPedState == PED_DRIVING)
 			veh->pDriver->Render();
 		for(i = 0; i < 8; i++)

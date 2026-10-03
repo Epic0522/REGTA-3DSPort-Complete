@@ -112,6 +112,15 @@ bool initialiseMaterialState(void);
 bool32 stereoControlsActive(void);
 bool32 stereoExtendedDepthEnabled(void);
 void setStereoExtendedDepth(bool32 extendedDepth);
+bool32 ps2GraphicsEnabled(void);
+void setPS2Graphics(bool32 enabled);
+void preparePS2GraphicsColour(int32 game, float32 red, float32 green, float32 blue, float32 alpha = 30.0f);
+void setPS2WorldRange(float32 range);
+float32 ps2WorldRange(void);
+void setPS2SilhouetteWeight(float32 weight);
+float32 ps2SilhouetteWeight(Atomic *atomic);
+// Current-frame softness, applied to each eye before HUD drawing.
+void renderPS2Graphics(int32 game, float32 red, float32 green, float32 blue, float32 alpha = 30.0f);
 bool32 performanceModeActive(void);
 bool32 performanceMode2DEnabled(void);
 bool32 performanceMode3DEnabled(void);
@@ -315,6 +324,8 @@ void setMaterialColor(const RGBA &color);
 struct EntityRenderStyle {
 	float opacity, reflection;
 	bool untexturedBlackDecal;
+	bool worldBuilding;
+	bool worldSkyline;
 };
 EntityRenderStyle getEntityRenderStyle(void);
 void setEntityRenderStyle(EntityRenderStyle style);

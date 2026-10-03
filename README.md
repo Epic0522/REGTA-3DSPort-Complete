@@ -35,7 +35,7 @@ interface, touch controls, Nintendo button prompts and a cheat-code keyboard.
 
 - Dark-blue lower-screen interface.
 - Faster loading and smoother streaming.
-- Removed motion blur; fixed vehicle materials and several crashes.
+- Optional PS2-inspired colour, fog and softness; fixed vehicle materials and several crashes.
 - Final-mission music: 'push it to the limit'.
 
 Tested on New Nintendo 3DS. Busy scenes can still drop frames.
@@ -102,7 +102,7 @@ REGTA-3DSPort-Complete/
 ├── scripts/      setup, build, layout-check and 3DSX install helpers
 ├── packaging/    CIA scripts and finished CGFX banners, audio and icons
 ├── tools/        shared host-side utilities
-└── docs/         historical implementation and verification notes
+└── docs/         implementation, research and verification notes
 ```
 
 Keep the repository layout and symbolic links intact, even when building only
@@ -599,7 +599,40 @@ All three games use Nintendo button labels and the same basic controls:
 Some actions differ between games; follow the in-game tutorials and button
 prompts for those.
 
+### PS2 Graphics
+
+**PS2 Graphics** is a separate switch in Options → Display settings,
+**on by default**, and works with Flat/Stereo and Quality/Performance. Existing saved
+choices are respected; restoring display defaults enables it. The same
+setting is stored as `PS2Graphics=0` or `PS2Graphics=1` under `[Graphics]` in the
+corresponding game's INI file.
+
+This mode combines time/weather colour grading, distance fog, subtle motion
+trails and edge softness with shorter rendering/detail ranges. Random traffic
+occupants fade in closer than the high-detail vehicle;
+player and mission vehicles retain their occupants. HUD text stays sharp and
+each Stereo eye is processed independently.
+
+It is a PS2-inspired 3DS profile, not a bit-exact PS2 renderer. Its range settings
+are tuned 3DS budgets, not measured PS2-to-PC ratios. Visual tuning incorporates
+physical-console feedback; performance still depends on the scene and profile.
+See [the research and comparison images](docs/PS2_GRAPHICS.md).
+
 ## Changelog
+
+### October 3, 2026
+
+- Fixed Vice City's Rub Out cutscenes selecting unrelated same-name mission dialogue WAVs; converted audio preference now applies only to stock radio, ambience and announcements.
+- Added an independent, default-on PS2 Graphics switch to all three games,
+  available in both Flat and Stereo, Quality and Performance.
+- Added time/weather colour grading, distance fog, subtle frame trails and edge softness; foreground stays clear, distant scenery fades into fog and HUD text stays sharp.
+- Fixed a shutdown wait that could leave HOME Menu stuck on Closing after suspending the game; textures are released after submitted GPU work finishes, without waiting for another screen refresh.
+- PS2 Graphics keeps 83% of the normal world range in III, 80% in VC and 76% in LCS, with high-detail ranges at 85%; distant solid buildings gradually use an untextured silhouette material, while glass and cut-out surfaces keep their authored transparency.
+- Kept more foreground colour in LCS with a gentler screen filter, while retaining the distant fog's blue tint. VC/LCS switch distant buildings to silhouettes earlier than III.
+- Kept a closer fade-in range for random traffic occupants.
+- Kept LCS's low-detail island outlines beyond the ordinary building budget and capped distant haze opacity, with a gradual building fade at the budget edge.
+- Removed LCS's pedestrian/car density sliders from the 3DS settings.
+- Prioritised nearby off-screen traffic while on foot, freeing distant unseen civilian traffic slots without raising population limits or changing driving spawns.
 
 ### September 25, 2026
 

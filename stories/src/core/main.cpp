@@ -1,4 +1,7 @@
 #include "common.h"
+#ifdef _3DS
+#include "../../../../common/3ds/PS2GraphicsProfile.h"
+#endif
 #include <time.h>
 #include "rpmatfx.h"
 #include "rphanim.h"
@@ -1763,6 +1766,9 @@ RenderEffects(void)
 void
 Render2dStuff(void)
 {
+#ifdef _3DS
+	rw::c3d::renderPS2Graphics(PS2Graphics3DS::LibertyCityStories, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue());
+#endif
 	PUSH_RENDERGROUP("Render2dStuff");
 	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
 	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
@@ -1876,7 +1882,14 @@ static float
 Apply3DSFarClipProfile(float farClip)
 {
 #ifdef _3DS
-	return Min(farClip, Max(180.0f, farClip * rw::c3d::adaptiveWorldRangeScale()));
+	if(rw::c3d::ps2GraphicsEnabled())
+		rw::c3d::preparePS2GraphicsColour(PS2Graphics3DS::LibertyCityStories, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue());
+	const bool ps2 = rw::c3d::ps2GraphicsEnabled();
+	const float worldRange = PS2Graphics3DS::FarClip(farClip, rw::c3d::adaptiveWorldRangeScale(), ps2, PS2Graphics3DS::LibertyCityStories);
+	rw::c3d::setPS2WorldRange(ps2 ? worldRange : 0.0f);
+	// Only the few authored whole-island LODs may use the extra clipping space.
+	// Ordinary building visibility and sector scans use worldRange in Renderer.
+	return ps2 ? farClip : worldRange;
 #else
 	return farClip;
 #endif
@@ -1886,7 +1899,10 @@ static float
 Apply3DSFogProfile(float fogStart)
 {
 #ifdef _3DS
-	return Min(fogStart, Max(120.0f, fogStart * rw::c3d::adaptiveWorldRangeScale()));
+	const float clip = Apply3DSFarClipProfile(CTimeCycle::GetFarClip());
+	const float range = rw::c3d::ps2GraphicsEnabled() ? rw::c3d::ps2WorldRange() : clip;
+	return PS2Graphics3DS::FogStart(fogStart, range,
+		rw::c3d::adaptiveWorldRangeScale(), rw::c3d::ps2GraphicsEnabled());
 #else
 	return fogStart;
 #endif
@@ -2054,7 +2070,12 @@ Idle(void *arg)
 #endif
 
 		tbStartTimer(0, "RenderMotionBlur");
-		if(!stereo3D)
+		if(!stereo3D
+#ifdef _3DS
+		   && (!rw::c3d::ps2GraphicsEnabled() ||
+		       (TheCamera.m_BlurType != MOTION_BLUR_NONE && TheCamera.m_BlurType != MOTION_BLUR_LIGHT_SCENE))
+#endif
+		  )
 			TheCamera.RenderMotionBlur();
 		tbEndTimer("RenderMotionBlur");
 

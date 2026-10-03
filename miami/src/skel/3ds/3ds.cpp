@@ -867,6 +867,8 @@ main(int argc, char *argv[])
 
 		/* About to shut down or restart - block resize events again... */
 		RwInitialised = FALSE;
+		// Drain the last frame before releasing textures, including HOME close.
+		C3D_FrameWaitDone();
 		FrontEndMenuManager.UnloadTextures();
 
 		if(!FrontEndMenuManager.m_bWantToRestart)

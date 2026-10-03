@@ -1,4 +1,7 @@
 #include "common.h"
+#ifdef _3DS
+#include "../../../../common/3ds/PS2GraphicsProfile.h"
+#endif
 #include <time.h>
 #include "rpmatfx.h"
 #include "rphanim.h"
@@ -2119,6 +2122,9 @@ RenderEffects(void)
 void
 Render2dStuff(void)
 {
+#ifdef _3DS
+	rw::c3d::renderPS2Graphics(PS2Graphics3DS::ViceCity, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue());
+#endif
 	RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)FALSE);
 	RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)TRUE);
@@ -2226,7 +2232,10 @@ static float
 Apply3DSFarClipProfile(float farClip)
 {
 #ifdef _3DS
-	return Min(farClip, Max(180.0f, farClip * rw::c3d::adaptiveWorldRangeScale()));
+	if(rw::c3d::ps2GraphicsEnabled())
+		rw::c3d::preparePS2GraphicsColour(PS2Graphics3DS::ViceCity, CTimeCycle::GetBlurRed(), CTimeCycle::GetBlurGreen(), CTimeCycle::GetBlurBlue());
+	return PS2Graphics3DS::FarClip(farClip, rw::c3d::adaptiveWorldRangeScale(),
+		rw::c3d::ps2GraphicsEnabled(), PS2Graphics3DS::ViceCity);
 #else
 	return farClip;
 #endif
@@ -2236,7 +2245,8 @@ static float
 Apply3DSFogProfile(float fogStart)
 {
 #ifdef _3DS
-	return Min(fogStart, Max(120.0f, fogStart * rw::c3d::adaptiveWorldRangeScale()));
+	return PS2Graphics3DS::FogStart(fogStart, Apply3DSFarClipProfile(CTimeCycle::GetFarClip()),
+		rw::c3d::adaptiveWorldRangeScale(), rw::c3d::ps2GraphicsEnabled());
 #else
 	return fogStart;
 #endif
@@ -2380,7 +2390,12 @@ Idle(void *arg)
 #endif
 
 		tbStartTimer(0, "RenderMotionBlur");
-		if(!stereo3D)
+		if(!stereo3D
+#ifdef _3DS
+		   && (!rw::c3d::ps2GraphicsEnabled() ||
+		       (TheCamera.m_BlurType != MOTION_BLUR_NONE && TheCamera.m_BlurType != MOTION_BLUR_LIGHT_SCENE))
+#endif
+		  )
 			TheCamera.RenderMotionBlur();
 		tbEndTimer("RenderMotionBlur");
 

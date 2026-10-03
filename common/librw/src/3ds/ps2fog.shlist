@@ -1,0 +1,6 @@
+./shaders/default.v.pica
+./shaders/ps2/defaultfog.v.pica
+./shaders/ps2/matfxfog.v.pica
+./shaders/ps2/matfxbasefog.v.pica
+./shaders/ps2/im3dfog.v.pica
+./shaders/lighting.v.pica

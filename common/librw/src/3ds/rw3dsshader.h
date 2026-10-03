@@ -23,14 +23,18 @@ namespace c3d {
 struct Shader
 {
 	shaderProgram_s vsh_program;
+	shaderProgram_s fog_program;
+	bool hasFogProgram, fogSelected;
 	void (*combiner)(void);
 	bool usesLighting;
 	
 	static DVLB_s *dvlb;
+	static DVLB_s *fogDvlb;
 	static void loadDVLB(u8* shbinData, u32 shbinSize);
 	static Shader *create(u32 prgId, void (*combiner)(void), bool usesLighting = true);
 	
 	void use(void);
+	void selectFog(bool enabled);
 	void destroy(void);
 };
 

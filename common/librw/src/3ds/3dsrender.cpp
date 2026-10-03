@@ -14,6 +14,7 @@
 #include "rw3ds.h"
 #include "rw3dsimpl.h"
 #include "rw3dsshader.h"
+#include "default_shbin.h"
 
 namespace rw {
 namespace c3d {
@@ -484,6 +485,38 @@ getAtomicAmbientLight(Atomic *atomic)
 }
 
 
+static Shader *ps2SilhouetteShader;
+extern C3D_Tex whitetex;
+static float ps2SilhouetteBlend;
+
+void
+closePS2SilhouetteRenderer(void)
+{
+	if(ps2SilhouetteShader) ps2SilhouetteShader->destroy();
+	ps2SilhouetteShader = nil;
+}
+static void
+silhouetteCombiner(void)
+{
+	C3D_TexEnv *env0 = C3D_GetTexEnv(0), *env1 = C3D_GetTexEnv(1);
+	C3D_TexEnvInit(env0);
+	C3D_TexEnvInit(env1);
+	// "White model" means a neutral unlit surface, not maximum-brightness white.
+	// A grey base leaves contrast after VC's bright PS2 colour grading.
+	const uint32 grey = 0xFF606060;
+	if(ps2SilhouetteBlend >= 1.0f){
+		C3D_TexEnvSrc(env0, C3D_Both, GPU_CONSTANT);
+		C3D_TexEnvColor(env0, grey);
+	}else{
+		C3D_TexEnvSrc(env0, C3D_Both, GPU_TEXTURE0, GPU_PRIMARY_COLOR);
+		C3D_TexEnvFunc(env0, C3D_Both, GPU_MODULATE);
+		C3D_TexEnvSrc(env1, C3D_RGB, GPU_CONSTANT, GPU_PREVIOUS, GPU_CONSTANT);
+		C3D_TexEnvOpRgb(env1, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_ALPHA);
+		C3D_TexEnvFunc(env1, C3D_RGB, GPU_INTERPOLATE);
+		C3D_TexEnvColor(env1, (grey & 0xFFFFFF) | (uint32(ps2SilhouetteBlend * 255.0f) << 24));
+	}
+}
+
 void
 defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 {
@@ -499,8 +532,22 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 	const uint32 oldAlphaFunc = GetRenderState(ALPHATESTFUNC);
 	const uint32 oldAlphaRef = GetRenderState(ALPHATESTREF);
 	setWorldMatrix(atomic->getFrame()->getLTM());
-	
-	lightingCB(atomic);
+	const bool solidPass = oldZWrite && GetRenderState(SRCBLEND) == BLENDSRCALPHA &&
+		GetRenderState(DESTBLEND) == BLENDINVSRCALPHA;
+	float silhouette = header->vegetationProxy < 0 && solidPass ? ps2SilhouetteWeight(atomic) : 0.0f;
+	// Reject the whole atomic if any mesh needs alpha, including binary cut-outs.
+	// Never flatten glass, trees, fences, night-light shells or a fading model.
+	for(int32 i = 0; silhouette > 0.0f && i < header->numMeshes; ++i){
+		const InstanceData &mesh = header->inst[i];
+		Texture *texture = mesh.material->texture;
+		if(mesh.vertexAlpha || mesh.material->color.alpha != 255 ||
+		   (texture && (!texture->raster || GETC3DRASTEREXT(texture->raster)->hasAlpha)))
+			silhouette = 0.0f;
+	}
+	if(silhouette > 0.0f && !ps2SilhouetteShader)
+		ps2SilhouetteShader = Shader::create(VSH_PRG_DEFAULT, silhouetteCombiner, true);
+	if(!ps2SilhouetteShader) silhouette = 0.0f;
+	if(silhouette < 1.0f) lightingCB(atomic);
 
 	setAttribPointers(header);
 	// Keep each eye's material order, but bind its framebuffer only once per
@@ -508,7 +555,14 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 	InstanceData *inst = header->inst;
 	int32 n = header->numMeshes;
 
-	defaultShader->use();
+	if(silhouette > 0.0f){
+		ps2SilhouetteBlend = silhouette;
+		setPS2SilhouetteWeight(silhouette);
+		ps2SilhouetteShader->use();
+		// Update only the material stages; keep the cached distance-fog stage.
+		silhouetteCombiner();
+	}else
+		defaultShader->use();
 
 	while(n--){
 		m = inst->material;
@@ -530,8 +584,10 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 			SetRenderState(ALPHATESTFUNC,ALPHAGREATEREQUAL);
 			SetRenderState(ALPHATESTREF,3);
 		}
-		setMaterial(canopy ? materialFlags | Geometry::MODULATE : materialFlags, color, m->surfaceProps);
-		setTexture(0, m->texture);
+		if(silhouette < 1.0f)
+			setMaterial(canopy ? materialFlags | Geometry::MODULATE : materialFlags, color, m->surfaceProps);
+		setTexture(0, silhouette >= 1.0f ? nil : m->texture);
+		if(silhouette >= 1.0f) C3D_TexBind(0, nil);
 		rw::SetRenderState(VERTEXALPHA, inst->vertexAlpha || color.alpha != 0xFF);
 		bool depthOffset = isVehicleDepthOffsetMaterial(m);
 		if(depthOffset)
@@ -545,6 +601,11 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 			SetRenderState(ALPHATESTREF,oldAlphaRef);
 		}
 		inst++;
+	}
+	if(silhouette > 0.0f){
+		setPS2SilhouetteWeight(0.0f);
+		// Restore the cached null-texture binding for subsequent immediate draws.
+		if(silhouette >= 1.0f) C3D_TexBind(0, &whitetex);
 	}
 	if(canopyBlend>0.f){
 		if(canopyBlend<1.f) SetRenderState(ZWRITEENABLE,0);

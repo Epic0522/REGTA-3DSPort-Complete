@@ -1,0 +1,58 @@
+;; Optional PS2 distance-fog variant; keep body aligned with default.v.pica.
+	;; Inputs
+.alias in_pos     v0
+.alias in_normal  v1
+.alias in_color   v2
+.alias in_tex0    v3
+
+	;; Outputs
+.out v_pos	  position
+.out v_color      color
+.out v_tex0       texcoord0
+.out v_fog texcoord2
+
+;; Default world entry point, shared by III, VC and LCS. No directional lights means the
+;; original lighting loop exits before reading the normal. Preserve its
+;; ambient/prelight/clamp/material operations in the same order.
+.entry defaultfog_main
+.proc defaultfog_main
+	call	xform_vertex
+	mov	v_pos, r0
+	; Clamp in the sampler, after interpolation; large building faces must
+	; keep their nearby portion clear even when distant vertices are in fog.
+	mov	r2, u_ps2FogParams
+	mad	r2.x, r0.w, u_ps2FogParams.x, r2.y
+	mov	r2.y, u_ps2FogParams.z
+	mov	r2.zw, zeros
+	mov	v_fog, r2
+	; Fully fogged solid-building proxies need no vertex lighting or UV work.
+	mov	r15, u_ps2FogParams
+	cmp	ones, le, gt, r15.w
+	jmpc	cmp.x, defaultfog_silhouette
+	mov	r15, u_lightParams[0]
+	cmp	DIRECT, gt, lt, r15.x
+	jmpc	cmp.x, defaultfog_ambient_only
+	call	xform_normal
+	call	DynamicLights
+	mov	v_color, r0
+	mov	v_tex0, in_tex0
+	end
+
+defaultfog_ambient_only:
+	mov	r0, zeros
+	mul	r0, surfDiffuse, r0
+	mov	r1, u_ambLight
+	mad	r0.rgb, r1.rgb, surfAmbient.rgb, r0.rgb
+	mad	r0, in_color, fixclr, r0
+	max	r0, zeros, r0
+	min	r0, ones, r0
+	mul	r0, u_matColor, r0
+	mov	v_color, r0
+	mov	v_tex0, in_tex0
+	end
+
+defaultfog_silhouette:
+	mov	v_color, ones
+	mov	v_tex0, zeros
+	end
+.end

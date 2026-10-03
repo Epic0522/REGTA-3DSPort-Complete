@@ -14,6 +14,8 @@
 
 #include "rw3ds.h"
 #include "rw3dsshader.h"
+#include "default_shbin.h"
+#include "ps2fog_shbin.h"
 
 namespace rw {
 namespace c3d {
@@ -21,11 +23,13 @@ namespace c3d {
 Shader *currentShader = NULL;
 
 DVLB_s* Shader::dvlb = NULL;
+DVLB_s* Shader::fogDvlb = NULL;
 	
 void
 Shader::loadDVLB(u8* shbinData, u32 shbinSize)
 {
 	Shader::dvlb = DVLB_ParseFile((u32*)shbinData, shbinSize);
+	Shader::fogDvlb = DVLB_ParseFile((u32*)ps2fog_shbin, ps2fog_shbin_size);
 }
   
 Shader*
@@ -38,7 +42,18 @@ Shader::create(u32 prgId, void (*combiner)(void), bool usesLighting)
 	sh->usesLighting = usesLighting;
 	shaderProgramInit(&sh->vsh_program);
 	shaderProgramSetVsh(&sh->vsh_program, &Shader::dvlb->DVLE[prgId]);
-
+	int fogId = -1;
+	if(prgId == VSH_PRG_DEFAULT) fogId = VSH_PRG_DEFAULTFOG;
+	else if(prgId == VSH_PRG_MATFX) fogId = VSH_PRG_MATFXFOG;
+	else if(prgId == VSH_PRG_MATFXBASE) fogId = VSH_PRG_MATFXBASEFOG;
+	else if(prgId == VSH_PRG_IM3D) fogId = VSH_PRG_IM3DFOG;
+	sh->hasFogProgram = fogId >= 0 && Shader::fogDvlb &&
+		(uint32)fogId < Shader::fogDvlb->numDVLE;
+	sh->fogSelected = false;
+	if(sh->hasFogProgram){
+		shaderProgramInit(&sh->fog_program);
+		shaderProgramSetVsh(&sh->fog_program, &Shader::fogDvlb->DVLE[fogId]);
+	}
 	return sh;
 }
 
@@ -46,7 +61,7 @@ void
 Shader::use(void)
 {
 	if(currentShader != this) {
-		C3D_BindProgram(&this->vsh_program);
+		C3D_BindProgram(this->fogSelected ? &this->fog_program : &this->vsh_program);
 		// Rebuild the same complete chain, but don't resend unchanged stages.
 		// Pending full invalidations, including HOME restore, remain intact.
 		C3D_ConfigureTexEnv(this->combiner);
@@ -55,9 +70,19 @@ Shader::use(void)
 }
 
 void
+Shader::selectFog(bool enabled)
+{
+	enabled = enabled && this->hasFogProgram;
+	if(this->fogSelected == enabled) return;
+	this->fogSelected = enabled;
+	C3D_BindProgram(enabled ? &this->fog_program : &this->vsh_program);
+}
+
+void
 Shader::destroy(void)
 {
   shaderProgramFree(&this->vsh_program);
+  if(this->hasFogProgram) shaderProgramFree(&this->fog_program);
   // DVLB_Free(this->vsh_dvlb);
   rwFree(this);
 }
