@@ -353,7 +353,10 @@ bool32 getAlphaBlend(void);
 void bindFramebuffer(uint32 fbo);
 void bindTexture(C3D_Tex *tex);
 
-void flushCache(void);
+// Mesh fades share the final combiner with fog. Immediate draws already carry
+// their opacity in vertex alpha and leave this multiplier at one.
+void flushCache(float32 entityOpacity = 1.0f);
+void invalidateFinalRenderStageCache(void);
 void setIm3DBuffered(bool32 enable);
 void resetIm3DFrameBuffers(void);
 #ifdef RESTORIES_3DS_BUILD

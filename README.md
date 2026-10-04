@@ -620,6 +620,10 @@ See [the research and comparison images](docs/PS2_GRAPHICS.md).
 
 ## Changelog
 
+### October 4, 2026
+
+- Fixed PS2 fog disappearing after building fades or shader changes, most noticeable at some camera angles in LCS Stereo; fog and transparency now share one final render stage in all three games.
+
 ### October 3, 2026
 
 - Fixed Vice City's Rub Out cutscenes selecting unrelated same-name mission dialogue WAVs; converted audio preference now applies only to stock radio, ambience and announcements.

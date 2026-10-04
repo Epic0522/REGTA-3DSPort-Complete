@@ -65,6 +65,9 @@ Shader::use(void)
 		// Rebuild the same complete chain, but don't resend unchanged stages.
 		// Pending full invalidations, including HOME restore, remain intact.
 		C3D_ConfigureTexEnv(this->combiner);
+		// The complete-chain reset also replaces the final fog/opacity stage,
+		// even when a shader is selected again without an intervening draw.
+		invalidateFinalRenderStageCache();
 		currentShader = this;
 	}
 }

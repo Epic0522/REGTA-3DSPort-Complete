@@ -242,7 +242,7 @@ renderVegetationProxy(Atomic *atomic, int32 proxy, float blend)
 			int materialAlpha = atomic->geometry->matList.materials[i]->color.alpha;
 			if(materialAlpha < alpha) alpha = materialAlpha;
 		}
-	// The proxy uses im3D, whose shader resets the mesh-only entity-alpha stage.
+	// The proxy uses im3D, which leaves the mesh-opacity multiplier at one.
 	// Carry the same distance/contact fade in the quad vertices, exactly once.
 	const float entityOpacity = fminf(1.f, fmaxf(0.f, getEntityRenderStyle().opacity));
 	const float proxyAlpha = alpha * blend * entityOpacity;

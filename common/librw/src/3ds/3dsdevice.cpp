@@ -181,9 +181,8 @@ static bool32 ps2FogCamera;
 static C3D_Tex ps2FogTexture;
 static bool32 ps2FogTextureReady;
 static bool32 ps2FogTextureBound;
-static Shader *ps2FogStageShader;
-static bool32 ps2FogStageEnabled;
-static uint32 ps2FogStageColor;
+static C3D_TexEnv finalRenderStageCache;
+static bool32 finalRenderStageValid;
 static float32 ps2FogParams[4] = {0.0f, 0.0f, 0.5f, 0.0f};
 static int32 ps2GraphicsGame = PS2Graphics3DS::GTAIII;
 static float32 ps2OrdinaryWorldRange;
@@ -1258,7 +1257,41 @@ setMaterial(const RGBA &color, const SurfaceProperties &surfaceprops, float extr
 }
 
 void
-flushCache(void)
+invalidateFinalRenderStageCache(void)
+{
+	finalRenderStageValid = false;
+}
+
+// Stage 5 owns both distance-fog RGB and mesh opacity. Separate writers used
+// to erase each other's state while the fog cache still reported it as valid.
+static void
+applyFinalRenderStage(bool fog, uint32 color, float32 entityOpacity)
+{
+	C3D_TexEnv env;
+	C3D_TexEnvInit(&env);
+	const uint32 alpha = uint32(fminf(1.0f, fmaxf(0.0f, entityOpacity)) * 255.0f);
+	if(fog){
+		C3D_TexEnvSrc(&env, C3D_RGB, GPU_CONSTANT, GPU_PREVIOUS, GPU_TEXTURE2);
+		C3D_TexEnvOpRgb(&env, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_ALPHA);
+		C3D_TexEnvFunc(&env, C3D_RGB, GPU_INTERPOLATE);
+	}
+	if(alpha < 255){
+		C3D_TexEnvSrc(&env, C3D_Alpha, GPU_PREVIOUS, GPU_CONSTANT);
+		C3D_TexEnvFunc(&env, C3D_Alpha, GPU_MODULATE);
+	}
+	// Fog uses the constant's RGB; opacity uses its alpha. Authored texture,
+	// material and vertex alpha remain in GPU_PREVIOUS in both cases.
+	C3D_TexEnvColor(&env, (fog ? ((color >> 16 & 0xFF) | (color & 0xFF00) |
+		((color & 0xFF) << 16)) : 0x00FFFFFF) | (alpha << 24));
+	if(!finalRenderStageValid || memcmp(&finalRenderStageCache, &env, sizeof(env)) != 0){
+		C3D_SetTexEnv(5, &env);
+		finalRenderStageCache = env;
+		finalRenderStageValid = true;
+	}
+}
+
+void
+flushCache(float32 entityOpacity)
 {
 	// Nonlinear PICA depth LUTs compress distant world space into the last bin.
 	// Distance-fog variants export their own normalised camera-space coordinate.
@@ -1277,23 +1310,7 @@ flushCache(void)
 		const float32 scale = PS2Graphics3DS::FogColourScale(r, g, b, ps2ColourGain);
 		color = (uint32(r * scale) << 16) | (uint32(g * scale) << 8) | uint32(b * scale);
 	}
-	if(ps2FogStageShader != currentShader || ps2FogStageEnabled != fog ||
-	   (fog && ps2FogStageColor != color)){
-		C3D_TexEnv fogEnv;
-		C3D_TexEnvInit(&fogEnv);
-		if(fog){
-			C3D_TexEnvColor(&fogEnv, (color >> 16 & 0xFF) | (color & 0xFF00) |
-				((color & 0xFF) << 16) | 0xFF000000);
-			C3D_TexEnvSrc(&fogEnv, C3D_RGB, GPU_CONSTANT, GPU_PREVIOUS, GPU_TEXTURE2);
-			C3D_TexEnvOpRgb(&fogEnv, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_COLOR, GPU_TEVOP_RGB_SRC_ALPHA);
-			C3D_TexEnvFunc(&fogEnv, C3D_RGB, GPU_INTERPOLATE);
-			// Preserve glass, object fades and cut-out alpha.
-		}
-		C3D_SetTexEnv(5, &fogEnv);
-		ps2FogStageShader = currentShader;
-		ps2FogStageEnabled = fog;
-		ps2FogStageColor = color;
-	}
+	applyFinalRenderStage(fog, color, entityOpacity);
 	setC3DRenderState(RWC3D_FOGMODE, GPU_NO_FOG);
 	flushC3DRenderState();
 
@@ -2154,8 +2171,8 @@ stopC3D(void)
 	}
 	ps2HistoryTick = 0;
 	ps2FogParams[0] = ps2FogParams[1] = 0.0f;
-	ps2FogCamera = ps2FogTextureBound = ps2FogStageEnabled = false;
-	ps2FogStageShader = nil;
+	ps2FogCamera = ps2FogTextureBound = false;
+	invalidateFinalRenderStageCache();
 	if(ps2FogTextureReady){
 		C3D_TexDelete(&ps2FogTexture);
 		ps2FogTextureReady = false;

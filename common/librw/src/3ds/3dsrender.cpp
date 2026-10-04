@@ -191,29 +191,6 @@ isVehicleDepthOffsetMaterial(Material *material)
 	       color.red == 0 && color.green == 0 && color.blue == 0 && color.alpha == 255;
 }
 
-// Stage 5 is reserved for entity fading, after material, vertex and texture
-// alpha. This also covers plain interior meshes and detached/damage atomics
-// that do not share the bodywork shader. No material mutation or extra draw.
-static void
-applyEntityOpacity(void)
-{
-	static bool wasFaded = false;
-	const float opacity = getEntityRenderStyle().opacity;
-	if(opacity >= 1.f && !wasFaded) return;
-	C3D_TexEnv env;
-	C3D_TexEnvInit(&env);
-	if(opacity < 1.f) {
-		C3D_TexEnvSrc(&env, C3D_RGB, GPU_PREVIOUS);
-		C3D_TexEnvFunc(&env, C3D_RGB, GPU_REPLACE);
-		C3D_TexEnvSrc(&env, C3D_Alpha, GPU_PREVIOUS, GPU_CONSTANT);
-		C3D_TexEnvFunc(&env, C3D_Alpha, GPU_MODULATE);
-		const uint32 alpha = (uint32)(opacity * 255.f);
-		C3D_TexEnvColor(&env, (alpha << 24) | 0x00FFFFFF);
-	}
-	C3D_SetTexEnv(5, &env);
-	wasFaded = opacity < 1.f;
-}
-
 static uint32 worldLightClusterMask = 0xFFFFFFFF;
 
 void
@@ -246,8 +223,7 @@ drawInstElements(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClas
 void
 drawInst_simple(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass)
 {
-	applyEntityOpacity();
-	flushCache();
+	flushCache(getEntityRenderStyle().opacity);
 	if(!stereoRenderActive()){
 		drawInstElements(header, inst, drawClass);
 		return;
