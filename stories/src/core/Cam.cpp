@@ -1874,6 +1874,7 @@ CCam::Process_Cam_On_A_String(const CVector &CameraTarget, float TargetOrientati
 		Up.Normalise();
 	}else{
 		float TargetRoll;
+#ifndef _3DS
 		if(CPad::GetPad(0)->GetDPadLeft() || CPad::GetPad(0)->GetDPadRight()){
 			float fwdSpeed = 180.0f*DotProduct(((CVehicle*)CamTargetEntity)->m_vecMoveSpeed, CamTargetEntity->GetForward());
 			if(fwdSpeed > 210.0f) fwdSpeed = 210.0f;
@@ -1886,7 +1887,9 @@ CCam::Process_Cam_On_A_String(const CVector &CameraTarget, float TargetOrientati
 			float AngleDiff = DotProduct(FwdTarget, Front);
 			AngleDiff = Acos(Min(Abs(AngleDiff), 1.0f));
 			TargetRoll *= fwdSpeed/210.0f * Sin(AngleDiff);
-		}else{
+		}else
+#endif
+		{
 			float fwdSpeed = 180.0f*DotProduct(((CVehicle*)CamTargetEntity)->m_vecMoveSpeed, CamTargetEntity->GetForward());
 			if(fwdSpeed > 210.0f) fwdSpeed = 210.0f;
 			TargetRoll = CPad::GetPad(0)->GetLeftStickX()/128.0f * fwdSpeed/210.0f;
@@ -3302,6 +3305,7 @@ CCam::Process_BehindBoat(const CVector &CameraTarget, float TargetOrientation, f
 
 
 	float TargetRoll;
+#ifndef _3DS
 	if(CPad::GetPad(0)->GetDPadLeft() || CPad::GetPad(0)->GetDPadRight()){
 #ifdef FIX_BUGS
 		float fwdSpeed = 180.0f*DotProduct(((CVehicle*)CamTargetEntity)->m_vecMoveSpeed, CamTargetEntity->GetForward());
@@ -3320,7 +3324,9 @@ CCam::Process_BehindBoat(const CVector &CameraTarget, float TargetOrientation, f
 #else
 		TargetRoll *= Sin(AngleDiff);
 #endif
-	}else{
+	}else
+#endif
+	{
 		float fwdSpeed = 180.0f*DotProduct(((CVehicle*)CamTargetEntity)->m_vecMoveSpeed, CamTargetEntity->GetForward());
 		if(fwdSpeed > 210.0f) fwdSpeed = 210.0f;
 		TargetRoll = CPad::GetPad(0)->GetLeftStickX()/128.0f * fwdSpeed/210.0f;

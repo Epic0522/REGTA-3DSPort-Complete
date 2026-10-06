@@ -15,6 +15,7 @@
 
 	;; Uniforms
 .fvec u_proj[8]
+; CPU-composed camera-relative model-view, shared with the PS2 bundle.
 .fvec u_view[4]
 .fvec u_world[4]
 .fvec u_texMatrix[4]

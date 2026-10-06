@@ -648,7 +648,7 @@ Get3DSControlTokenString(const wchar *in, wchar *out)
 	static const tFixedToken fixedTokens[] = {
 		{ "AMBUY", "A" },
 		{ "AMEXI", "B" },
-		{ "AMMOV", "CIRCLE PAD / D-PAD" },
+		{ "AMMOV", "CIRCLE PAD" },
 		{ "FREE2", "CIRCLE PAD" },
 		{ "PDLOO", "C-STICK" },
 		{ "TRSK", "A" },

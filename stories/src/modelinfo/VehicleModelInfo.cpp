@@ -1413,6 +1413,13 @@ CVehicleModelInfo::SetEnvironmentMap(void)
 	#endif
 
 	RpClumpForAllAtomics(m_clump, SetEnvironmentMapCB, nil);
+#ifdef RESTORIES_3DS_BUILD
+	// PreprocessHierarchy detaches optional components before this pass. The
+	// Stallion roof still contains MatFX paint/chrome and must use the same
+	// material pipeline as the body, rather than the unstable vertex lighting.
+	for(i = 0; i < m_numComps; i++)
+		SetEnvironmentMapCB(m_comps[i], nil);
+#endif
 	if(m_wheelId != -1){
 		wheelmi = (CSimpleModelInfo*)CModelInfo::GetModelInfo(m_wheelId);
 		for(i = 0; i < wheelmi->m_numAtomics; i++){

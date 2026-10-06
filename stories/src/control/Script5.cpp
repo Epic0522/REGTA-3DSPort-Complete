@@ -4,6 +4,7 @@
 #include "ScriptCommands.h"
 
 #include "CarCtrl.h"
+#include "FileMgr.h"
 #include "BulletInfo.h"
 #include "General.h"
 #include "Lines.h"
@@ -1421,10 +1422,18 @@ int16 CRunningScript::GetPadState(uint16 pad, uint16 button)
 	case 5: return pPad->NewState.LeftShoulder2;
 	case 6: return pPad->NewState.RightShoulder1;
 	case 7: return pPad->NewState.RightShoulder2;
+#ifdef _3DS
+	// Legacy SCM directions use the Circle Pad; physical D-pad is graphics-only.
+	case 8: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Up) ? 255 : 0;
+	case 9: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Down) ? 255 : 0;
+	case 10: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Left) ? 255 : 0;
+	case 11: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Right) ? 255 : 0;
+#else
 	case 8: return pPad->NewState.DPadUp;
 	case 9: return pPad->NewState.DPadDown;
 	case 10: return pPad->NewState.DPadLeft;
 	case 11: return pPad->NewState.DPadRight;
+#endif
 	case 12: return pPad->NewState.Start;
 	case 13: return pPad->NewState.Select;
 	case 14: return pPad->NewState.Square;
@@ -2197,6 +2206,118 @@ INITSAVEBUF
 	for (CRunningScript* pScript = pActiveScripts; pScript; pScript = pScript->GetNext())
 		pScript->Save(buf);
 VALIDATESAVEBUF(*size)
+}
+
+namespace {
+struct WorldDoorBinding {
+	uint32 createIp;
+	uint16 globalIndex;
+	CVector closedPosition;
+};
+
+// Only the six persistent Electricgate controllers in the stock LCS script.
+// Validate the CREATE stream before interpreting a saved global as a door ref.
+static bool MatchesWorldDoorBinding(const WorldDoorBinding &binding, const uint8 *creation)
+{
+	uint32 ip = 0;
+	const uint8 prefix[] = { COMMAND_CREATE_OBJECT_NO_OFFSET & 0xFF,
+		COMMAND_CREATE_OBJECT_NO_OFFSET >> 8, ARGUMENT_INT16, 0x33, 0xFF };
+	if (memcmp(&creation[ip], prefix, sizeof(prefix)) != 0)
+		return false;
+	ip += sizeof(prefix);
+	float coordinates[3];
+	for (int32 i = 0; i < 3; i++) {
+		uint32 bits;
+		uint8 type = creation[ip++];
+		if (type == ARGUMENT_FLOAT) {
+			memcpy(&bits, &creation[ip], 4);
+			ip += 4;
+		} else if (type == ARGUMENT_FLOAT_2BYTES) {
+			bits = (uint32)creation[ip] << 16 |
+				(uint32)creation[ip + 1] << 24;
+			ip += 2;
+		} else
+			return false;
+		memcpy(&coordinates[i], &bits, sizeof(bits));
+	}
+	return CVector(coordinates[0], coordinates[1], coordinates[2]) == binding.closedPosition &&
+		creation[ip] == ARGUMENT_GLOBAL + binding.globalIndex / 256 &&
+		creation[ip + 1] == binding.globalIndex % 256;
+}
+}
+
+void
+CTheScripts::RebindWorldDoorScriptHandles(bool reloadContract)
+{
+	/* A legacy/imported object graph can retain a live, same-generation handle
+	 * for the wrong door. In an observed save, global 1232 addressed the gate
+	 * at (985.3, -328.1), while its controller moves the gate at (1250.4, -812).
+	 * Match the saved instances by model AND their authored movement envelope;
+	 * never revive an old pool slot or allocate a replacement mission object. */
+	static const WorldDoorBinding bindings[] = {
+		{ 272805, 1232, CVector(1250.4f, -812.0f, 13.97f) },
+		{ 272836, 1233, CVector(1016.0f, -1099.955f, 12.294f) },
+		{ 272867, 1234, CVector(985.3f, -328.1f, 9.0f) },
+		{ 274072, 1278, CVector(91.589f, -318.592f, 15.296f) },
+		{ 274197, 1282, CVector(366.158f, -1128.432f, 21.941f) },
+		{ 274230, 1283, CVector(326.3f, -1128.432f, 21.941f) }
+	};
+	int modelId;
+	if (!ScriptSpace || !CModelInfo::GetModelInfo("Electricgate", &modelId) ||
+		NumberOfUsedObjects <= 205 || UsedObjectArray[205].index != modelId)
+		return;
+	static bool checked = false;
+	static bool matches[ARRAY_SIZE(bindings)];
+	if (reloadContract || !checked) {
+		// INITUS is a mission overlay, no longer present in ScriptSpace after
+		// startup. Validate its declarations from the unchanged SCM file once
+		// per load, without loading or executing that overlay again.
+		memset(matches, 0, sizeof(matches));
+		checked = false;
+		int32 file = CFileMgr::OpenFile("DATA/main.scm", "rb");
+		if (file <= 0)
+			return;
+		for (uint32 i = 0; i < ARRAY_SIZE(bindings); i++) {
+			uint8 creation[24];
+			if (CFileMgr::Seek(file, 8 + bindings[i].createIp, SEEK_SET))
+				continue;
+			if (CFileMgr::Read(file, (char*)creation, sizeof(creation)) == sizeof(creation))
+				matches[i] = MatchesWorldDoorBinding(bindings[i], creation);
+		}
+		CFileMgr::CloseFile(file);
+		checked = true;
+	}
+	CObjectPool *pool = CPools::GetObjectPool();
+	for (uint32 i = 0; i < ARRAY_SIZE(bindings); i++) {
+		const WorldDoorBinding &binding = bindings[i];
+		if (!matches[i] ||
+			4u * (binding.globalIndex + 1) > GetSizeOfVariableSpace())
+			continue;
+		int32 *handle = GetPointerToScriptVariable(4 * binding.globalIndex);
+		CObject *door = pool->GetAt(*handle);
+		if (door && door->ObjectCreatedBy == MISSION_OBJECT &&
+			door->GetModelIndex() == modelId &&
+			(door->GetPosition() - binding.closedPosition).MagnitudeSqr() <= 16.0f * 16.0f)
+			continue;
+		CObject *match = nil;
+		for (int32 slot = 0; slot < pool->GetSize(); slot++) {
+			CObject *candidate = pool->GetSlot(slot);
+			if (!candidate || candidate->ObjectCreatedBy != MISSION_OBJECT ||
+				candidate->GetModelIndex() != modelId ||
+				!((candidate->GetPosition() - binding.closedPosition).MagnitudeSqr() <= 16.0f * 16.0f))
+				continue;
+			if (match) { // Ambiguous graph: leave the handle untouched.
+				match = nil;
+				break;
+			}
+			match = candidate;
+		}
+		if (match) {
+			debug("LCS world door %u rebound from %d to %d\n", binding.globalIndex,
+				*handle, pool->GetIndex(match));
+			*handle = pool->GetIndex(match);
+		}
+	}
 }
 
 void

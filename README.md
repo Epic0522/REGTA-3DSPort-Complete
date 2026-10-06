@@ -588,6 +588,8 @@ All three games use Nintendo button labels and the same basic controls:
 - C-stick controls the camera.
 - ABXY, L/R and ZL/ZR are mapped to the games' native actions.
 - START pauses and SELECT cycles the gameplay camera.
+- Menus accept both the D-pad and Circle Pad. During gameplay, the D-pad
+  controls graphics settings; script selections use the Circle Pad.
 - The lower screen presents loading progress, radar/status information and
   contextual touch controls.
 - Touch the lower screen once to reveal the overlay. The first touch only
@@ -616,9 +618,18 @@ each Stereo eye is processed independently.
 It is a PS2-inspired 3DS profile, not a bit-exact PS2 renderer. Its range settings
 are tuned 3DS budgets, not measured PS2-to-PC ratios. Visual tuning incorporates
 physical-console feedback; performance still depends on the scene and profile.
-See [the research and comparison images](docs/PS2_GRAPHICS.md).
 
 ## Changelog
+
+### October 6, 2026
+
+- Rebound LCS persistent gate script handles after loading legacy object graphs, using the authored model and position. Object movement commands now suspend safely on missing operands, and pool lookups reject invalid/free handles.
+- Applied the LCS vehicle material pipeline to detached optional components, including the Stallion roof, so they no longer use the unstable legacy vertex lighting path.
+
+- Fixed vehicle decals showing through doors and bodywork in all three games; depth bias now follows camera distance and exterior overlays cull their back faces.
+- Restored Vice City's complete Hotring roof numbers: verified vehicle overlays now use the authored triangle list instead of strips with reversed faces. Body meshes keep their original strips.
+- Moved legacy D-pad gameplay and mission-script directions to the Circle Pad in all three games, including weapon/race selection and LCS outfits. Kept analog movement and steering, corrected old direction prompts, and reserved the gameplay D-pad for graphics controls. Menus retain both D-pad and Circle Pad navigation.
+- Reduced moving-model polygon jitter and rotating vehicle decal flicker in all three games by calculating camera-relative model-view matrices on the CPU before float24 vertex processing. Based on the precision fix linked in [issue #10](https://github.com/Epic0522/REGTA-3DSPort-Complete/issues/10).
 
 ### October 4, 2026
 

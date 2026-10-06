@@ -46,6 +46,26 @@ destroyNativeData(void *object, int32, int32)
 	return object;
 }
 
+// Old BinMesh strips can reverse individual decal faces at strip joins.
+// Hotring's roof has five such faces; the authored Triangle list is intact.
+// Use that list only for verified overlays, keeping exterior back-face culling
+// and depth tests. Body meshes retain their compact original strips.
+static uint32
+copyDecalTriangles(Geometry *geo, Material *material, uint16 *indices)
+{
+	uint32 count = 0;
+	for(int32 i = 0; i < geo->numTriangles; ++i){
+		const Triangle &triangle = geo->triangles[i];
+		if(triangle.matId >= geo->matList.numMaterials ||
+		   geo->matList.materials[triangle.matId] != material)
+			continue;
+		if(indices)
+			memcpy(indices + count, triangle.v, sizeof(triangle.v));
+		count += 3;
+	}
+	return count;
+}
+
 static InstanceDataHeader*
 instanceMesh(rw::ObjPipeline *rwpipe, Geometry *geo)
 {
@@ -75,9 +95,22 @@ instanceMesh(rw::ObjPipeline *rwpipe, Geometry *geo)
 		inst->vertexAlpha = 0;
 		inst->maxVertexAlpha = 255;
 		inst->program = 0;
+		inst->decalTriangles = 0;
+		if(header->primType == GPU_TRIANGLE_STRIP && geo->triangles &&
+		   isVehicleDecalMaterial(inst->material)){
+			const uint32 count = copyDecalTriangles(geo, inst->material, nil);
+			if(count){
+				header->totalNumIndex = header->totalNumIndex - inst->numIndex + count;
+				inst->numIndex = count;
+				inst->decalTriangles = 1;
+			}
+		}
 		inst->indexBuffer = (uint16*)safeLinearAlloc(inst->numIndex * 2);
 		assert(inst->indexBuffer);
-		memcpy(inst->indexBuffer, mesh->indices, inst->numIndex*2);
+		if(inst->decalTriangles)
+			copyDecalTriangles(geo, inst->material, inst->indexBuffer);
+		else
+			memcpy(inst->indexBuffer, mesh->indices, inst->numIndex*2);
 		mesh++;
 		inst++;
 	}

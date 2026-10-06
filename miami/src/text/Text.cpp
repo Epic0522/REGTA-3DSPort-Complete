@@ -122,7 +122,7 @@ CText::Get(const char *key)
 #endif
 #ifdef _3DS
 	if(FrontEndMenuManager.m_PrefsLanguage == CMenuManager::LANGUAGE_AMERICAN) {
-		static const char *keys[] = { "FEC_RS3", "FEC_HO3", "FEC_LB4", "FEC_CR3", "FEC_SM3", "FEC_R3" };
+		static const char *keys[] = { "FEC_RS3", "FEC_HO3", "FEC_LB4", "FEC_CR3", "FEC_SM3", "FEC_R3", "LAW3_12" };
 		static const char *texts[] = {
 			"Radio station cycle (TOUCH, THEN TAP L3)",
 			"Horn (TOUCH, THEN TAP L3)",
@@ -130,8 +130,9 @@ CText::Get(const char *key)
 			"Crouch (TOUCH, THEN TAP L3)",
 			"Sub-mission (TOUCH, THEN TAP R3)",
 			"(TOUCH, THEN TAP R3)",
+			"You can select weapons by moving the ~h~CIRCLE PAD~w~ ~h~left~w~ or ~h~right~w~.",
 		};
-		static wchar translated[ARRAY_SIZE(keys)][48];
+		static wchar translated[ARRAY_SIZE(keys)][128];
 		static bool initialized;
 		if(!initialized) {
 			for(uint32 i = 0; i < ARRAY_SIZE(keys); i++) {

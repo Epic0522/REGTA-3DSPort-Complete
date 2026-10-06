@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _3DS
+#include "../../../common/3ds/LegacyDirections.h"
+#endif
+
 enum {
 	PLAYERCONTROL_ENABLED = 0,
 	PLAYERCONTROL_CAMERA = 1,
@@ -270,6 +274,19 @@ public:
 
 #ifdef _3DS
 	void AffectFrom3DS();
+	static bool Is3DSMenuInputActive();
+	bool Get3DSDirection(LegacyDirections3DS::Direction direction)
+	{
+		return LegacyDirections3DS::Held(NewState, direction, Is3DSMenuInputActive());
+	}
+	bool Get3DSDirectionJustDown(LegacyDirections3DS::Direction direction)
+	{
+		return LegacyDirections3DS::JustDown(NewState, OldState, direction, Is3DSMenuInputActive());
+	}
+	bool Get3DSDirectionJustUp(LegacyDirections3DS::Direction direction)
+	{
+		return LegacyDirections3DS::JustUp(NewState, OldState, direction, Is3DSMenuInputActive());
+	}
 	bool Get3DSRifleFirstPersonAim();
 #ifdef ENABLE_3DS_BOTTOM_RADAR
 	static bool Is3DSTouchOverlayVisible();
@@ -422,10 +439,17 @@ public:
 	bool GetCircleJustDown()         { return !!(NewState.Circle && !OldState.Circle); }
 	bool GetCrossJustDown()          { return !!(NewState.Cross && !OldState.Cross); }
 	bool GetSquareJustDown()         { return !!(NewState.Square && !OldState.Square); }
-	bool GetDPadUpJustDown()         { return !!(NewState.DPadUp && !OldState.DPadUp); }
-	bool GetDPadDownJustDown()       { return !!(NewState.DPadDown && !OldState.DPadDown); }
-	bool GetDPadLeftJustDown()       { return !!(NewState.DPadLeft && !OldState.DPadLeft); }
-	bool GetDPadRightJustDown()      { return !!(NewState.DPadRight && !OldState.DPadRight); }
+#ifdef _3DS
+	bool GetDPadUpJustDown() { return Get3DSDirectionJustDown(LegacyDirections3DS::Up); }
+	bool GetDPadDownJustDown() { return Get3DSDirectionJustDown(LegacyDirections3DS::Down); }
+	bool GetDPadLeftJustDown() { return Get3DSDirectionJustDown(LegacyDirections3DS::Left); }
+	bool GetDPadRightJustDown() { return Get3DSDirectionJustDown(LegacyDirections3DS::Right); }
+#else
+	bool GetDPadUpJustDown() { return !!(NewState.DPadUp && !OldState.DPadUp); }
+	bool GetDPadDownJustDown() { return !!(NewState.DPadDown && !OldState.DPadDown); }
+	bool GetDPadLeftJustDown() { return !!(NewState.DPadLeft && !OldState.DPadLeft); }
+	bool GetDPadRightJustDown() { return !!(NewState.DPadRight && !OldState.DPadRight); }
+#endif
 	bool GetLeftShoulder1JustDown()  { return !!(NewState.LeftShoulder1 && !OldState.LeftShoulder1); }
 	bool GetLeftShoulder2JustDown()  { return !!(NewState.LeftShoulder2 && !OldState.LeftShoulder2); }
 	bool GetRightShoulder1JustDown() { return !!(NewState.RightShoulder1 && !OldState.RightShoulder1); }
@@ -440,19 +464,32 @@ public:
 	bool GetCircleJustUp() { return !!(!NewState.Circle && OldState.Circle); }
 	bool GetCrossJustUp() { return !!(!NewState.Cross && OldState.Cross); }
 	bool GetSquareJustUp() { return !!(!NewState.Square && OldState.Square); }
+#ifdef _3DS
+	bool GetDPadUpJustUp() { return Get3DSDirectionJustUp(LegacyDirections3DS::Up); }
+	bool GetDPadDownJustUp() { return Get3DSDirectionJustUp(LegacyDirections3DS::Down); }
+	bool GetDPadLeftJustUp() { return Get3DSDirectionJustUp(LegacyDirections3DS::Left); }
+	bool GetDPadRightJustUp() { return Get3DSDirectionJustUp(LegacyDirections3DS::Right); }
+#else
 	bool GetDPadUpJustUp() { return !!(!NewState.DPadUp && OldState.DPadUp); }
 	bool GetDPadDownJustUp() { return !!(!NewState.DPadDown && OldState.DPadDown); }
 	bool GetDPadLeftJustUp() { return !!(!NewState.DPadLeft && OldState.DPadLeft); }
 	bool GetDPadRightJustUp() { return !!(!NewState.DPadRight && OldState.DPadRight); }
-
+#endif
 	bool GetTriangle()           { return !!NewState.Triangle; }
 	bool GetCircle()             { return !!NewState.Circle; }
 	bool GetCross()              { return !!NewState.Cross; }
 	bool GetSquare()             { return !!NewState.Square; }
-	bool GetDPadUp()             { return !!NewState.DPadUp; }
-	bool GetDPadDown()           { return !!NewState.DPadDown; }
-	bool GetDPadLeft()           { return !!NewState.DPadLeft; }
-	bool GetDPadRight()          { return !!NewState.DPadRight; }
+#ifdef _3DS
+	bool GetDPadUp() { return Get3DSDirection(LegacyDirections3DS::Up); }
+	bool GetDPadDown() { return Get3DSDirection(LegacyDirections3DS::Down); }
+	bool GetDPadLeft() { return Get3DSDirection(LegacyDirections3DS::Left); }
+	bool GetDPadRight() { return Get3DSDirection(LegacyDirections3DS::Right); }
+#else
+	bool GetDPadUp() { return !!NewState.DPadUp; }
+	bool GetDPadDown() { return !!NewState.DPadDown; }
+	bool GetDPadLeft() { return !!NewState.DPadLeft; }
+	bool GetDPadRight() { return !!NewState.DPadRight; }
+#endif
 	bool GetLeftShoulder1(void)  { return !!NewState.LeftShoulder1; }
 	bool GetLeftShoulder2(void)  { return !!NewState.LeftShoulder2; }
 	bool GetRightShoulder1(void) { return !!NewState.RightShoulder1; }

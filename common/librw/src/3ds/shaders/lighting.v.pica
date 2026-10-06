@@ -24,6 +24,8 @@ do_direction:
 	;jmpc	!cmp.y, join			; always true
 
 do_local:
+	; xform_vertex now computes camera-space positions directly. Re-enabling
+	; local lights requires a matching light-position/normal transform.
 	;add	r1.xyz, r8, -r13		; dir(r1) = V - u_lightPosition[i].xyz;
 	;dp3	r2.x, r1.xyz, r1.xyz		; inv_dist(r2.x) = 1 / length(dir)
 	;rsq	r2.x, r2.x			;

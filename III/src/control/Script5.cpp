@@ -1287,10 +1287,18 @@ int16 CRunningScript::GetPadState(uint16 pad, uint16 button)
 	case 5: return pPad->NewState.LeftShoulder2;
 	case 6: return pPad->NewState.RightShoulder1;
 	case 7: return pPad->NewState.RightShoulder2;
+#ifdef _3DS
+	// Legacy SCM directions use the Circle Pad; physical D-pad is graphics-only.
+	case 8: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Up) ? 255 : 0;
+	case 9: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Down) ? 255 : 0;
+	case 10: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Left) ? 255 : 0;
+	case 11: return LegacyDirections3DS::Held(pPad->NewState, LegacyDirections3DS::Right) ? 255 : 0;
+#else
 	case 8: return pPad->NewState.DPadUp;
 	case 9: return pPad->NewState.DPadDown;
 	case 10: return pPad->NewState.DPadLeft;
 	case 11: return pPad->NewState.DPadRight;
+#endif
 	case 12: return pPad->NewState.Start;
 	case 13: return pPad->NewState.Select;
 	case 14: return pPad->NewState.Square;

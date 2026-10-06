@@ -132,133 +132,6 @@ setTransitionVehicleReflection(Clump *clump, Texture *texture,
 #endif
 
 static inline bool
-vehicleTextureEquals(Texture *tex, const char *value)
-{
-	return strcasecmp(tex->name, value) == 0 || strcasecmp(tex->mask, value) == 0;
-}
-
-static inline bool
-vehicleTextureStartsWith(Texture *tex, const char *value, size_t length)
-{
-	return strncasecmp(tex->name, value, length) == 0 ||
-	       strncasecmp(tex->mask, value, length) == 0;
-}
-
-static inline bool
-isVehicleDepthOffsetTexture(Texture *tex)
-{
-#ifdef RE3_3DS_BUILD
-	/* Match only stock DFF materials that are independent overlays.  The broad
-	 * *8bit128 rule was intentionally removed because those atlases are shared
-	 * by bodywork, lamps and trim. */
-	if(tex == nil)
-		return false;
-	return vehicleTextureEquals(tex, "taxi64") ||
-	       vehicleTextureEquals(tex, "ambudecals128") ||
-	       vehicleTextureEquals(tex, "coachdecals4bit128") ||
-	       vehicleTextureEquals(tex, "poldecals128") ||
-	       vehicleTextureEquals(tex, "lcpdbadge4bit64") ||
-	       vehicleTextureEquals(tex, "lcpdbadge4bit64a") ||
-	       vehicleTextureEquals(tex, "lcpd4bit64a") ||
-	       vehicleTextureEquals(tex, "lcpd4bit64aback") ||
-	       vehicleTextureEquals(tex, "badges64") ||
-	       vehicleTextureEquals(tex, "fdlc128") ||
-	       vehicleTextureStartsWith(tex, "numders", 7) ||
-	       vehicleTextureStartsWith(tex, "mrwhoopdecals", 15) ||
-	       vehicleTextureEquals(tex, "mrwongsdecal4bit128") ||
-	       vehicleTextureEquals(tex, "mulesigns4bit256a") ||
-	       vehicleTextureEquals(tex, "panlantic_128") ||
-	       vehicleTextureEquals(tex, "armour_logosa_128") ||
-	       vehicleTextureEquals(tex, "toyz_128") ||
-	       vehicleTextureEquals(tex, "yankeesigns4bit256a");
-#elif defined(RESTORIES_3DS_BUILD)
-	/* Match the same verified LCS overlay materials as the default renderer.
-	 * MatFX vehicles take this path, while ordinary vehicles use 3dsrender. */
-	if(tex == nil)
-		return false;
-	return vehicleTextureStartsWith(tex, "plates", 6) ||
-	       vehicleTextureEquals(tex, "xv_licenseplates") ||
-	       vehicleTextureEquals(tex, "licenseplates") ||
-	       vehicleTextureEquals(tex, "taxi64") ||
-	       vehicleTextureEquals(tex, "ambudecals128") ||
-	       vehicleTextureEquals(tex, "coachdecals4bit128") ||
-	       vehicleTextureEquals(tex, "poldecals128") ||
-	       vehicleTextureEquals(tex, "lcpdbadge4bit64") ||
-	       vehicleTextureEquals(tex, "lcpdbadge4bit64a") ||
-	       vehicleTextureEquals(tex, "lcpd4bit64a") ||
-	       vehicleTextureEquals(tex, "badges64") ||
-	       vehicleTextureEquals(tex, "lcpd4bit64aback") ||
-	       vehicleTextureEquals(tex, "polmavdecals128") ||
-	       vehicleTextureEquals(tex, "hotroddecal") ||
-	       vehicleTextureEquals(tex, "ijb_armourlog") ||
-	       vehicleTextureEquals(tex, "ijb_toyz_128") ||
-	       vehicleTextureEquals(tex, "xv_badges") ||
-	       vehicleTextureEquals(tex, "fdlc128") ||
-	       vehicleTextureStartsWith(tex, "numders", 7) ||
-	       vehicleTextureStartsWith(tex, "mrwhoopdecals", 15) ||
-	       vehicleTextureEquals(tex, "mrwongsdecal4bit128") ||
-	       vehicleTextureEquals(tex, "ib_mulesigns") ||
-	       vehicleTextureEquals(tex, "mulesigns4bit256a") ||
-	       vehicleTextureEquals(tex, "panlantic_128") ||
-	       vehicleTextureEquals(tex, "armour_logosa_128") ||
-	       vehicleTextureEquals(tex, "toyz_128") ||
-	       vehicleTextureEquals(tex, "ib_yankeesigns") ||
-	       vehicleTextureEquals(tex, "yankeesigns4bit256a");
-#else
-	/* Vice City plates and Hotring sponsor/number meshes sit only a tiny distance
-	 * above their backing body polygons.  Match only those texture families so
-	 * the offset cannot affect ordinary paint, glass or lamp materials. */
-	if(tex == nil)
-		return false;
-	return vehicleTextureStartsWith(tex, "plates", 6) ||
-	       vehicleTextureStartsWith(tex, "hotringad", 9) ||
-	       vehicleTextureStartsWith(tex, "hotrinaad", 9) ||
-	       vehicleTextureStartsWith(tex, "hotrinbad", 9) ||
-	       vehicleTextureStartsWith(tex, "hotrinadv", 9) ||
-	       vehicleTextureStartsWith(tex, "hotrinanum", 10) ||
-	       vehicleTextureStartsWith(tex, "hotrinbnum", 10) ||
-	       vehicleTextureEquals(tex, "ambudecals128") ||
-	       vehicleTextureEquals(tex, "bensonsigns4bit256") ||
-	       vehicleTextureEquals(tex, "bobcatlogo") ||
-	       vehicleTextureEquals(tex, "boxville864bit256signs") ||
-	       vehicleTextureEquals(tex, "chopper86decals128a") ||
-	       vehicleTextureEquals(tex, "chopper86decals128") ||
-	       vehicleTextureEquals(tex, "coach86decals4bit128") ||
-	       vehicleTextureEquals(tex, "vcpoldecals128") ||
-	       vehicleTextureEquals(tex, "vcpdbadge4bit64") ||
-	       vehicleTextureEquals(tex, "vcfd8bit128a") ||
-	       vehicleTextureStartsWith(tex, "kaufmandecal", 12) ||
-	       vehicleTextureEquals(tex, "mrwhoop86decals128") ||
-	       vehicleTextureEquals(tex, "mulesigns4bit256a") ||
-	       vehicleTextureEquals(tex, "policedecals64") ||
-	       vehicleTextureEquals(tex, "polmavdecals128a") ||
-	       vehicleTextureEquals(tex, "polmavdecals128") ||
-	       vehicleTextureStartsWith(tex, "numders", 7) ||
-	       vehicleTextureEquals(tex, "rumpo864bit256signs") ||
-	       vehicleTextureEquals(tex, "securica86logos128") ||
-	       vehicleTextureEquals(tex, "spandsign8bit128b") ||
-	       vehicleTextureEquals(tex, "spandsign8bit128a") ||
-	       vehicleTextureStartsWith(tex, "vcnmavlogo", 10) ||
-	       vehicleTextureEquals(tex, "vcnmavdecal") ||
-	       vehicleTextureEquals(tex, "yankee864bit256signs");
-#endif
-}
-
-static inline bool
-isVehicleDepthOffsetMaterial(Material *material)
-{
-	if(material == nil) return false;
-	if(isVehicleDepthOffsetTexture(material->texture)) return true;
-	// Kaufman's horizontal black body stripe is an independent untextured
-	// overlay, so it cannot be identified by the texture whitelist above.
-	const RGBA &color = material->color;
-	return getEntityRenderStyle().untexturedBlackDecal && material->texture == nil &&
-	       color.red == 0 && color.green == 0 && color.blue == 0 && color.alpha == 255;
-}
-
-static const float VEHICLE_DECAL_DEPTH_OFFSET = 0.0120f;
-
-static inline bool
 textureHasAlpha(Texture *tex)
 {
 	return tex && tex->raster && GETC3DRASTEREXT(tex->raster)->hasAlpha;
@@ -354,7 +227,7 @@ combinerMatFXTextureOnly(void)
 
 static void
 matfxTextureRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
-	Texture *texture)
+	Texture *texture, Atomic *atomic, float &decalDepthOffset)
 {
 	Material *m = inst->material;
 	
@@ -373,18 +246,14 @@ matfxTextureRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 	 * transparent white background is drawn as an opaque rectangle. */
 	rw::SetRenderState(VERTEXALPHA,
 		inst->vertexAlpha || m->color.alpha != 0xFF || textureHasAlpha(texture));
-	bool depthOffset = isVehicleDepthOffsetMaterial(m);
-	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
-	drawInst(header, inst, PROFILE_DRAW_MATFX);
-	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, 0.0f);
+	drawVehicleMesh(header, inst, PROFILE_DRAW_MATFX, atomic, decalDepthOffset);
 }
 
 void
-matfxDefaultRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags)
+matfxDefaultRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
+	Atomic *atomic, float &decalDepthOffset)
 {
-	matfxTextureRender(header, inst, flags, inst->material->texture);
+	matfxTextureRender(header, inst, flags, inst->material->texture, atomic, decalDepthOffset);
 }
 
 
@@ -463,7 +332,7 @@ uploadEnvMatrix(Frame *frame)
 void
 matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 	Texture *baseTexture, MatFX::Env *env, Atomic *atomic,
-	RGBAf *ambient, bool *ambientValid, bool *envMatrixValid)
+	RGBAf *ambient, bool *ambientValid, bool *envMatrixValid, float &decalDepthOffset)
 {
 	Material *m;
 	m = inst->material;
@@ -472,7 +341,7 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 	 * makes them look like milky white plastic, so keep them on the verified
 	 * texture/material-only path. */
 	if(inst->vertexAlpha || m->color.alpha != 0xFF || textureHasAlpha(baseTexture)){
-		matfxTextureRender(header, inst, flags, baseTexture);
+		matfxTextureRender(header, inst, flags, baseTexture, atomic, decalDepthOffset);
 		return;
 	}
 
@@ -481,7 +350,7 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 	   || env->tex == nil
 #endif
 	){
-		matfxTextureRender(header, inst, flags, baseTexture);
+		matfxTextureRender(header, inst, flags, baseTexture, atomic, decalDepthOffset);
 		return;
 	}
 
@@ -503,7 +372,7 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 			delta.x * delta.x + delta.y * delta.y + delta.z * delta.z <
 			35.0f * 35.0f;
 		if(!nearTrafficReflection){
-			matfxTextureRender(header, inst, flags, baseTexture);
+			matfxTextureRender(header, inst, flags, baseTexture, atomic, decalDepthOffset);
 			return;
 		}
 	}
@@ -514,7 +383,7 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 		(transitionReflection ? lcsTransitionVehicleReflectionFrame :
 		 lcsTrafficVehicleReflectionFrame);
 	if(reflectionTexture == nil || reflectionFrame == nil){
-		matfxTextureRender(header, inst, flags, baseTexture);
+		matfxTextureRender(header, inst, flags, baseTexture, atomic, decalDepthOffset);
 		return;
 	}
 #endif
@@ -573,18 +442,14 @@ matfxEnvRender(InstanceDataHeader *header, InstanceData *inst, uint32 flags,
 
 	rw::SetRenderState(VERTEXALPHA,
 		inst->vertexAlpha || m->color.alpha != 0xFF || textureHasAlpha(baseTexture));
-	bool depthOffset = isVehicleDepthOffsetMaterial(m);
-	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
-	drawInst(header, inst, PROFILE_DRAW_MATFX);
-	if(depthOffset)
-		C3D_DepthMap(true, -1.0f, 0.0f);
+	drawVehicleMesh(header, inst, PROFILE_DRAW_MATFX, atomic, decalDepthOffset);
 }
 
 void
 matfxRenderCB(Atomic *atomic, InstanceDataHeader *header)
 {
 	uint32 flags = atomic->geometry->flags;
+	float decalDepthOffset = -1.0f;
 	setWorldMatrix(atomic->getFrame()->getLTM());
 
 	setAttribPointers(header);
@@ -599,14 +464,14 @@ matfxRenderCB(Atomic *atomic, InstanceDataHeader *header)
 		MatFX *matfx = MatFX::get(inst->material);
 
 		if(matfx == nil)
-			matfxDefaultRender(header, inst, flags);
+			matfxDefaultRender(header, inst, flags, atomic, decalDepthOffset);
 		else switch(matfx->type){
 		case MatFX::ENVMAP:
 			matfxEnvRender(header, inst, flags, inst->material->texture,
-				&matfx->fx[0].env, atomic, &ambient, &ambientValid, &envMatrixValid);
+				&matfx->fx[0].env, atomic, &ambient, &ambientValid, &envMatrixValid, decalDepthOffset);
 			break;
 		default:
-			matfxDefaultRender(header, inst, flags);
+			matfxDefaultRender(header, inst, flags, atomic, decalDepthOffset);
 			break;
 		}
 		inst++;

@@ -52,6 +52,20 @@ static bool IsSlideObjectUsedWrongByScript(const CVector& posTarget, const CVect
 }
 #endif
 
+// Retry a missing movement operand after a door rebind. Yield this controller
+// at the same opcode if it is still absent, so subsequent GET/SET commands do
+// not dereference the same stale handle or mistake a missing door for completion.
+static CObject *ResolveMovingScriptObject(CRunningScript *script, uint32 commandIp)
+{
+	CObject *object = CPools::GetObjectPool()->GetAt(GET_INTEGER_PARAM(0));
+	if (!object) {
+		CTheScripts::RebindWorldDoorScriptHandles();
+		SET_INTEGER_PARAM(0, script->CollectNextParameterWithoutIncreasingPC(commandIp + 2));
+		object = CPools::GetObjectPool()->GetAt(GET_INTEGER_PARAM(0));
+	}
+	return object;
+}
+
 int8 CRunningScript::ProcessCommands800To899(int32 command)
 {
 	CMatrix tmp_matrix;
@@ -473,9 +487,14 @@ int8 CRunningScript::ProcessCommands800To899(int32 command)
 		return 0;
 	case COMMAND_ROTATE_OBJECT:
 	{
+		const uint32 commandIp = m_nIp - 2;
 		CollectParameters(&m_nIp, 4);
-		CObject* pObject = CPools::GetObjectPool()->GetAt(GET_INTEGER_PARAM(0));
-		script_assert(pObject);
+		CObject* pObject = ResolveMovingScriptObject(this, commandIp);
+		if (!pObject) {
+			m_nIp = commandIp;
+			m_nWakeTime = CTimer::GetTimeInMilliseconds() + 100;
+			return 1;
+		}
 		float fx = pObject->GetForward().x;
 		float fy = pObject->GetForward().y;
 		float heading = LimitAngleOnCircle(
@@ -529,9 +548,14 @@ int8 CRunningScript::ProcessCommands800To899(int32 command)
 	}
 	case COMMAND_SLIDE_OBJECT:
 	{
+		const uint32 commandIp = m_nIp - 2;
 		CollectParameters(&m_nIp, 8);
-		CObject* pObject = CPools::GetObjectPool()->GetAt(GET_INTEGER_PARAM(0));
-		script_assert(pObject);
+		CObject* pObject = ResolveMovingScriptObject(this, commandIp);
+		if (!pObject) {
+			m_nIp = commandIp;
+			m_nWakeTime = CTimer::GetTimeInMilliseconds() + 100;
+			return 1;
+		}
 		CVector pos = pObject->GetPosition();
 		CVector posTarget = GET_VECTOR_PARAM(1);
 		CVector slideBy = GET_VECTOR_PARAM(4);

@@ -175,6 +175,7 @@ initialiseMaterialState()
 
 static UniformScene uniformScene;
 static UniformObject uniformObject;
+static V3d cameraWorldOrigin = {0.0f, 0.0f, 0.0f};
 static C3DMaterialState materialState;
 static bool32 ps2Graphics = PS2Graphics3DS::DefaultEnabled;
 static bool32 ps2FogCamera;
@@ -1191,14 +1192,17 @@ setWorldMatrix(Matrix *mat, float positionScale)
 	world.r[0].z = raw.at.x;
 	world.r[1].z = raw.at.y;
 	world.r[2].z = raw.at.z;
-	world.r[3].z = raw.upw;
+	world.r[3].z = raw.atw;
 
-	world.r[0].w = raw.pos.x;
-	world.r[1].w = raw.pos.y;
-	world.r[2].w = raw.pos.z;
+	// Subtract in CPU float32 before PICA's float24 world transform. Absolute
+	// city coordinates otherwise lose moving model vertices and the small
+	// separation of rotating decals before the view matrix subtracts the camera.
+	world.r[0].w = raw.pos.x - cameraWorldOrigin.x * raw.posw;
+	world.r[1].w = raw.pos.y - cameraWorldOrigin.y * raw.posw;
+	world.r[2].w = raw.pos.z - cameraWorldOrigin.z * raw.posw;
 	world.r[3].w = raw.posw;
 	// Decode rigid packed positions through the existing world transform.
-	// Translation and homogeneous w stay untouched; uniform scale preserves
+	// Camera-relative translation and homogeneous w stay untouched; scale preserves
 	// the direction of normals, which the default shader normalizes.
 	if(positionScale != 1.0f)
 		for(int i = 0; i < 4; ++i){
@@ -1314,9 +1318,17 @@ flushCache(float32 entityOpacity)
 	setC3DRenderState(RWC3D_FOGMODE, GPU_NO_FOG);
 	flushC3DRenderState();
 
+	if(sceneDirty || worldDirty){
+		// Compose in float32 before uploading to PICA. A separate world/view
+		// transform would round rotating panels and decals twice in float24.
+		// Keep u_world for world-space normals; u_view holds model-view positions.
+		C3D_Mtx modelView;
+		Mtx_Multiply(&modelView, &uniformScene.view, &uniformObject.world);
+		c3dUniformMatrix4fv(U(u_view), 1, 0, &modelView);
+	}
+
 	if(sceneDirty){
 		c3dUniformMatrix4fv(U(u_proj), 2, 0, &uniformScene.proj[0]);
-		c3dUniformMatrix4fv(U(u_view), 1, 0, &uniformScene.view);
 		sceneDirty = 0;
 	}
 
@@ -1864,6 +1876,7 @@ beginUpdate(Camera *cam)
 	// View Matrix
 	Matrix inv;
 	Matrix::invert(&inv, cam->getFrame()->getLTM());
+	cameraWorldOrigin = cam->getFrame()->getLTM()->pos;
 	// Since we're looking into positive Z,
 	// flip X to ge a left handed view space.
 	view.r[0].x = -inv.right.x;
@@ -1881,9 +1894,11 @@ beginUpdate(Camera *cam)
 	view.r[2].z =  inv.at.z;
 	view.r[3].z =  0.0f;
 
-	view.r[0].w = -inv.pos.x;
-	view.r[1].w =  inv.pos.y;
-	view.r[2].w =  inv.pos.z;
+	// The world matrix already supplies position relative to this camera.
+	// Keep the same view rotation, normals, projection and fog distances.
+	view.r[0].w = 0.0f;
+	view.r[1].w = 0.0f;
+	view.r[2].w = 0.0f;
 	view.r[3].w =  1.0f;
 
 	// Projection Matrix

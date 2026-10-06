@@ -124,6 +124,12 @@ Open3DSCheatKeyboard(CPad *pad)
 }
 }
 
+bool
+CPad::Is3DSMenuInputActive()
+{
+	return FrontEndMenuManager.m_bMenuActive;
+}
+
 #ifdef ENABLE_3DS_BOTTOM_RADAR
 bool
 CPad::Is3DSTouchOverlayVisible()
@@ -1866,7 +1872,11 @@ int16 CPad::GetCarGunUpDown(void)
 
 		case 3:
 		{
+#ifdef _3DS
+			return -NewState.LeftStickY;
+#else
 			return (NewState.DPadUp - NewState.DPadDown) / 2;
+#endif
 
 			break;
 		}
@@ -1893,7 +1903,11 @@ int16 CPad::GetCarGunLeftRight(void)
 
 		case 3:
 		{
+#ifdef _3DS
+			return NewState.LeftStickX;
+#else
 			return (NewState.DPadRight - NewState.DPadLeft) / 2;
+#endif
 
 			break;
 		}
@@ -2409,7 +2423,7 @@ bool CPad::CycleCameraModeUpJustDown(void)
 
 		case 1:
 		{
-			return !!(NewState.DPadUp && !OldState.DPadUp);
+			return GetDPadUpJustDown();
 
 			break;
 		}
@@ -2433,7 +2447,7 @@ bool CPad::CycleCameraModeDownJustDown(void)
 
 		case 1:
 		{
-			return !!(NewState.DPadDown && !OldState.DPadDown);
+			return GetDPadDownJustDown();
 
 			break;
 		}
@@ -2625,6 +2639,10 @@ bool CPad::ShiftTargetRightJustDown(void)
 // FIX: fixes from VC for the bug of double switching the controller setup
 bool CPad::GetAnaloguePadUp(void)
 {
+#ifdef _3DS
+	// Share one edge with legacy directions: frontends OR both accessors.
+	return GetDPadUpJustDown();
+#else
 	static int16 oldfStickY = 0;
 
 	int16 leftStickY = CPad::GetPad(0)->GetLeftStickY();
@@ -2639,10 +2657,15 @@ bool CPad::GetAnaloguePadUp(void)
 		oldfStickY = leftStickY;
 		return false;
 	}
+#endif
 }
 
 bool CPad::GetAnaloguePadDown(void)
 {
+#ifdef _3DS
+	// Share one edge with legacy directions: frontends OR both accessors.
+	return GetDPadDownJustDown();
+#else
 	static int16 oldfStickY = 0;
 
 	int16 leftStickY = CPad::GetPad(0)->GetLeftStickY();
@@ -2657,10 +2680,15 @@ bool CPad::GetAnaloguePadDown(void)
 		oldfStickY = leftStickY;
 		return false;
 	}
+#endif
 }
 
 bool CPad::GetAnaloguePadLeft(void)
 {
+#ifdef _3DS
+	// Share one edge with legacy directions: frontends OR both accessors.
+	return GetDPadLeftJustDown();
+#else
 	static int16 oldfStickX = 0;
 
 	int16 leftStickX = CPad::GetPad(0)->GetLeftStickX();
@@ -2675,10 +2703,15 @@ bool CPad::GetAnaloguePadLeft(void)
 		oldfStickX = leftStickX;
 		return false;
 	}
+#endif
 }
 
 bool CPad::GetAnaloguePadRight(void)
 {
+#ifdef _3DS
+	// Share one edge with legacy directions: frontends OR both accessors.
+	return GetDPadRightJustDown();
+#else
 	static int16 oldfStickX = 0;
 
 	int16 leftStickX = CPad::GetPad(0)->GetLeftStickX();
@@ -2693,10 +2726,14 @@ bool CPad::GetAnaloguePadRight(void)
 		oldfStickX = leftStickX;
 		return false;
 	}
+#endif
 }
 
 bool CPad::GetAnaloguePadLeftJustUp(void)
 {
+#ifdef _3DS
+	return GetDPadLeftJustUp();
+#else
 	static int16 oldfStickX = 0;
 
 	int16 X = GetPad(0)->GetPedWalkLeftRight();
@@ -2713,10 +2750,14 @@ bool CPad::GetAnaloguePadLeftJustUp(void)
 
 		return false;
 	}
+#endif
 }
 
 bool CPad::GetAnaloguePadRightJustUp(void)
 {
+#ifdef _3DS
+	return GetDPadRightJustUp();
+#else
 	static int16 oldfStickX = 0;
 
 	int16 X = GetPad(0)->GetPedWalkLeftRight();
@@ -2733,6 +2774,7 @@ bool CPad::GetAnaloguePadRightJustUp(void)
 
 		return false;
 	}
+#endif
 }
 
 #else

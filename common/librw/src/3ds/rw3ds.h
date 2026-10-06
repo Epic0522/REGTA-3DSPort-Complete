@@ -199,6 +199,7 @@ struct InstanceData
 	Material *material;
 	bool32    vertexAlpha;
 	uint8     maxVertexAlpha;
+	bool32    decalTriangles;
 	uint32    program;
 	uint16   *indexBuffer;
 
@@ -394,6 +395,9 @@ void drawInst_simple(InstanceDataHeader *header, InstanceData *inst, ProfileDraw
 void drawInst_GSemu(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass);
 // This one switches between the above two depending on render state;
 void drawInst(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClass drawClass);
+bool isVehicleDecalMaterial(Material *material);
+void drawVehicleMesh(InstanceDataHeader *header, InstanceData *inst,
+	ProfileDrawClass drawClass, Atomic *atomic, float &decalDepthOffset);
 
 
 void *destroyNativeData(void *object, int32, int32);

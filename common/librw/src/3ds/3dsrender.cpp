@@ -19,7 +19,7 @@
 namespace rw {
 namespace c3d {
 
-static const float VEHICLE_DECAL_DEPTH_OFFSET = 0.0120f;
+static const float VEHICLE_DECAL_MAX_VIEW_OFFSET = 0.0030f;
 
 static inline bool
 vehicleTextureEquals(Texture *tex, const char *value)
@@ -147,6 +147,7 @@ isVehicleDepthOffsetTexture(Texture *tex)
 		return false;
 	return vehicleTextureStartsWith(tex, "plates", 6) ||
 	       vehicleTextureStartsWith(tex, "hotringad", 9) ||
+	       vehicleTextureStartsWith(tex, "hotringnum", 10) ||
 	       vehicleTextureStartsWith(tex, "hotrinaad", 9) ||
 	       vehicleTextureStartsWith(tex, "hotrinbad", 9) ||
 	       vehicleTextureStartsWith(tex, "hotrinadv", 9) ||
@@ -179,8 +180,8 @@ isVehicleDepthOffsetTexture(Texture *tex)
 #endif
 }
 
-static inline bool
-isVehicleDepthOffsetMaterial(Material *material)
+bool
+isVehicleDecalMaterial(Material *material)
 {
 	if(material == nil) return false;
 	if(isVehicleDepthOffsetTexture(material->texture)) return true;
@@ -192,6 +193,51 @@ isVehicleDepthOffsetMaterial(Material *material)
 }
 
 static uint32 worldLightClusterMask = 0xFFFFFFFF;
+
+static float
+vehicleDecalDepthOffset(Atomic *atomic)
+{
+	Camera *camera = (Camera*)engine->currentCamera;
+	if(camera == nil || camera->projection != Camera::PERSPECTIVE)
+		return 0.0f;
+	const float near = camera->nearPlane, far = camera->farPlane;
+	if(!(near > 0.0f && far > near)) return 0.0f;
+	const Matrix &view = *camera->getFrame()->getLTM();
+	const Sphere &bounds = *atomic->getWorldBoundingSphere();
+	const V3d relative = sub(bounds.center, view.pos);
+	// Use the furthest possible visible vertex. A fixed depth-buffer offset
+	// grows into metres of apparent displacement as a vehicle moves away.
+	const float depth = fminf(far, dot(relative, view.at) + bounds.radius);
+	if(!(depth > near && depth > VEHICLE_DECAL_MAX_VIEW_OFFSET)) return 0.0f;
+	// Reversed perspective depth is A / z + B. Bound the pull towards the
+	// camera to 0.003 world units, including both eye projections, whose Z is
+	// identical. Do not add a minimum depth/pixel bias at long distances.
+	const float a = near * far / (far - near);
+	return a * VEHICLE_DECAL_MAX_VIEW_OFFSET /
+		(depth * (depth - VEHICLE_DECAL_MAX_VIEW_OFFSET));
+}
+
+void
+drawVehicleMesh(InstanceDataHeader *header, InstanceData *inst,
+	ProfileDrawClass drawClass, Atomic *atomic, float &decalDepthOffset)
+{
+	if(!isVehicleDecalMaterial(inst->material)){
+		drawInst(header, inst, drawClass);
+		return;
+	}
+	// Resolve once per atomic, and only if it actually contains an overlay.
+	if(decalDepthOffset < 0.0f) decalDepthOffset = vehicleDecalDepthOffset(atomic);
+	// Independent exterior overlays must not show their mirrored back face
+	// inside a door. Bodywork/glass retain their original two-sided handling.
+	const uint32 cull = GetRenderState(CULLMODE);
+	if(cull == CULLNONE) SetRenderState(CULLMODE, CULLBACK);
+	if(decalDepthOffset > 0.0f)
+		C3D_DepthMap(true, -1.0f, decalDepthOffset);
+	drawInst(header, inst, drawClass);
+	if(decalDepthOffset > 0.0f)
+		C3D_DepthMap(true, -1.0f, 0.0f);
+	SetRenderState(CULLMODE, cull);
+}
 
 void
 setWorldLightClusterMask(uint32 mask)
@@ -207,7 +253,7 @@ drawInstElements(InstanceDataHeader *header, InstanceData *inst, ProfileDrawClas
 	// The mask is set only while that atomic renders.  Fall back untouched for
 	// any asset variant whose layout does not match the stock 1512 indices.
 	if(worldLightClusterMask == 0xFFFFFFFF || header->primType != GPU_TRIANGLES || inst->numIndex != 1512) {
-		C3D_DrawElements(header->primType, inst->numIndex, C3D_UNSIGNED_SHORT, inst->indexBuffer);
+		C3D_DrawElements(inst->decalTriangles ? GPU_TRIANGLES : header->primType, inst->numIndex, C3D_UNSIGNED_SHORT, inst->indexBuffer);
 		profileRecordDraw(inst->numIndex, drawClass);
 		return;
 	}
@@ -499,6 +545,7 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 	Material *m;
 
 	uint32 flags = atomic->geometry->flags;
+	float decalDepthOffset = -1.0f;
 	if(header->vegetationProxy == -2)
 		header->vegetationProxy = findVegetationProxy(atomic->geometry);
 	const float canopyBlend = vegetationBlend(atomic, header->vegetationProxy);
@@ -565,12 +612,7 @@ defaultRenderCB(Atomic *atomic, InstanceDataHeader *header)
 		setTexture(0, silhouette >= 1.0f ? nil : m->texture);
 		if(silhouette >= 1.0f) C3D_TexBind(0, nil);
 		rw::SetRenderState(VERTEXALPHA, inst->vertexAlpha || color.alpha != 0xFF);
-		bool depthOffset = isVehicleDepthOffsetMaterial(m);
-		if(depthOffset)
-			C3D_DepthMap(true, -1.0f, VEHICLE_DECAL_DEPTH_OFFSET);
-		drawInst(header, inst, PROFILE_DRAW_WORLD);
-		if(depthOffset)
-			C3D_DepthMap(true, -1.0f, 0.0f);
+		drawVehicleMesh(header, inst, PROFILE_DRAW_WORLD, atomic, decalDepthOffset);
 		if(canopy){
 			SetRenderState(ZWRITEENABLE,oldZWrite);
 			SetRenderState(ALPHATESTFUNC,oldAlphaFunc);

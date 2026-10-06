@@ -13,15 +13,12 @@
 	mov	r0.xyz, in_pos		; tmp(r0) = Vec4(in_pos, 0)
 	mov	r0.w, ones
 
-	dp4	r8.x, u_world[0], r0 	; V(r8) = world * tmp
-	dp4	r8.y, u_world[1], r0
-	dp4	r8.z, u_world[2], r0
-	dp4	r8.w, u_world[3], r0
-	
-	dp4	r1.x, u_view[0], r8	; C(r0) = view * V
-	dp4	r1.y, u_view[1], r8
-	dp4	r1.z, u_view[2], r8
-	dp4	r1.w, u_view[3], r8
+	; u_view is the CPU-composed camera-relative model-view matrix.
+	; Avoid quantizing a world-space intermediate before rotating into view.
+	dp4	r1.x, u_view[0], r0
+	dp4	r1.y, u_view[1], r0
+	dp4	r1.z, u_view[2], r0
+	dp4	r1.w, u_view[3], r0
 
 	mova	a0.x, screenSide
 	dp4	r0.x, u_proj[a0.x+0], r1	; v_pos = proj * C

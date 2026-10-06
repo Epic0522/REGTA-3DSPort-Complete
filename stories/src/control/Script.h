@@ -575,6 +575,7 @@ public:
 	static void SaveAllScripts(uint8*, uint32*);
 	static bool LoadAllScripts(uint8*, uint32);
 	static void RebindPlayerPedScriptHandle();
+	static void RebindWorldDoorScriptHandles(bool reloadContract = false);
 
 	static bool IsDebugOn() { return DbgFlag; };
 	static void InvertDebugFlag() { DbgFlag = !DbgFlag; }

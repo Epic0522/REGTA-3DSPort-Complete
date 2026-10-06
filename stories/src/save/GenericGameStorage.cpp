@@ -588,6 +588,7 @@ GenericLoad()
 	}
 
 	DoGameSpecificStuffAfterSucessLoad();
+	CTheScripts::RebindWorldDoorScriptHandles(true);
 	/* Native LCS performs one resident-script pass before reporting load success;
 	 * this is where safehouse doors, pickups and building swaps are recreated. */
 	CTheScripts::Process();
