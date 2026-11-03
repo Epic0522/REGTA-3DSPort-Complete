@@ -372,6 +372,7 @@ TAGS
 *.3ds
 *.elf
 *.map
+!tools/chs/models/chsfont.map
 *.lst
 *.smdh
 *.bnr
@@ -383,6 +384,7 @@ TAGS
 *.col
 *.ifp
 *.gxt
+!tools/chs/TEXT/american.gxt
 *.scm
 *.wav
 *.mp3

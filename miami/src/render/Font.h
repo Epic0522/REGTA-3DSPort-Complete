@@ -132,6 +132,7 @@ class CFont
 	static int16 NewLine;
 public:
 	static CSprite2d Sprite[MAX_FONTS];
+	static CSprite2d SpriteC;	// chinese glyph atlas
 	static CFontDetails Details;
 	static CFontRenderState RenderState;
 
@@ -147,6 +148,7 @@ public:
 
 	static void Initialise(void);
 	static void Shutdown(void);
+	static void LoadChineseFont(void);
 	static void InitPerFrame(void);
 	static void PrintChar(float x, float y, wchar c);
 	static void PrintString(float x, float y, wchar *s);

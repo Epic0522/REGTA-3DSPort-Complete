@@ -9,14 +9,19 @@ vsh_bin=${vsh_obj%.shbin.o}.shbin
 vsh_hdr=${vsh_obj%.shbin.o}_shbin.h
 shaders_src=$(for sh in $(cat $shlist); do echo $(dirname $shlist)/$sh; done)
 shaders_hdr=$(for sh in $(cat $shlist); do echo $(dirname $shlist)/$(dirname $sh)/header.v.pica; done)
-shaders_tmp=$(for sh in $(cat $shlist); do echo $(dirname $vsh_bin)/$sh; done)
+# Per-shader temp dir: default.shlist and ps2fog.shlist list the same shader
+# filenames, so a parallel build let one job's picasso read the other job's
+# half-written file ("procedure 'DynamicLights' is undefined").
+tmpdir=$(dirname $vsh_bin)/.shaders-$name
+rm -rf "$tmpdir"
+shaders_tmp=$(for sh in $(cat $shlist); do echo $tmpdir/$sh; done)
 
 echo compiling shader \"$name\"
 
 echo preprocessing
 for sh in $(< $shlist)
 do
-    tmp=$(dirname $vsh_bin)/$sh
+    tmp=$tmpdir/$sh
     mkdir -p $(dirname $tmp)
     cat $(dirname $shlist)/$(dirname $sh)/header.v.pica \
 	$(dirname $shlist)/$sh > $tmp
