@@ -3,10 +3,23 @@
 #include "Sprite2d.h"
 #include "TxdStore.h"
 #include "Font.h"
-#ifdef BUTTON_ICONS
 #include "FileMgr.h"
-#endif
 #include "Timer.h"
+
+#ifdef RW_3DS
+#include <3ds.h>
+static void
+ChsLog(const char *msg, long a = 0, long b = 0)
+{
+	FILE *f = fopen("sdmc:/3ds/revc_chs.log", "a");
+	if(f == nil)
+		return;
+	fprintf(f, "%s %ld %ld free=%u\n", msg, a, b, (unsigned)linearSpaceFree());
+	fclose(f);
+}
+#else
+static void ChsLog(const char *, long = 0, long = 0) {}
+#endif
 
 void
 AsciiToUnicode(const char *src, wchar *dst)
@@ -52,6 +65,142 @@ CFontDetails CFont::Details;
 int16 CFont::NewLine;
 CSprite2d CFont::Sprite[MAX_FONTS];
 CFontRenderState CFont::RenderState;
+
+// Chinese glyph atlas (baked by miami/tools/gen_chs_font.py): one 1024x1024
+// 8-bit coverage image made of 20x20 cells, plus a sorted codepoint->cell table.
+#define CHS_ATLAS_SIZE 1024
+#define CHS_CELL_SIZE 20
+#define CHS_COLUMNS (CHS_ATLAS_SIZE / CHS_CELL_SIZE)
+
+CSprite2d CFont::SpriteC;
+static RwTexture *pChsTexture;
+static uint8 *pChsMap;
+static int32 ChsNumGlyphs;
+
+static int32
+FindChsGlyph(wchar c)
+{
+	int32 lo = 0, hi = ChsNumGlyphs - 1;
+	while (lo <= hi) {
+		int32 mid = (lo + hi) / 2;
+		uint32 cp;
+		uint16 slot;
+		memcpy(&cp, &pChsMap[mid * 6], sizeof(cp));
+		memcpy(&slot, &pChsMap[mid * 6 + 4], sizeof(slot));
+		if (cp == (uint32)c)
+			return slot;
+		if (cp < (uint32)c)
+			lo = mid + 1;
+		else
+			hi = mid - 1;
+	}
+	return -1;
+}
+
+static void
+DrawChsGlyph(float x, float y, wchar c, const CRGBA &color, float scaleX, float scaleY)
+{
+	int32 slot = FindChsGlyph(c);
+	if (slot < 0)
+		return;
+	float u0 = (float)(slot % CHS_COLUMNS) * CHS_CELL_SIZE / CHS_ATLAS_SIZE;
+	float v0 = (float)(slot / CHS_COLUMNS) * CHS_CELL_SIZE / CHS_ATLAS_SIZE;
+	float u1 = u0 + (float)CHS_CELL_SIZE / CHS_ATLAS_SIZE;
+	float v1 = v0 + (float)CHS_CELL_SIZE / CHS_ATLAS_SIZE;
+	CSprite2d::AddToBuffer(
+		CRect(x, y, x + CHS_CELL_SIZE * scaleX, y + CHS_CELL_SIZE * scaleY),
+		color,
+		u0, v0, u1, v0, u0, v1, u1, v1);
+}
+
+void
+CFont::LoadChineseFont(void)
+{
+	ChsLog("chsfont: enter");
+	if (pChsTexture != nil)
+		return;
+	int fd = CFileMgr::OpenFile("MODELS/CHSFONT.A8");
+	if (fd <= 0) {
+		ChsLog("chsfont: no a8", fd);
+		return;
+	}
+
+	uint8 *alpha = (uint8*)malloc(CHS_ATLAS_SIZE * CHS_ATLAS_SIZE);
+	if (alpha == nil)
+		return;
+	CFileMgr::Read(fd, (const char*)alpha, CHS_ATLAS_SIZE * CHS_ATLAS_SIZE);
+	CFileMgr::CloseFile(fd);
+
+	RwImage *image = RwImageCreate(CHS_ATLAS_SIZE, CHS_ATLAS_SIZE, 32);
+	if (image == nil) {
+		ChsLog("chsfont: image create failed");
+		free(alpha);
+		return;
+	}
+	if (RwImageAllocatePixels(image) == nil) {
+		ChsLog("chsfont: image alloc failed");
+		RwImageDestroy(image);
+		free(alpha);
+		return;
+	}
+	uint8 *pixels = RwImageGetPixels(image);
+	int32 stride = RwImageGetStride(image);
+	for (int32 y = 0; y < CHS_ATLAS_SIZE; y++) {
+		uint8 *row = pixels + y * stride;
+		for (int32 x = 0; x < CHS_ATLAS_SIZE; x++) {
+			row[x * 4 + 0] = 255;
+			row[x * 4 + 1] = 255;
+			row[x * 4 + 2] = 255;
+			row[x * 4 + 3] = alpha[y * CHS_ATLAS_SIZE + x];
+		}
+	}
+	free(alpha);
+	ChsLog("chsfont: a8 sampled");
+
+	int32 w, h, depth, format;
+	RwImageFindRasterFormat(image, rwRASTERTYPETEXTURE, &w, &h, &depth, &format);
+#ifdef RW_3DS
+	ChsLog("chsfont: free before raster", (long)linearSpaceFree());
+	if(linearSpaceFree() < (24u << 20)){
+		ChsLog("chsfont: low linear mem, skip texture");
+		RwImageDestroy(image);
+		return;
+	}
+#endif
+	ChsLog("chsfont: raster create", depth);
+	RwRaster *raster = RwRasterCreate(w, h, depth, format);
+	ChsLog("chsfont: raster made", raster != nil);
+	if (raster == nil || RwRasterSetFromImage(raster, image) == nil) {
+		if (raster)
+			RwRasterDestroy(raster);
+		RwImageDestroy(image);
+		return;
+	}
+	RwImageDestroy(image);
+
+	ChsLog("chsfont: raster filled");
+	pChsTexture = RwTextureCreate(raster);
+	RwTextureSetName(pChsTexture, "chsfont");
+	RwTextureSetFilterMode(pChsTexture, rwFILTERLINEAR);
+	SpriteC.m_pTexture = pChsTexture;
+
+	fd = CFileMgr::OpenFile("MODELS/CHSFONT.MAP");
+	if (fd <= 0)
+		return;
+	uint32 magic, count;
+	CFileMgr::Read(fd, (const char*)&magic, 4);
+	CFileMgr::Read(fd, (const char*)&count, 4);
+	if (magic != 0x4D534843) {	// 'CHSM'
+		CFileMgr::CloseFile(fd);
+		return;
+	}
+	ChsNumGlyphs = count;
+	ChsLog("chsfont: map header", count, magic);
+	pChsMap = (uint8*)malloc(ChsNumGlyphs * 6);
+	CFileMgr::Read(fd, (const char*)pChsMap, ChsNumGlyphs * 6);
+	CFileMgr::CloseFile(fd);
+	ChsLog("chsfont: ready");
+}
 
 #ifdef MORE_LANGUAGES
 uint8 CFont::LanguageSet = FONT_LANGSET_EFIGS;
@@ -355,6 +504,7 @@ CFont::Initialise(void)
 	SetAlphaFade(255.0f);
 	SetDropShadowPosition(0);
 	CTxdStore::PopCurrentTxd();
+	LoadChineseFont();
 
 #if !defined(GAMEPAD_MENU) && defined(BUTTON_ICONS)
 	// loaded in CMenuManager with GAMEPAD_MENU defined
@@ -648,6 +798,7 @@ CFont::RenderFontBuffer()
 	CRGBA color;
 	bool bBold = false;
 	bool bFlash = false;
+	bool bChsBatch = false;
 
 	Sprite[RenderState.style].SetRenderState();
 	RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)TRUE);
@@ -696,6 +847,32 @@ CFont::RenderFontBuffer()
 				RenderState.color = color;
 		}
 		wchar c = *pRenderStateBufPointer.pStr;
+		// Characters from the Chinese atlas are drawn from a separate texture,
+		// so the pending latin glyphs have to be flushed first and the font
+		// texture rebound once the run of chinese characters is over.
+		if (ChsNumGlyphs > 0 && c >= 0x80 && FindChsGlyph(c) >= 0) {
+			static bool bChsLogged = false;
+			if (!bChsLogged) {
+				bChsLogged = true;
+				ChsLog("chsfont: first glyph", (long)c);
+			}
+			if (!bChsBatch) {
+				CSprite2d::RenderVertexBuffer();
+				SpriteC.SetRenderState();
+				bChsBatch = true;
+			}
+			if (RenderState.slant != 0.0f)
+				textPosY = (RenderState.slantRefX - textPosX) * RenderState.slant + RenderState.slantRefY;
+			DrawChsGlyph(textPosX, textPosY, c, RenderState.color,
+				RenderState.scaleX, RenderState.scaleY);
+			textPosX += RenderState.scaleX * CHS_CELL_SIZE;
+			continue;
+		}
+		if (bChsBatch) {
+			CSprite2d::RenderVertexBuffer();
+			Sprite[RenderState.style].SetRenderState();
+			bChsBatch = false;
+		}
 		c -= ' ';
 		if (RenderState.bFontHalfTexture) 
 			c = FindNewCharacter(c); 
@@ -719,6 +896,8 @@ CFont::RenderFontBuffer()
 			textPosX += RenderState.fExtraSpace;
 	}
 	CSprite2d::RenderVertexBuffer();
+	if (bChsBatch)
+		Sprite[RenderState.style].SetRenderState();
 	FontRenderStatePointer.pRenderState = (CFontRenderState*)FontRenderStateBuf;
 }
 
@@ -1231,6 +1410,8 @@ CFont::GetCharacterWidth(wchar c)
 		return Size[LanguageSet][Details.style][192];
 #else
 
+	if (c + ' ' >= 0x80 && ChsNumGlyphs > 0 && FindChsGlyph(c + ' ') >= 0)
+		return CHS_CELL_SIZE;
 	if (RenderState.proportional)
 		return Size[RenderState.style][c];
 	else
@@ -1281,6 +1462,8 @@ CFont::GetCharacterSize(wchar c)
 	// PS2 don't call FindNewCharacter in here at all, and also uses different chars for some symbols
 	if (!Details.bFontHalfTexture && c == 30) c = 61; // wanted star
 #endif
+	if (c + ' ' >= 0x80 && ChsNumGlyphs > 0 && FindChsGlyph(c + ' ') >= 0)
+		return CHS_CELL_SIZE * Details.scaleX;
 	if (Details.bFontHalfTexture)
 		c = FindNewCharacter(c);
 	if (Details.proportional)

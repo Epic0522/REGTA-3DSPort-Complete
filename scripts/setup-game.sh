@@ -180,6 +180,15 @@ copy_runtime_override()
 	fi
 }
 
+optional_runtime_override()
+{
+	relative_path=$1
+	source_path="$project_root/gamefiles/$game/$relative_path"
+
+	[ -e "$source_path" ] || return 0
+	copy_runtime_override "$relative_path"
+}
+
 echo "Applying the hardware-tested REGTA 3DS runtime overrides"
 case "$game" in
 	re3)
@@ -204,6 +213,13 @@ case "$game" in
 			movies
 		do
 			copy_runtime_override "$relative_path"
+		done
+		# Optional Chinese text pack (see miami/tools/chs/README.md).
+		for relative_path in \
+			models/chsfont.a8 \
+			models/chsfont.map
+		do
+			optional_runtime_override "$relative_path"
 		done
 		;;
 	relcs)
